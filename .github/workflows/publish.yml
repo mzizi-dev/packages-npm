@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
@@ -41,7 +41,7 @@ jobs:
       - name: Configure Node for GitHub Packages
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: "24"
           registry-url: "https://npm.pkg.github.com"
           scope: "@nyuchi"
 
