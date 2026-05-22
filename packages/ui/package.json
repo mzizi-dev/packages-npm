@@ -1,6 +1,6 @@
 {
   "name": "@nyuchi/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Shared UI primitives for the Nyuchi Design System — Astro components (Breadcrumb, SocialIcon) plus breadcrumb helpers. Nyuchi's implementation of the Mzizi architecture.",
   "type": "module",
   "license": "MIT",
