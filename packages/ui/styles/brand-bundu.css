@@ -1,0 +1,12 @@
+/**
+ * brand-bundu.css — Bundu Foundation overlay (terracotta primary).
+ * Import AFTER globals.css to remap the primary mineral.
+ */
+:root {
+  --primary: var(--color-terracotta);
+  --ring: var(--color-terracotta);
+}
+.dark {
+  --primary: var(--color-terracotta);
+  --ring: var(--color-terracotta);
+}

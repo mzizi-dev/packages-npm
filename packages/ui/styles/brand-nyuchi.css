@@ -1,0 +1,12 @@
+/**
+ * brand-nyuchi.css — Nyuchi overlay (gold primary).
+ * Import AFTER globals.css to remap the primary mineral.
+ */
+:root {
+  --primary: var(--color-gold);
+  --ring: var(--color-gold);
+}
+.dark {
+  --primary: var(--color-gold);
+  --ring: var(--color-gold);
+}

@@ -9,10 +9,10 @@ additional UI packages over time.
 
 ## Packages
 
-| Package                                    | Description                                                                                   |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------- |
-| [`@nyuchi/ui`](./packages/ui)              | Shared UI primitives — Astro components plus helpers                                           |
-| [`@bundu/ui`](./packages/bundu-ui)         | Marketing UI kit — Astro marketing components + shadcn primitives on the seven-mineral tokens |
+| Package                            | Description                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------- |
+| [`@nyuchi/ui`](./packages/ui)      | Svelte 5 / SvelteKit component library on the seven-mineral tokens                            |
+| [`@bundu/ui`](./packages/bundu-ui) | Marketing UI kit — Astro marketing components + shadcn primitives on the seven-mineral tokens |
 
 ## Development
 

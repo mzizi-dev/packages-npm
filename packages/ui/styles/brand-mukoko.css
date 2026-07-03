@@ -1,0 +1,12 @@
+/**
+ * brand-mukoko.css — Mukoko overlay (tanzanite primary).
+ * Import AFTER globals.css to remap the primary mineral.
+ */
+:root {
+  --primary: var(--color-tanzanite);
+  --ring: var(--color-tanzanite);
+}
+.dark {
+  --primary: var(--color-tanzanite);
+  --ring: var(--color-tanzanite);
+}
