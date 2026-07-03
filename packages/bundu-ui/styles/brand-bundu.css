@@ -1,0 +1,10 @@
+/* brand-bundu — Bundu Foundation primary: terracotta.
+   Import AFTER globals.css to select this brand's primary + ring. */
+:root {
+  --primary: var(--color-terracotta);
+  --ring: var(--color-terracotta);
+}
+.dark {
+  --primary: var(--color-terracotta);
+  --ring: var(--color-terracotta);
+}

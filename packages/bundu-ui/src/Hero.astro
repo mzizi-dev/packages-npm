@@ -1,0 +1,101 @@
+---
+/**
+ * Hero — shared across all Bundu Ecosystem apps (was copy-pasted
+ * byte-identical into nyuchi/mukoko/bundu). Anthropic-restrained
+ * editorial: generous whitespace, serif Display headline, narrow body,
+ * an eyebrow tag, and at most two pill CTAs composed from <Button>.
+ */
+import { Button } from "@bundu/ui/ui/button";
+
+interface CTA {
+  text: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  primaryCTA?: CTA;
+  secondaryCTA?: CTA;
+  variant?: "default" | "gradient" | "light";
+  align?: "center" | "start";
+}
+
+const {
+  title,
+  subtitle,
+  description,
+  primaryCTA,
+  secondaryCTA,
+  variant = "default",
+  align = "start",
+} = Astro.props;
+
+const sectionClasses = {
+  default: "bg-canvas",
+  light: "bg-secondary",
+  gradient: "gradient-hero",
+};
+
+const alignClasses = {
+  start: "text-left",
+  center: "text-center mx-auto",
+};
+---
+
+<section
+  class:list={["py-12 md:py-16 lg:py-20", sectionClasses[variant]]}
+  data-slot="hero"
+>
+  <div class="container-custom">
+    <div class:list={["max-w-3xl", alignClasses[align]]}>
+      {subtitle && <p class="eyebrow">{subtitle}</p>}
+
+      <h1 class="font-serif text-display text-foreground text-balance">
+        {title}
+      </h1>
+
+      {
+        description && (
+          <p
+            class:list={[
+              "mt-6 text-body-lg text-muted-foreground text-pretty max-w-2xl",
+              align === "center" && "mx-auto",
+            ]}
+          >
+            {description}
+          </p>
+        )
+      }
+
+      {
+        (primaryCTA || secondaryCTA) && (
+          <div
+            class:list={[
+              "mt-8 flex flex-wrap items-center gap-3",
+              align === "center" && "justify-center",
+            ]}
+          >
+            {primaryCTA && (
+              <Button href={primaryCTA.href} external={primaryCTA.external}>
+                {primaryCTA.text}
+              </Button>
+            )}
+            {secondaryCTA && (
+              <Button
+                href={secondaryCTA.href}
+                external={secondaryCTA.external}
+                variant="ghost"
+                arrow
+              >
+                {secondaryCTA.text}
+              </Button>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

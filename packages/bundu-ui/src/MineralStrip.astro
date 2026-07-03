@@ -1,0 +1,51 @@
+---
+/**
+ * MineralStrip — the decorative seven-mineral accent bar.
+ *
+ * A full-height, ~6px bar fixed to the LEFT edge of every page,
+ * split into seven equal vertical segments coloured with the seven
+ * African-mineral tokens (top→bottom: cobalt, tanzanite, malachite,
+ * gold, terracotta, sodalite, copper).
+ *
+ * Purely decorative: aria-hidden and pointer-events:none, so it never
+ * intercepts clicks or reaches the accessibility tree. Colours come
+ * exclusively from the `--color-*` custom properties defined in each
+ * app's src/styles/global.css — no hex here.
+ */
+const minerals = [
+  "cobalt",
+  "tanzanite",
+  "malachite",
+  "gold",
+  "terracotta",
+  "sodalite",
+  "copper",
+] as const;
+---
+
+<div class="mineral-strip" aria-hidden="true" data-slot="mineral-strip">
+  {
+    minerals.map((mineral) => (
+      <span style={`background-color: var(--color-${mineral});`} />
+    ))
+  }
+</div>
+
+<style>
+  .mineral-strip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100dvh;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+
+  .mineral-strip span {
+    flex: 1 1 0;
+    display: block;
+  }
+</style>

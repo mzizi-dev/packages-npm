@@ -1,0 +1,50 @@
+---
+/**
+ * Icon — the design system's inline-SVG set, so pages and components
+ * never hand-roll `<svg>` paths. Stroke-based, 1.75 weight, inherits
+ * `currentColor` and sizes to 1em by default (override via `class`).
+ *
+ * Add a glyph by adding one entry to PATHS — keep the set curated to
+ * what the sites actually use rather than pulling a whole icon font.
+ */
+interface Props {
+  name: keyof typeof PATHS;
+  /** Accessible label; omitted → decorative (aria-hidden). */
+  title?: string;
+  class?: string;
+}
+
+const PATHS = {
+  "arrow-right": "M17 8l4 4m0 0l-4 4m4-4H3",
+  "arrow-up-right": "M7 17L17 7M17 7H7M17 7v10",
+  check: "M5 13l4 4L19 7",
+  "chevron-down": "M19 9l-7 7-7-7",
+  "chevron-right": "M9 5l7 7-7 7",
+  external: "M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14",
+  close: "M6 18L18 6M6 6l12 12",
+  menu: "M4 6h16M4 12h16M4 18h16",
+  plus: "M12 5v14M5 12h14",
+  minus: "M5 12h14",
+} as const;
+
+const { name, title, class: className } = Astro.props;
+const decorative = !title;
+---
+
+<svg
+  class={["inline-block h-[1em] w-[1em]", className].filter(Boolean).join(" ")}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  data-slot="icon"
+  data-icon={name}
+  role={decorative ? undefined : "img"}
+  aria-hidden={decorative ? "true" : undefined}
+  aria-label={decorative ? undefined : title}
+>
+  {title && <title>{title}</title>}
+  <path d={PATHS[name]} />
+</svg>
