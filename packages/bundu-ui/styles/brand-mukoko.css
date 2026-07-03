@@ -1,10 +1,13 @@
 /* brand-mukoko — Mukoko primary: tanzanite.
-   Import AFTER globals.css to select this brand's primary + ring. */
+   Tanzanite is Mukoko's canonical brand→mineral (identity; Africa's super
+   app). Import AFTER globals.css (or tokens.css) to select this brand's
+   primary + ring. */
 :root {
   --primary: var(--color-tanzanite);
   --ring: var(--color-tanzanite);
 }
-.dark {
+.dark,
+[data-theme="dark"] {
   --primary: var(--color-tanzanite);
   --ring: var(--color-tanzanite);
 }

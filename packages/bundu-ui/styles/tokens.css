@@ -1,0 +1,188 @@
+/* @bundu/ui — design tokens (framework-agnostic).
+
+   The seven African Minerals + seven heritage tones + semantic tokens,
+   canonical from the Mzizi design system (mzizi.dev / styling-minerals,
+   styling-heritage-colors). This file is PURE custom properties — no
+   @layer, no @apply, no Tailwind — so it can be imported by ANY site to
+   pull the ecosystem palette from one central source instead of
+   hardcoding hex values per page.
+
+   - Tailwind / shadcn sites: import ../styles/globals.css (it @imports
+     this file, then adds the component + utility layers).
+   - Plain-CSS / Astro Starlight docs sites: @import this file directly and
+     map the mineral vars onto your own theme variables.
+
+   Dark mode is supported under both conventions: the .dark class
+   (shadcn / Tailwind toggle) and [data-theme="dark"] (data-attribute
+   toggle, e.g. Starlight).
+
+   Do NOT hand-edit hex values — they are the DB's source of truth. Refresh
+   from the design system (get_brand_tokens / styling-minerals) if they move. */
+
+:root {
+  /* === Seven African Minerals — light mode === */
+  --color-cobalt: #0047ab;
+  --color-cobalt-container: #e3f2fd;
+  --color-cobalt-on-container: #002966;
+
+  --color-tanzanite: #4b0082;
+  --color-tanzanite-container: #f3e5f5;
+  --color-tanzanite-on-container: #2e004d;
+
+  --color-malachite: #004d40;
+  --color-malachite-container: #e0f2f1;
+  --color-malachite-on-container: #00332b;
+
+  --color-gold: #5d4037;
+  --color-gold-container: #fff8e1;
+  --color-gold-on-container: #3e2723;
+
+  --color-terracotta: #a0522d;
+  --color-terracotta-container: #f5e6d3;
+  --color-terracotta-on-container: #5d2906;
+
+  --color-sodalite: #283593;
+  --color-sodalite-container: #e8eaf6;
+  --color-sodalite-on-container: #141a5c;
+
+  --color-copper: #bf5a36;
+  --color-copper-container: #fbe4da;
+  --color-copper-on-container: #5c2410;
+
+  /* === Seven heritage tones — light mode (atmosphere colours) === */
+  --heritage-indigo: #4527a0;
+  --heritage-savanna: #8d6e1a;
+  --heritage-baobab: #4e342e;
+  --heritage-sunset: #d84315;
+  --heritage-river: #006064;
+  --heritage-hematite: #546e7a;
+  --heritage-kalahari: #c9b589;
+
+  /* === Semantic tokens — light === */
+  --background: #faf9f4; /* warm cream canvas */
+  --canvas: #faf9f4;
+  --foreground: #1a1a17; /* near-black ink */
+  --ink: #1a1a17;
+
+  --card: #ffffff;
+  --card-foreground: #1a1a17;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a17;
+
+  /* Brand primary: cobalt is the canonical Mzizi default. Each brand site
+     overrides --primary and --ring to its own mineral via the brand-*.css
+     overlay imported after this file. */
+  --primary: var(--color-cobalt);
+  --primary-foreground: #ffffff;
+
+  --secondary: #f4f2ec;
+  --secondary-foreground: #1a1a17;
+
+  --muted: #f4f2ec;
+  --muted-foreground: #5d5c57;
+
+  --accent: var(--color-cobalt-container);
+  --accent-foreground: var(--color-cobalt-on-container);
+
+  --destructive: #b3261e;
+  --destructive-foreground: #ffffff;
+  --destructive-container: #fdeded;
+
+  --border: #e7e5e0; /* warm stone */
+  --input: #ffffff;
+  --ring: var(--color-cobalt);
+
+  --success: var(--color-malachite);
+  --warning: #7a5c00;
+  --error: #b3261e;
+  --info: var(--color-cobalt);
+
+  /* Touch targets */
+  --touch-target: 56px;
+  --touch-target-sm: 48px;
+
+  /* Radius system — derived from the ecosystem --radius-unit (7px). */
+  --radius-unit: 7px;
+  --radius-sm: 7px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 17px;
+  --radius-full: 9999px;
+}
+
+.dark,
+[data-theme="dark"] {
+  /* === Seven African Minerals — dark mode === */
+  --color-cobalt: #00b0ff;
+  --color-cobalt-container: #001f3f;
+  --color-cobalt-on-container: #b3e5fc;
+
+  --color-tanzanite: #b388ff;
+  --color-tanzanite-container: #1a0033;
+  --color-tanzanite-on-container: #e1bee7;
+
+  --color-malachite: #64ffda;
+  --color-malachite-container: #00251a;
+  --color-malachite-on-container: #a7ffeb;
+
+  --color-gold: #ffd740;
+  --color-gold-container: #332200;
+  --color-gold-on-container: #ffecb3;
+
+  --color-terracotta: #e1b07e;
+  --color-terracotta-container: #3e2817;
+  --color-terracotta-on-container: #f5e6d3;
+
+  --color-sodalite: #3d5afe;
+  --color-sodalite-container: #0d1442;
+  --color-sodalite-on-container: #c5cae9;
+
+  --color-copper: #ff8a65;
+  --color-copper-container: #3a1a0e;
+  --color-copper-on-container: #ffd3c2;
+
+  /* === Seven heritage tones — dark mode === */
+  --heritage-indigo: #7986cb;
+  --heritage-savanna: #e5c158;
+  --heritage-baobab: #a1887f;
+  --heritage-sunset: #ff7043;
+  --heritage-river: #4dd0e1;
+  --heritage-hematite: #90a4ae;
+  --heritage-kalahari: #e8d9b5;
+
+  /* === Semantic tokens — dark === */
+  --background: #100f0e;
+  --canvas: #100f0e;
+  --foreground: #f0efe9;
+  --ink: #f0efe9;
+
+  --card: #1a1917;
+  --card-foreground: #f0efe9;
+  --popover: #1a1917;
+  --popover-foreground: #f0efe9;
+
+  --primary: var(--color-cobalt);
+  --primary-foreground: #1a1917;
+
+  --secondary: #2a2927;
+  --secondary-foreground: #f0efe9;
+
+  --muted: #2a2927;
+  --muted-foreground: #a8a6a0;
+
+  --accent: var(--color-cobalt-container);
+  --accent-foreground: var(--color-cobalt-on-container);
+
+  --destructive: #f2b8b5;
+  --destructive-foreground: #1a1917;
+  --destructive-container: #3e1818;
+
+  --border: #2a2927;
+  --input: #100f0e;
+  --ring: var(--color-cobalt);
+
+  --success: var(--color-malachite);
+  --warning: #ffd866;
+  --error: #f2b8b5;
+  --info: var(--color-cobalt);
+}

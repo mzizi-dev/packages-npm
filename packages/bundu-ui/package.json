@@ -1,7 +1,7 @@
 {
   "name": "@bundu/ui",
-  "version": "0.1.0",
-  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. Astro marketing components (Hero, Section, MineralStrip, Container, Breadcrumb with valid BreadcrumbList JSON-LD, …) plus shadcn CVA + cn() React primitives mapped onto the seven-African-mineral tokens, a canonical globals.css, tiny brand overrides, and a Tailwind preset.",
+  "version": "0.1.1",
+  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. Astro marketing components (Hero, Section, MineralStrip, Container, Breadcrumb with valid BreadcrumbList JSON-LD, …) plus shadcn CVA + cn() React primitives mapped onto the seven-African-mineral tokens, a framework-agnostic tokens.css, a canonical globals.css, tiny brand overrides, and a Tailwind preset.",
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
@@ -45,6 +45,7 @@
     "./SocialIcon.astro": "./src/SocialIcon.astro",
     "./Breadcrumb.astro": "./src/Breadcrumb.astro",
     "./lib/utils": "./src/lib/utils.ts",
+    "./styles/tokens.css": "./styles/tokens.css",
     "./styles/globals.css": "./styles/globals.css",
     "./styles/brand-bundu.css": "./styles/brand-bundu.css",
     "./styles/brand-nyuchi.css": "./styles/brand-nyuchi.css",
