@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
       id-token: write
     steps:
       - name: Checkout
@@ -33,25 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # npm hosts both scopes: @nyuchi/* and @bundu/* (@bundu/ui). NPM_TOKEN
-      # must have publish access to both orgs.
+      # Publish to npm only. Both scopes are hosted on npm: @nyuchi/* and
+      # @bundu/* (@bundu/ui). NPM_TOKEN must have publish access to both orgs.
       - name: Publish to npmjs
         run: pnpm -r publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Configure Node for GitHub Packages
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@nyuchi"
-
-      # GitHub Packages for this repo is scoped to the @nyuchi org, so only
-      # @nyuchi/* packages can publish here. @bundu/ui is npm-only (the @bundu
-      # org lives on npm, not this repo's GitHub Packages registry) — filtering
-      # avoids a scope-mismatch failure on release.
-      - name: Publish to GitHub Packages (@nyuchi only)
-        run: pnpm --filter "@nyuchi/*" publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -22,11 +22,12 @@ pnpm install
 
 ## Publishing
 
-Packages are published to **both** [npm](https://www.npmjs.com/org/nyuchi) and
-[GitHub Packages](https://github.com/orgs/nyuchi/packages) automatically by the
+Packages are published to [npm](https://www.npmjs.com) automatically by the
 [`publish` workflow](./.github/workflows/publish.yml) when a GitHub Release is
-published. The workflow requires an `NPM_TOKEN` repository secret; GitHub
-Packages uses the built-in `GITHUB_TOKEN`.
+published — `@nyuchi/*` under the [`@nyuchi`](https://www.npmjs.com/org/nyuchi)
+org and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) org.
+The workflow requires an `NPM_TOKEN` repository secret with publish access to
+both orgs.
 
 ## License
 
