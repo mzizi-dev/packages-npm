@@ -1,10 +1,13 @@
 /* brand-nyuchi — Nyuchi primary: gold.
-   Import AFTER globals.css to select this brand's primary + ring. */
+   Gold is Nyuchi's canonical brand→mineral (value; infrastructure &
+   enterprise). Import AFTER globals.css (or tokens.css) to select this
+   brand's primary + ring. */
 :root {
   --primary: var(--color-gold);
   --ring: var(--color-gold);
 }
-.dark {
+.dark,
+[data-theme="dark"] {
   --primary: var(--color-gold);
   --ring: var(--color-gold);
 }
