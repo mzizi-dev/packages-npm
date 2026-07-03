@@ -1,0 +1,10 @@
+/* brand-nyuchi — Nyuchi primary: gold.
+   Import AFTER globals.css to select this brand's primary + ring. */
+:root {
+  --primary: var(--color-gold);
+  --ring: var(--color-gold);
+}
+.dark {
+  --primary: var(--color-gold);
+  --ring: var(--color-gold);
+}

@@ -1,0 +1,358 @@
+@layer base {
+  :root {
+    /* === Seven African Minerals — light mode (canonical from mzizi.dev) === */
+    --color-cobalt: #0047ab;
+    --color-cobalt-container: #e3f2fd;
+    --color-cobalt-on-container: #002966;
+
+    --color-tanzanite: #4b0082;
+    --color-tanzanite-container: #f3e5f5;
+    --color-tanzanite-on-container: #2e004d;
+
+    --color-malachite: #004d40;
+    --color-malachite-container: #e0f2f1;
+    --color-malachite-on-container: #00332b;
+
+    --color-gold: #5d4037;
+    --color-gold-container: #fff8e1;
+    --color-gold-on-container: #3e2723;
+
+    --color-terracotta: #a0522d;
+    --color-terracotta-container: #f5e6d3;
+    --color-terracotta-on-container: #5d2906;
+
+    --color-sodalite: #283593;
+    --color-sodalite-container: #e8eaf6;
+    --color-sodalite-on-container: #141a5c;
+
+    --color-copper: #bf5a36;
+    --color-copper-container: #fbe4da;
+    --color-copper-on-container: #5c2410;
+
+    /* === Semantic tokens — light (canonical from mzizi.dev) === */
+    --background: #faf9f4; /* warm cream canvas */
+    --canvas: #faf9f4;
+    --foreground: #1a1a17; /* near-black ink */
+    --ink: #1a1a17;
+
+    --card: #ffffff;
+    --card-foreground: #1a1a17;
+    --popover: #ffffff;
+    --popover-foreground: #1a1a17;
+
+    /* Brand primary: cobalt is the canonical Mzizi / Design MCP default.
+       Each brand site overrides --primary and --ring to its own mineral
+       via the brand-*.css overlay imported after this file. */
+    --primary: var(--color-cobalt);
+    --primary-foreground: #ffffff;
+
+    --secondary: #f4f2ec;
+    --secondary-foreground: #1a1a17;
+
+    --muted: #f4f2ec;
+    --muted-foreground: #5d5c57;
+
+    --accent: var(--color-cobalt-container);
+    --accent-foreground: var(--color-cobalt-on-container);
+
+    --destructive: #b3261e;
+    --destructive-foreground: #ffffff;
+    --destructive-container: #fdeded;
+
+    --border: #e7e5e0; /* warm stone */
+    --input: #ffffff;
+    --ring: var(--color-cobalt);
+
+    --success: var(--color-malachite);
+    --warning: #7a5c00;
+    --error: #b3261e;
+    --info: var(--color-cobalt);
+
+    /* Touch targets */
+    --touch-target: 56px;
+    --touch-target-sm: 48px;
+  }
+
+  .dark {
+    --color-cobalt: #00b0ff;
+    --color-cobalt-container: #001f3f;
+    --color-cobalt-on-container: #b3e5fc;
+
+    --color-tanzanite: #b388ff;
+    --color-tanzanite-container: #1a0033;
+    --color-tanzanite-on-container: #e1bee7;
+
+    --color-malachite: #64ffda;
+    --color-malachite-container: #00251a;
+    --color-malachite-on-container: #a7ffeb;
+
+    --color-gold: #ffd740;
+    --color-gold-container: #332200;
+    --color-gold-on-container: #ffecb3;
+
+    --color-terracotta: #e1b07e;
+    --color-terracotta-container: #3e2817;
+    --color-terracotta-on-container: #f5e6d3;
+
+    --color-sodalite: #3d5afe;
+    --color-sodalite-container: #0d1442;
+    --color-sodalite-on-container: #c5cae9;
+
+    --color-copper: #ff8a65;
+    --color-copper-container: #3a1a0e;
+    --color-copper-on-container: #ffd3c2;
+
+    --background: #100f0e;
+    --canvas: #100f0e;
+    --foreground: #f0efe9;
+    --ink: #f0efe9;
+
+    --card: #1a1917;
+    --card-foreground: #f0efe9;
+    --popover: #1a1917;
+    --popover-foreground: #f0efe9;
+
+    --primary: var(--color-cobalt);
+    --primary-foreground: #1a1917;
+
+    --secondary: #2a2927;
+    --secondary-foreground: #f0efe9;
+
+    --muted: #2a2927;
+    --muted-foreground: #a8a6a0;
+
+    --accent: var(--color-cobalt-container);
+    --accent-foreground: var(--color-cobalt-on-container);
+
+    --destructive: #f2b8b5;
+    --destructive-foreground: #1a1917;
+    --destructive-container: #3e1818;
+
+    --border: #2a2927;
+    --input: #100f0e;
+    --ring: var(--color-cobalt);
+
+    --success: var(--color-malachite);
+    --warning: #ffd866;
+    --error: #f2b8b5;
+    --info: var(--color-cobalt);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Noto Sans", system-ui, sans-serif;
+    @apply antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Noto Serif", Georgia, serif;
+    color: var(--foreground);
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--color-cobalt-container);
+    color: var(--color-cobalt-on-container);
+  }
+}
+
+@layer components {
+  /* Containers — Anthropic-style narrow editorial column + wide grid */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-10;
+  }
+
+  .container-narrow {
+    @apply max-w-narrow mx-auto px-6 sm:px-8;
+  }
+
+  .container-prose {
+    @apply max-w-3xl mx-auto px-6 sm:px-8;
+  }
+
+  /* Pill buttons — design system mandate */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+           bg-primary text-primary-foreground font-medium rounded-full
+           transition-all duration-200 ease-soft
+           hover:opacity-90
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+           bg-foreground text-background font-medium rounded-full
+           transition-all duration-200 ease-soft
+           hover:opacity-90
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+           border border-foreground text-foreground font-medium rounded-full
+           transition-all duration-200 ease-soft
+           hover:bg-foreground hover:text-background
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 h-10
+           text-foreground font-medium rounded-full
+           transition-colors duration-200 ease-soft
+           hover:bg-muted
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-card text-card-foreground rounded-lg
+           border border-border;
+  }
+
+  .card-hover {
+    @apply bg-card text-card-foreground rounded-lg border border-border hover:shadow-sm transition-all duration-200 ease-soft;
+  }
+
+  /* Sections */
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  .section-tight {
+    @apply py-12 md:py-16;
+  }
+
+  .section-loose {
+    @apply py-20 md:py-32;
+  }
+
+  .section-title {
+    @apply font-serif text-h1 text-foreground mb-4 text-balance;
+  }
+
+  .section-subtitle {
+    @apply text-body-lg text-muted-foreground max-w-2xl text-pretty;
+  }
+
+  .eyebrow {
+    @apply inline-block text-caption font-semibold uppercase tracking-wider text-muted-foreground mb-4;
+  }
+
+  /* Badges — pill */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium;
+  }
+
+  .badge-primary {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-malachite-container text-malachite-on-container;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-gold-container text-gold-on-container;
+  }
+
+  .badge-info {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
+  }
+
+  .badge-accent {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-terracotta-container text-terracotta-on-container;
+  }
+
+  .badge-premium {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-tanzanite-container text-tanzanite-on-container;
+  }
+
+  /* Ubuntu pull-quote */
+  .ubuntu-quote {
+    @apply relative py-8 px-6
+           bg-malachite-container text-malachite-on-container
+           border-l-4 border-malachite rounded-r-lg;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full h-12 px-4 rounded-full
+           bg-input text-foreground border border-border
+           placeholder:text-muted-foreground
+           transition-colors duration-200
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:opacity-50;
+  }
+
+  /* Editorial divider */
+  .rule {
+    @apply h-px w-full bg-border my-12;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Anthropic-style soft hero gradient — cream → muted */
+  .gradient-hero {
+    background: linear-gradient(
+      135deg,
+      var(--canvas) 0%,
+      var(--secondary) 100%
+    );
+  }
+
+  /* Subtle mineral wash — for brand accent sections */
+  .wash-gold {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--color-gold-container) 100%
+    );
+  }
+  .wash-cobalt {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--color-cobalt-container) 100%
+    );
+  }
+  .wash-malachite {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--color-malachite-container) 100%
+    );
+  }
+}
