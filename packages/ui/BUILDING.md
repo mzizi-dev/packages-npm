@@ -32,9 +32,11 @@ pnpm --filter @nyuchi/ui check        # svelte-check (0 errors, 0 warnings)
 - **No raw hex in components.** `src/lib/**` uses semantic-token utility
   classes only (`bg-primary`, `text-muted-foreground`, `bg-cobalt-container`,
   …). Hex literals live solely in the token CSS and preset. Enforce with:
+
   ```sh
   grep -rnE '#[0-9a-fA-F]{3,8}\b' src/   # must return nothing
   ```
+
 - **Accessibility.** ARIA roles + keyboard support on interactive components;
   a ≥48px minimum touch target (`min-h-12`); pill-shaped buttons
   (`rounded-full`).

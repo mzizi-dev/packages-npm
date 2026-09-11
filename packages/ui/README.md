@@ -41,11 +41,11 @@ import "@nyuchi/ui/styles/brand-nyuchi.css";  // gold primary (or brand-bundu / 
 and `@layer` component/utility classes. The canonical `--primary` / `--ring`
 mineral is **cobalt**; a brand overlay remaps them:
 
-| Overlay             | Primary mineral |
-| ------------------- | --------------- |
-| `brand-bundu.css`   | terracotta      |
-| `brand-nyuchi.css`  | gold            |
-| `brand-mukoko.css`  | tanzanite       |
+| Overlay            | Primary mineral |
+| ------------------ | --------------- |
+| `brand-bundu.css`  | terracotta      |
+| `brand-nyuchi.css` | gold            |
+| `brand-mukoko.css` | tanzanite       |
 
 ### Tailwind consumers
 
