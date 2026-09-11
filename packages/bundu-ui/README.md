@@ -1,10 +1,21 @@
 # @bundu/ui
 
-The **marketing UI kit** for the Bundu Ecosystem — Nyuchi's implementation of the
-[Mzizi](https://mzizi.dev) design system. It's the shared component layer behind the
-marketing sites (bundu, nyuchi, mukoko): editorial Astro building blocks plus a set of
-shadcn-style React primitives, all mapped onto the **seven African minerals** and the
-semantic token system.
+> The marketing UI kit for the Bundu ecosystem — editorial Astro building blocks plus shadcn-style React primitives on the seven African-mineral tokens.
+
+[![npm](https://img.shields.io/npm/v/%40bundu%2Fui?style=flat-square&logo=npm)](https://www.npmjs.com/package/@bundu/ui)
+[![Lint](https://img.shields.io/github/actions/workflow/status/mukoko-dev/packages-ui/lint.yml?branch=main&label=lint&style=flat-square)](https://github.com/mukoko-dev/packages-ui/actions/workflows/lint.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+**Repo:** [mukoko-dev/packages-ui](https://github.com/mukoko-dev/packages-ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+
+---
+
+## What it is
+
+The shared component layer behind the marketing sites (bundu, nyuchi, mukoko).
+It is Nyuchi's implementation of the [Mzizi](https://mzizi.dev) design
+system — an open-architecture project of the Bundu Foundation, operated and
+developed by Nyuchi. This package is not Mzizi itself.
 
 - **Astro marketing components** — `Hero`, `Section`, `SectionHeader`, `Container`,
   `MineralStrip`, `Icon`, `SocialIcon`, and `Breadcrumb` (emits valid schema.org
@@ -18,7 +29,9 @@ semantic token system.
 
 Every value flows through CSS custom properties / Tailwind tokens — **never a raw hex in
 source**. All seven minerals are valid tokens: `cobalt`, `tanzanite`, `malachite`, `gold`,
-`terracotta`, `sodalite`, `copper`.
+`terracotta`, `sodalite`, `copper`. These are the mineral subset of the Mzizi palette,
+which is 21 colour families in total (7 minerals, 7 heritage, 7 experimental); this kit
+ships the mineral seven only.
 
 ## Install
 
@@ -89,9 +102,9 @@ export function CTA() {
 }
 ```
 
-See [BUILDING.md](./BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
+See [BUILDING.md](https://github.com/mukoko-dev/packages-ui/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
 seven minerals, and the no-raw-hex rule.
 
-## License
+## Licence
 
-[MIT](../../LICENSE) © Nyuchi Africa (Pvt) Ltd
+[MIT](https://github.com/mukoko-dev/packages-ui/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.

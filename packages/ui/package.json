@@ -5,10 +5,10 @@
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
-  "homepage": "https://github.com/nyuchi/packages-ui#readme",
+  "homepage": "https://github.com/mukoko-dev/packages-ui#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nyuchi/packages-ui.git",
+    "url": "git+https://github.com/mukoko-dev/packages-ui.git",
     "directory": "packages/ui"
   },
   "bugs": {
