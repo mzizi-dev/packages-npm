@@ -1,0 +1,612 @@
+{
+  "_meta": {
+    "brandSource": "https://api.mzizi.dev/v1/brand",
+    "canonLastUpdated": "2026-07-13",
+    "canonVersion": "4.0.31",
+    "note": "Machine-written by scripts/fetch-canon.mjs. Do not hand-edit.",
+    "onDiskSourceOfTruth": "mzizi-dev/mzizi-registry -> lib/tokens/palette.source.ts + brand.source.ts",
+    "paletteSource": "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/lib/tokens/palette.source.ts"
+  },
+  "backgrounds": [
+    {
+      "dark": "#0E0D0C",
+      "light": "#F3F3F1",
+      "name": "base",
+      "usage": "Page background — ambient base surface (prime step P5)"
+    },
+    {
+      "dark": "#1E1D1A",
+      "light": "#E5E4E1",
+      "name": "container",
+      "usage": "Neutral containers, grouped content (prime step P11)"
+    },
+    {
+      "dark": "#050504",
+      "light": "#FAF9F5",
+      "name": "muted",
+      "usage": "Deepest fill — inset sections, metadata rows, maximum text contrast"
+    },
+    {
+      "dark": "#23221F",
+      "light": "#E0DFDC",
+      "name": "overlay",
+      "usage": "Overlays and dialogs (prime step P13)"
+    },
+    {
+      "dark": "#050505",
+      "light": "#FAFAFA",
+      "name": "pitch",
+      "usage": "Deepest surface — media wells, splash (prime step P2)"
+    },
+    {
+      "dark": "#2E2C29",
+      "light": "#D6D5D1",
+      "name": "raised",
+      "usage": "Raised elements above overlay — menus, toasts (prime step P17)"
+    },
+    {
+      "dark": "rgba(0,0,0,0.60)",
+      "light": "rgba(0,0,0,0.40)",
+      "name": "scrim",
+      "usage": "Semi-transparent backdrop behind overlays"
+    },
+    {
+      "dark": "#131211",
+      "light": "#EEEEEC",
+      "name": "surface",
+      "usage": "Card / panel surface (prime step P7)"
+    },
+    {
+      "dark": "#080807",
+      "light": "#F8F8F7",
+      "name": "void",
+      "usage": "App shell behind base (prime step P3)"
+    },
+    {
+      "dark": "color-mix(in oklab, var(--surface) 88%, var(--brand-accent))",
+      "light": "color-mix(in oklab, var(--surface) 93%, var(--brand-accent))",
+      "name": "wash",
+      "usage": "Cover-colour page wash — surface tinted with the active brand accent (~7% light / ~12% dark)"
+    }
+  ],
+  "ecosystem": [
+    {
+      "description": "The complete ecosystem built by Nyuchi Africa. Three pillars — mukoko (consumer super app), nyuchi (enterprise layer), and sister brands (specialist verticals) — all connected through one identity, one design system, and one open data commons.",
+      "language": "Shona",
+      "meaning": "Wilderness",
+      "mineral": "copper",
+      "name": "bundu",
+      "role": "The ecosystem",
+      "url": "https://www.bundu.org",
+      "voice": "Visionary, grounded, inclusive"
+    },
+    {
+      "description": "Seven enterprise products, each with its own consumer interface and business-facing tools. API platform, web services, learning, medical, rentals, tools, and SEO manager. Every nyuchi product is a standalone product, a door into the mukoko platform, and a professional surface for the same ecosystem.",
+      "language": "Shona",
+      "meaning": "Bee",
+      "mineral": "gold",
+      "name": "nyuchi",
+      "role": "Infrastructure & enterprise",
+      "url": "https://nyuchi.com",
+      "voice": "Technical, reliable, industrious"
+    },
+    {
+      "description": "A growing net of mini-apps — founded seventeen, four substrate components, one unified identity — grown under the Bundu Order. The digital home where a billion Africans' social, creative, commercial, civic, and economic lives belong.",
+      "language": "Shona",
+      "meaning": "Beehive",
+      "mineral": "tanzanite",
+      "name": "mukoko",
+      "role": "Africa's super app",
+      "url": "https://mukoko.com",
+      "voice": "Welcoming, structured, protective"
+    },
+    {
+      "description": "The Digital Twin's conversational interface. Three layers of intelligence — personal (your pod data), community (anonymised platform data), and platform (base mukoko knowledge). A friend that serves; a friend that does not control.",
+      "language": "Shona",
+      "meaning": "Friend",
+      "mineral": "sodalite",
+      "name": "shamwari",
+      "role": "Sovereign AI companion",
+      "url": "https://shamwari.ai",
+      "voice": "Helpful, warm, intelligent"
+    },
+    {
+      "description": "Community events and cultural gatherings. Standalone brand calling the same platform API. Edge-first check-in via geographic Durable Objects for sub-10ms ticket validation at venue doors.",
+      "language": "Shona",
+      "meaning": "Gathering",
+      "mineral": "malachite",
+      "name": "nhimbe",
+      "role": "Events & gatherings",
+      "url": "https://nhimbe.com",
+      "voice": "Celebratory, communal, vibrant"
+    },
+    {
+      "description": "Rentals-first marketplace for Zimbabwe and beyond. Business verification through the platform's unified submissions pipeline. Escrow-backed payments via mukoko wallet. Seller conversations flow through Campfire.",
+      "language": "English/Shona",
+      "meaning": "Bush trade",
+      "mineral": "gold",
+      "name": "bushtrade",
+      "role": "Marketplace",
+      "url": "https://bushtrade.co.zw",
+      "voice": "Practical, trustworthy, local"
+    },
+    {
+      "description": "African language learning. Shona and Ndebele as primaries, English, French, Portuguese, and travel phrases. The product expression of mukoko's commitment to treating African languages as first-class citizens.",
+      "language": "English",
+      "meaning": "Language",
+      "mineral": "cobalt",
+      "name": "lingo",
+      "role": "Language learning",
+      "url": "https://lingo.mukoko.com",
+      "voice": "Encouraging, cultural, playful"
+    },
+    {
+      "description": "All messaging and cross-app communications. The architectural anchor of the ecosystem.",
+      "language": "English",
+      "meaning": "Campfire",
+      "mineral": "malachite",
+      "name": "campfire",
+      "role": "Platform messaging anchor",
+      "url": "https://campfire.mukoko.com",
+      "voice": "Direct, warm, always present"
+    },
+    {
+      "description": "African creator video platform competing with TikTok.",
+      "language": "English",
+      "meaning": "Bytes",
+      "mineral": "tanzanite",
+      "name": "bytes",
+      "role": "Short-form creator video",
+      "url": "https://bytes.mukoko.com",
+      "voice": "Energetic, creative, youthful"
+    },
+    {
+      "description": "Long-form publishing with 10 work types, co-authorship, and revenue splitting.",
+      "language": "English",
+      "meaning": "Novels",
+      "mineral": "malachite",
+      "name": "novels",
+      "role": "Publishing platform",
+      "url": "https://novels.mukoko.com",
+      "voice": "Literary, thoughtful, immersive"
+    },
+    {
+      "description": "Africa's rival to Google Business Profile + Maps for formal and informal economies.",
+      "language": "English",
+      "meaning": "Places",
+      "mineral": "gold",
+      "name": "places",
+      "role": "Geographic knowledge graph",
+      "url": "https://places.mukoko.com",
+      "voice": "Authoritative, helpful, discoverable"
+    },
+    {
+      "description": "Public transit routing, vehicle booking, commute planning for African cities.",
+      "language": "English",
+      "meaning": "Transport",
+      "mineral": "gold",
+      "name": "transport",
+      "role": "Public transit and booking",
+      "url": "https://transport.mukoko.com",
+      "voice": "Efficient, reliable, practical"
+    },
+    {
+      "description": "Calendar, tasks, notes, bookings — single source of truth for scheduling.",
+      "language": "English",
+      "meaning": "Planner",
+      "mineral": "cobalt",
+      "name": "planner",
+      "role": "Productivity hub",
+      "url": "https://planner.mukoko.com",
+      "voice": "Organised, clear, supportive"
+    },
+    {
+      "description": "MUKOKO tokens, mobile money, bank transfers. No bank account required.",
+      "language": "English",
+      "meaning": "Wallet",
+      "mineral": "gold",
+      "name": "wallet",
+      "role": "Payments and tokens",
+      "url": "https://wallet.mukoko.com",
+      "voice": "Trustworthy, precise, secure"
+    },
+    {
+      "description": "Personalised content feed and agentic dashboard.",
+      "language": "English",
+      "meaning": "Pulse",
+      "mineral": "tanzanite",
+      "name": "pulse",
+      "role": "Feed and Mukoko Home",
+      "url": "https://pulse.mukoko.com",
+      "voice": "Personal, adaptive, ambient"
+    },
+    {
+      "description": "Health info, telemedicine booking, medication reminders. Connected to Nyuchi Medical.",
+      "language": "English",
+      "meaning": "Health",
+      "mineral": "malachite",
+      "name": "health",
+      "role": "Wellness and telemedicine",
+      "url": "https://health.mukoko.com",
+      "voice": "Caring, accurate, private"
+    },
+    {
+      "description": "Community channels — WhatsApp groups, Discord servers for Africa.",
+      "language": "English",
+      "meaning": "Circles",
+      "mineral": "terracotta",
+      "name": "circles",
+      "role": "Community messaging",
+      "url": "https://circles.mukoko.com",
+      "voice": "Inclusive, moderated, community-driven"
+    }
+  ],
+  "experimental": [
+    {
+      "containerDark": "#352721",
+      "containerLight": "#EBDFDB",
+      "cssVar": "--color-ember",
+      "darkHex": "#DA8766",
+      "heptagonIndex": 0,
+      "hex": "#DA8766",
+      "lightHex": "#843D20",
+      "name": "ember",
+      "onContainerDark": "#EBA68A",
+      "onContainerLight": "#7A3115",
+      "uiDark": "#BB562D",
+      "uiLight": "#CD5F33"
+    },
+    {
+      "containerDark": "#333521",
+      "containerLight": "#E9EBDB",
+      "cssVar": "--color-acacia",
+      "darkHex": "#93A528",
+      "heptagonIndex": 1,
+      "hex": "#93A528",
+      "lightHex": "#4D5615",
+      "name": "acacia",
+      "onContainerDark": "#B6CE23",
+      "onContainerLight": "#48510E",
+      "uiDark": "#768420",
+      "uiLight": "#7E8C22"
+    },
+    {
+      "containerDark": "#213521",
+      "containerLight": "#DBEBDB",
+      "cssVar": "--color-fern",
+      "darkHex": "#2CB42B",
+      "heptagonIndex": 2,
+      "hex": "#2CB42B",
+      "lightHex": "#175E17",
+      "name": "fern",
+      "onContainerDark": "#28DB28",
+      "onContainerLight": "#0F570F",
+      "uiDark": "#228D22",
+      "uiLight": "#259725"
+    },
+    {
+      "containerDark": "#213532",
+      "containerLight": "#DBEBE9",
+      "cssVar": "--color-lagoon",
+      "darkHex": "#2AAE9B",
+      "heptagonIndex": 3,
+      "hex": "#2AAE9B",
+      "lightHex": "#165B51",
+      "name": "lagoon",
+      "onContainerDark": "#24D6BC",
+      "onContainerLight": "#0E554B",
+      "uiDark": "#218A7A",
+      "uiLight": "#249383"
+    },
+    {
+      "containerDark": "#212735",
+      "containerLight": "#DBE0EB",
+      "cssVar": "--color-storm",
+      "darkHex": "#7E9BE0",
+      "heptagonIndex": 4,
+      "hex": "#7E9BE0",
+      "lightHex": "#284CA6",
+      "name": "storm",
+      "onContainerDark": "#99B2EE",
+      "onContainerLight": "#1A409B",
+      "uiDark": "#426CD1",
+      "uiLight": "#577BD6"
+    },
+    {
+      "containerDark": "#2D2135",
+      "containerLight": "#E4DBEB",
+      "cssVar": "--color-dusk",
+      "darkHex": "#BA87E2",
+      "heptagonIndex": 5,
+      "hex": "#BA87E2",
+      "lightHex": "#742AAD",
+      "name": "dusk",
+      "onContainerDark": "#CC9FEF",
+      "onContainerLight": "#661B9E",
+      "uiDark": "#9749D3",
+      "uiLight": "#A35DD8"
+    },
+    {
+      "containerDark": "#35212D",
+      "containerLight": "#EBDBE4",
+      "cssVar": "--color-protea",
+      "darkHex": "#DF7BB4",
+      "heptagonIndex": 6,
+      "hex": "#DF7BB4",
+      "lightHex": "#932464",
+      "name": "protea",
+      "onContainerDark": "#ED98C9",
+      "onContainerLight": "#841656",
+      "uiDark": "#CA3188",
+      "uiLight": "#D34998"
+    }
+  ],
+  "heritage": [
+    {
+      "cssVar": "--color-indigo",
+      "darkHex": "#7986CB",
+      "hex": "#7986CB",
+      "lightHex": "#4527A0",
+      "name": "indigo",
+      "origin": "Indigofera, West Africa textile tradition",
+      "symbolism": "Dusk, depth, the dyer's craft",
+      "usage": "Twilight surfaces, deep atmosphere, mini-app moods"
+    },
+    {
+      "cssVar": "--color-savanna",
+      "darkHex": "#E5C158",
+      "hex": "#E5C158",
+      "lightHex": "#8D6E1A",
+      "name": "savanna",
+      "origin": "Sub-Saharan grasslands",
+      "symbolism": "Sun-dried grass, open land, the dry season",
+      "usage": "Warm grassland surfaces, daylight atmosphere"
+    },
+    {
+      "cssVar": "--color-baobab",
+      "darkHex": "#A1887F",
+      "hex": "#A1887F",
+      "lightHex": "#4E342E",
+      "name": "baobab",
+      "origin": "Adansonia, across the African continent",
+      "symbolism": "The tree of life, age, shelter",
+      "usage": "Earthy surfaces, grounded atmosphere, bark tones"
+    },
+    {
+      "cssVar": "--color-sunset",
+      "darkHex": "#FF7043",
+      "hex": "#FF7043",
+      "lightHex": "#D84315",
+      "name": "sunset",
+      "origin": "The African horizon at dusk",
+      "symbolism": "Day's end, warmth, the gathering hour",
+      "usage": "Warm accent surfaces, golden-hour atmosphere"
+    },
+    {
+      "cssVar": "--color-river",
+      "darkHex": "#4DD0E1",
+      "hex": "#4DD0E1",
+      "lightHex": "#006064",
+      "name": "river",
+      "origin": "The great African rivers — Zambezi, Nile, Congo",
+      "symbolism": "Flow, life, the journey",
+      "usage": "Cool surfaces, flowing atmosphere, water tones"
+    },
+    {
+      "cssVar": "--color-hematite",
+      "darkHex": "#90A4AE",
+      "hex": "#90A4AE",
+      "lightHex": "#546E7A",
+      "name": "hematite",
+      "origin": "Sishen & Thabazimbi, South Africa",
+      "symbolism": "Foundation, endurance, the substrate",
+      "usage": "Neutral anchor, mini-app surfaces, atmosphere"
+    },
+    {
+      "cssVar": "--color-kalahari",
+      "darkHex": "#E8D9B5",
+      "hex": "#E8D9B5",
+      "lightHex": "#C9B589",
+      "name": "kalahari",
+      "origin": "Kalahari & Namib, Southern Africa",
+      "symbolism": "Openness, space, the light pole",
+      "usage": "Light anchor, warm backgrounds, mini-app surfaces"
+    }
+  ],
+  "minerals": [
+    {
+      "containerDark": "#001F3F",
+      "containerLight": "#E3F2FD",
+      "cssVar": "--color-cobalt",
+      "darkHex": "#00B0FF",
+      "hex": "#0047AB",
+      "lightHex": "#0047AB",
+      "name": "cobalt",
+      "onContainerDark": "#B3E5FC",
+      "onContainerLight": "#002966",
+      "origin": "Katanga (DRC) and Zambian Copperbelt",
+      "symbolism": "Digital future, trust, knowledge",
+      "usage": "Primary blue, links, CTAs"
+    },
+    {
+      "containerDark": "#1A0033",
+      "containerLight": "#F3E5F5",
+      "cssVar": "--color-tanzanite",
+      "darkHex": "#B388FF",
+      "hex": "#B388FF",
+      "lightHex": "#4B0082",
+      "name": "tanzanite",
+      "onContainerDark": "#E1BEE7",
+      "onContainerLight": "#2E004D",
+      "origin": "Merelani Hills, Tanzania",
+      "symbolism": "Premium, creativity, connection",
+      "usage": "Purple accent, brand/logo, social features"
+    },
+    {
+      "containerDark": "#00251A",
+      "containerLight": "#E0F2F1",
+      "cssVar": "--color-malachite",
+      "darkHex": "#64FFDA",
+      "hex": "#64FFDA",
+      "lightHex": "#004D40",
+      "name": "malachite",
+      "onContainerDark": "#A7FFEB",
+      "onContainerLight": "#00332B",
+      "origin": "Congo Copper Belt",
+      "symbolism": "Growth, nature, success",
+      "usage": "Success states, positive actions"
+    },
+    {
+      "containerDark": "#332200",
+      "containerLight": "#FFF8E1",
+      "cssVar": "--color-gold",
+      "darkHex": "#FFD740",
+      "hex": "#FFD740",
+      "lightHex": "#5D4037",
+      "name": "gold",
+      "onContainerDark": "#FFECB3",
+      "onContainerLight": "#3E2723",
+      "origin": "Ghana, South Africa, Mali",
+      "symbolism": "Honey, rewards, warmth",
+      "usage": "Achievements, rewards, highlights"
+    },
+    {
+      "containerDark": "#3E2817",
+      "containerLight": "#F5E6D3",
+      "cssVar": "--color-terracotta",
+      "darkHex": "#E1B07E",
+      "hex": "#A0522D",
+      "lightHex": "#A0522D",
+      "name": "terracotta",
+      "onContainerDark": "#F5E6D3",
+      "onContainerLight": "#5D2906",
+      "origin": "Pan-African Sahel",
+      "symbolism": "Earth, community, grounding",
+      "usage": "Community features, warmth"
+    },
+    {
+      "containerDark": "#0D1442",
+      "containerLight": "#E8EAF6",
+      "cssVar": "--color-sodalite",
+      "darkHex": "#3D5AFE",
+      "hex": "#283593",
+      "lightHex": "#283593",
+      "name": "sodalite",
+      "onContainerDark": "#C5CAE9",
+      "onContainerLight": "#141A5C",
+      "origin": "Kunene River, Namibia & South Africa",
+      "symbolism": "Intelligence, depth, reasoning",
+      "usage": "AI/Shamwari surfaces, deep-reasoning states"
+    },
+    {
+      "containerDark": "#3A1A0E",
+      "containerLight": "#FBE4DA",
+      "cssVar": "--color-copper",
+      "darkHex": "#FF8A65",
+      "hex": "#BF5A36",
+      "lightHex": "#BF5A36",
+      "name": "copper",
+      "onContainerDark": "#FFD3C2",
+      "onContainerLight": "#5C2410",
+      "origin": "Central African Copperbelt, Zambia & DRC",
+      "symbolism": "Connection, foundation, stewardship",
+      "usage": "Bundu ecosystem identity, the commons"
+    }
+  ],
+  "radii": {
+    "2xl": "17px",
+    "base": "14px",
+    "full": "9999px",
+    "lg": "14px",
+    "md": "12px",
+    "sm": "7px",
+    "system": "Ecosystem numbers: 7, 12, 14, 17. Buttons are always pill (rounded-full).",
+    "xl": "17px"
+  },
+  "semanticColors": [
+    {
+      "dark": "#001F3F",
+      "light": "#E3F2FD",
+      "name": "accent",
+      "usage": "Hover fills, selected rows, soft highlights. Cobalt container."
+    },
+    {
+      "dark": "#2A2927",
+      "light": "#E7E5E0",
+      "name": "border",
+      "usage": "Canonical border color — cards, inputs, dividers, tables. Warm stone, not cool gray."
+    },
+    {
+      "dark": "#B388FF",
+      "light": "#4B0082",
+      "name": "brand-accent",
+      "usage": "Per-app/per-context saturated brand mineral for accent fills and CTAs. Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app or per-event/category (nhimbe). Distinct from the semantic --accent (a pale container for hover/selected states)."
+    },
+    {
+      "dark": "#3E1818",
+      "light": "#FDEDED",
+      "name": "destructive-container",
+      "usage": "Soft background behind destructive content. Follows mineral container pattern."
+    },
+    {
+      "dark": "#F2B8B5",
+      "light": "#B3261E",
+      "name": "error",
+      "usage": "Error states, destructive actions"
+    },
+    {
+      "dark": "#00B0FF",
+      "light": "#0047AB",
+      "name": "info",
+      "usage": "Informational states"
+    },
+    {
+      "dark": "#100F0E",
+      "light": "#FFFFFF",
+      "name": "input",
+      "usage": "Form input background — same as surface. Pill-shape provides visual distinction."
+    },
+    {
+      "dark": "#A09C93",
+      "light": "#55514B",
+      "name": "neutral",
+      "usage": "Neutral / inactive status, secondary data series"
+    },
+    {
+      "dark": "#BA9570",
+      "light": "#674C32",
+      "name": "offline",
+      "usage": "Offline / disconnected state"
+    },
+    {
+      "dark": "#B388FF",
+      "light": "#4B0082",
+      "name": "primary",
+      "usage": "Primary brand action color — tanzanite (the Mukoko/Nyuchi brand mineral). Maps to --color-tanzanite. Cobalt is the exceptional mineral for links/info only (see the info token) — do not use it as --primary."
+    },
+    {
+      "dark": "#00B0FF",
+      "light": "#0047AB",
+      "name": "ring",
+      "usage": "Focus ring color — cobalt. 2px width, 2px offset (see brand_meta.accessibility)."
+    },
+    {
+      "dark": "#64FFDA",
+      "light": "#004D40",
+      "name": "success",
+      "usage": "Success states, positive actions"
+    },
+    {
+      "dark": "#36ABBA",
+      "light": "#1C5962",
+      "name": "syncing",
+      "usage": "In-progress sync / pending state"
+    },
+    {
+      "dark": "#FFD866",
+      "light": "#7A5C00",
+      "name": "warning",
+      "usage": "Warning states, caution"
+    }
+  ]
+}

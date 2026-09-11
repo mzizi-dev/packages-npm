@@ -68,7 +68,13 @@ them with a client directive in Astro (`<Switch client:load />`).
 ## 2. The design-system tools
 
 `@bundu/ui` is downstream of the **Mzizi** registry. The registry — not this package — is
-the source of truth for tokens and net-new components.
+the source of truth for tokens and net-new components, and since 0.2.0 that is mechanical
+rather than aspirational: `styles/tokens.css`, `styles/theme.css`, `tokens.json`,
+`tailwind-palette.mjs` and every `styles/brand-*.css` are generated from
+`tokens/canon.snapshot.json`, which `scripts/fetch-canon.mjs` writes from
+`api.mzizi.dev/api/v1/brand` and `mzizi-registry`'s `lib/tokens/palette.source.ts`.
+Hand-editing any of them fails `pnpm tokens:check`. The token values are **not** stored in
+a database — Mzizi holds no brand or primitive token data in one.
 
 ### mzizi MCP
 

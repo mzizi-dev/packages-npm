@@ -24,18 +24,33 @@ implementations**, not Mzizi itself. Mzizi's own registry lives at
 | [`@nyuchi/ui`](https://github.com/mukoko-dev/packages-ui/tree/main/packages/ui)      | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                         |
 | [`@bundu/ui`](https://github.com/mukoko-dev/packages-ui/tree/main/packages/bundu-ui) | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites |
 
+Both packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
+`tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
+one generator, not two hand-maintained files.
+
 ## Tokens
 
-Both packages ship the **seven African minerals** — `cobalt`, `tanzanite`,
-`malachite`, `gold`, `terracotta`, `sodalite`, `copper` — as CSS custom
-properties, in light and dark, with `brand-*.css` overlays that swap the brand
-primary.
+All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one
+`--color-*` namespace, plus the nine-step surface ladder and the connectivity status
+trio, in light and dark, with `brand-*.css` overlays that swap the brand primary.
+Everything is **generated** from `tokens/canon.snapshot.json`:
 
-The minerals are the mineral subset of the Mzizi palette, which is **21 colour
-families** in total (7 minerals, 7 heritage, 7 experimental). These packages
-deliberately ship the mineral seven only; the full palette is served from
-[`api.mzizi.dev`](https://api.mzizi.dev/api/v1/brand). Never a raw hex in
-source.
+```sh
+pnpm canon:fetch     # refresh the snapshot from canon (network, on demand)
+pnpm tokens:build    # regenerate every artifact from the snapshot (offline)
+pnpm tokens:check    # CI gate: fail if any generated file was hand-edited (offline)
+pnpm canon:parity    # CI gate: fail if the snapshot has drifted from canon (network)
+```
+
+The snapshot is machine-written from two sources that are cross-checked against each
+other — [`api.mzizi.dev/api/v1/brand`](https://api.mzizi.dev/api/v1/brand) and
+`mzizi-dev/mzizi-registry`'s `lib/tokens/palette.source.ts`. Nobody types a hex, and
+never a raw hex in source. The values do **not** live in a database; Mzizi holds no
+brand or primitive token data in one.
+
+`canon:parity` reaches the network and therefore runs in **CI only** — it refuses to run
+without `CI` set unless given `--force`. It is never in a build, a `prepack`, a
+`postinstall` or a runtime path.
 
 ## Development
 
@@ -48,9 +63,15 @@ pnpm lint
 
 Published to npm automatically by the
 [`publish` workflow](https://github.com/mukoko-dev/packages-ui/blob/main/.github/workflows/publish.yml)
-when a GitHub Release is published — `@nyuchi/*` under the `@nyuchi` npm org
-and `@bundu/*` under the `@bundu` npm org. The workflow requires an `NPM_TOKEN`
-repository secret with publish access to both orgs.
+when a GitHub Release is published (or a `v*` tag is pushed) — `@nyuchi/*` under the
+[`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org and `@bundu/*` under the
+[`@bundu`](https://www.npmjs.com/org/bundu) npm org. The workflow requires an
+`NPM_TOKEN` with publish access to both orgs. `NPM_TOKEN` is an **organisation** secret
+on `mukoko-dev` and is visible to this repository (verified 2026-09-12, after the
+transfer from `nyuchi`), so no repository-level secret is needed.
+
+Publishing is the owner's call. CI does not publish on a branch push — only on a
+published GitHub Release or a `v*` tag.
 
 ## Licence
 

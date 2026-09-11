@@ -1,0 +1,67 @@
+# Token gates.
+#
+# Two jobs, deliberately separate, because they fail for different reasons
+# and only one of them is allowed to touch the network.
+#
+#   tokens      OFFLINE. Regenerates every token artifact from
+#               tokens/canon.snapshot.json and fails if the working tree
+#               disagrees. This is the gate that makes hand-editing a
+#               generated file a build failure. It needs no credential and
+#               no third party, so it runs on every PR and every push.
+#
+#   canon-parity  NETWORK. Asks whether the committed snapshot still matches
+#               live canon (api.mzizi.dev/api/v1/brand + mzizi-registry's
+#               palette.source.ts). It runs HERE ONLY — never in a package
+#               build, never in prepack, never at runtime. A design-token
+#               package that phones home at build time renders a blank page
+#               the afternoon the API is unwell.
+#
+# Neither job can pass vacuously: `tokens` compares bytes it just generated,
+# `canon-parity` compares against an upstream this repo does not control.
+# Both are demonstrated failing on a wrong hex in the PR that added them.
+
+name: Tokens
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  merge_group:
+  schedule:
+    # Weekly. Canon moving is not urgent, but it must not be invisible.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  tokens:
+    name: generated files match the generator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tokens:check
+
+  canon-parity:
+    name: snapshot matches live canon
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm canon:parity

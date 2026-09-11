@@ -1,0 +1,142 @@
+/* @nyuchi/ui — Tailwind v4 entrypoint. GENERATED FILE — DO NOT EDIT.
+
+   Every consumer in the estate is on Tailwind v4. Until 0.2.0 this package
+   shipped only a v3-shape preset, which v4 can still load through `@config`
+   — that is how all four current consumers work today, and it keeps working.
+   This file is the native path for new consumers:
+
+     @import "tailwindcss";
+     @import "@bundu/ui/styles/theme.css";
+     @import "@bundu/ui/styles/brand-mzizi.css";
+
+   and no tailwind.config.mjs at all.
+
+   Palette families are declared with their light-mode value as the @theme
+   fallback; tokens.css's own :root / .dark rules are unlayered and therefore
+   win at runtime, which is what makes dark mode work. Tokens that alias a
+   bare ladder variable use `@theme inline` so no second definition is
+   emitted. */
+
+@import "./tokens.css";
+
+/* Palette — bg-cobalt, text-savanna, border-ember-ui, ... */
+@theme {
+  --color-cobalt: #0047ab;
+  --color-cobalt-container: #e3f2fd;
+  --color-cobalt-on-container: #002966;
+  --color-tanzanite: #4b0082;
+  --color-tanzanite-container: #f3e5f5;
+  --color-tanzanite-on-container: #2e004d;
+  --color-malachite: #004d40;
+  --color-malachite-container: #e0f2f1;
+  --color-malachite-on-container: #00332b;
+  --color-gold: #5d4037;
+  --color-gold-container: #fff8e1;
+  --color-gold-on-container: #3e2723;
+  --color-terracotta: #a0522d;
+  --color-terracotta-container: #f5e6d3;
+  --color-terracotta-on-container: #5d2906;
+  --color-sodalite: #283593;
+  --color-sodalite-container: #e8eaf6;
+  --color-sodalite-on-container: #141a5c;
+  --color-copper: #bf5a36;
+  --color-copper-container: #fbe4da;
+  --color-copper-on-container: #5c2410;
+
+  --color-indigo: #4527a0;
+  --color-savanna: #8d6e1a;
+  --color-baobab: #4e342e;
+  --color-sunset: #d84315;
+  --color-river: #006064;
+  --color-hematite: #546e7a;
+  --color-kalahari: #c9b589;
+
+  --color-ember: #843d20;
+  --color-ember-container: #ebdfdb;
+  --color-ember-on-container: #7a3115;
+  --color-ember-ui: #cd5f33;
+  --color-acacia: #4d5615;
+  --color-acacia-container: #e9ebdb;
+  --color-acacia-on-container: #48510e;
+  --color-acacia-ui: #7e8c22;
+  --color-fern: #175e17;
+  --color-fern-container: #dbebdb;
+  --color-fern-on-container: #0f570f;
+  --color-fern-ui: #259725;
+  --color-lagoon: #165b51;
+  --color-lagoon-container: #dbebe9;
+  --color-lagoon-on-container: #0e554b;
+  --color-lagoon-ui: #249383;
+  --color-storm: #284ca6;
+  --color-storm-container: #dbe0eb;
+  --color-storm-on-container: #1a409b;
+  --color-storm-ui: #577bd6;
+  --color-dusk: #742aad;
+  --color-dusk-container: #e4dbeb;
+  --color-dusk-on-container: #661b9e;
+  --color-dusk-ui: #a35dd8;
+  --color-protea: #932464;
+  --color-protea-container: #ebdbe4;
+  --color-protea-on-container: #841656;
+  --color-protea-ui: #d34998;
+
+  /* Type, radius and easing — same scale the v3 preset ships. */
+  --font-sans: "Noto Sans", system-ui, sans-serif;
+  --font-serif: "Noto Serif", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --radius-sm: 7px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 17px;
+  --radius-2xl: 17px;
+  --radius-full: 9999px;
+  --radius-pill: 9999px;
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ladder, status and semantic tokens alias bare variables, so they are
+   inlined rather than redefined — no duplicate declaration, one source. */
+@theme inline {
+  --color-pitch: var(--pitch);
+  --color-void: var(--void);
+  --color-base: var(--base);
+  --color-surface: var(--surface);
+  --color-container: var(--container);
+  --color-overlay: var(--overlay);
+  --color-raised: var(--raised);
+  --color-scrim: var(--scrim);
+  --color-wash: var(--wash);
+  --color-surface-muted: var(--surface-muted);
+
+  --color-syncing: var(--syncing);
+  --color-offline: var(--offline);
+  --color-neutral: var(--neutral);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-foreground: var(--brand-accent-foreground);
+}

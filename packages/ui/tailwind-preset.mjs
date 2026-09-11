@@ -13,98 +13,32 @@
  *     presets: [nyuchiPreset],
  *     content: ["./src/**\/*.{svelte,ts,html}"],
  *   };
+ *
+ * The colour map is GENERATED — ./tailwind-palette.mjs, built by
+ * scripts/generate-tokens.mjs from tokens/canon.snapshot.json. It carries
+ * all 21 colour families, the nine-step surface ladder and the status trio,
+ * not just the seven minerals. Everything else here is hand-authored
+ * package policy. Regenerate with `pnpm tokens:build`.
  */
+
+import { colors, families } from "./tailwind-palette.mjs";
 
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "class",
+  // Mineral utilities are often composed from data (`bg-${mineral}`), which
+  // Tailwind's scanner cannot see. Built from the generated colour map so a
+  // new canon family is safelisted the moment it lands.
   safelist: [
     {
-      pattern:
-        /^(bg|text|border|ring)-(cobalt|tanzanite|malachite|gold|terracotta|sodalite|copper)(-container|-on-container)?$/,
+      pattern: new RegExp(
+        `^(bg|text|border|ring)-(${families.join("|")})(-container|-on-container|-ui)?$`,
+      ),
     },
   ],
   theme: {
     extend: {
-      colors: {
-        // === Seven African Minerals ===
-        cobalt: {
-          DEFAULT: "var(--color-cobalt)",
-          container: "var(--color-cobalt-container)",
-          "on-container": "var(--color-cobalt-on-container)",
-        },
-        tanzanite: {
-          DEFAULT: "var(--color-tanzanite)",
-          container: "var(--color-tanzanite-container)",
-          "on-container": "var(--color-tanzanite-on-container)",
-        },
-        malachite: {
-          DEFAULT: "var(--color-malachite)",
-          container: "var(--color-malachite-container)",
-          "on-container": "var(--color-malachite-on-container)",
-        },
-        gold: {
-          DEFAULT: "var(--color-gold)",
-          container: "var(--color-gold-container)",
-          "on-container": "var(--color-gold-on-container)",
-        },
-        terracotta: {
-          DEFAULT: "var(--color-terracotta)",
-          container: "var(--color-terracotta-container)",
-          "on-container": "var(--color-terracotta-on-container)",
-        },
-        sodalite: {
-          DEFAULT: "var(--color-sodalite)",
-          container: "var(--color-sodalite-container)",
-          "on-container": "var(--color-sodalite-on-container)",
-        },
-        copper: {
-          DEFAULT: "var(--color-copper)",
-          container: "var(--color-copper-container)",
-          "on-container": "var(--color-copper-on-container)",
-        },
-
-        // === Semantic tokens ===
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        canvas: "var(--canvas)",
-        ink: "var(--ink)",
-        primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
-        },
-        secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
-        },
-        muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
-        },
-        accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
-        },
-        destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
-        },
-        card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
-        },
-        popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
-        },
-        border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
-        success: "var(--success)",
-        warning: "var(--warning)",
-        error: "var(--error)",
-        info: "var(--info)",
-      },
+      colors,
       fontFamily: {
         sans: ['"Noto Sans"', "system-ui", "sans-serif"],
         serif: ['"Noto Serif"', "Georgia", "serif"],

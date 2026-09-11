@@ -1,7 +1,7 @@
 {
   "name": "@bundu/ui",
-  "version": "0.1.1",
-  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. Astro marketing components (Hero, Section, MineralStrip, Container, Breadcrumb with valid BreadcrumbList JSON-LD, …) plus shadcn CVA + cn() React primitives mapped onto the seven-African-mineral tokens, a framework-agnostic tokens.css, a canonical globals.css, tiny brand overrides, and a Tailwind preset.",
+  "version": "0.2.0",
+  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
@@ -12,7 +12,7 @@
     "directory": "packages/bundu-ui"
   },
   "bugs": {
-    "url": "https://github.com/nyuchi/packages-ui/issues"
+    "url": "https://github.com/mukoko-dev/packages-ui/issues"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -46,11 +46,16 @@
     "./Breadcrumb.astro": "./src/Breadcrumb.astro",
     "./lib/utils": "./src/lib/utils.ts",
     "./styles/tokens.css": "./styles/tokens.css",
+    "./styles/theme.css": "./styles/theme.css",
     "./styles/globals.css": "./styles/globals.css",
     "./styles/brand-bundu.css": "./styles/brand-bundu.css",
     "./styles/brand-nyuchi.css": "./styles/brand-nyuchi.css",
     "./styles/brand-mukoko.css": "./styles/brand-mukoko.css",
-    "./tailwind-preset": "./tailwind-preset.mjs"
+    "./tailwind-preset": "./tailwind-preset.mjs",
+    "./styles/brand-shamwari.css": "./styles/brand-shamwari.css",
+    "./styles/brand-mzizi.css": "./styles/brand-mzizi.css",
+    "./tokens.json": "./tokens.json",
+    "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -64,7 +69,9 @@
   "files": [
     "src",
     "styles",
-    "tailwind-preset.mjs"
+    "tailwind-preset.mjs",
+    "tailwind-palette.mjs",
+    "tokens.json"
   ],
   "publishConfig": {
     "access": "public"
@@ -73,6 +80,8 @@
     "bundu",
     "mzizi",
     "design-system",
+    "design-tokens",
+    "tailwind",
     "marketing",
     "astro",
     "ui"

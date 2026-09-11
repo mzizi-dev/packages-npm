@@ -33,8 +33,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Offline. A tarball whose styles/tokens.css does not match the
+      # generator is a tarball nobody can reproduce from this commit.
+      - name: Verify generated token artifacts
+        run: pnpm tokens:check
+
       # Publish to npm only. Both scopes are hosted on npm: @nyuchi/* and
       # @bundu/* (@bundu/ui). NPM_TOKEN must have publish access to both orgs.
+      # NPM_TOKEN is an ORG secret on mukoko-dev (verified 2026-09-12, after
+      # the repo moved from nyuchi), so this step keeps working post-transfer.
       - name: Publish to npmjs
         run: pnpm -r publish --access public --no-git-checks
         env:

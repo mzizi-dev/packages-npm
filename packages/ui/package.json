@@ -12,7 +12,7 @@
     "directory": "packages/ui"
   },
   "bugs": {
-    "url": "https://github.com/nyuchi/packages-ui/issues"
+    "url": "https://github.com/mukoko-dev/packages-ui/issues"
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,16 +21,24 @@
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
     },
+    "./styles/tokens.css": "./styles/tokens.css",
+    "./styles/theme.css": "./styles/theme.css",
     "./styles/globals.css": "./styles/globals.css",
     "./styles/brand-bundu.css": "./styles/brand-bundu.css",
     "./styles/brand-nyuchi.css": "./styles/brand-nyuchi.css",
     "./styles/brand-mukoko.css": "./styles/brand-mukoko.css",
-    "./tailwind-preset": "./tailwind-preset.mjs"
+    "./tailwind-preset": "./tailwind-preset.mjs",
+    "./styles/brand-shamwari.css": "./styles/brand-shamwari.css",
+    "./styles/brand-mzizi.css": "./styles/brand-mzizi.css",
+    "./tokens.json": "./tokens.json",
+    "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "files": [
     "dist",
     "styles",
-    "tailwind-preset.mjs"
+    "tailwind-preset.mjs",
+    "tailwind-palette.mjs",
+    "tokens.json"
   ],
   "scripts": {
     "build": "svelte-package",
@@ -55,6 +63,7 @@
     "nyuchi",
     "mzizi",
     "design-system",
+    "design-tokens",
     "svelte",
     "sveltekit",
     "ui"
