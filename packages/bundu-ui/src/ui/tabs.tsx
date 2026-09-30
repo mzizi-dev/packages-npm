@@ -165,6 +165,13 @@ export function TabsTrigger({
 
 export interface TabsContentProps {
   value: string;
+  /**
+   * Render the panel's content even while it is inactive (it keeps the
+   * `hidden` attribute). For static rendering with no hydration — e.g. an
+   * Astro page with no `client:*` directive — where every panel has to be in
+   * the HTML and a small script (or CSS) switches them.
+   */
+  forceMount?: boolean;
   class?: string;
   className?: string;
   children?: React.ReactNode;
@@ -172,6 +179,7 @@ export interface TabsContentProps {
 
 export function TabsContent({
   value,
+  forceMount = false,
   class: astroClass,
   className,
   children,
@@ -193,7 +201,7 @@ export function TabsContent({
         className,
       )}
     >
-      {selected ? children : null}
+      {selected || forceMount ? children : null}
     </div>
   );
 }

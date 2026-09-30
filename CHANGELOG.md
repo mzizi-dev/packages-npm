@@ -36,6 +36,9 @@ Slated for **0.2.0** of both packages. Neither is published yet.
   other token file, bringing the count to 20, and exported as
   `./styles/color-scheme.css`.
 - **`@bundu/ui` — `Icon` glyphs `search`, `code` and `terminal`.**
+- **`@bundu/ui` — `TabsContent` `forceMount`.** It renders an inactive panel's content
+  (still `hidden`), so a statically rendered tab set, with no hydration, carries every
+  panel in its HTML. The default is unchanged.
 - **`@bundu/ui` — `.gradient-showcase` utility** in `styles/globals.css`. It lays soft
   washes of the brand `--primary` and cobalt over `--background`, with no hex and no
   image.
