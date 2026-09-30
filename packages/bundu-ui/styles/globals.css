@@ -200,6 +200,24 @@
     );
   }
 
+  /* Showcase hero — the brand primary and cobalt as soft washes over the
+     page background. Tokens only: it follows the brand overlay and the
+     theme, with no hex and no image. */
+  .gradient-showcase {
+    background:
+      radial-gradient(
+        ellipse 70% 60% at 100% 0%,
+        color-mix(in oklab, var(--primary) 16%, transparent) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 60% 50% at 0% 100%,
+        color-mix(in oklab, var(--color-cobalt) 10%, transparent) 0%,
+        transparent 70%
+      ),
+      var(--background);
+  }
+
   /* Subtle mineral wash — for brand accent sections */
   .wash-gold {
     background: linear-gradient(

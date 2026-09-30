@@ -7,9 +7,13 @@
 
      @import "tailwindcss";
      @import "@bundu/ui/styles/theme.css";
+     @import "@bundu/ui/styles/globals.css";   (for the Astro components)
      @import "@bundu/ui/styles/brand-mzizi.css";
+     @source "../../node_modules/@bundu/ui/src";
 
-   and no tailwind.config.mjs at all.
+   and no tailwind.config.mjs at all. The type scale, reading widths and
+   named spacing below are read from tailwind-preset.mjs, so the v3 preset
+   and this file cannot drift apart.
 
    Palette families are declared with their light-mode value as the @theme
    fallback; tokens.css's own :root / .dark rules are unlayered and therefore
@@ -80,7 +84,7 @@
   --color-protea-on-container: #841656;
   --color-protea-ui: #d34998;
 
-  /* Type, radius and easing — same scale the v3 preset ships. */
+  /* Fonts, radius and easing — the same values the v3 preset ships. */
   --font-sans: "Noto Sans", system-ui, sans-serif;
   --font-serif: "Noto Serif", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -92,6 +96,56 @@
   --radius-full: 9999px;
   --radius-pill: 9999px;
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Type scale, reading widths and named spacing — read from the v3
+     preset (tailwind-preset.mjs), so both Tailwind paths share them. */
+  --text-display: clamp(2rem, 4vw + 0.75rem, 3.5rem);
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.025em;
+  --text-display--font-weight: 700;
+  --text-display-sm: clamp(1.875rem, 3vw + 0.75rem, 3rem);
+  --text-display-sm--line-height: 1.1;
+  --text-display-sm--letter-spacing: -0.02em;
+  --text-display-sm--font-weight: 700;
+  --text-h1: clamp(2rem, 3vw + 1rem, 3rem);
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 700;
+  --text-h2: clamp(1.75rem, 2vw + 1rem, 2.25rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2--font-weight: 600;
+  --text-h3: clamp(1.5rem, 1.5vw + 1rem, 1.875rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 600;
+  --text-h4: 1.5rem;
+  --text-h4--line-height: 1.3;
+  --text-h4--letter-spacing: -0.005em;
+  --text-h4--font-weight: 600;
+  --text-h5: 1.25rem;
+  --text-h5--line-height: 1.4;
+  --text-h5--font-weight: 600;
+  --text-h6: 1rem;
+  --text-h6--line-height: 1.4;
+  --text-h6--font-weight: 600;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.5;
+  --text-caption--letter-spacing: 0.02em;
+  --container-prose: 65ch;
+  --container-narrow: 42rem;
+  --spacing-xxs: 0.125rem;
+  --spacing-xs-plus: 0.375rem;
+  --spacing-sm-plus: 0.625rem;
+  --spacing-base-plus: 1.25rem;
+  --spacing-xl-plus: 2.5rem;
+  --spacing-2xl-plus: 3.5rem;
 }
 
 /* Ladder, status and semantic tokens alias bare variables, so they are

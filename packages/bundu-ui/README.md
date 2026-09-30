@@ -86,8 +86,17 @@ pnpm add react react-dom
 ```css
 @import "tailwindcss";
 @import "@bundu/ui/styles/theme.css"; /* @imports tokens.css, adds @theme */
+@import "@bundu/ui/styles/globals.css"; /* the @layer rules the Astro components use */
 @import "@bundu/ui/styles/brand-nyuchi.css";
+@source "../../node_modules/@bundu/ui/src"; /* v4 does not scan node_modules itself */
 ```
+
+`theme.css` carries the palette, the type scale (`text-display` … `text-caption`), the
+reading widths (`max-w-narrow`) and the named spacing, so `globals.css`'s `@apply` rules
+and the components' classes resolve with no preset. Tailwind imports `tokens.css` once
+even though both files reference it. The Astro components render the React primitives
+(for example `Hero`'s buttons), so an Astro site also needs `@astrojs/react`. With no
+`client:*` directive they render to static HTML and ship no JavaScript.
 
 **1b. Tailwind v3, or v4 via `@config`** — unchanged from 0.1.x, still supported:
 
@@ -155,6 +164,54 @@ export function CTA() {
   );
 }
 ```
+
+## Hero
+
+```astro
+---
+import Hero from "@bundu/ui/Hero.astro";
+---
+
+<!-- 0.1.x usage, unchanged: a single text column -->
+<Hero
+  title="Build in the open"
+  subtitle="Bundu Ecosystem"
+  description="One line that says what this is."
+  primaryCTA={{ text: "Get started", href: "/start" }}
+  secondaryCTA={{ text: "Read the docs", href: "https://docs.example.org", external: true }}
+/>
+
+<!-- Split: text beside a live demo at lg, stacked (text first) below it -->
+<Hero
+  layout="split"
+  variant="showcase"
+  badge="Beta"
+  title="A short, bold headline"
+  description="One line of subtext."
+  primaryCTA={{ text: "Try it", href: "#demo" }}
+  mediaLabel="Live demo"
+>
+  <div slot="media"><!-- your demo, screenshot or widget --></div>
+</Hero>
+```
+
+| Prop           | Type                                               | Default     | Notes                                                                                |
+| -------------- | -------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------ |
+| `title`        | `string`                                           | —           | The `h1`.                                                                            |
+| `subtitle`     | `string`                                           | —           | Eyebrow above the headline.                                                          |
+| `description`  | `string`                                           | —           | One paragraph of subtext.                                                            |
+| `primaryCTA`   | `{ text, href, external? }`                        | —           | Pill button.                                                                         |
+| `secondaryCTA` | `{ text, href, external? }`                        | —           | Ghost button with an arrow.                                                          |
+| `variant`      | `"default" \| "gradient" \| "light" \| "showcase"` | `"default"` | `showcase` washes the brand `--primary` and cobalt over `--background`; tokens only. |
+| `align`        | `"start" \| "center"`                              | `"start"`   |                                                                                      |
+| `layout`       | `"stack" \| "split"`                               | `"stack"`   | `split` sets text and the `media` slot side by side from `lg`.                       |
+| `badge`        | `string`                                           | —           | Status pill above the headline. It is read as a claim, so keep it accurate.          |
+| `mediaLabel`   | `string`                                           | —           | Accessible name for the media region (`role="group"`).                               |
+| `media` (slot) | markup                                             | —           | Rendered beside (split) or below (stack) the text column.                            |
+
+With no `media` slot, no `badge`, `layout` left at `stack` and a 0.1.x `variant`, `Hero`
+renders **byte-identical** markup to 0.1.1. That was checked by building every
+combination of the 0.1.x props against the published 0.1.1 tarball.
 
 See [BUILDING.md](https://github.com/mukoko-dev/packages-ui/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
 21 colour families, and the no-raw-hex rule.

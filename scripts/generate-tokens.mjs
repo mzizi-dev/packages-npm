@@ -590,9 +590,13 @@ const THEME_HEADER = (
 
      @import "tailwindcss";
      @import "@bundu/ui/styles/theme.css";
+     @import "@bundu/ui/styles/globals.css";   (for the Astro components)
      @import "@bundu/ui/styles/brand-mzizi.css";
+     @source "../../node_modules/@bundu/ui/src";
 
-   and no tailwind.config.mjs at all.
+   and no tailwind.config.mjs at all. The type scale, reading widths and
+   named spacing below are read from tailwind-preset.mjs, so the v3 preset
+   and this file cannot drift apart.
 
    Palette families are declared with their light-mode value as the @theme
    fallback; tokens.css's own :root / .dark rules are unlayered and therefore
@@ -600,6 +604,41 @@ const THEME_HEADER = (
    bare ladder variable use \`@theme inline\` so no second definition is
    emitted. */
 `;
+
+/**
+ * The type scale, reading widths and named spacing the Astro components use
+ * (`text-display`, `text-body-lg`, `text-caption`, `max-w-narrow`, `p-xxs`,
+ * ...). They are hand-authored package policy in the v3 preset; theme.css
+ * READS them from there rather than restating them, so a v4 consumer and a
+ * v3 consumer get the same scale from one definition. Both presets must agree
+ * on type and widths (theme.css is byte-identical across the packages), and
+ * the generator fails if they do not. Named spacing comes from @bundu/ui's
+ * preset; @nyuchi/ui's declares none, and the extra names are inert there.
+ */
+async function presetScale() {
+  const [bundu, nyuchi] = await Promise.all(
+    PACKAGES.map((dir) =>
+      import(resolve(ROOT, dir, "tailwind-preset.mjs")).then(
+        (mod) => mod.default.theme.extend,
+      ),
+    ),
+  );
+  for (const key of ["fontSize", "maxWidth"]) {
+    if (JSON.stringify(bundu[key]) !== JSON.stringify(nyuchi[key])) {
+      throw new Error(
+        `the two tailwind-preset.mjs files disagree on theme.extend.${key}; ` +
+          "theme.css is shared, so they must match",
+      );
+    }
+  }
+  return {
+    fontSize: bundu.fontSize,
+    maxWidth: bundu.maxWidth,
+    spacing: bundu.spacing ?? {},
+  };
+}
+
+const SCALE = await presetScale();
 
 function emitThemeCss(pkg, m) {
   const lines = [];
@@ -625,7 +664,7 @@ function emitThemeCss(pkg, m) {
     push(`  --color-${x.name}-ui: ${norm(x.uiLight)};`);
   }
   push("");
-  push("  /* Type, radius and easing — same scale the v3 preset ships. */");
+  push("  /* Fonts, radius and easing — the same values the v3 preset ships. */");
   push('  --font-sans: "Noto Sans", system-ui, sans-serif;');
   push('  --font-serif: "Noto Serif", Georgia, serif;');
   push('  --font-mono: "JetBrains Mono", ui-monospace, monospace;');
@@ -638,6 +677,28 @@ function emitThemeCss(pkg, m) {
   push(`  --radius-full: ${r.full};`);
   push(`  --radius-pill: ${r.full};`);
   push("  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);");
+  push("");
+  push(
+    "  /* Type scale, reading widths and named spacing — read from the v3\n" +
+      "     preset (tailwind-preset.mjs), so both Tailwind paths share them. */",
+  );
+  const cssProp = { lineHeight: "line-height", letterSpacing: "letter-spacing", fontWeight: "font-weight" };
+  for (const [name, value] of Object.entries(SCALE.fontSize)) {
+    const [size, opts = {}] = Array.isArray(value) ? value : [value];
+    push(`  --text-${name}: ${size};`);
+    for (const [k, v] of Object.entries(opts)) {
+      if (!cssProp[k]) throw new Error(`fontSize.${name}: unsupported option ${k}`);
+      push(`  --text-${name}--${cssProp[k]}: ${v};`);
+    }
+  }
+  for (const [name, value] of Object.entries(SCALE.maxWidth)) {
+    push(`  --container-${name}: ${value};`);
+  }
+  for (const [name, value] of Object.entries(SCALE.spacing)) {
+    // Numeric keys (18, 88) are already covered by v4's spacing multiplier.
+    if (/^\d+$/.test(name)) continue;
+    push(`  --spacing-${name}: ${value};`);
+  }
   push("}");
   push("");
   push(
