@@ -15,7 +15,10 @@ the npm registry.
 
 ## [Unreleased]
 
-Slated for **0.2.0** of both packages. Neither is published yet.
+## [@bundu/ui 0.2.0, @nyuchi/ui 0.2.0] - 2026-09-30
+
+Published to npm from the `v0.2.0` tag. `@nyuchi/ui` 0.2.0 is **Breaking**: the Svelte 5
+library replaces the Astro components published as 0.1.2.
 
 ### Added
 
