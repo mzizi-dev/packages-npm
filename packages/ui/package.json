@@ -23,6 +23,7 @@
     },
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",
+    "./styles/color-scheme.css": "./styles/color-scheme.css",
     "./styles/globals.css": "./styles/globals.css",
     "./styles/brand-bundu.css": "./styles/brand-bundu.css",
     "./styles/brand-nyuchi.css": "./styles/brand-nyuchi.css",

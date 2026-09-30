@@ -87,9 +87,15 @@ pnpm add react react-dom
 @import "tailwindcss";
 @import "@bundu/ui/styles/theme.css"; /* @imports tokens.css, adds @theme */
 @import "@bundu/ui/styles/globals.css"; /* the @layer rules the Astro components use */
+@import "@bundu/ui/styles/color-scheme.css"; /* optional: follow the OS dark setting */
 @import "@bundu/ui/styles/brand-nyuchi.css";
 @source "../../node_modules/@bundu/ui/src"; /* v4 does not scan node_modules itself */
 ```
+
+`color-scheme.css` is opt-in. `tokens.css` only turns dark under `.dark` or
+`[data-theme="dark"]`, and this file adds the same dark values under
+`prefers-color-scheme: dark`, for sites with no theme script. An explicit
+`data-theme="light"` still wins. Import it before the brand overlay.
 
 `theme.css` carries the palette, the type scale (`text-display` … `text-caption`), the
 reading widths (`max-w-narrow`) and the named spacing, so `globals.css`'s `@apply` rules

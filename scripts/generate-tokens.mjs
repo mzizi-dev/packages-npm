@@ -555,6 +555,50 @@ const HEADER = (
    working unchanged. */
 `;
 
+const COLOR_SCHEME_HEADER = (
+  pkg,
+) => `/* ${pkg} — follow the reader's OS colour scheme. GENERATED FILE — DO NOT EDIT.
+
+   OPT-IN. tokens.css switches to dark only under .dark or
+   [data-theme="dark"], which needs something (a class toggle, a script) to
+   set them. A site with no theme script that should still honour
+   prefers-color-scheme imports this file as well:
+
+     @import "@bundu/ui/styles/theme.css";          (or tokens.css)
+     @import "@bundu/ui/styles/color-scheme.css";   <- after it
+     @import "@bundu/ui/styles/brand-mzizi.css";    <- brand overlays last
+
+   It repeats tokens.css's dark block under @media (prefers-color-scheme:
+   dark). An explicit data-theme="light" or .light still wins. The selector
+   is wrapped in :where(), so it has :root's specificity and a brand overlay
+   imported after it keeps its --primary. Same values, same generator. */
+`;
+
+function emitColorSchemeCss(pkg, decls) {
+  const dark = emitBlock(decls, "dark")
+    .split("\n")
+    .map((line) => (line ? `  ${line}` : line))
+    .join("\n");
+  return [
+    COLOR_SCHEME_HEADER(pkg),
+    ":root {",
+    "  color-scheme: light dark;",
+    "}",
+    "",
+    '[data-theme="light"],',
+    ".light {",
+    "  color-scheme: light;",
+    "}",
+    "",
+    "@media (prefers-color-scheme: dark) {",
+    '  :root:where(:not([data-theme="light"], .light)) {',
+    dark,
+    "  }",
+    "}",
+    "",
+  ].join("\n");
+}
+
 function emitTokensCss(pkg, m, decls, meta) {
   return [
     HEADER(pkg, meta),
@@ -1127,6 +1171,7 @@ async function build() {
       [`${dir}/tailwind-palette.mjs`, emitPaletteModule(pkg, m)],
       [`${dir}/styles/tokens.css`, emitTokensCss(pkg, m, decls, meta)],
       [`${dir}/styles/theme.css`, emitThemeCss(pkg, m)],
+      [`${dir}/styles/color-scheme.css`, emitColorSchemeCss(pkg, decls)],
       [
         `${dir}/tokens.json`,
         await format(

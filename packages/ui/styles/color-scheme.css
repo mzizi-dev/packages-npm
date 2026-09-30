@@ -1,0 +1,193 @@
+/* @nyuchi/ui — follow the reader's OS colour scheme. GENERATED FILE — DO NOT EDIT.
+
+   OPT-IN. tokens.css switches to dark only under .dark or
+   [data-theme="dark"], which needs something (a class toggle, a script) to
+   set them. A site with no theme script that should still honour
+   prefers-color-scheme imports this file as well:
+
+     @import "@bundu/ui/styles/theme.css";          (or tokens.css)
+     @import "@bundu/ui/styles/color-scheme.css";   <- after it
+     @import "@bundu/ui/styles/brand-mzizi.css";    <- brand overlays last
+
+   It repeats tokens.css's dark block under @media (prefers-color-scheme:
+   dark). An explicit data-theme="light" or .light still wins. The selector
+   is wrapped in :where(), so it has :root's specificity and a brand overlay
+   imported after it keeps its --primary. Same values, same generator. */
+
+:root {
+  color-scheme: light dark;
+}
+
+[data-theme="light"],
+.light {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"], .light)) {
+    /* === Seven African Minerals — the deep-earth + hand families */
+    --color-cobalt: #00b0ff; /* Primary blue, links, CTAs */
+    --color-cobalt-container: #001f3f;
+    --color-cobalt-on-container: #b3e5fc;
+
+    --color-tanzanite: #b388ff; /* Purple accent, brand/logo, social features */
+    --color-tanzanite-container: #1a0033;
+    --color-tanzanite-on-container: #e1bee7;
+
+    --color-malachite: #64ffda; /* Success states, positive actions */
+    --color-malachite-container: #00251a;
+    --color-malachite-on-container: #a7ffeb;
+
+    --color-gold: #ffd740; /* Achievements, rewards, highlights */
+    --color-gold-container: #332200;
+    --color-gold-on-container: #ffecb3;
+
+    --color-terracotta: #e1b07e; /* Community features, warmth */
+    --color-terracotta-container: #3e2817;
+    --color-terracotta-on-container: #f5e6d3;
+
+    --color-sodalite: #3d5afe; /* AI/Shamwari surfaces, deep-reasoning states */
+    --color-sodalite-container: #0d1442;
+    --color-sodalite-on-container: #c5cae9;
+
+    --color-copper: #ff8a65; /* Bundu ecosystem identity, the commons */
+    --color-copper-container: #3a1a0e;
+    --color-copper-on-container: #ffd3c2;
+
+    /* === Seven heritage tones — atmospheric anchors. Canon carries light/dark
+       only for these; there is no container step. */
+    /* Twilight surfaces, deep atmosphere, mini-app moods */
+    --color-indigo: #7986cb;
+
+    --color-savanna: #e5c158; /* Warm grassland surfaces, daylight atmosphere */
+
+    /* Earthy surfaces, grounded atmosphere, bark tones */
+    --color-baobab: #a1887f;
+
+    --color-sunset: #ff7043; /* Warm accent surfaces, golden-hour atmosphere */
+
+    --color-river: #4dd0e1; /* Cool surfaces, flowing atmosphere, water tones */
+
+    --color-hematite: #90a4ae; /* Neutral anchor, mini-app surfaces, atmosphere */
+
+    /* Light anchor, warm backgrounds, mini-app surfaces */
+    --color-kalahari: #e8d9b5;
+
+    /* === Seven experimental tones — the computed heptagon (hues offset 17°,
+       prime saturations). `-ui` is the solved interactive step. */
+    --color-ember: #da8766;
+    --color-ember-container: #352721;
+    --color-ember-on-container: #eba68a;
+    --color-ember-ui: #bb562d;
+
+    --color-acacia: #93a528;
+    --color-acacia-container: #333521;
+    --color-acacia-on-container: #b6ce23;
+    --color-acacia-ui: #768420;
+
+    --color-fern: #2cb42b;
+    --color-fern-container: #213521;
+    --color-fern-on-container: #28db28;
+    --color-fern-ui: #228d22;
+
+    --color-lagoon: #2aae9b;
+    --color-lagoon-container: #213532;
+    --color-lagoon-on-container: #24d6bc;
+    --color-lagoon-ui: #218a7a;
+
+    --color-storm: #7e9be0;
+    --color-storm-container: #212735;
+    --color-storm-on-container: #99b2ee;
+    --color-storm-ui: #426cd1;
+
+    --color-dusk: #ba87e2;
+    --color-dusk-container: #2d2135;
+    --color-dusk-on-container: #cc9fef;
+    --color-dusk-ui: #9749d3;
+
+    --color-protea: #df7bb4;
+    --color-protea-container: #35212d;
+    --color-protea-on-container: #ed98c9;
+    --color-protea-ui: #ca3188;
+
+    /* === Nine-step surface ladder, shallow to deep. Prime steps P2..P17. */
+    --pitch: #050505; /* Deepest surface — media wells, splash (prime step P2) */
+    --void: #080807; /* App shell behind base (prime step P3) */
+    --base: #0e0d0c; /* Page background — ambient base surface (prime step P5) */
+    --surface: #131211; /* Card / panel surface (prime step P7) */
+    /* Neutral containers, grouped content (prime step P11) */
+    --container: #1e1d1a;
+    --overlay: #23221f; /* Overlays and dialogs (prime step P13) */
+    /* Raised elements above overlay — menus, toasts (prime step P17) */
+    --raised: #2e2c29;
+    --scrim: rgba(0, 0, 0, 0.6); /* Semi-transparent backdrop behind overlays */
+    /* Cover-colour page wash — surface tinted with the active brand accent (~7%
+       light / ~12% dark) */
+    --wash: color-mix(in oklab, var(--surface) 88%, var(--brand-accent));
+    /* Deepest fill — inset sections, metadata rows, maximum text contrast. Canon
+       calls this background "muted"; the shadcn semantic --muted already owns
+       that name below. */
+    --surface-muted: #050504;
+
+    /* === Per-app brand mineral. --wash mixes it into --surface; the brand-*.css
+       overlays repoint it alongside --primary. */
+    /* Per-app/per-context saturated brand mineral for accent fills and CTAs.
+       Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app
+       or per-event/category (nhimbe). Distinct from the semantic --accent (a pale
+       container for hover/selected states). */
+    --brand-accent: #b388ff;
+    --brand-accent-foreground: #0e0d0c;
+
+    /* === Connectivity status trio. */
+    --syncing: #36abba; /* In-progress sync / pending state */
+    --offline: #ba9570; /* Offline / disconnected state */
+    --neutral: #a09c93; /* Neutral / inactive status, secondary data series */
+
+    /* === Semantic tokens — the shadcn/Tailwind contract. */
+    /* Canon `base`. Was #faf9f4 / #100f0e before 0.2.0 — drift fixes 1 and 2. */
+    --background: var(--base);
+    --canvas: var(--background);
+    --foreground: #f0efe9;
+    --ink: var(--foreground);
+    /* Dark was #1a1917 before 0.2.0 — drift fix 3. Light stays white: a marketing
+       card floats above the base by design. */
+    --card: var(--surface);
+    --card-foreground: var(--foreground);
+    --popover: var(--card);
+    --popover-foreground: var(--card-foreground);
+    /* Drift fix 6. Canon: "Cobalt is the exceptional mineral for links/info only
+       — do not use it as --primary." Every brand-*.css overlay repoints this;
+       tanzanite is the unbranded default. */
+    --primary: var(--color-tanzanite);
+    --primary-foreground: #1a1917;
+    --secondary: #2a2927; /* Light was #f4f2ec before 0.2.0 — drift fix 5. */
+    --secondary-foreground: var(--foreground);
+    --muted: #2a2927; /* Light was #f4f2ec before 0.2.0 — drift fix 4. */
+    --muted-foreground: #a8a6a0;
+    --accent: var(--color-cobalt-container);
+    --accent-foreground: var(--color-cobalt-on-container);
+    --destructive: #f2b8b5;
+    --destructive-foreground: #1a1917;
+    --destructive-container: #3e1818;
+    --border: #2a2927;
+    --input: #100f0e;
+    /* Focus ring color — cobalt. 2px width, 2px offset (see
+       brand_meta.accessibility). */
+    --ring: var(--color-cobalt);
+    --success: var(--color-malachite);
+    --warning: #ffd866;
+    --error: var(--destructive);
+    --info: var(--color-cobalt); /* Informational states */
+
+    /* === Legacy aliases. 0.1.1 namespaced the heritage tones --heritage-*; they
+       are --color-* now, like every other family. These keep the four existing
+       consumers compiling unchanged. Do not use in new code. */
+    --heritage-indigo: var(--color-indigo);
+    --heritage-savanna: var(--color-savanna);
+    --heritage-baobab: var(--color-baobab);
+    --heritage-sunset: var(--color-sunset);
+    --heritage-river: var(--color-river);
+    --heritage-hematite: var(--color-hematite);
+    --heritage-kalahari: var(--color-kalahari);
+  }
+}
