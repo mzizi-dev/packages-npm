@@ -23,6 +23,7 @@ the npm registry.
   by the formatter, and `@nyuchi/ui`'s `Breadcrumb` writes its JSON-LD closing tag as
   `<\/script>` (the same string at runtime) so the linter can parse the component.
   No API change.
+- **Removed `.github/workflows/lint.yml`.** The `mzizi-dev` org ruleset now runs the shared lint on every pull request through `mzizi-dev/.github`'s `org-lint.yml`, publishing the same five `lint / …` checks, so the repo's own caller only ran lint a second time.
 
 ## [@bundu/ui 0.2.0, @nyuchi/ui 0.2.0] - 2026-09-30
 
