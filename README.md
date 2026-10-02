@@ -2,8 +2,8 @@
 
 > Shared, publishable UI packages — Nyuchi's implementation of the Mzizi architecture, consumed by the marketing and documentation sites.
 
-[![Lint](https://github.com/mukoko-dev/packages-ui/actions/workflows/lint.yml/badge.svg)](https://github.com/mukoko-dev/packages-ui/actions/workflows/lint.yml)
-[![Publish](https://github.com/mukoko-dev/packages-ui/actions/workflows/publish.yml/badge.svg)](https://github.com/mukoko-dev/packages-ui/actions/workflows/publish.yml)
+[![Lint](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
+[![Publish](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
@@ -21,8 +21,8 @@ implementations**, not Mzizi itself. Mzizi's own registry lives at
 
 | Package                                                                              | Framework          | What it is                                                               |
 | ------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------ |
-| [`@nyuchi/ui`](https://github.com/mukoko-dev/packages-ui/tree/main/packages/ui)      | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                         |
-| [`@bundu/ui`](https://github.com/mukoko-dev/packages-ui/tree/main/packages/bundu-ui) | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites |
+| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)      | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                         |
+| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui) | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites |
 
 Both packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
 `tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
@@ -62,18 +62,19 @@ pnpm lint
 ## Publishing
 
 Published to npm automatically by the
-[`publish` workflow](https://github.com/mukoko-dev/packages-ui/blob/main/.github/workflows/publish.yml)
+[`publish` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/publish.yml)
 when a GitHub Release is published (or a `v*` tag is pushed) — `@nyuchi/*` under the
 [`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org and `@bundu/*` under the
 [`@bundu`](https://www.npmjs.com/org/bundu) npm org. The workflow requires an
 `NPM_TOKEN` with publish access to both orgs. `NPM_TOKEN` is an **organisation** secret
-on `mukoko-dev` and is visible to this repository (verified 2026-09-12, after the
-transfer from `nyuchi`), so no repository-level secret is needed.
+on `mzizi-dev`, visible to all its repositories (the repo moved here from
+`mukoko-dev` on 2026-10-02), so no repository-level secret is needed. Check that
+this token can publish to both npm orgs before the first release from here.
 
 Publishing is the owner's call. CI does not publish on a branch push — only on a
 published GitHub Release or a `v*` tag.
 
 ## Licence
 
-[MIT](https://github.com/mukoko-dev/packages-ui/blob/main/LICENSE) © Nyuchi
+[MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi
 Africa (Pvt) Ltd.

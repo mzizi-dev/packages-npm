@@ -3,10 +3,10 @@
 > Svelte 5 / SvelteKit component library for the Nyuchi Design System — accessible primitives on the Mzizi tokens (all 21 colour families).
 
 [![npm](https://img.shields.io/npm/v/%40nyuchi%2Fui?style=flat-square&logo=npm)](https://www.npmjs.com/package/@nyuchi/ui)
-[![Lint](https://img.shields.io/github/actions/workflow/status/mukoko-dev/packages-ui/lint.yml?branch=main&label=lint&style=flat-square)](https://github.com/mukoko-dev/packages-ui/actions/workflows/lint.yml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/mzizi-dev/packages-npm/lint.yml?branch=main&label=lint&style=flat-square)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-**Repo:** [mukoko-dev/packages-ui](https://github.com/mukoko-dev/packages-ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+**Repo:** [mzizi-dev/packages-npm](https://github.com/mzizi-dev/packages-npm) | **Architecture:** [mzizi.dev](https://mzizi.dev)
 
 ---
 
@@ -55,7 +55,7 @@ nine-step surface ladder (`--pitch --void --base --surface --container --overlay
 --raised --scrim --wash`), the connectivity status trio (`--syncing --offline
 --neutral`) and the semantic (shadcn) contract, in light and dark.
 
-It is **generated** — see the [repo README](https://github.com/mukoko-dev/packages-ui#tokens) — and is
+It is **generated** — see the [repo README](https://github.com/mzizi-dev/packages-npm#tokens) — and is
 byte-identical to `@bundu/ui`'s. Until 0.2.0 this package carried its own
 hand-written copy of the palette inside `globals.css`, which had drifted and
 disagreed with `@bundu/ui` about Bundu's own brand mineral. That copy is gone.
@@ -129,8 +129,8 @@ All components use semantic-token classes only — **no raw hex**.
 
 ## Building
 
-See [BUILDING.md](https://github.com/mukoko-dev/packages-ui/blob/main/packages/ui/BUILDING.md).
+See [BUILDING.md](https://github.com/mzizi-dev/packages-npm/blob/main/packages/ui/BUILDING.md).
 
 ## Licence
 
-[MIT](https://github.com/mukoko-dev/packages-ui/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.
+[MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.

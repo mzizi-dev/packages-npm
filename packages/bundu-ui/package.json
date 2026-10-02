@@ -5,14 +5,14 @@
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
-  "homepage": "https://github.com/mukoko-dev/packages-ui#readme",
+  "homepage": "https://github.com/mzizi-dev/packages-npm#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mukoko-dev/packages-ui.git",
+    "url": "git+https://github.com/mzizi-dev/packages-npm.git",
     "directory": "packages/bundu-ui"
   },
   "bugs": {
-    "url": "https://github.com/mukoko-dev/packages-ui/issues"
+    "url": "https://github.com/mzizi-dev/packages-npm/issues"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",

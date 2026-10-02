@@ -40,8 +40,9 @@ jobs:
 
       # Publish to npm only. Both scopes are hosted on npm: @nyuchi/* and
       # @bundu/* (@bundu/ui). NPM_TOKEN must have publish access to both orgs.
-      # NPM_TOKEN is an ORG secret on mukoko-dev (verified 2026-09-12, after
-      # the repo moved from nyuchi), so this step keeps working post-transfer.
+      # NPM_TOKEN is an ORG secret on mzizi-dev, visible to all its repos (the
+      # repo moved here from mukoko-dev on 2026-10-02). Confirm it can publish
+      # to both npm orgs before the first release from here.
       - name: Publish to npmjs
         run: pnpm -r publish --access public --no-git-checks
         env:

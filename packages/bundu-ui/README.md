@@ -3,10 +3,10 @@
 > The marketing UI kit for the Bundu ecosystem — editorial Astro building blocks plus shadcn-style React primitives on the Mzizi tokens (all 21 colour families).
 
 [![npm](https://img.shields.io/npm/v/%40bundu%2Fui?style=flat-square&logo=npm)](https://www.npmjs.com/package/@bundu/ui)
-[![Lint](https://img.shields.io/github/actions/workflow/status/mukoko-dev/packages-ui/lint.yml?branch=main&label=lint&style=flat-square)](https://github.com/mukoko-dev/packages-ui/actions/workflows/lint.yml)
+[![Lint](https://img.shields.io/github/actions/workflow/status/mzizi-dev/packages-npm/lint.yml?branch=main&label=lint&style=flat-square)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-**Repo:** [mukoko-dev/packages-ui](https://github.com/mukoko-dev/packages-ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+**Repo:** [mzizi-dev/packages-npm](https://github.com/mzizi-dev/packages-npm) | **Architecture:** [mzizi.dev](https://mzizi.dev)
 
 ---
 
@@ -219,9 +219,9 @@ With no `media` slot, no `badge`, `layout` left at `stack` and a 0.1.x `variant`
 renders **byte-identical** markup to 0.1.1. That was checked by building every
 combination of the 0.1.x props against the published 0.1.1 tarball.
 
-See [BUILDING.md](https://github.com/mukoko-dev/packages-ui/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
+See [BUILDING.md](https://github.com/mzizi-dev/packages-npm/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
 21 colour families, and the no-raw-hex rule.
 
 ## Licence
 
-[MIT](https://github.com/mukoko-dev/packages-ui/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.
+[MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.
