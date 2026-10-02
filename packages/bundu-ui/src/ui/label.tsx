@@ -10,8 +10,7 @@ import { cn } from "../lib/utils";
  */
 export const labelClasses = "text-body-sm font-medium text-foreground";
 
-export interface LabelProps
-  extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /** Astro-style class attribute (merged with `className`). */
   class?: string;
   className?: string;

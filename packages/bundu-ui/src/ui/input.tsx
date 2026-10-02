@@ -16,8 +16,7 @@ import { cn } from "../lib/utils";
 export const inputClasses =
   "flex h-12 w-full rounded-lg border border-border bg-background px-4 text-body text-foreground transition-colors placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Astro-style class attribute (merged with `className`). */
   class?: string;
   className?: string;

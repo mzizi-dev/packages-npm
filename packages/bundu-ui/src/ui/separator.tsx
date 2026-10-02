@@ -10,8 +10,7 @@ import { cn } from "../lib/utils";
  * a11y tree; set `decorative={false}` for a semantic separator that
  * exposes `role="separator"` + `aria-orientation`.
  */
-export interface SeparatorProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical";
   decorative?: boolean;
   class?: string;
@@ -31,7 +30,11 @@ export function Separator({
       data-orientation={orientation}
       role={decorative ? "none" : "separator"}
       aria-orientation={
-        decorative ? undefined : orientation === "vertical" ? "vertical" : "horizontal"
+        decorative
+          ? undefined
+          : orientation === "vertical"
+            ? "vertical"
+            : "horizontal"
       }
       className={cn(
         "shrink-0 bg-border",

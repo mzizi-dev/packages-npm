@@ -12,8 +12,7 @@ import { cn } from "../lib/utils";
 export const textareaClasses =
   "flex min-h-24 w-full rounded-lg border border-border bg-background px-4 py-3 text-body text-foreground transition-colors placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
 
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** Astro-style class attribute (merged with `className`). */
   class?: string;
   className?: string;

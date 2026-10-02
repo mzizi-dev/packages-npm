@@ -708,7 +708,9 @@ function emitThemeCss(pkg, m) {
     push(`  --color-${x.name}-ui: ${norm(x.uiLight)};`);
   }
   push("");
-  push("  /* Fonts, radius and easing — the same values the v3 preset ships. */");
+  push(
+    "  /* Fonts, radius and easing — the same values the v3 preset ships. */",
+  );
   push('  --font-sans: "Noto Sans", system-ui, sans-serif;');
   push('  --font-serif: "Noto Serif", Georgia, serif;');
   push('  --font-mono: "JetBrains Mono", ui-monospace, monospace;');
@@ -726,12 +728,17 @@ function emitThemeCss(pkg, m) {
     "  /* Type scale, reading widths and named spacing — read from the v3\n" +
       "     preset (tailwind-preset.mjs), so both Tailwind paths share them. */",
   );
-  const cssProp = { lineHeight: "line-height", letterSpacing: "letter-spacing", fontWeight: "font-weight" };
+  const cssProp = {
+    lineHeight: "line-height",
+    letterSpacing: "letter-spacing",
+    fontWeight: "font-weight",
+  };
   for (const [name, value] of Object.entries(SCALE.fontSize)) {
     const [size, opts = {}] = Array.isArray(value) ? value : [value];
     push(`  --text-${name}: ${size};`);
     for (const [k, v] of Object.entries(opts)) {
-      if (!cssProp[k]) throw new Error(`fontSize.${name}: unsupported option ${k}`);
+      if (!cssProp[k])
+        throw new Error(`fontSize.${name}: unsupported option ${k}`);
       push(`  --text-${name}--${cssProp[k]}: ${v};`);
     }
   }

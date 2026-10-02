@@ -71,8 +71,7 @@ export function Tabs({
   );
 }
 
-export interface TabsListProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
   class?: string;
   className?: string;
 }
@@ -96,7 +95,8 @@ export function TabsList({
     e.preventDefault();
     let next = idx;
     if (e.key === "ArrowRight") next = (idx + 1) % tabs.length;
-    else if (e.key === "ArrowLeft") next = (idx - 1 + tabs.length) % tabs.length;
+    else if (e.key === "ArrowLeft")
+      next = (idx - 1 + tabs.length) % tabs.length;
     else if (e.key === "Home") next = 0;
     else if (e.key === "End") next = tabs.length - 1;
     tabs[next]?.focus();

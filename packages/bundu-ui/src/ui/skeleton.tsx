@@ -8,8 +8,7 @@ import { cn } from "../lib/utils";
  * Size it with utility classes (`h-4 w-32`, `h-10 w-10 rounded-full`,
  * …) via `class` / `className`.
  */
-export interface SkeletonProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   class?: string;
   className?: string;
 }

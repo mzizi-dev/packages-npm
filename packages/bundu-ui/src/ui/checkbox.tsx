@@ -14,8 +14,7 @@ import { cn } from "../lib/utils";
  * native checkbox. The 20px box sits inside a comfortable label hit
  * area; pair it with a `<Label>` for a larger touch target.
  */
-export interface CheckboxProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   class?: string;
   className?: string;
 }

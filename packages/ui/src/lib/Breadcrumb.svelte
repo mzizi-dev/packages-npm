@@ -81,7 +81,7 @@
 
 <svelte:head>
   {#if shouldRender}
-    {@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
+    {@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}<\/script>`}
   {/if}
 </svelte:head>
 

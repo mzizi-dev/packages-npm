@@ -15,6 +15,15 @@ the npm registry.
 
 ## [Unreleased]
 
+### Changed
+
+- **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies
+  (`prettier` stays, for the token generator only), and `vp check` (format plus
+  type-aware lint) is the repo's check. Source files in both packages were re-wrapped
+  by the formatter, and `@nyuchi/ui`'s `Breadcrumb` writes its JSON-LD closing tag as
+  `<\/script>` (the same string at runtime) so the linter can parse the component.
+  No API change.
+
 ## [@bundu/ui 0.2.0, @nyuchi/ui 0.2.0] - 2026-09-30
 
 Published to npm from the `v0.2.0` tag. `@nyuchi/ui` 0.2.0 is **Breaking**: the Svelte 5

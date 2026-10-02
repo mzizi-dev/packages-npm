@@ -17,8 +17,7 @@ export const alertVariants = cva(
         info: "bg-cobalt-container text-cobalt-on-container border-transparent",
         success:
           "bg-malachite-container text-malachite-on-container border-transparent",
-        warning:
-          "bg-gold-container text-gold-on-container border-transparent",
+        warning: "bg-gold-container text-gold-on-container border-transparent",
         destructive: "bg-card text-destructive border-destructive/40",
       },
     },
@@ -29,7 +28,8 @@ export const alertVariants = cva(
 );
 
 export interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {
   class?: string;
   className?: string;
@@ -54,8 +54,7 @@ export function Alert({
   );
 }
 
-export interface AlertTitleProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface AlertTitleProps extends React.HTMLAttributes<HTMLParagraphElement> {
   class?: string;
   className?: string;
 }

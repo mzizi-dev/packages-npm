@@ -18,11 +18,15 @@
     "canon:parity": "node scripts/check-canon-parity.mjs",
     "tokens:build": "node scripts/generate-tokens.mjs",
     "tokens:check": "node scripts/generate-tokens.mjs --check",
-    "format": "prettier --write \"**/*.{md,mdx,json,jsonc}\" --config .prettierrc --ignore-path .prettierignore --no-error-on-unmatched-pattern",
-    "format:check": "prettier --check \"**/*.{md,mdx,json,jsonc}\" --config .prettierrc --ignore-path .prettierignore --no-error-on-unmatched-pattern"
+    "check": "vp check",
+    "test": "vp test --passWithNoTests",
+    "build": "pnpm -r --if-present run build",
+    "lint": "vp lint",
+    "fmt": "vp fmt"
   },
   "devDependencies": {
-    "prettier": "3.9.4"
+    "prettier": "3.9.4",
+    "vite-plus": "1.0.0"
   },
   "engines": {
     "node": ">=20",
