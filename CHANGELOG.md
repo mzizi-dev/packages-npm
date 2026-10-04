@@ -35,8 +35,29 @@ the npm registry.
   higher-contrast colourway with a tighter frame (the bundu-ecosystem-icons
   pair), still scaled to 128px and never redrawn.
 
+### Changed (`@nyuchi/ui` 0.3.0)
+
+- **`@nyuchi/ui` is 0.3.0** (version bumped in `packages/ui/package.json`; not
+  yet published: it is released from a tag). 0.2.0 is on npm, so the eight
+  brand overlays added since (`brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
+  `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
+  `brand-learning`) need a new version to ship. Additive only: new exports.
+
 ### Added
 
+- **`brand-kweli.css` (malachite) and `brand-learning.css` (gold), in both
+  packages**, so Kweli and Nyuchi Learning dashboards can adopt the Mzizi
+  Dashboard Standard (mzizi-dev/mzizi-registry#404). Owner decisions,
+  2026-10-04: Kweli is malachite (it used to borrow Mukoko's tanzanite), and
+  Nyuchi Learning / education is gold, because every Nyuchi brand is gold.
+  Canon's ecosystem table now carries `kweli`, `learning`, `news` and
+  `weather` rows (mzizi-dev/mzizi-registry#409); until the snapshot picks them
+  up through `/v1/brand`, `LOCAL_BRAND_MINERALS` gives the same answers, and
+  the news and weather overlays now cite canon instead of the mini-app accent
+  table. A canon row that disagrees still fails the generator. New
+  `scripts/brand-overlays.test.mjs` checks, in both packages, that every
+  decided brand ships on its decided family, that every overlay repoints
+  `--primary` and `--ring` only, and that every overlay is exported.
 - **Brand overlays for six sub-apps, in both packages:** `brand-nhimbe.css`
   (malachite), `brand-lingo.css` (cobalt), `brand-bushtrade.css` (gold),
   `brand-campfire.css` (malachite), `brand-news.css` (cobalt) and
