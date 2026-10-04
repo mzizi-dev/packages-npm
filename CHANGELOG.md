@@ -50,84 +50,58 @@ version it should be, and the other packages still publish. A major needs a manu
   and the job fails at the end naming what did not publish. A package whose
   workspace dependency is not on npm is held back, not published uninstallable.
 
-## [@bundu/ui 0.5.0, @nyuchi/ui 0.4.0] - 2026-10-04
+## [@bundu/ui 0.3.0, @nyuchi/ui 0.3.0, @bundu/server 0.1.0] - 2026-10-04
 
-Owner decisions, 2026-10-04 ([mukoko-dev/nhimbe#155](https://github.com/mukoko-dev/nhimbe/issues/155)):
-the nhimbe brand is retired. The events platform is **Mukoko Events**, at
-events.mukoko.com, and its mineral stays malachite.
+The first release from the release workflow, which publishes and tags on merge to
+`main` with no hand-pushed tag (mzizi-dev/packages-npm#25). Owner decision, 2026-10-04:
+versions that were bumped here but never published are reset to the org versioning
+policy, so each package's next release is one minor above what npm has. npm has
+`@bundu/ui` 0.2.0 and `@nyuchi/ui` 0.2.0, so both are 0.3.0; `@bundu/server` is new,
+at 0.1.0.
 
-### Added (`@bundu/ui` 0.5.0, `@nyuchi/ui` 0.4.0)
-
-- **`styles/brand-events.css`**: the Mukoko Events overlay (malachite), exported
-  in both packages. Canon's row is `events` (mzizi-dev/mzizi-registry#411). Until
-  the snapshot carries it, the mineral is bridged in `LOCAL_BRAND_MINERALS`.
-
-### Deprecated (`@bundu/ui` 0.5.0, `@nyuchi/ui` 0.4.0)
-
-- **`styles/brand-nhimbe.css`** is now a generated re-export of `brand-events.css`
-  (`@import "./brand-events.css";`), so existing imports keep working. Import
-  `brand-events.css` in new code. `DEPRECATED_OVERLAY_ALIASES` in
-  `scripts/generate-tokens.mjs` generates it, and a test keeps it a pure
-  re-export.
-
-## [@bundu/ui 0.4.1, @nyuchi/ui 0.3.0] - 2026-10-04
-
-The first versions published by the release workflow, which publishes and tags on
-merge to `main` with no hand-pushed tag (mzizi-dev/packages-npm#25). `@bundu/ui`
-0.3.0 and 0.4.0 were never published to npm: 0.4.1 is the first `@bundu/ui` on npm
-since 0.2.0 and carries both, so their entries below and under 0.3.0 apply to it.
-`@bundu/server` 0.1.0 (see 0.3.0 below) reaches npm for the first time in the same
-run.
-
-### Changed (repository)
-
-- **Releases are automatic.** `.github/workflows/release.yml` replaces `publish.yml`.
-  On every push to `main` it runs the token check and the tests, publishes each
-  package whose `package.json` version is not on npm yet (with npm provenance), then
-  tags it `<name>@<version>` (for example `@bundu/ui@0.4.1`) and creates a GitHub
-  release from that version's section here, using `RELEASE_BUMP_TOKEN`. Bumping a
-  package's version in a PR is the release; a merge that bumps nothing publishes
-  nothing. The old `v*` tags stay as history; new tags are per package.
-
-### Changed (`@bundu/ui` 0.4.1)
-
-- **Brand fills from canon.** The generator now emits `--color-<mineral>-brand`
-  (the mineral's brand `hex` from canon, the same in both themes) and
-  `--color-<mineral>-on-brand` (whichever of the mineral's own container pair
-  has the higher WCAG contrast on it) in `tokens.css`, `theme.css`,
-  `color-scheme.css` and `tokens.json`, for both packages. Light-mode
-  `--color-gold` stays the deep `lightHex` for text on light surfaces.
-- **`AppShell` `accent`.** A mineral whose brand fill colours primary actions
-  and the current item's indicator inside the shell (`"gold"` for Nyuchi:
-  #FFD740 with #3E2723 text, about 11:1). Text links and the focus ring keep
-  the contrast-safe primary and ring.
-- **`StatTile` trend.** The badge is short and never wraps ("+12.5%",
-  "−3 pts", "No change"), with "vs …" after it as quiet text; screen readers
-  still hear the full sentence once.
-- **`BrandMark`.** 28px by default, and the official mark in its deeper,
-  higher-contrast colourway with a tighter frame (the bundu-ecosystem-icons
-  pair), still scaled to 128px and never redrawn.
-
-### Changed (`@nyuchi/ui` 0.3.0)
-
-- **`@nyuchi/ui` is 0.3.0** (published by the release workflow). 0.2.0 is on npm, so the eight
-  brand overlays added since (`brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
-  `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
-  `brand-learning`) need a new version to ship. Additive only: new exports.
-
-### Changed (canon snapshot)
-
-- **The canon snapshot carries `kweli`, `learning`, `news` and `weather`.**
-  `pnpm canon:fetch` after api.mzizi.dev's registry pin moved to
-  mzizi-registry `50fc537` (mzizi-dev/mzizi-registry#409; mzizi-api-gateway#38):
-  `tokens/canon.snapshot.json` gains the four `ecosystem` rows. The generator's
-  `LOCAL_BRAND_MINERALS` bridge entries for them, and the stale `mzizi` one
-  (canon has carried that row since the hematite decision), are removed, so
-  every overlay's mineral now comes from canon. The four overlays, in both
-  packages, are unchanged apart from their header comment, which now cites
-  canon. No colour changes.
+**This one entry carries all of the unreleased entries before it.** The changes this
+file recorded under `@bundu/ui` 0.3.0, 0.4.0, 0.4.1 and 0.5.0 and `@nyuchi/ui` 0.3.0 and
+0.4.0 are all here. None of those versions reached npm, and 0.4.0, 0.4.1 and 0.5.0 are not used.
+Breaking changes are marked **Breaking**.
 
 ### Added
+
+- **`@bundu/server` 0.1.0 — a new package: server-side helpers**, the companion to
+  `@bundu/ui` as `mzizi-roots-server` is to `mzizi-roots`. Dependency-free on Web APIs,
+  so it runs in Astro server routes, Node 20+ and Cloudflare Workers alike:
+  `createSealer` (AES-256-GCM values bound to a purpose, wire-compatible with the Rust
+  sealer in the Nyuchi console backend, checked both ways), `randomToken`,
+  `pkceChallenge`, cookie helpers with safe defaults, `createFlash` (one-shot messages
+  carried as a key, never text), the theme preference, `safeBack` (same-origin return
+  paths, refusing `//`, `\` and control characters), `parseOrigin` (bare `https`
+  origins), `withSecurityHeaders`, and the table query and paging core. Built from
+  TypeScript to `dist/` with declarations on `prepack`. 36 unit tests. Tracking:
+  mzizi-dev/packages-npm#19.
+- **`@bundu/ui` — `@bundu/ui/lib/table` now re-exports `@bundu/server/table`**, which
+  holds the code, and `@bundu/ui` depends on `@bundu/server`. The same API.
+- **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`).
+  `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable` (one card per row on
+  phones), `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`,
+  `StateMessage`, `Toast`, `StatTile` and `BarChart`, and the primitives under them
+  (`Button`, `Badge`, `Card`, `Alert`, `Input`, `Label`, `Skeleton`). All are **pure
+  Astro**: no React or other framework under them and no client JavaScript. `Badge`
+  follows the Mzizi registry's `badge` contract (`default`, `secondary`, `destructive`,
+  `outline`, `ghost`, `link`). Plus `@bundu/ui/lib/table` (`parseTableQuery`,
+  `filterRows`, `paginate`, `withParams`). Built for the Nyuchi console's move to Astro
+  and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this release
+  is published.
+- **`@bundu/ui` — `@bundu/ui/ui/variants`.** The class recipes (`buttonVariants`,
+  `cardVariants`, `alertVariants`, `inputClasses`, `labelClasses`, `skeletonClasses`,
+  `badgeClasses`) with no React in them, shared by the React primitives and the Astro
+  components. Each `.tsx` still exports its own recipe, so existing imports keep
+  working.
+- **`@bundu/ui` — rendering tests for the app patterns.** `src/app/app.test.ts` renders
+  every component through Astro's container API with **no framework renderer
+  registered**, and checks the semantics each one promises (landmarks, labels, `aria-*`
+  wiring, escaped cell text, no `<script>` and no island), plus a source check that no
+  app component imports a framework. `@bundu/ui` gains a `test` script, a
+  `vitest.config.ts` (Astro's `getViteConfig`) and an `astro` dev dependency; the root
+  `pnpm test` runs each package's tests. Not in the tarball.
 
 - **`brand-kweli.css` (malachite) and `brand-learning.css` (gold), in both
   packages**, so Kweli and Nyuchi Learning dashboards can adopt the Mzizi
@@ -173,8 +147,8 @@ run.
   contract delta is on mzizi-dev/mzizi-registry#404. This replaces the
   console's local `TODO(mzizi)` destructive buttons
   (nyuchi/nyuchi-platform#330).
-- **`@bundu/ui` 0.4.0 — the app patterns become a full-width product dashboard**
-  (never published on its own; it reaches npm in 0.4.1). New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
+- **`@bundu/ui` — the app patterns become a full-width product dashboard.**
+  New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
   `QuickSearch` and `CommandPalette` (⌘K), `TopBarAction`, `Toolbar` and
   `ToolbarMenu`, `StatTiles`, `InfoTip`, `EmptyState`, and `BrandMark` with the
   official Nyuchi mark (the Mzizi registry's bee icon pair, scaled to 128px, in
@@ -183,7 +157,22 @@ run.
   app glyphs. `ui/variants` gains `appButtonVariants` and `appInputClasses`.
   Built for the Nyuchi console (nyuchi/nyuchi-platform#330).
 
+- **`styles/brand-events.css`** (Mukoko Events; owner decisions, 2026-10-04,
+  [mukoko-dev/nhimbe#155](https://github.com/mukoko-dev/nhimbe/issues/155): the nhimbe
+  brand is retired, the events platform is Mukoko Events at events.mukoko.com, and its
+  mineral stays malachite): the Mukoko Events overlay (malachite), exported
+  in both packages. Canon's row is `events` (mzizi-dev/mzizi-registry#411). Until
+  the snapshot carries it, the mineral is bridged in `LOCAL_BRAND_MINERALS`.
+
 ### Changed
+
+- **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies
+  (`prettier` stays, for the token generator only), and `vp check` (format plus
+  type-aware lint) is the repo's check. Source files in both packages were re-wrapped
+  by the formatter, and `@nyuchi/ui`'s `Breadcrumb` writes its JSON-LD closing tag as
+  `<\/script>` (the same string at runtime) so the linter can parse the component.
+  No API change.
+- **Removed `.github/workflows/lint.yml`.** The `mzizi-dev` org ruleset now runs the shared lint on every pull request through `mzizi-dev/.github`'s `org-lint.yml`, publishing the same five `lint / …` checks, so the repo's own caller only ran lint a second time.
 
 - **Breaking — `AppShell` is full width.** A fixed sidebar (16.25rem) and a main
   column filling the rest, with no `max-w-[96rem]` centred container; the nav
@@ -192,7 +181,7 @@ run.
   `collapsed`, `persist`, `footerLinks`, `sidebarLabel`, `id`. The sidebar
   collapses to an icon rail.
 - **Breaking — `SideNav` shows the label only.** An item's `description` (or
-  0.3's `summary`) is a tooltip and the link's `aria-describedby`, no longer
+  the earlier `summary`) is a tooltip and the link's `aria-describedby`, no longer
   printed under the label. Takes `groups` with icons, badges and nested items;
   flat `items` still work.
 - **App density.** `Button` (36px; 48px on touch), `Input`, `FilterBar`,
@@ -205,60 +194,57 @@ run.
   collapse cookie and Escape for tooltips; the ⌘K shortcut and live filtering);
   everything works without them. The app components stay framework-free.
 
-## [@bundu/ui 0.3.0, @bundu/server 0.1.0] - 2026-10-04
+- **Brand fills from canon.** The generator now emits `--color-<mineral>-brand`
+  (the mineral's brand `hex` from canon, the same in both themes) and
+  `--color-<mineral>-on-brand` (whichever of the mineral's own container pair
+  has the higher WCAG contrast on it) in `tokens.css`, `theme.css`,
+  `color-scheme.css` and `tokens.json`, for both packages. Light-mode
+  `--color-gold` stays the deep `lightHex` for text on light surfaces.
+- **`AppShell` `accent`.** A mineral whose brand fill colours primary actions
+  and the current item's indicator inside the shell (`"gold"` for Nyuchi:
+  #FFD740 with #3E2723 text, about 11:1). Text links and the focus ring keep
+  the contrast-safe primary and ring.
+- **`StatTile` trend.** The badge is short and never wraps ("+12.5%",
+  "−3 pts", "No change"), with "vs …" after it as quiet text; screen readers
+  still hear the full sentence once.
+- **`BrandMark`.** 28px by default, and the official mark in its deeper,
+  higher-contrast colourway with a tighter frame (the bundu-ecosystem-icons
+  pair), still scaled to 128px and never redrawn.
 
-Never published to npm on its own: no `v0.3.0` tag was pushed. These changes reach npm in
-`@bundu/ui` 0.4.1, and `@bundu/server` 0.1.0 is first published alongside it.
-`@nyuchi/ui` is unchanged at 0.2.0.
+- **`@nyuchi/ui` is 0.3.0.** 0.2.0 is on npm, so the eight
+  brand overlays added since (`brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
+  `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
+  `brand-learning`) need a new version to ship. Additive only: new exports.
 
-### Added
+### Changed (repository)
 
-- **`@bundu/server` 0.1.0 — a new package: server-side helpers**, the companion to
-  `@bundu/ui` as `mzizi-roots-server` is to `mzizi-roots`. Dependency-free on Web APIs,
-  so it runs in Astro server routes, Node 20+ and Cloudflare Workers alike:
-  `createSealer` (AES-256-GCM values bound to a purpose, wire-compatible with the Rust
-  sealer in the Nyuchi console backend, checked both ways), `randomToken`,
-  `pkceChallenge`, cookie helpers with safe defaults, `createFlash` (one-shot messages
-  carried as a key, never text), the theme preference, `safeBack` (same-origin return
-  paths, refusing `//`, `\` and control characters), `parseOrigin` (bare `https`
-  origins), `withSecurityHeaders`, and the table query and paging core. Built from
-  TypeScript to `dist/` with declarations on `prepack`. 36 unit tests. Tracking:
-  mzizi-dev/packages-npm#19.
-- **`@bundu/ui` — `@bundu/ui/lib/table` now re-exports `@bundu/server/table`**, which
-  holds the code, and `@bundu/ui` depends on `@bundu/server`. The same API.
-- **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`).
-  `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable` (one card per row on
-  phones), `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`,
-  `StateMessage`, `Toast`, `StatTile` and `BarChart`, and the primitives under them
-  (`Button`, `Badge`, `Card`, `Alert`, `Input`, `Label`, `Skeleton`). All are **pure
-  Astro**: no React or other framework under them and no client JavaScript. `Badge`
-  follows the Mzizi registry's `badge` contract (`default`, `secondary`, `destructive`,
-  `outline`, `ghost`, `link`). Plus `@bundu/ui/lib/table` (`parseTableQuery`,
-  `filterRows`, `paginate`, `withParams`). Built for the Nyuchi console's move to Astro
-  and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this release
-  is published.
-- **`@bundu/ui` — `@bundu/ui/ui/variants`.** The class recipes (`buttonVariants`,
-  `cardVariants`, `alertVariants`, `inputClasses`, `labelClasses`, `skeletonClasses`,
-  `badgeClasses`) with no React in them, shared by the React primitives and the Astro
-  components. Each `.tsx` still exports its own recipe, so existing imports keep
-  working.
-- **`@bundu/ui` — rendering tests for the app patterns.** `src/app/app.test.ts` renders
-  every component through Astro's container API with **no framework renderer
-  registered**, and checks the semantics each one promises (landmarks, labels, `aria-*`
-  wiring, escaped cell text, no `<script>` and no island), plus a source check that no
-  app component imports a framework. `@bundu/ui` gains a `test` script, a
-  `vitest.config.ts` (Astro's `getViteConfig`) and an `astro` dev dependency; the root
-  `pnpm test` runs each package's tests. Not in the tarball.
+- **Releases are automatic.** `.github/workflows/release.yml` replaces `publish.yml`.
+  On every push to `main` it runs the token check and the tests, publishes each
+  package whose `package.json` version is not on npm yet (with npm provenance), then
+  tags it `<name>@<version>` (for example `@bundu/ui@0.3.0`) and creates a GitHub
+  release from that version's section here, using `RELEASE_BUMP_TOKEN`. Bumping a
+  package's version in a PR is the release; a merge that bumps nothing publishes
+  nothing. The old `v*` tags stay as history; new tags are per package.
 
-### Changed
+### Changed (canon snapshot)
 
-- **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies
-  (`prettier` stays, for the token generator only), and `vp check` (format plus
-  type-aware lint) is the repo's check. Source files in both packages were re-wrapped
-  by the formatter, and `@nyuchi/ui`'s `Breadcrumb` writes its JSON-LD closing tag as
-  `<\/script>` (the same string at runtime) so the linter can parse the component.
-  No API change.
-- **Removed `.github/workflows/lint.yml`.** The `mzizi-dev` org ruleset now runs the shared lint on every pull request through `mzizi-dev/.github`'s `org-lint.yml`, publishing the same five `lint / …` checks, so the repo's own caller only ran lint a second time.
+- **The canon snapshot carries `kweli`, `learning`, `news` and `weather`.**
+  `pnpm canon:fetch` after api.mzizi.dev's registry pin moved to
+  mzizi-registry `50fc537` (mzizi-dev/mzizi-registry#409; mzizi-api-gateway#38):
+  `tokens/canon.snapshot.json` gains the four `ecosystem` rows. The generator's
+  `LOCAL_BRAND_MINERALS` bridge entries for them, and the stale `mzizi` one
+  (canon has carried that row since the hematite decision), are removed, so
+  every overlay's mineral now comes from canon. The four overlays, in both
+  packages, are unchanged apart from their header comment, which now cites
+  canon. No colour changes.
+
+### Deprecated
+
+- **`styles/brand-nhimbe.css`** is now a generated re-export of `brand-events.css`
+  (`@import "./brand-events.css";`), so existing imports keep working. Import
+  `brand-events.css` in new code. `DEPRECATED_OVERLAY_ALIASES` in
+  `scripts/generate-tokens.mjs` generates it, and a test keeps it a pure
+  re-export.
 
 ## [@bundu/ui 0.2.0, @nyuchi/ui 0.2.0] - 2026-09-30
 

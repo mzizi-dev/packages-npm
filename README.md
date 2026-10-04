@@ -66,7 +66,7 @@ Releases are automatic. On every push to `main` the
 [`release` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/release.yml)
 runs the token check and the tests, publishes each package whose `package.json`
 version is not on npm yet, then tags it `<name>@<version>` (for example
-`@bundu/ui@0.4.1`) and creates a GitHub release from that version's
+`@bundu/ui@0.3.0`) and creates a GitHub release from that version's
 `CHANGELOG.md` section. Nobody pushes a tag by hand.
 
 To release a package, bump its `version` in its `package.json` and add a

@@ -8,7 +8,7 @@
 // releases whatever did publish, then fails the job if anything did not.
 //
 // Packages go in dependency order, and a package whose workspace dependency
-// did not make it to npm is NOT published: @bundu/ui 0.4.1 depends on
+// did not make it to npm is NOT published: @bundu/ui 0.3.0 depends on
 // @bundu/server ^0.1.0, and publishing it while that version is missing would
 // put a package on npm that nobody can install. It is reported as blocked.
 //

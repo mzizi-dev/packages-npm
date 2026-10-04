@@ -7,8 +7,8 @@
 # in the PR IS the release. A merge that bumps nothing publishes nothing.
 #
 # This replaces publish.yml, which ran only on a hand-pushed `v*` tag or a
-# published GitHub release. Nobody pushed one after 0.2.0, so @bundu/ui 0.3.0,
-# 0.4.0 and 0.4.1 and @bundu/server 0.1.0 sat unpublished on `main`
+# published GitHub release. Nobody pushed one after 0.2.0, so the next @bundu/ui and
+# @nyuchi/ui and the new @bundu/server 0.1.0 sat unpublished on `main`
 # (mzizi-dev/packages-npm#25).
 #
 # Gated in the job, not on another workflow: the offline token check and every
