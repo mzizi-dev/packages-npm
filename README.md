@@ -29,6 +29,13 @@ Both UI packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`
 `tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
 one generator, not two hand-maintained files.
 
+The Mzizi design system itself is published on claude.ai as the Design System artifact,
+<https://claude.ai/artifact/G8CCtAbZ8w717uQ3R5itCc>: voice and content fundamentals, visual
+foundations, the marks, and component previews. Its source of truth is the `design-system/`
+folder in `mzizi-dev/mzizi-registry` (arriving with mzizi-registry#418), which the artifact is
+built from file for file, so a change to the design system goes there, never on the artifact
+page.
+
 ## Tokens
 
 All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one
