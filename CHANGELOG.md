@@ -37,6 +37,18 @@ the npm registry.
 
 ### Added
 
+- **`@bundu/ui` — a contract for every app component.** The 31 components under
+  `@bundu/ui/app/*` each have a Mzizi component contract, authored in
+  mzizi-dev/mzizi-registry (`contracts/`, mzizi-dev/mzizi-registry#404) and
+  shipped in `contracts/` (exports `@bundu/ui/contracts/index.json`,
+  `…/contracts/app/*` and the schema). New `src/app/contracts.test.ts` renders
+  every component in every named state and evaluates its clauses, selector
+  checks, fine and coarse pointer heights, the brand-overlay rule (no colour
+  values; minerals only as declared status colours), the no-JS rule, and that
+  its props and slots are the contract's. An unevaluable clause fails.
+  `pnpm contracts:fetch` / `contracts:check` sync the copy from the registry.
+  Together the contracts are the Mzizi Dashboard Standard.
+
 - **`@bundu/ui` — Button `destructive` and `destructive-outline` variants**
   in both `buttonVariants` (`ui/button`) and `appButtonVariants`
   (`app/Button.astro`). They use only the `destructive` /

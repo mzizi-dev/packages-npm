@@ -367,6 +367,32 @@ const groups = groupNav(
 </AppShell>
 ```
 
+## Component contracts
+
+Every app component carries a contract, as everything built in Mzizi does. The
+contracts are authored in the Mzizi registry
+([`mzizi-dev/mzizi-registry`, `contracts/`](https://github.com/mzizi-dev/mzizi-registry/tree/main/contracts))
+and shipped here, one JSON file per component:
+
+```js
+import contract from "@bundu/ui/contracts/app/side-nav.contract.json" with { type: "json" };
+```
+
+Each states the component's props and slots with types, its behaviour and named
+states, accessibility (roles, keyboard, focus, ARIA), density for a fine and a
+coarse pointer, theming (brand overlay tokens only; layout never varies by
+brand), the no-JavaScript fallback and the responsive rules, plus a
+`contract … end` block in the Mzizi language's clause grammar. The schema is
+`@bundu/ui/contracts/schema/component-contract.schema.json`.
+
+`src/app/contracts.test.ts` renders every component in every named state and
+evaluates its contract: the clauses, the selector checks, the density table and
+the brand-overlay rule. A clause the runner cannot evaluate fails. Together the
+contracts are the **Mzizi Dashboard Standard** (docs.mzizi.dev).
+
+Do not edit `contracts/` here. Change the registry, then
+`pnpm contracts:fetch` (or `pnpm contracts:check [ref]` to compare).
+
 ## Licence
 
 [MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.

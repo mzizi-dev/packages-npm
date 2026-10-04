@@ -90,6 +90,9 @@
     "./styles/brand-shamwari.css": "./styles/brand-shamwari.css",
     "./styles/brand-mzizi.css": "./styles/brand-mzizi.css",
     "./tokens.json": "./tokens.json",
+    "./contracts/index.json": "./contracts/index.json",
+    "./contracts/schema/component-contract.schema.json": "./contracts/schema/component-contract.schema.json",
+    "./contracts/app/*": "./contracts/app/*",
     "./assets/brand/nyuchi-mark-light.png": "./assets/brand/nyuchi-mark-light.png",
     "./assets/brand/nyuchi-mark-dark.png": "./assets/brand/nyuchi-mark-dark.png",
     "./tailwind-palette": "./tailwind-palette.mjs"
@@ -110,6 +113,7 @@
     "tailwind-preset.mjs",
     "tailwind-palette.mjs",
     "tokens.json",
+    "contracts",
     "assets"
   ],
   "publishConfig": {
@@ -129,6 +133,10 @@
     "data-table"
   ],
   "devDependencies": {
-    "astro": "7.3.5"
+    "astro": "7.3.5",
+    "css-select": "6.0.0",
+    "domhandler": "5.0.3",
+    "domutils": "3.2.2",
+    "htmlparser2": "^10"
   }
 }
