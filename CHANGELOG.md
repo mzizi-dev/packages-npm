@@ -53,9 +53,6 @@ release (0.5.0 is not on npm yet).
 - **`pnpm contracts:fetch` reads every contract family** (`FAMILIES` in
   `scripts/contract-paths.mjs`: `app`, `discover`), and the path guard accepts
   only those directories.
-
-### Changed (repository)
-
 - **The canon snapshot carries `events` (Mukoko Events).** `api.mzizi.dev` now
   serves canon's `events` row (mzizi-dev/mzizi-registry#411, through
   mzizi-dev/mzizi-api-gateway#39), so the `LOCAL_BRAND_MINERALS` bridge for it is
