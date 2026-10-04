@@ -2,7 +2,12 @@
 // the orders and outcomes it must produce without touching npm.
 import { describe, expect, test } from "vite-plus/test";
 
-import { policyCheck, publishAll, publishOrder } from "./release-publish.mjs";
+import {
+  npmPublishArgs,
+  policyCheck,
+  publishAll,
+  publishOrder,
+} from "./release-publish.mjs";
 
 const ui = {
   name: "@bundu/ui",
@@ -125,5 +130,22 @@ describe("versioning policy", () => {
         RELEASE_MANUAL: "true",
       })(pkg),
     ).toBeNull();
+  });
+});
+
+describe("npmPublishArgs", () => {
+  // The npm CLI publishes the tarball pnpm packed: trusted publishing (OIDC)
+  // is an npm feature. No token flag and no --tag: npm applies `latest`.
+  test("publishes the packed tarball, public", () => {
+    expect(npmPublishArgs("/tmp/x/bundu-ui-0.4.0.tgz")).toEqual([
+      "publish",
+      "/tmp/x/bundu-ui-0.4.0.tgz",
+      "--access",
+      "public",
+    ]);
+  });
+
+  test("passes --dry-run through", () => {
+    expect(npmPublishArgs("a.tgz", { dryRun: true })).toContain("--dry-run");
   });
 });
