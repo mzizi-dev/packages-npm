@@ -1014,21 +1014,13 @@ const OVERLAY_BRANDS = [
  * entry then.
  *
  * Empty: every overlay brand has its canon row. mzizi (hematite, owner
- * decision 2026-09-30) and news, weather, kweli and learning (cobalt, cobalt,
+ * decision 2026-09-30), news, weather, kweli and learning (cobalt, cobalt,
  * malachite, gold; owner decisions 2026-10-04, mzizi-registry#404 and #409)
- * were bridged here until the snapshot picked them up.
+ * and events (malachite, Mukoko Events, formerly nhimbe; owner decision
+ * 2026-10-04, mzizi-registry#411) were bridged here until the snapshot picked
+ * them up.
  */
-const LOCAL_BRAND_MINERALS = {
-  events: {
-    mineral: "malachite",
-    note:
-      "Owner decision, 2026-10-04 (mukoko-dev/nhimbe#155): the nhimbe brand " +
-      "is retired; the events platform is Mukoko Events (events.mukoko.com) " +
-      "and its mineral stays malachite. Canon row: mzizi-registry " +
-      "lib/tokens/brand.source.ts ecosystem[name=events] (mzizi-registry#411); " +
-      "bridged here until the snapshot carries it.",
-  },
-};
+const LOCAL_BRAND_MINERALS = {};
 
 /**
  * Overlay files kept under a retired brand name, each re-exporting the
