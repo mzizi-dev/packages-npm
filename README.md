@@ -3,7 +3,7 @@
 > Shared, publishable UI packages — Nyuchi's implementation of the Mzizi architecture, consumed by the marketing and documentation sites.
 
 [![Lint](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
-[![Publish](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml)
+[![Release](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) · [`@bundu/server`](https://www.npmjs.com/package/@bundu/server) | **Architecture:** [mzizi.dev](https://mzizi.dev)
@@ -62,18 +62,23 @@ pnpm lint
 
 ## Publishing
 
-Published to npm automatically by the
-[`publish` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/publish.yml)
-when a GitHub Release is published (or a `v*` tag is pushed) — `@nyuchi/*` under the
-[`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org and `@bundu/*` under the
-[`@bundu`](https://www.npmjs.com/org/bundu) npm org. The workflow requires an
-`NPM_TOKEN` with publish access to both orgs. `NPM_TOKEN` is an **organisation** secret
-on `mzizi-dev`, visible to all its repositories (the repo moved here from
-`mukoko-dev` on 2026-10-02), so no repository-level secret is needed. Check that
-this token can publish to both npm orgs before the first release from here.
+Releases are automatic. On every push to `main` the
+[`release` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/release.yml)
+runs the token check and the tests, publishes each package whose `package.json`
+version is not on npm yet, then tags it `<name>@<version>` (for example
+`@bundu/ui@0.4.1`) and creates a GitHub release from that version's
+`CHANGELOG.md` section. Nobody pushes a tag by hand.
 
-Publishing is the owner's call. CI does not publish on a branch push — only on a
-published GitHub Release or a `v*` tag.
+To release a package, bump its `version` in its `package.json` and add a
+`## [<name> <version>] - <date>` section to `CHANGELOG.md` (one heading may name
+several packages) in the same pull request. A merge that bumps nothing publishes
+nothing, and a re-run skips every version npm already has.
+
+`@nyuchi/*` publish under the [`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org
+and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) npm org, with
+npm provenance. Two **organisation** secrets on `mzizi-dev` are used, so no
+repository-level secret is needed: `NPM_TOKEN` (publish access to both npm orgs)
+and `RELEASE_BUMP_TOKEN` (pushes the tags and creates the releases).
 
 ## Licence
 
