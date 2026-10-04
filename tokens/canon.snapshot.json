@@ -249,6 +249,46 @@
       "role": "Language, registry and design system",
       "url": "https://mzizi.dev",
       "voice": "Precise, honest, grounded"
+    },
+    {
+      "description": "The Africa Trust Platform: place, organisation and person verification for the whole Mukoko ecosystem, and the public face of the geographic knowledge graph. Every place gets one canonical page, and the kweli verification badge travels with the entity across every Mukoko app.",
+      "language": "Swahili",
+      "meaning": "Truth",
+      "mineral": "malachite",
+      "name": "kweli",
+      "role": "Trust and verification",
+      "url": "https://kweli.mukoko.com",
+      "voice": "Honest, rigorous, reassuring"
+    },
+    {
+      "description": "Nyuchi Learning: the Nyuchi education surface, and the home of the classroom tools Nyuchi Web Services builds for schools. A Nyuchi brand, so it wears Nyuchi gold.",
+      "language": "English",
+      "meaning": "Learning",
+      "mineral": "gold",
+      "name": "learning",
+      "role": "Education",
+      "url": "https://learning.nyuchi.com",
+      "voice": "Patient, practical, encouraging"
+    },
+    {
+      "description": "Mukoko News: cross-source African news with journalist attribution and source credibility, feeding Pulse.",
+      "language": "English",
+      "meaning": "News",
+      "mineral": "cobalt",
+      "name": "news",
+      "role": "News and journalism",
+      "url": "https://news.mukoko.com",
+      "voice": "Clear, credible, balanced"
+    },
+    {
+      "description": "Mukoko Weather: forecasts and severity-graded weather alerts for African places.",
+      "language": "English",
+      "meaning": "Weather",
+      "mineral": "cobalt",
+      "name": "weather",
+      "role": "Weather and alerts",
+      "url": "https://weather.mukoko.com",
+      "voice": "Calm, precise, timely"
     }
   ],
   "experimental": [

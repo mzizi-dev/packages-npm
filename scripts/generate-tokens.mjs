@@ -982,7 +982,7 @@ function emitTokensJson(pkg, m, decls, meta) {
 
 /**
  * Brands that ship an overlay. Canon's `ecosystem` table supplies the mineral
- * for every one of these; mzizi's row is new (see below).
+ * for every one of these.
  */
 const OVERLAY_BRANDS = [
   "bundu",
@@ -991,8 +991,6 @@ const OVERLAY_BRANDS = [
   "shamwari",
   "mzizi",
   // Sub-apps that adopt the Mzizi Dashboard Standard (mzizi-registry#404).
-  // Canon's ecosystem table maps the first four; news, weather, kweli and
-  // learning are bridged below until the snapshot carries their rows.
   "nhimbe",
   "lingo",
   "bushtrade",
@@ -1004,62 +1002,21 @@ const OVERLAY_BRANDS = [
 ];
 
 /**
- * mzizi -> hematite is the OWNER'S DECISION (2026-09-30), not a judgement call
- * made here. Hematite's canon symbolism is "Foundation, endurance, the
- * substrate" and its usage "Neutral anchor".
+ * A bridge for a brand whose canon row is decided but not yet in
+ * tokens/canon.snapshot.json: canon's `ecosystem` table reaches `/v1/brand`
+ * (and so the snapshot) only once api.mzizi.dev's registry pin moves past the
+ * merge that adds the row. An entry here is `{ mineral, note }`, with the note
+ * naming the owner decision and the canon row it is recorded in. Once the
+ * snapshot carries the row, canon wins, and a canon row that disagrees with an
+ * entry here fails the generator rather than silently picking one; remove the
+ * entry then.
  *
- * The decision is recorded in canon: mzizi-registry -> lib/tokens/brand.source.ts
- * gains a `mzizi` row in its `ecosystem` table. api.mzizi.dev serves that table
- * from a pinned registry commit, so the row reaches `/v1/brand` (and therefore
- * tokens/canon.snapshot.json) only once the gateway's pin moves past it. Until
- * then this entry supplies the same answer. Once canon carries the row, canon
- * wins, and a canon row that disagrees with this entry fails the generator
- * rather than silently picking one.
+ * Empty: every overlay brand has its canon row. mzizi (hematite, owner
+ * decision 2026-09-30) and news, weather, kweli and learning (cobalt, cobalt,
+ * malachite, gold; owner decisions 2026-10-04, mzizi-registry#404 and #409)
+ * were bridged here until the snapshot picked them up.
  */
-const LOCAL_BRAND_MINERALS = {
-  // news, weather, kweli and learning: owner decisions, 2026-10-04
-  // (mzizi-registry#404). The rows are in canon's `ecosystem` table
-  // (mzizi-registry lib/tokens/brand.source.ts, mzizi-registry#409) but
-  // reach /v1/brand, and so tokens/canon.snapshot.json, only once the
-  // gateway's registry pin moves past that merge. These entries give the
-  // same answers until then. Once the snapshot carries a row, canon wins,
-  // and a canon row that disagrees fails the generator.
-  news: {
-    mineral: "cobalt",
-    note:
-      "Owner decision (2026-10-04): Mukoko News is cobalt, recorded in " +
-      "canon as mzizi-registry lib/tokens/brand.source.ts -> " +
-      "ecosystem[name=news].",
-  },
-  weather: {
-    mineral: "cobalt",
-    note:
-      "Owner decision (2026-10-04): Mukoko Weather is cobalt, recorded in " +
-      "canon as mzizi-registry lib/tokens/brand.source.ts -> " +
-      "ecosystem[name=weather].",
-  },
-  kweli: {
-    mineral: "malachite",
-    note:
-      "Owner decision (2026-10-04): Kweli is malachite (it used to borrow " +
-      "Mukoko's tanzanite), recorded in canon as mzizi-registry " +
-      "lib/tokens/brand.source.ts -> ecosystem[name=kweli].",
-  },
-  learning: {
-    mineral: "gold",
-    note:
-      "Owner decision (2026-10-04): Nyuchi Learning (education) is gold, " +
-      "because every Nyuchi brand is gold, recorded in canon as " +
-      "mzizi-registry lib/tokens/brand.source.ts -> ecosystem[name=learning].",
-  },
-  mzizi: {
-    mineral: "hematite",
-    note:
-      "Owner decision (2026-09-30): mzizi's brand mineral is hematite, " +
-      "recorded in canon as mzizi-registry lib/tokens/brand.source.ts -> " +
-      "ecosystem[name=mzizi].",
-  },
-};
+const LOCAL_BRAND_MINERALS = {};
 
 function brandOverlays(m) {
   const eco = byName(m.canon.ecosystem);
