@@ -991,6 +991,44 @@ describe("primitives", () => {
     expect(html).toContain("pointer-coarse:h-12");
   });
 
+  test("Button has destructive variants on the destructive tokens only", async () => {
+    const solid = await render(
+      Button,
+      {
+        type: "submit",
+        variant: "destructive",
+        name: "intent",
+        value: "delete",
+      },
+      { slots: { default: "Delete my account" } },
+    );
+    expect(solid).toMatch(
+      /<button type="submit"[^>]*name="intent"[^>]*value="delete"/,
+    );
+    expect(solid).toContain("bg-destructive text-destructive-foreground");
+    expect(solid).toContain("focus-visible:ring-ring");
+    expect(solid).not.toContain("bg-primary");
+    expect(solid).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+    const outline = await render(
+      Button,
+      { href: "/keys/1/revoke", variant: "destructive-outline", size: "sm" },
+      { slots: { default: "Revoke key" } },
+    );
+    expect(outline).toMatch(/<a href="\/keys\/1\/revoke"/);
+    expect(outline).toContain("border-destructive");
+    expect(outline).toContain("text-destructive");
+    expect(outline).toContain(
+      "hover:bg-destructive hover:text-destructive-foreground",
+    );
+    const disabled = await render(
+      Button,
+      { variant: "destructive", disabled: true },
+      { slots: { default: "Delete" } },
+    );
+    expect(disabled).toMatch(/<button[^>]*disabled/);
+    expect(disabled).toContain("disabled:opacity-50");
+  });
+
   test("Alert announces itself", async () => {
     const html = await render(
       Alert,

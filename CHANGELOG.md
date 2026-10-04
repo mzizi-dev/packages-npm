@@ -18,6 +18,15 @@ the npm registry.
 
 ### Added
 
+- **`@bundu/ui` — Button `destructive` and `destructive-outline` variants**
+  in both `buttonVariants` (`ui/button`) and `appButtonVariants`
+  (`app/Button.astro`). They use only the `destructive` /
+  `destructive-foreground` tokens, so brand overlays never change them. Use
+  `destructive` for the one irreversible action on a page and
+  `destructive-outline` for secondary ones (revoke, remove). The Button
+  contract delta is on mzizi-dev/mzizi-registry#404. This replaces the
+  console's local `TODO(mzizi)` destructive buttons
+  (nyuchi/nyuchi-platform#330).
 - **`@bundu/ui` 0.4.0 — the app patterns become a full-width product dashboard**
   (version bumped in `packages/bundu-ui/package.json`; not yet published: it is
   released from a `v0.4.0` tag). New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
