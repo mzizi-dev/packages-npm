@@ -11,6 +11,10 @@
  * intercepts clicks or reaches the accessibility tree. Colours come
  * exclusively from the `--color-*` custom properties defined in each
  * app's src/styles/global.css — no hex here.
+ *
+ * No inline `style` attributes: each segment is coloured by the scoped
+ * stylesheet below (by `data-mineral`), so a page's Content-Security-Policy can
+ * keep `style-src 'self'` with no `style-src-attr 'unsafe-inline'`.
  */
 const minerals = [
   "cobalt",
@@ -26,7 +30,7 @@ const minerals = [
 <div class="mineral-strip" aria-hidden="true" data-slot="mineral-strip">
   {
     minerals.map((mineral) => (
-      <span style={`background-color: var(--color-${mineral});`} />
+      <span data-mineral={mineral} />
     ))
   }
 </div>
@@ -47,5 +51,26 @@ const minerals = [
   .mineral-strip span {
     flex: 1 1 0;
     display: block;
+  }
+  .mineral-strip [data-mineral="cobalt"] {
+    background-color: var(--color-cobalt);
+  }
+  .mineral-strip [data-mineral="tanzanite"] {
+    background-color: var(--color-tanzanite);
+  }
+  .mineral-strip [data-mineral="malachite"] {
+    background-color: var(--color-malachite);
+  }
+  .mineral-strip [data-mineral="gold"] {
+    background-color: var(--color-gold);
+  }
+  .mineral-strip [data-mineral="terracotta"] {
+    background-color: var(--color-terracotta);
+  }
+  .mineral-strip [data-mineral="sodalite"] {
+    background-color: var(--color-sodalite);
+  }
+  .mineral-strip [data-mineral="copper"] {
+    background-color: var(--color-copper);
   }
 </style>

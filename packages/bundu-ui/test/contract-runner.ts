@@ -422,6 +422,11 @@ const MINERAL_CLASS = new RegExp(
  * mineral. Colour comes from semantic tokens (`--primary`, `--ring`, …), so
  * the brand overlay is the only thing that changes it; minerals appear only
  * as declared status colours.
+ *
+ * CSP rule: no element carries an inline `style` attribute. Custom
+ * properties and sizes go through classes, data attributes or SVG geometry,
+ * so a page's Content-Security-Policy keeps `style-src 'self'` with no
+ * `style-src-attr 'unsafe-inline'`.
  */
 export function evaluateTheming(
   contract: Contract,
@@ -432,6 +437,10 @@ export function evaluateTheming(
     for (const el of elements(doc(html))) {
       const cls = el.attribs.class ?? "";
       const style = el.attribs.style ?? "";
+      if (el.attribs.style !== undefined)
+        failures.push(
+          `[${state}] an inline style attribute on <${el.name}> (needs style-src-attr 'unsafe-inline')`,
+        );
       if (/#[0-9a-fA-F]{3,8}\b/.test(cls) || /#[0-9a-fA-F]{3,8}\b/.test(style))
         failures.push(`[${state}] a literal hex colour on <${el.name}>`);
       if (

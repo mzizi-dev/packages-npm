@@ -372,9 +372,65 @@ const groups = groupNav(
 </AppShell>
 ```
 
+## Discover patterns (the Mzizi Discover Standard)
+
+One design for every public discover and browse page in the Mukoko family:
+circles, news, events, weather, and the super-app on the web. Pure Astro, no
+client JavaScript, no inline styles. Eleven components under
+`@bundu/ui/discover/*`:
+
+| Component         | What it is                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `DiscoverShell`   | Skip link, mineral strip, header (brand, main nav, one action), `<main id="main">`, footer |
+| `DiscoverMeta`    | `<head>` tags: title, robots, canonical, Open Graph, X card, JSON-LD                       |
+| `DiscoverHero`    | Breadcrumbs, eyebrow, the one `<h1>`, lead, then the `search` and `actions` slots          |
+| `DiscoverSearch`  | A GET search form, 48px on every pointer                                                   |
+| `CategoryChips`   | A named nav of `CategoryChip` links that wraps                                             |
+| `CategoryChip`    | One category link with a count; `current` marks it                                         |
+| `DiscoverSection` | A named band: eyebrow, heading, description, "See all", content                            |
+| `ResultGrid`      | Status line, cards, empty state and "load more"; layouts `grid`, `list`, `rail`            |
+| `DiscoverCard`    | One card, variants `article`, `event`, `circle`, `place`, sharing one anatomy              |
+| `LoadMore`        | Cursor pagination: one `rel="next"` link to `?cursor=…`                                    |
+| `OpenInApp`       | The "Open in Mukoko" action: an https link and one line saying what happens                |
+
+```astro
+---
+import DiscoverShell from "@bundu/ui/discover/DiscoverShell.astro";
+import DiscoverHero from "@bundu/ui/discover/DiscoverHero.astro";
+import DiscoverSearch from "@bundu/ui/discover/DiscoverSearch.astro";
+import DiscoverSection from "@bundu/ui/discover/DiscoverSection.astro";
+import ResultGrid from "@bundu/ui/discover/ResultGrid.astro";
+import DiscoverCard from "@bundu/ui/discover/DiscoverCard.astro";
+import LoadMore from "@bundu/ui/discover/LoadMore.astro";
+---
+<DiscoverShell homeLabel="mukoko circles, home" nav={[{ label: "All circles", href: "/circles" }]}>
+  <span slot="brand">mukoko circles</span>
+  <DiscoverHero size="home" eyebrow="Mukoko Circles" title="Find your people.">
+    <DiscoverSearch slot="search" label="Search circles" />
+  </DiscoverHero>
+  <DiscoverSection id="featured" title="Circles worth joining" seeAllHref="/circles">
+    <ResultGrid label="Featured circles" summary={`${circles.length} circles`}>
+      {circles.map((c) => <DiscoverCard variant="circle" href={c.href} title={c.name} initial={c.name[0]} meta={[c.members]} />)}
+      <LoadMore slot="more" href={next} label="More circles" />
+    </ResultGrid>
+  </DiscoverSection>
+</DiscoverShell>
+```
+
+Tailwind must see the components' classes: add
+`@source "../../node_modules/@bundu/ui/src";` (the path from your CSS file)
+after the `@bundu/ui` imports.
+
+**Server-filled shells.** Every Discover component also works when the page is
+built once with `{{placeholders}}` and a server fills it (as circles.mukoko.com's
+Rust Worker does): text props are plain strings, empty text hides itself, and
+state switches (`ResultGrid state`, `LoadMore state`, `DiscoverCard badgeTone`,
+`CategoryChip current`) are attributes styled by classes, so the template needs
+no logic.
+
 ## Component contracts
 
-Every app component carries a contract, as everything built in Mzizi does. The
+Every app and Discover component carries a contract, as everything built in Mzizi does. The
 contracts are authored in the Mzizi registry
 ([`mzizi-dev/mzizi-registry`, `contracts/`](https://github.com/mzizi-dev/mzizi-registry/tree/main/contracts))
 and shipped here, one JSON file per component:
@@ -392,8 +448,16 @@ brand), the no-JavaScript fallback and the responsive rules, plus a
 
 `src/app/contracts.test.ts` renders every component in every named state and
 evaluates its contract: the clauses, the selector checks, the density table and
-the brand-overlay rule. A clause the runner cannot evaluate fails. Together the
-contracts are the **Mzizi Dashboard Standard** (docs.mzizi.dev).
+the brand-overlay rule. A clause the runner cannot evaluate fails, and so does
+any inline `style` attribute (a page's CSP never needs
+`style-src-attr 'unsafe-inline'`). `contracts/app/` is the **Mzizi Dashboard
+Standard** and `contracts/discover/` the **Mzizi Discover Standard**
+(docs.mzizi.dev).
+
+**Upstream first.** A component an app needs that is not here, or a change to
+one that is, comes here (and its contract to the registry) straight away. An
+app keeps a local copy only while that PR is open, marked
+`TODO(mzizi): <PR URL>`.
 
 Do not edit `contracts/` here. Change the registry, then
 `pnpm contracts:fetch` (or `pnpm contracts:check [ref]` to compare).

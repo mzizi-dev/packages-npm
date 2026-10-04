@@ -18,6 +18,9 @@ describe("safeJoin", () => {
       resolve(dest, "app/side-nav.contract.json"),
     );
     expect(
+      safeJoin(dest, "discover/discover-card.contract.json", CONTRACT_FILE),
+    ).toBe(resolve(dest, "discover/discover-card.contract.json"));
+    expect(
       safeJoin(dest, "schema/component-contract.schema.json", SCHEMA_FILE),
     ).toBe(resolve(dest, "schema/component-contract.schema.json"));
   });
@@ -34,6 +37,9 @@ describe("safeJoin", () => {
     "app/side-nav.contract.json/..",
     "",
     "app/side-nav.json",
+    "schema/side-nav.contract.json",
+    "other/side-nav.contract.json",
+    "discover/../app/x.contract.json",
   ])("refuses %j", (rel) => {
     expect(() => safeJoin(dest, rel, CONTRACT_FILE)).toThrow(/refusing/);
   });
