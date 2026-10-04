@@ -20,11 +20,18 @@ import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  CONTRACT_FILE,
+  SCHEMA_FILE,
+  safeJoin,
+  safeRef,
+} from "./contract-paths.mjs";
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DEST = resolve(ROOT, "packages/bundu-ui/contracts");
 const args = process.argv.slice(2);
 const check = args.includes("--check");
-const ref = args.find((a) => !a.startsWith("--")) ?? "main";
+const ref = safeRef(args.find((a) => !a.startsWith("--")) ?? "main");
 const base = `https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/${ref}/contracts/`;
 
 async function get(path) {
@@ -35,6 +42,13 @@ async function get(path) {
 
 const indexText = await get("index.json");
 const index = JSON.parse(indexText);
+// Every name below comes from fetched data. Each is checked against the
+// registry's exact shapes and resolved inside DEST before it is fetched or
+// written (scripts/contract-paths.mjs); anything else stops the script.
+safeJoin(DEST, index.schema, SCHEMA_FILE);
+if (!Array.isArray(index.contracts))
+  throw new Error("index.json: no contracts");
+for (const entry of index.contracts) safeJoin(DEST, entry?.file, CONTRACT_FILE);
 const files = new Map([
   ["index.json", indexText],
   [index.schema, await get(index.schema)],
@@ -44,7 +58,14 @@ for (const entry of index.contracts)
 
 let drift = 0;
 for (const [path, text] of files) {
-  const dest = resolve(DEST, path);
+  const dest =
+    path === "index.json"
+      ? resolve(DEST, "index.json")
+      : safeJoin(
+          DEST,
+          path,
+          path.startsWith("app/") ? CONTRACT_FILE : SCHEMA_FILE,
+        );
   const local = await readFile(dest, "utf8").catch(() => null);
   if (local === text) continue;
   if (check) {
