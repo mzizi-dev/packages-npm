@@ -8,7 +8,7 @@
 // releases whatever did publish, then fails the job if anything did not.
 //
 // Packages go in dependency order, and a package whose workspace dependency
-// did not make it to npm is NOT published: @bundu/ui 0.4.1 depends on
+// did not make it to npm is NOT published: @bundu/ui 0.3.0 depends on
 // @bundu/server ^0.1.0, and publishing it while that version is missing would
 // put a package on npm that nobody can install. It is reported as blocked.
 //
@@ -19,9 +19,18 @@
 // $GITHUB_OUTPUT. Always exits 0 unless the script itself breaks.
 //
 // Pass --dry-run to pack without publishing.
+//
+// Versioning policy (nyuchi/.github#80). Before a version is published it
+// must be what the org policy allows next: the next MINOR above the highest
+// stable version of that package on npm (x.y.z -> x.y+1.0), or a MAJOR only
+// on a manual run with bump: major. npm is the record here, not git tags. The
+// rules are the org's shared calculator, nyuchi/.github's next-version.mjs,
+// which the workflow checks out pinned and names in NEXT_VERSION_SCRIPT. A
+// refused version is recorded like an npm refusal: the rest still publish.
 
 import { spawnSync } from "node:child_process";
 import { appendFileSync, realpathSync } from "node:fs";
+import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { onNpm, workspacePackages } from "./release-tags.mjs";
@@ -63,10 +72,15 @@ export function publishOrder(pkgs) {
 /**
  * Decide and carry out each package's publish. `isOnNpm(name, version)` and
  * `publish(pkg)` (returns true on success) are injected so tests need no
- * network. Returns [{ name, version, result, detail }] where result is one of
- * "already on npm", "published", "failed", "blocked".
+ * network, as is `checkVersion(pkg)`: null when the versioning policy allows
+ * the version, else the reason it does not. Returns
+ * [{ name, version, result, detail }] where result is one of
+ * "already on npm", "published", "failed", "blocked", "refused".
  */
-export function publishAll(pkgs, { isOnNpm, publish }) {
+export function publishAll(
+  pkgs,
+  { isOnNpm, publish, checkVersion = () => null },
+) {
   const names = new Set(pkgs.map((p) => p.name));
   const ok = new Set(); // names whose current version is on npm
   const results = [];
@@ -85,6 +99,11 @@ export function publishAll(pkgs, { isOnNpm, publish }) {
         result: "blocked",
         detail: `needs ${missing.join(", ")} on npm first`,
       });
+      continue;
+    }
+    const refusal = checkVersion(pkg);
+    if (refusal) {
+      results.push({ name, version, result: "refused", detail: refusal });
       continue;
     }
     if (publish(pkg)) {
@@ -113,14 +132,58 @@ function publishWithPnpm(pkg) {
   return r.status === 0;
 }
 
-function main() {
+/** Every version of `name` on npm ([] when it has never been published). */
+function npmVersions(name) {
+  const r = spawnSync("npm", ["view", name, "versions", "--json"], {
+    encoding: "utf8",
+  });
+  if (r.status !== 0) return [];
+  const v = JSON.parse(r.stdout || "[]");
+  return Array.isArray(v) ? v : [v];
+}
+
+/**
+ * The policy check, from the org calculator at NEXT_VERSION_SCRIPT. Bump and
+ * manual come from the workflow (RELEASE_BUMP, RELEASE_MANUAL). Exported for
+ * the tests, which pass their own calculator and npm lookup.
+ */
+export function policyCheck(calc, versionsOf, env = process.env) {
+  const bump = env.RELEASE_BUMP ?? "";
+  const allowMajor = env.RELEASE_MANUAL === "true" && bump === "major";
+  return (pkg) => {
+    const current = calc.highest(versionsOf(pkg.name), "");
+    try {
+      calc.check(current, pkg.version, { channel: "main", bump, allowMajor });
+      return null;
+    } catch (err) {
+      return err.message;
+    }
+  };
+}
+
+async function main() {
+  const script = process.env.NEXT_VERSION_SCRIPT;
+  if (!script && !dryRun)
+    throw new Error(
+      "NEXT_VERSION_SCRIPT is not set: the versioning policy cannot be checked.",
+    );
+  const checkVersion = script
+    ? policyCheck(
+        await import(pathToFileURL(resolve(script)).href),
+        npmVersions,
+      )
+    : () => null;
   const results = publishAll(workspacePackages(), {
     isOnNpm: (name, version) => onNpm(name, version, 1),
     publish: publishWithPnpm,
+    checkVersion,
   });
   const failed = results.filter(
-    (r) => r.result === "failed" || r.result === "blocked",
+    (r) =>
+      r.result === "failed" || r.result === "blocked" || r.result === "refused",
   );
+  for (const r of results.filter((r) => r.result === "refused"))
+    console.log(`::error::${r.name}@${r.version}: ${r.detail}`);
 
   const table = [
     "| Package | Version | Result |",
@@ -147,5 +210,5 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href
 ) {
-  main();
+  await main();
 }

@@ -302,9 +302,9 @@ with inline `style` attributes, so a Content-Security-Policy needs
 0.3.0 the console's copy used the mineral variants of the React `Badge`;
 `primary` there is `default` here.
 
-### The product-dashboard shell (0.4.0)
+### The product-dashboard shell
 
-0.4.0 makes the app patterns a full-width product dashboard, dense like a
+The app patterns make a full-width product dashboard, dense like a
 console rather than roomy like a marketing page.
 
 | Component                                    | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
