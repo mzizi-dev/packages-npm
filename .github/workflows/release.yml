@@ -17,11 +17,14 @@
 # drift in live canon is a reason to refresh the snapshot, not to block a
 # release of what the snapshot already says.)
 #
-# Idempotent. `pnpm -r publish` skips every version npm already has, publishes
-# the rest in dependency order (@bundu/server before @bundu/ui, which depends on
-# it), and rewrites `workspace:^` to the real range. scripts/release-tags.mjs
-# then tags only versions that are on npm and have no tag yet. Re-running the
-# workflow, or a merge that bumps nothing, does nothing.
+# Idempotent. scripts/release-publish.mjs skips every version npm already has
+# and publishes the rest one package at a time, in dependency order
+# (@bundu/server before @bundu/ui, which depends on it), so one refused package
+# does not hold back unrelated ones; a package whose workspace dependency is
+# not on npm is held back rather than published uninstallable.
+# scripts/release-tags.mjs then tags only versions that are on npm and have no
+# tag yet, and the job fails at the end if anything was not published.
+# Re-running the workflow, or a merge that bumps nothing, does nothing.
 #
 # Tokens. NPM_TOKEN (mzizi-dev org secret) publishes; it needs publish rights in
 # both npm orgs, @bundu and @nyuchi. RELEASE_BUMP_TOKEN (mzizi-dev org secret)
@@ -95,8 +98,12 @@ jobs:
       - name: Test
         run: pnpm test
 
+      # Each package on its own: one that npm refuses is recorded and the rest
+      # still publish (a dependant of a refused package is held back). This
+      # step does not fail; the last step does, after the tags.
       - name: Publish unpublished versions to npm
-        run: pnpm -r publish --access public --no-git-checks
+        id: publish
+        run: node scripts/release-publish.mjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
@@ -111,3 +118,11 @@ jobs:
           node scripts/release-tags.mjs
         env:
           GH_TOKEN: ${{ secrets.RELEASE_BUMP_TOKEN }}
+
+      - name: Fail if any package did not publish
+        if: steps.publish.outputs.failed != ''
+        env:
+          FAILED: ${{ steps.publish.outputs.failed }}
+        run: |
+          echo "::error::Not published: $FAILED (see the npm publish table in the run summary)"
+          exit 1

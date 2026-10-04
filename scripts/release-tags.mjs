@@ -1,6 +1,7 @@
 // Tag and release every workspace package whose current version is on npm
 // but has no git tag yet. Run by .github/workflows/release.yml after
-// `pnpm -r publish`, which publishes only the versions npm does not have.
+// scripts/release-publish.mjs, which publishes only the versions npm does not
+// have, each package on its own.
 //
 // For each public package under packages/*:
 //   - the tag is `<name>@<version>` (for example `@bundu/ui@0.4.1`), annotated,
@@ -44,13 +45,17 @@ const tryRun = (cmd, args) => {
   }
 };
 
-/** The public workspace packages, in directory order. */
+/**
+ * The public workspace packages, in directory order, each with `dir`, its
+ * directory.
+ */
 export function workspacePackages(dir = join(root, "packages")) {
   return readdirSync(dir, { withFileTypes: true })
     .filter((d) => d.isDirectory())
-    .map((d) =>
-      JSON.parse(readFileSync(join(dir, d.name, "package.json"), "utf8")),
-    )
+    .map((d) => ({
+      ...JSON.parse(readFileSync(join(dir, d.name, "package.json"), "utf8")),
+      dir: join(dir, d.name),
+    }))
     .filter((p) => !p.private && p.name && p.version);
 }
 
@@ -78,12 +83,15 @@ export function changelogSection(changelog, name, version) {
   return body.length > 0 ? body : null;
 }
 
-function onNpm(name, version) {
-  // A few tries: a version published seconds ago can lag on the registry.
-  for (let attempt = 0; attempt < 5; attempt++) {
+/**
+ * Whether npm serves this exact version. `tries` above 1 waits between tries:
+ * a version published seconds ago can lag on the registry.
+ */
+export function onNpm(name, version, tries = 5) {
+  for (let attempt = 0; attempt < tries; attempt++) {
     if (tryRun("npm", ["view", `${name}@${version}`, "version"]) === version)
       return true;
-    if (attempt < 4) execFileSync("sleep", [String(5 * (attempt + 1))]);
+    if (attempt < tries - 1) execFileSync("sleep", [String(5 * (attempt + 1))]);
   }
   return false;
 }

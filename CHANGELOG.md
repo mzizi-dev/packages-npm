@@ -21,6 +21,10 @@ the npm registry.
 - **The release workflow pins every action to a commit SHA** (the version in a
   trailing comment), keeps no credential in the checkout, and gives
   `NPM_TOKEN` and `RELEASE_BUMP_TOKEN` only to the step that uses each one.
+- **The release workflow publishes each package on its own.** One package npm
+  refuses no longer stops the others: the rest publish, get tagged and released,
+  and the job fails at the end naming what did not publish. A package whose
+  workspace dependency is not on npm is held back, not published uninstallable.
 
 ## [@bundu/ui 0.4.1, @nyuchi/ui 0.3.0] - 2026-10-04
 
