@@ -911,6 +911,15 @@ describe("AppShell", () => {
     expect(shut).toMatch(/id="c-collapse" data-shell-collapse checked/);
   });
 
+  test("an accent sets the brand fill for primary actions from the mineral's tokens", async () => {
+    const html = await render(AppShell, { accent: "gold" }, { slots });
+    expect(html).toMatch(
+      /data-accent="gold" style="--app-accent: var\(--color-gold-brand\); --app-accent-foreground: var\(--color-gold-on-brand\);"/,
+    );
+    const plain = await render(AppShell, {}, { slots });
+    expect(plain).not.toContain("--app-accent");
+  });
+
   test("renders footer links and leaves the footer out when there is none", async () => {
     const withLinks = await render(
       AppShell,
@@ -1052,6 +1061,8 @@ describe("StatTile", () => {
     expect(html).toContain("<dt");
     expect(html).toContain("12,345");
     expect(html).toContain("Up 12% on the previous 30 days");
+    // The visible badge is short and never wraps.
+    expect(html).toMatch(/whitespace-nowrap[^"]*">\s*\+12%\s*</);
     expect(html).toContain("bg-malachite-container");
   });
 
