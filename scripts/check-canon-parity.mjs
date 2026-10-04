@@ -21,7 +21,12 @@
  */
 
 import { readFile } from "node:fs/promises";
-import { buildSnapshot, serialize, SNAPSHOT_PATH } from "./fetch-canon.mjs";
+import {
+  buildSnapshot,
+  sameSnapshot,
+  serialize,
+  SNAPSHOT_PATH,
+} from "./fetch-canon.mjs";
 
 const force = process.argv.includes("--force");
 if (!process.env.CI && !force) {
@@ -39,7 +44,7 @@ const [{ url, snapshot }, committed] = await Promise.all([
 ]);
 
 const live = serialize(snapshot);
-if (live === committed) {
+if (sameSnapshot(live, committed)) {
   console.log(`canon parity OK — tokens/canon.snapshot.json matches ${url}`);
   process.exit(0);
 }

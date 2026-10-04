@@ -147,8 +147,8 @@
        overlays repoint it alongside --primary. */
     /* Per-app/per-context saturated brand mineral for accent fills and CTAs.
        Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app
-       or per-event/category (nhimbe). Distinct from the semantic --accent (a pale
-       container for hover/selected states). */
+       or per-event/category (Mukoko Events). Distinct from the semantic --accent
+       (a pale container for hover/selected states). */
     --brand-accent: #b388ff;
     --brand-accent-foreground: #0e0d0c;
 
