@@ -43,7 +43,7 @@ the npm registry.
   `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
   `brand-learning`) need a new version to ship. Additive only: new exports.
 
-### Changed
+### Changed (canon snapshot)
 
 - **The canon snapshot carries `kweli`, `learning`, `news` and `weather`.**
   `pnpm canon:fetch` after api.mzizi.dev's registry pin moved to
