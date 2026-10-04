@@ -913,11 +913,11 @@ describe("AppShell", () => {
 
   test("an accent sets the brand fill for primary actions from the mineral's tokens", async () => {
     const html = await render(AppShell, { accent: "gold" }, { slots });
-    expect(html).toMatch(
-      /data-accent="gold" style="--app-accent: var\(--color-gold-brand\); --app-accent-foreground: var\(--color-gold-on-brand\);"/,
-    );
+    // By data-accent and the shell's stylesheet, never an inline style.
+    expect(html).toContain('data-accent="gold"');
+    expect(html).not.toMatch(/\sstyle=/);
     const plain = await render(AppShell, {}, { slots });
-    expect(plain).not.toContain("--app-accent");
+    expect(plain).not.toContain("data-accent");
   });
 
   test("renders footer links and leaves the footer out when there is none", async () => {
@@ -1104,7 +1104,9 @@ describe("BarChart", () => {
     expect(html).toContain("Show the figures");
     expect(html).toContain("Monday 5 October");
     expect(html).toMatch(/Total<\/th>\s*<td[^>]*>12<\/td>/);
-    expect(html).toContain("height:100%");
+    // The tallest bar fills the plot, as SVG geometry: no inline style.
+    expect(html).toMatch(/<rect x="0" y="0" width="10" height="100"/);
+    expect(html).not.toMatch(/\sstyle=/);
     expectNoClientJs(html);
   });
 

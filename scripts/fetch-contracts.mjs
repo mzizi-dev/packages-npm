@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   CONTRACT_FILE,
+  FAMILIES,
   SCHEMA_FILE,
   safeJoin,
   safeRef,
@@ -64,7 +65,7 @@ for (const [path, text] of files) {
       : safeJoin(
           DEST,
           path,
-          path.startsWith("app/") ? CONTRACT_FILE : SCHEMA_FILE,
+          path.startsWith("schema/") ? SCHEMA_FILE : CONTRACT_FILE,
         );
   const local = await readFile(dest, "utf8").catch(() => null);
   if (local === text) continue;
@@ -80,13 +81,16 @@ for (const [path, text] of files) {
   }
 }
 // A contract removed upstream must not linger here.
-const known = new Set([...files.keys()].filter((p) => p.startsWith("app/")));
-for (const f of await readdir(resolve(DEST, "app"))) {
-  if (!known.has(`app/${f}`)) {
-    console.error(
-      `stale: contracts/app/${f} is not in the registry at ${ref}${check ? "" : "; delete it"}`,
-    );
-    drift += 1;
+const known = new Set(files.keys());
+for (const family of FAMILIES) {
+  const present = await readdir(resolve(DEST, family)).catch(() => []);
+  for (const f of present) {
+    if (!known.has(`${family}/${f}`)) {
+      console.error(
+        `stale: contracts/${family}/${f} is not in the registry at ${ref}${check ? "" : "; delete it"}`,
+      );
+      drift += 1;
+    }
   }
 }
 if (drift > 0) process.exit(1);

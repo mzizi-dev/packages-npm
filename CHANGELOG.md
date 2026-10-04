@@ -16,6 +16,42 @@ the npm registry.
 
 ## [Unreleased]
 
+### Added (@bundu/ui) — the Mzizi Discover Standard
+
+Owner decision, 2026-10-04: the discover pages of news, events, circles and
+weather must be identical, so they move into the Mukoko super-app on the web
+unchanged (mzizi-dev/mzizi-registry#413). Ships with the next `@bundu/ui`
+release (0.5.0 is not on npm yet).
+
+- **Eleven pure Astro components, `@bundu/ui/discover/*`**: `DiscoverShell`,
+  `DiscoverMeta`, `DiscoverHero`, `DiscoverSearch`, `CategoryChips`,
+  `CategoryChip`, `DiscoverSection`, `ResultGrid`, `DiscoverCard` (variants
+  `article`, `event`, `circle`, `place`), `LoadMore` and `OpenInApp`. No client
+  JavaScript, no inline styles, and each works in a server-filled shell
+  (`{{placeholders}}`).
+- **Contracts**: `contracts/discover/` (11), fetched from the registry, rendered
+  in every state by `src/app/contracts.test.ts`; `src/discover/discover.test.ts`
+  renders a whole Discover page and the server-filled mode.
+
+### Changed (@bundu/ui)
+
+- **No inline `style` attributes anywhere**, so a page's CSP needs no
+  `style-src-attr 'unsafe-inline'`. `MineralStrip` colours its segments from
+  its stylesheet (`data-mineral`); `AppShell accent` is `data-accent` plus the
+  shell's stylesheet; `BarChart` draws bars as SVG geometry. The contract
+  runner now fails any rendered `style` attribute.
+- **`app/FilterBar`**: `search={false}` leaves the search field out (selects
+  only); `searchLabel` and `q` are optional; a select whose value is `""` is no
+  longer an active filter, so it no longer shows "Clear".
+- **Contracts**: `app/filter-bar` 1.1.0, `app/app-shell` 1.1.0, `app/bar-chart`
+  1.0.1.
+
+### Changed (repository)
+
+- **`pnpm contracts:fetch` reads every contract family** (`FAMILIES` in
+  `scripts/contract-paths.mjs`: `app`, `discover`), and the path guard accepts
+  only those directories.
+
 ### Changed (repository)
 
 - **The canon snapshot carries `events` (Mukoko Events).** `api.mzizi.dev` now

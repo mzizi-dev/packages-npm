@@ -10,8 +10,16 @@
  */
 import { isAbsolute, relative, resolve, sep } from "node:path";
 
-/** `app/<kebab>.contract.json`: the only shape a contract file has. */
-export const CONTRACT_FILE = /^app\/[a-z0-9]+(?:-[a-z0-9]+)*\.contract\.json$/;
+/**
+ * The contract families, one directory each: `app/` (the Dashboard
+ * Standard) and `discover/` (the Discover Standard). A new family is added
+ * here and nowhere else in this script.
+ */
+export const FAMILIES = ["app", "discover"];
+/** `<family>/<kebab>.contract.json`: the only shape a contract file has. */
+export const CONTRACT_FILE = new RegExp(
+  `^(?:${FAMILIES.join("|")})\\/[a-z0-9]+(?:-[a-z0-9]+)*\\.contract\\.json$`,
+);
 /** `schema/<kebab>.schema.json`: the only shape the schema file has. */
 export const SCHEMA_FILE = /^schema\/[a-z0-9]+(?:-[a-z0-9]+)*\.schema\.json$/;
 /** A git branch, tag or commit: no `..`, no leading `/` or `-`, no `//`. */
