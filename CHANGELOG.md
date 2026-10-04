@@ -17,21 +17,29 @@ the npm registry.
 
 ### Added
 
-- **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`,
-  0.3.0). `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable`,
-  `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`, `StateMessage`
-  and `Toast`, all server-rendered Astro over the existing React primitives, with no
-  client JavaScript; and `@bundu/ui/lib/table` (`parseTableQuery`, `filterRows`,
-  `paginate`, `withParams`) with unit tests. Built for the Nyuchi console's move to
-  Astro and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this
-  release is published. No change to existing exports.
-- **`@bundu/ui` — rendering tests for the app patterns.** `src/app/app.test.ts`
-  renders every component through Astro's container API with the React renderer and
-  checks the semantics each one promises (landmarks, labels, `aria-*` wiring, escaped
-  cell text, no `<script>` and no island). `@bundu/ui` gains a `test` script and a
-  `vitest.config.ts` (Astro's `getViteConfig`), and dev dependencies on `astro`,
-  `@astrojs/react`, `react`, `react-dom` and `@types/react`; the root `pnpm test` now
-  runs each package's tests. Not in the tarball.
+- **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`).
+  `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable` (one card per row on
+  phones), `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`,
+  `StateMessage`, `Toast`, `StatTile` and `BarChart`, and the primitives under them
+  (`Button`, `Badge`, `Card`, `Alert`, `Input`, `Label`, `Skeleton`). All are **pure
+  Astro**: no React or other framework under them and no client JavaScript. `Badge`
+  follows the Mzizi registry's `badge` contract (`default`, `secondary`, `destructive`,
+  `outline`, `ghost`, `link`). Plus `@bundu/ui/lib/table` (`parseTableQuery`,
+  `filterRows`, `paginate`, `withParams`). Built for the Nyuchi console's move to Astro
+  and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this release
+  is published.
+- **`@bundu/ui` — `@bundu/ui/ui/variants`.** The class recipes (`buttonVariants`,
+  `cardVariants`, `alertVariants`, `inputClasses`, `labelClasses`, `skeletonClasses`,
+  `badgeClasses`) with no React in them, shared by the React primitives and the Astro
+  components. Each `.tsx` still exports its own recipe, so existing imports keep
+  working.
+- **`@bundu/ui` — rendering tests for the app patterns.** `src/app/app.test.ts` renders
+  every component through Astro's container API with **no framework renderer
+  registered**, and checks the semantics each one promises (landmarks, labels, `aria-*`
+  wiring, escaped cell text, no `<script>` and no island), plus a source check that no
+  app component imports a framework. `@bundu/ui` gains a `test` script, a
+  `vitest.config.ts` (Astro's `getViteConfig`) and an `astro` dev dependency; the root
+  `pnpm test` runs each package's tests. Not in the tarball.
 
 ### Changed
 

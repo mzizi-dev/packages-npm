@@ -9,8 +9,8 @@
  * - unavailable:  the backend or WorkOS is briefly unreachable; retry
  * - loading:      skeleton rows (for streamed or slow sections)
  */
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Skeleton } from "../ui/skeleton";
+import Alert from "./Alert.astro";
+import Skeleton from "./Skeleton.astro";
 
 interface Props {
   kind: "empty" | "error" | "unconfigured" | "unavailable" | "loading";
@@ -34,7 +34,7 @@ const d = defaults[kind];
     <div role="status" aria-live="polite" class="space-y-3" data-slot="state-loading">
       <span class="sr-only">{title ?? d.title}</span>
       {Array.from({ length: rows }).map(() => (
-        <Skeleton className="h-12 w-full" />
+        <Skeleton class="h-12 w-full" />
       ))}
     </div>
   ) : kind === "empty" ? (
@@ -46,9 +46,8 @@ const d = defaults[kind];
       </div>
     </div>
   ) : (
-    <Alert variant={d.variant} data-state={kind}>
-      <AlertTitle>{title ?? d.title}</AlertTitle>
-      {message && <AlertDescription>{message}</AlertDescription>}
+    <Alert variant={d.variant} title={title ?? d.title} state={kind}>
+      {message && <p>{message}</p>}
       <slot />
     </Alert>
   )

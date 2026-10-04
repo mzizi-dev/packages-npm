@@ -4,8 +4,10 @@
  * the error are announced with the field (aria-describedby), an error sets
  * aria-invalid, and the label is always visible (never placeholder-only).
  */
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import type { HTMLAttributes } from "astro/types";
+
+import Input from "./Input.astro";
+import Label from "./Label.astro";
 
 interface Props {
   name: string;
@@ -38,7 +40,7 @@ const describedBy = [hint ? `${id}-hint` : null, error ? `${id}-error` : null].f
 ---
 
 <div class="grid content-start gap-2" data-slot="form-field">
-  <Label htmlFor={id}>
+  <Label for={id}>
     {label}
     {required && <span class="text-muted-foreground"> (required)</span>}
   </Label>
@@ -46,15 +48,15 @@ const describedBy = [hint ? `${id}-hint` : null, error ? `${id}-error` : null].f
     id={id}
     name={name}
     type={type}
-    defaultValue={value ?? ""}
+    value={value ?? ""}
     required={required}
-    readOnly={readonly}
-    autoComplete={autocomplete}
-    maxLength={maxlength}
-    inputMode={inputmode}
+    readonly={readonly}
+    autocomplete={autocomplete as HTMLAttributes<"input">["autocomplete"]}
+    maxlength={maxlength}
+    inputmode={inputmode}
     aria-describedby={describedBy}
-    aria-invalid={error ? true : undefined}
-    className={readonly ? "bg-muted" : ""}
+    aria-invalid={error ? "true" : undefined}
+    class={readonly ? "bg-muted" : undefined}
   />
   {hint && <p id={`${id}-hint`} class="text-body-sm text-muted-foreground">{hint}</p>}
   {error && <p id={`${id}-error`} class="text-body-sm font-medium text-destructive">{error}</p>}

@@ -5,8 +5,8 @@
  * Posts to the page itself (Post/Redirect/Get); Astro refuses cross-site
  * posts. A form-level error is announced as an alert.
  */
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Card } from "../ui/card";
+import Alert from "./Alert.astro";
+import Card from "./Card.astro";
 
 interface Props {
   title: string;
@@ -19,7 +19,7 @@ const { title, description, error, action, id = "form" } = Astro.props;
 ---
 
 <section aria-labelledby={`${id}-title`} class="@container" data-slot="form-layout">
-  <Card padding="none" className="overflow-hidden">
+  <Card padding="none" class="overflow-hidden">
     <div class="flex flex-col gap-1 border-b border-border px-6 py-5">
       <h2 id={`${id}-title`} class="text-h4 font-semibold">{title}</h2>
       {description && <p class="text-body-sm text-muted-foreground">{description}</p>}
@@ -27,9 +27,8 @@ const { title, description, error, action, id = "form" } = Astro.props;
     <form method="post" action={action} class="grid gap-6 px-6 py-6" novalidate>
       {
         error && (
-          <Alert variant="destructive">
-            <AlertTitle>Not saved</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+          <Alert variant="destructive" title="Not saved">
+            {error}
           </Alert>
         )
       }

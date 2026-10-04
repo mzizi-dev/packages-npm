@@ -8,9 +8,10 @@
  * Cells are plain data, not markup, so a section cannot inject HTML:
  * a string, or { text, href, badge, mono, sub }.
  */
-import { Badge } from "../ui/badge";
+import type { BadgeVariant } from "../ui/variants";
+import Badge from "./Badge.astro";
 
-export type BadgeVariant = "default" | "primary" | "success" | "warning" | "info" | "accent" | "premium" | "outline";
+export type { BadgeVariant };
 export interface CellObject {
   text: string;
   href?: string;

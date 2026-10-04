@@ -1,12 +1,17 @@
 // Rendering tests for the app patterns. Each component is rendered on the
-// server through Astro's container API, with the React renderer for the
-// primitives, and the HTML is checked for the semantics the component
+// server through Astro's container API with NO framework renderer
+// registered, so a component that reached for React (or any island) would
+// fail to render here. The HTML is checked for the semantics the component
 // promises: landmarks, labels, ARIA wiring, and no client JavaScript.
-import reactRenderer from "@astrojs/react/server.js";
+import { readFileSync, readdirSync } from "node:fs";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, test } from "vite-plus/test";
 
 import AccountMenu from "./AccountMenu.astro";
+import Alert from "./Alert.astro";
+import Badge from "./Badge.astro";
+import BarChart from "./BarChart.astro";
+import Button from "./Button.astro";
 import AppShell from "./AppShell.astro";
 import DataTable from "./DataTable.astro";
 import DetailPanel from "./DetailPanel.astro";
@@ -17,13 +22,13 @@ import PageHeader from "./PageHeader.astro";
 import Pagination from "./Pagination.astro";
 import SideNav from "./SideNav.astro";
 import StateMessage from "./StateMessage.astro";
+import StatTile from "./StatTile.astro";
 import Toast from "./Toast.astro";
 
 let container: AstroContainer;
 
 beforeAll(async () => {
   container = await AstroContainer.create();
-  container.addServerRenderer({ renderer: reactRenderer });
 });
 
 type Component = Parameters<AstroContainer["renderToString"]>[0];
@@ -506,5 +511,141 @@ describe("AppShell", () => {
     expect(html).not.toContain("mobile-nav");
     expect(html).not.toContain("<aside");
     expect(html).not.toContain("<footer");
+  });
+});
+
+describe("pure Astro", () => {
+  const dir = new URL(".", import.meta.url);
+  const files = readdirSync(dir).filter((f) => f.endsWith(".astro"));
+
+  test("every app component is here and imports no framework", () => {
+    expect(files.length).toBeGreaterThanOrEqual(21);
+    for (const file of files) {
+      const source = readFileSync(new URL(file, dir), "utf8");
+      expect(source, file).not.toMatch(
+        /from\s+["'](react|react-dom|preact|svelte|vue|solid-js)/,
+      );
+      expect(source, file).not.toMatch(
+        /from\s+["'][^"']+\.(tsx|jsx|svelte|vue)["']/,
+      );
+      expect(source, file).not.toMatch(/client:(load|idle|visible|media|only)/);
+      expect(source, file).not.toMatch(/<script/);
+    }
+  });
+});
+
+describe("primitives", () => {
+  test("Badge follows the registry badge contract", async () => {
+    const html = await render(
+      Badge,
+      { variant: "destructive" },
+      { slots: { default: "Revoked" } },
+    );
+    expect(html).toMatch(/data-slot="badge" data-variant="destructive"/);
+    expect(html).toContain("text-destructive");
+    expect(html).toContain("Revoked");
+    const plain = await render(Badge, {}, { slots: { default: "New" } });
+    expect(plain).toContain('data-variant="default"');
+    expect(plain).toContain("bg-primary text-primary-foreground");
+  });
+
+  test("Button is a link with href and a button without", async () => {
+    expect(
+      await render(Button, { href: "/x" }, { slots: { default: "Go" } }),
+    ).toMatch(/<a href="\/x"[^>]*data-slot="button"/);
+    const html = await render(
+      Button,
+      { type: "submit", variant: "secondary" },
+      { slots: { default: "Save" } },
+    );
+    expect(html).toMatch(/<button type="submit"/);
+    expect(html).toContain("h-12");
+  });
+
+  test("Alert announces itself", async () => {
+    const html = await render(
+      Alert,
+      { variant: "warning", title: "Heads up" },
+      { slots: { default: "Body" } },
+    );
+    expect(html).toMatch(/role="alert" data-slot="alert"/);
+    expect(html).toMatch(/data-slot="alert-title"[^>]*>Heads up/);
+    expect(html).toContain("Body");
+  });
+});
+
+describe("StatTile", () => {
+  test("writes the trend in words and formats the number", async () => {
+    const html = await render(StatTile, {
+      label: "Sign-ups",
+      value: 12345,
+      trend: 12,
+      versus: "the previous 30 days",
+    });
+    expect(html).toContain("<dt");
+    expect(html).toContain("12,345");
+    expect(html).toContain("Up 12% on the previous 30 days");
+    expect(html).toContain("bg-malachite-container");
+  });
+
+  test("a missing value is not zero", async () => {
+    const html = await render(StatTile, { label: "Revenue", value: null });
+    expect(html).toContain("Not available");
+  });
+
+  test("a fall that is good news gets the good tone", async () => {
+    const html = await render(StatTile, {
+      label: "Errors",
+      value: 3,
+      trend: -4.5,
+      upIsGood: false,
+    });
+    expect(html).toContain("Down 4.5%");
+    expect(html).toContain("bg-malachite-container");
+  });
+});
+
+describe("BarChart", () => {
+  const data = [
+    { label: "Mon", value: 4, long: "Monday 5 October" },
+    { label: "Tue", value: 0 },
+    { label: "Wed", value: 8 },
+  ];
+
+  test("is a labelled figure with the figures in a real table", async () => {
+    const html = await render(BarChart, {
+      title: "Submissions",
+      caption: "Last 3 days",
+      data,
+      id: "subs",
+    });
+    expect(html).toMatch(/<figure[^>]*aria-labelledby="subs-title"/);
+    expect(html).toMatch(/<h3 id="subs-title"/);
+    // Bars are hidden from screen readers; the table carries the numbers.
+    expect(html).toMatch(/<div aria-hidden="true">/);
+    expect(html).toContain("Show the figures");
+    expect(html).toContain("Monday 5 October");
+    expect(html).toMatch(/Total<\/th>\s*<td[^>]*>12<\/td>/);
+    expect(html).toContain("height:100%");
+    expectNoClientJs(html);
+  });
+
+  test("says so when there is nothing to chart", async () => {
+    const html = await render(BarChart, {
+      title: "Submissions",
+      caption: "Today",
+      data: [{ label: "Mon", value: 0 }],
+    });
+    expect(html).toContain("Nothing to chart in this range.");
+  });
+
+  test("rows layout writes each value beside its bar", async () => {
+    const html = await render(BarChart, {
+      title: "By country",
+      caption: "All time",
+      data,
+      layout: "rows",
+    });
+    expect(html).toMatch(/<ul class="grid gap-3" aria-hidden="true">/);
   });
 });

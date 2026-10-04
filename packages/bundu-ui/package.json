@@ -1,7 +1,7 @@
 {
   "name": "@bundu/ui",
   "version": "0.3.0",
-  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, server-rendered Astro app patterns for consoles (app shell, data table, filters, pagination, detail panel, forms, states, toast) and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
+  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, pure Astro app patterns for consoles with no framework and no client JavaScript (app shell, data table, filters, pagination, detail panel, forms, states, toast, stat tile, bar chart, and the primitives under them) and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
@@ -56,8 +56,18 @@
     "./app/FormField.astro": "./src/app/FormField.astro",
     "./app/StateMessage.astro": "./src/app/StateMessage.astro",
     "./app/Toast.astro": "./src/app/Toast.astro",
+    "./app/Button.astro": "./src/app/Button.astro",
+    "./app/Badge.astro": "./src/app/Badge.astro",
+    "./app/Card.astro": "./src/app/Card.astro",
+    "./app/Alert.astro": "./src/app/Alert.astro",
+    "./app/Input.astro": "./src/app/Input.astro",
+    "./app/Label.astro": "./src/app/Label.astro",
+    "./app/Skeleton.astro": "./src/app/Skeleton.astro",
+    "./app/StatTile.astro": "./src/app/StatTile.astro",
+    "./app/BarChart.astro": "./src/app/BarChart.astro",
     "./lib/utils": "./src/lib/utils.ts",
     "./lib/table": "./src/lib/table.ts",
+    "./ui/variants": "./src/ui/variants.ts",
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",
     "./styles/color-scheme.css": "./styles/color-scheme.css",
@@ -78,10 +88,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.2"
-  },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
   },
   "files": [
     "src",
@@ -108,10 +114,6 @@
     "data-table"
   ],
   "devDependencies": {
-    "@astrojs/react": "7.0.0",
-    "@types/react": "19.3.0",
-    "astro": "7.3.5",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "astro": "7.3.5"
   }
 }
