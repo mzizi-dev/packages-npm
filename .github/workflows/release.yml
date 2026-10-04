@@ -1,0 +1,103 @@
+# Release (auto publish + tag).
+#
+# Every push to `main` publishes each workspace package whose package.json
+# version is not on npm yet, then tags it `<name>@<version>` and opens a GitHub
+# release with that version's CHANGELOG.md section. Nobody pushes a tag by
+# hand: bumping `version` in a package's package.json, with a changelog entry,
+# in the PR IS the release. A merge that bumps nothing publishes nothing.
+#
+# This replaces publish.yml, which ran only on a hand-pushed `v*` tag or a
+# published GitHub release. Nobody pushed one after 0.2.0, so @bundu/ui 0.3.0,
+# 0.4.0 and 0.4.1 and @bundu/server 0.1.0 sat unpublished on `main`
+# (mzizi-dev/packages-npm#25).
+#
+# Gated in the job, not on another workflow: the offline token check and every
+# package's tests run here, on the exact commit being published, before
+# anything reaches npm. (The weekly canon-parity check stays in tokens.yml; a
+# drift in live canon is a reason to refresh the snapshot, not to block a
+# release of what the snapshot already says.)
+#
+# Idempotent. `pnpm -r publish` skips every version npm already has, publishes
+# the rest in dependency order (@bundu/server before @bundu/ui, which depends on
+# it), and rewrites `workspace:^` to the real range. scripts/release-tags.mjs
+# then tags only versions that are on npm and have no tag yet. Re-running the
+# workflow, or a merge that bumps nothing, does nothing.
+#
+# Tokens. NPM_TOKEN (mzizi-dev org secret) publishes; it needs publish rights in
+# both npm orgs, @bundu and @nyuchi. RELEASE_BUMP_TOKEN (mzizi-dev org secret)
+# pushes the tags and creates the releases, so they are made by a real token
+# and can trigger other workflows (the default GITHUB_TOKEN's cannot). The job
+# needs no `contents: write` of its own.
+#
+# Provenance. npm provenance (NPM_CONFIG_PROVENANCE) links each tarball to this
+# workflow run; it needs `id-token: write` and a public repository.
+
+name: Release (auto publish + tag)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One release at a time, in merge order; never cancel one mid-publish.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: publish, tag and release
+    # A manual run from another branch must not publish that branch.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # The tag push in "Tag and release" uses this token.
+          token: ${{ secrets.RELEASE_BUMP_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Offline. A tarball whose styles/tokens.css does not match the
+      # generator is a tarball nobody can reproduce from this commit.
+      - name: Verify generated token artifacts
+        run: pnpm tokens:check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Publish unpublished versions to npm
+        run: pnpm -r publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+
+      - name: Tag and release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node scripts/release-tags.mjs
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_BUMP_TOKEN }}
