@@ -18,6 +18,17 @@ the npm registry.
 
 ### Changed (repository)
 
+- **The canon snapshot carries `events` (Mukoko Events).** `api.mzizi.dev` now
+  serves canon's `events` row (mzizi-dev/mzizi-registry#411, through
+  mzizi-dev/mzizi-api-gateway#39), so the `LOCAL_BRAND_MINERALS` bridge for it is
+  gone. `brand-events.css` names its canon row, and the `--brand-accent` usage
+  note in `tokens.css` and `color-scheme.css` says "Mukoko Events" where it said
+  "nhimbe". No value changes.
+- **The canon parity gates compare values, not text.** `pnpm canon:parity` and
+  `canon:fetch --check` parse both snapshots before comparing. The org
+  formatter puts a short array such as `"aliases": ["nhimbe"]` on one line,
+  which changed the text but not the value, and the text comparison failed on
+  that whitespace.
 - **The release workflow pins every action to a commit SHA** (the version in a
   trailing comment), keeps no credential in the checkout, and gives
   `NPM_TOKEN` and `RELEASE_BUMP_TOKEN` only to the step that uses each one.

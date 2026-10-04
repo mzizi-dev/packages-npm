@@ -200,6 +200,20 @@ export function project(brand, brandUrl, diskMinerals) {
 
 export const serialize = (snapshot) => `${JSON.stringify(snapshot, null, 2)}\n`;
 
+/**
+ * Whether two snapshot texts hold the same values. Compared as parsed JSON,
+ * not text: the org formatter (`vp fmt`, oxfmt) re-wraps short arrays such as
+ * `"aliases": ["nhimbe"]` onto one line, which changes the text and not the
+ * value, and a parity gate must not fail on whitespace.
+ */
+export function sameSnapshot(a, b) {
+  try {
+    return JSON.stringify(JSON.parse(a)) === JSON.stringify(JSON.parse(b));
+  } catch {
+    return false;
+  }
+}
+
 export async function buildSnapshot() {
   const [{ url, body }, ts] = await Promise.all([
     fetchBrand(),
@@ -218,7 +232,7 @@ async function main() {
 
   if (check) {
     const current = await readFile(SNAPSHOT_PATH, "utf8").catch(() => "");
-    if (current !== next) {
+    if (!sameSnapshot(current, next)) {
       console.error(
         "CANON PARITY FAILED — tokens/canon.snapshot.json no longer matches canon.\n" +
           `  brand:   ${url}\n` +
