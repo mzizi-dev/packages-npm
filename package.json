@@ -19,7 +19,7 @@
     "tokens:build": "node scripts/generate-tokens.mjs",
     "tokens:check": "node scripts/generate-tokens.mjs --check",
     "check": "vp check",
-    "test": "vp test --passWithNoTests",
+    "test": "vp test --passWithNoTests && pnpm -r --if-present run test",
     "build": "pnpm -r --if-present run build",
     "lint": "vp lint",
     "fmt": "vp fmt"

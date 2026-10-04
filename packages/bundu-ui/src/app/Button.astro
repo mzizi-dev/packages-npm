@@ -1,0 +1,35 @@
+---
+/**
+ * Button — pure Astro. An <a> when `href` is set, otherwise a <button>.
+ * The classes are `buttonVariants` (shared with the React `Button`), so
+ * targets are 48px or more.
+ */
+import { cn } from "../lib/utils";
+import { buttonVariants } from "../ui/variants";
+
+interface Props {
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  fullWidth?: boolean;
+  disabled?: boolean;
+  name?: string;
+  value?: string;
+  class?: string;
+}
+const { href, type = "button", variant, size, fullWidth, disabled, name, value, class: extra } = Astro.props;
+const classes = cn(buttonVariants({ variant, size, fullWidth }), extra);
+---
+
+{
+  href ? (
+    <a href={href} class={classes} data-slot="button">
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} disabled={disabled} name={name} value={value} data-slot="button">
+      <slot />
+    </button>
+  )
+}
