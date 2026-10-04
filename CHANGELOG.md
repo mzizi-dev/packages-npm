@@ -61,6 +61,18 @@ run.
   `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
   `brand-learning`) need a new version to ship. Additive only: new exports.
 
+### Changed (canon snapshot)
+
+- **The canon snapshot carries `kweli`, `learning`, `news` and `weather`.**
+  `pnpm canon:fetch` after api.mzizi.dev's registry pin moved to
+  mzizi-registry `50fc537` (mzizi-dev/mzizi-registry#409; mzizi-api-gateway#38):
+  `tokens/canon.snapshot.json` gains the four `ecosystem` rows. The generator's
+  `LOCAL_BRAND_MINERALS` bridge entries for them, and the stale `mzizi` one
+  (canon has carried that row since the hematite decision), are removed, so
+  every overlay's mineral now comes from canon. The four overlays, in both
+  packages, are unchanged apart from their header comment, which now cites
+  canon. No colour changes.
+
 ### Added
 
 - **`brand-kweli.css` (malachite) and `brand-learning.css` (gold), in both
