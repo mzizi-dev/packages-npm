@@ -16,6 +16,8 @@
   "scripts": {
     "canon:fetch": "node scripts/fetch-canon.mjs",
     "canon:parity": "node scripts/check-canon-parity.mjs",
+    "contracts:fetch": "node scripts/fetch-contracts.mjs",
+    "contracts:check": "node scripts/fetch-contracts.mjs --check",
     "tokens:build": "node scripts/generate-tokens.mjs",
     "tokens:check": "node scripts/generate-tokens.mjs --check",
     "check": "vp check",
