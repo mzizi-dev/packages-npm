@@ -21,6 +21,23 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added
+
+- **`@bundu/ui`: `SegmentedControl`, `NativeSelect`, `Toaster` and
+  `SafeAreaFrame`** (`@bundu/ui/<Name>.astro`), first used by nyuchi-tools
+  (`nyuchi/workspace-tools`). `SegmentedControl` is native radios, so it needs
+  no script; `NativeSelect` is a real `<select>` in the pill input style;
+  `Toaster` is `window.toast(message, kind?)` in a polite live region, for
+  client-side feedback (server-rendered flash messages stay with
+  `@bundu/ui/app/Toast.astro`); `SafeAreaFrame` draws a canvas shape with its
+  platform-covered bands, and its geometry, `safeAreaBands`, is exported from the
+  root and `@bundu/ui/safe-area` with the same numbers as the registry's
+  `safe-area-frame` in React and Rust (mzizi-dev/mzizi-registry#398). `Icon`
+  gains `image`, `layers`, `mail`, `grid`, `download`, `upload`, `copy`, `sun`,
+  `moon`, `sparkle`, `shield` and `history`. `src/components.test.ts` renders
+  each through Astro's container API. None of the four has a registry contract
+  yet, so they are not under `@bundu/ui/app/*`.
+
 ### Added (repository): the README links the published Mzizi design system
 
 The README links the Design System artifact
