@@ -5,7 +5,8 @@
  * https link (a universal / app link, or a server redirect such as
  * circles.mukoko.com's `/c/{slug}/join`), so it opens the app where it is
  * installed and the web otherwise; never a bare custom scheme, which does
- * nothing without the app.
+ * nothing without the app. Other actions (the default slot) sit beside the
+ * button, above the hint.
  *
  * Mzizi Discover Standard (contracts/discover/open-in-app).
  */
@@ -23,6 +24,9 @@ const { href, label = "Open in Mukoko", hint = "Opens in the Mukoko app, or on t
 ---
 
 <div class="flex flex-col items-start gap-2" data-slot="open-in-app">
-  <a href={href} class={buttonVariants({ variant, size: "md" })} data-variant={variant}>{label}</a>
+  <div class="flex flex-wrap items-center gap-3">
+    <a href={href} class={buttonVariants({ variant, size: "md" })} data-variant={variant}>{label}</a>
+    <slot />
+  </div>
   {hint !== "" && <p class="text-body-sm text-muted-foreground empty:hidden">{hint}</p>}
 </div>

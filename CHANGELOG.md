@@ -45,6 +45,8 @@ release (0.5.0 is not on npm yet).
   longer an active filter, so it no longer shows "Clear".
 - **Contracts**: `app/filter-bar` 1.1.0, `app/app-shell` 1.1.0, `app/bar-chart`
   1.0.1.
+- **`.link` in `globals.css`**: inline text links, underlined at rest (WCAG
+  1.4.1). Upstreamed from circles.mukoko.com, which defined it locally.
 
 ### Changed (repository)
 

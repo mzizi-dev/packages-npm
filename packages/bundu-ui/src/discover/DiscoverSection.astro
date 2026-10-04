@@ -5,6 +5,9 @@
  * ResultGrid, CategoryChips, or anything else). A named region, labelled by
  * its heading. A featured rail is a DiscoverSection holding a ResultGrid.
  *
+ * `state="empty"` hides the whole band (heading included), for a section
+ * whose data came back empty; a server-filled shell may pass a placeholder.
+ *
  * Mzizi Discover Standard (contracts/discover/discover-section).
  */
 import { cn } from "../lib/utils";
@@ -25,13 +28,22 @@ interface Props {
   level?: 2 | 3;
   /** The section's id; its heading is `<id>-title`. Unique per page. */
   id: string;
+  /** "ok" or "empty": empty hides the band (a server-filled shell may pass a placeholder). */
+  state?: string;
 }
-const { title, eyebrow, description, seeAllHref, seeAllLabel = "See all", tone = "default", space = "default", level = 2, id } = Astro.props;
+const { title, eyebrow, description, seeAllHref, seeAllLabel = "See all", tone = "default", space = "default", level = 2, id, state = "ok" } = Astro.props;
 const Heading = `h${level}` as "h2" | "h3";
 const titleId = `${id}-title`;
 ---
 
-<section id={id} aria-labelledby={titleId} class={cn(space === "tight" ? "py-12 md:py-16" : "py-16 md:py-24", tone === "muted" && "bg-secondary")} data-slot="discover-section" data-tone={tone}>
+<section
+  id={id}
+  aria-labelledby={titleId}
+  class={cn(space === "tight" ? "py-12 md:py-16" : "py-16 md:py-24", tone === "muted" && "bg-secondary", "data-[state=empty]:hidden")}
+  data-slot="discover-section"
+  data-tone={tone}
+  data-state={state}
+>
   <div class="container-custom">
     <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div class="max-w-2xl">

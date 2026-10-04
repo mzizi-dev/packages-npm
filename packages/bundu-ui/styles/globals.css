@@ -59,6 +59,14 @@
     @apply max-w-3xl mx-auto px-6 sm:px-8;
   }
 
+  /* Inline text links: underlined at rest, so a link in running text is
+     never told apart by colour alone (WCAG 1.4.1). Upstreamed from
+     circles.mukoko.com. */
+  .link {
+    @apply text-foreground underline underline-offset-4 decoration-border
+           transition-colors hover:decoration-foreground;
+  }
+
   /* Pill buttons — design system mandate */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 h-12
