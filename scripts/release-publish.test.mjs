@@ -2,7 +2,7 @@
 // the orders and outcomes it must produce without touching npm.
 import { describe, expect, test } from "vite-plus/test";
 
-import { publishAll, publishOrder } from "./release-publish.mjs";
+import { policyCheck, publishAll, publishOrder } from "./release-publish.mjs";
 
 const ui = {
   name: "@bundu/ui",
@@ -77,5 +77,53 @@ describe("publishAll", () => {
       attempted.indexOf("@bundu/ui"),
     );
     expect(attempted).toHaveLength(3);
+  });
+});
+
+describe("versioning policy", () => {
+  // A stand-in for nyuchi/.github's next-version.mjs: the real one is checked
+  // out by the workflow; here only the wiring is under test.
+  const calc = {
+    highest: (versions) => versions.at(-1) ?? "0.0.0",
+    check: (current, proposed, { allowMajor }) => {
+      const [ma, mi] = current.split(".").map(Number);
+      const ok =
+        current === "0.0.0" ||
+        proposed === `${ma}.${mi + 1}.0` ||
+        (allowMajor && proposed === `${ma + 1}.0.0`);
+      if (!ok) throw new Error(`policy allows ${ma}.${mi + 1}.0`);
+    },
+  };
+  const npm = { "@bundu/ui": ["0.2.0"], "@nyuchi/ui": ["0.2.0"] };
+  const versionsOf = (name) => npm[name] ?? [];
+
+  test("a version that is not the next minor is refused, and the rest publish", () => {
+    const check = policyCheck(calc, versionsOf, {});
+    const published = [];
+    const results = publishAll(
+      [server, { ...ui, version: "0.5.0" }, { ...nyuchi, version: "0.3.0" }],
+      {
+        isOnNpm: () => false,
+        publish: (p) => (published.push(p.name), true),
+        checkVersion: check,
+      },
+    );
+    const by = Object.fromEntries(results.map((r) => [r.name, r]));
+    expect(by["@bundu/ui"].result).toBe("refused");
+    expect(by["@bundu/ui"].detail).toMatch(/0\.3\.0/);
+    expect(by["@bundu/server"].result).toBe("published");
+    expect(by["@nyuchi/ui"].result).toBe("published");
+    expect(published).not.toContain("@bundu/ui");
+  });
+
+  test("a major needs a manual run with bump: major", () => {
+    const pkg = { name: "@nyuchi/ui", version: "1.0.0" };
+    expect(policyCheck(calc, versionsOf, {})(pkg)).toMatch(/policy/);
+    expect(
+      policyCheck(calc, versionsOf, {
+        RELEASE_BUMP: "major",
+        RELEASE_MANUAL: "true",
+      })(pkg),
+    ).toBeNull();
   });
 });

@@ -90,7 +90,7 @@ export const inputClasses =
 export const labelClasses = "text-body-sm font-medium text-foreground";
 
 /*
- * App density (0.4.0). Consoles and signed-in apps are dense, not
+ * App density (0.3.0). Consoles and signed-in apps are dense, not
  * marketing-roomy: 36px controls and 14px text on a fine pointer, growing
  * to 48px targets and 16px text on a coarse pointer (touch), so phones keep
  * WCAG-sized targets and iOS never zooms an input. Corners are the small
