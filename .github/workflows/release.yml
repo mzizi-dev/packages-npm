@@ -29,6 +29,11 @@
 # and can trigger other workflows (the default GITHUB_TOKEN's cannot). The job
 # needs no `contents: write` of its own.
 #
+# Supply chain. This job holds NPM_TOKEN and RELEASE_BUMP_TOKEN, so every
+# action is pinned to a full commit SHA (version in the trailing comment), the
+# checkout keeps no credential, each token is passed only to the one step that
+# uses it, and the job's own GITHUB_TOKEN is read-only.
+#
 # Provenance. npm provenance (NPM_CONFIG_PROVENANCE) links each tarball to this
 # workflow run; it needs `id-token: write` and a public repository.
 
@@ -61,17 +66,19 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
-          # The tag push in "Tag and release" uses this token.
-          token: ${{ secrets.RELEASE_BUMP_TOKEN }}
+          # No token left in .git/config while dependencies install, tests run
+          # and lifecycle scripts execute. "Tag and release" authenticates git
+          # itself, from RELEASE_BUMP_TOKEN, only for its own push.
+          persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "lts/*"
           cache: pnpm
@@ -98,6 +105,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # gh as git's credential helper: the push uses GH_TOKEN, which only
+          # this step has.
+          gh auth setup-git --hostname github.com
           node scripts/release-tags.mjs
         env:
           GH_TOKEN: ${{ secrets.RELEASE_BUMP_TOKEN }}

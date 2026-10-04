@@ -16,6 +16,12 @@ the npm registry.
 
 ## [Unreleased]
 
+### Changed (repository)
+
+- **The release workflow pins every action to a commit SHA** (the version in a
+  trailing comment), keeps no credential in the checkout, and gives
+  `NPM_TOKEN` and `RELEASE_BUMP_TOKEN` only to the step that uses each one.
+
 ## [@bundu/ui 0.4.1, @nyuchi/ui 0.3.0] - 2026-10-04
 
 The first versions published by the release workflow, which publishes and tags on
