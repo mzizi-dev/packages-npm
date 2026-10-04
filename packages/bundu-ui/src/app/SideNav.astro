@@ -46,7 +46,7 @@ const describe = (item: NavItem) => item.description ?? item.summary;
 const row =
   "group/row relative flex h-8 w-full min-w-0 items-center gap-2.5 rounded-sm px-2.5 text-body-sm text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:h-11";
 const here =
-  "bg-muted font-medium before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-primary";
+  "bg-muted font-medium before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-[var(--app-accent,var(--primary))]";
 const icon = "h-4 w-4 shrink-0 text-muted-foreground group-hover/row:text-foreground";
 const badge = "shrink-0 rounded-sm border border-border px-1.5 text-caption leading-4 font-medium text-muted-foreground";
 const tip =

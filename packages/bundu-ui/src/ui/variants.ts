@@ -102,7 +102,10 @@ export const appButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primary-foreground hover:opacity-90",
+        // The shell's accent (AppShell `accent`, a mineral's brand fill)
+        // when set, else the theme's primary.
+        primary:
+          "bg-[var(--app-accent,var(--primary))] text-[var(--app-accent-foreground,var(--primary-foreground))] hover:opacity-90",
         secondary: "bg-foreground text-background hover:opacity-90",
         outline: "border-border bg-card text-foreground hover:bg-muted",
         ghost: "text-foreground hover:bg-muted",
