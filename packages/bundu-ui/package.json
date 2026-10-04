@@ -71,6 +71,9 @@
     "./tokens.json": "./tokens.json",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
+  "scripts": {
+    "test": "vp test"
+  },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -103,5 +106,12 @@
     "console",
     "app-shell",
     "data-table"
-  ]
+  ],
+  "devDependencies": {
+    "@astrojs/react": "7.0.0",
+    "@types/react": "19.3.0",
+    "astro": "7.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
 }

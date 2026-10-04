@@ -25,6 +25,13 @@ the npm registry.
   `paginate`, `withParams`) with unit tests. Built for the Nyuchi console's move to
   Astro and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this
   release is published. No change to existing exports.
+- **`@bundu/ui` — rendering tests for the app patterns.** `src/app/app.test.ts`
+  renders every component through Astro's container API with the React renderer and
+  checks the semantics each one promises (landmarks, labels, `aria-*` wiring, escaped
+  cell text, no `<script>` and no island). `@bundu/ui` gains a `test` script and a
+  `vitest.config.ts` (Astro's `getViteConfig`), and dev dependencies on `astro`,
+  `@astrojs/react`, `react`, `react-dom` and `@types/react`; the root `pnpm test` now
+  runs each package's tests. Not in the tarball.
 
 ### Changed
 
