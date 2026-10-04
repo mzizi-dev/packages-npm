@@ -14,7 +14,20 @@ are below 1.0.0, a minor release may carry breaking changes; each one is marked
 Entries before 0.2.0 were backfilled on 2026-09-30 from the git history, the tags and
 the npm registry.
 
+From 2026-10-04 each package follows the org versioning policy
+([nyuchi/.github#80](https://github.com/nyuchi/.github/issues/80)): a release is the next
+minor above that package's highest version on npm, and a major is only released by hand.
+Versions published before then are not renumbered.
+
 ## [Unreleased]
+
+### Changed (repository): releases follow the org versioning policy
+
+The Release workflow checks each unpublished version against the org's shared calculator
+(nyuchi/.github `next-version.mjs`, at a pinned commit) before publishing it. A version
+that is not the next minor above that package's highest version on npm is refused, with the
+version it should be, and the other packages still publish. A major needs a manual run with
+`bump: major`.
 
 ### Changed (repository)
 

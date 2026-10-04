@@ -37,6 +37,13 @@
 # checkout keeps no credential, each token is passed only to the one step that
 # uses it, and the job's own GITHUB_TOKEN is read-only.
 #
+# Versioning policy (nyuchi/.github#80). A version is published only if it is
+# the next MINOR above the highest stable version of that package on npm
+# (x.y.z -> x.y+1.0); a MAJOR only on a manual run with bump: major. Each
+# segment holds 0..999. release-publish.mjs applies the org's shared
+# calculator (nyuchi/.github next-version.mjs, checked out below at a pinned
+# commit) to each package and records a refused version like an npm refusal.
+#
 # Provenance. npm provenance (NPM_CONFIG_PROVENANCE) links each tarball to this
 # workflow run; it needs `id-token: write` and a public repository.
 
@@ -46,6 +53,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      bump:
+        description: Override the release bump (major is manual only).
+        type: choice
+        options: [minor, patch, major]
+        default: minor
 
 # One release at a time, in merge order; never cancel one mid-publish.
 concurrency:
@@ -98,6 +111,17 @@ jobs:
       - name: Test
         run: pnpm test
 
+      # The org's versioning calculator, at a pinned commit. Data only: the
+      # script is imported by release-publish.mjs; nothing in it runs here.
+      - name: Checkout the versioning policy
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: nyuchi/.github
+          ref: de909ab7468d998ba2cf87416ac2042616eba75d # main, 2026-10-04
+          path: .versioning
+          sparse-checkout: .github/actions/next-version
+          persist-credentials: false
+
       # Each package on its own: one that npm refuses is recorded and the rest
       # still publish (a dependant of a refused package is held back). This
       # step does not fail; the last step does, after the tags.
@@ -105,6 +129,9 @@ jobs:
         id: publish
         run: node scripts/release-publish.mjs
         env:
+          NEXT_VERSION_SCRIPT: .versioning/.github/actions/next-version/next-version.mjs
+          RELEASE_BUMP: ${{ inputs.bump || '' }}
+          RELEASE_MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
