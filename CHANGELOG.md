@@ -26,6 +26,26 @@ the npm registry.
   and the job fails at the end naming what did not publish. A package whose
   workspace dependency is not on npm is held back, not published uninstallable.
 
+## [@bundu/ui 0.5.0, @nyuchi/ui 0.4.0] - 2026-10-04
+
+Owner decisions, 2026-10-04 ([mukoko-dev/nhimbe#155](https://github.com/mukoko-dev/nhimbe/issues/155)):
+the nhimbe brand is retired. The events platform is **Mukoko Events**, at
+events.mukoko.com, and its mineral stays malachite.
+
+### Added (`@bundu/ui` 0.5.0, `@nyuchi/ui` 0.4.0)
+
+- **`styles/brand-events.css`**: the Mukoko Events overlay (malachite), exported
+  in both packages. Canon's row is `events` (mzizi-dev/mzizi-registry#411). Until
+  the snapshot carries it, the mineral is bridged in `LOCAL_BRAND_MINERALS`.
+
+### Deprecated (`@bundu/ui` 0.5.0, `@nyuchi/ui` 0.4.0)
+
+- **`styles/brand-nhimbe.css`** is now a generated re-export of `brand-events.css`
+  (`@import "./brand-events.css";`), so existing imports keep working. Import
+  `brand-events.css` in new code. `DEPRECATED_OVERLAY_ALIASES` in
+  `scripts/generate-tokens.mjs` generates it, and a test keeps it a pure
+  re-export.
+
 ## [@bundu/ui 0.4.1, @nyuchi/ui 0.3.0] - 2026-10-04
 
 The first versions published by the release workflow, which publishes and tags on
