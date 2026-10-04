@@ -21,6 +21,13 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added (repository): the README links the published Mzizi design system
+
+The README links the Design System artifact
+(<https://claude.ai/artifact/G8CCtAbZ8w717uQ3R5itCc>), the Mzizi design system published on
+claude.ai, and names its source of truth: the `design-system/` folder in
+`mzizi-dev/mzizi-registry`, arriving with mzizi-registry#418. No package changes.
+
 ### Changed (repository): releases follow the org versioning policy
 
 The Release workflow checks each unpublished version against the org's shared calculator
