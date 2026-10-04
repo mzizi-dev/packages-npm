@@ -1,4 +1,6 @@
-// Contract tests: every app component against its Mzizi component contract.
+// Contract tests: every app component (the Dashboard Standard, src/app/) and
+// every Discover component (the Discover Standard, src/discover/) against its
+// Mzizi component contract.
 //
 // The contracts are the registry's (mzizi-dev/mzizi-registry, contracts/),
 // copied into ../../contracts/ by `pnpm contracts:fetch` and shipped with the
@@ -24,7 +26,12 @@ import {
 } from "../../test/contract-runner";
 
 const contractsDir = new URL("../../contracts/", import.meta.url);
-const appDir = new URL(".", import.meta.url);
+const srcDir = new URL("../", import.meta.url);
+/** Contract families and the source directory each one's components live in. */
+const FAMILIES = ["app", "discover"] as const;
+const familyOf = (c: { name: string }) => c.name.split("/")[0] ?? "";
+const sourceOf = (c: { name: string; title: string }) =>
+  new URL(`${familyOf(c)}/${c.title}.astro`, srcDir);
 const pkg = JSON.parse(
   readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
 ) as { exports: Record<string, string> };
@@ -39,9 +46,11 @@ const contracts: Contract[] = index.contracts.map(
     ) as Contract,
 );
 
-const components = import.meta.glob<{ default: unknown }>("./*.astro", {
-  eager: true,
-});
+// Keyed by path from the package root: "/src/<family>/<Title>.astro".
+const components = import.meta.glob<{ default: unknown }>(
+  ["/src/app/*.astro", "/src/discover/*.astro"],
+  { eager: true },
+);
 
 let container: AstroContainer;
 beforeAll(async () => {
@@ -51,7 +60,7 @@ beforeAll(async () => {
 type Component = Parameters<AstroContainer["renderToString"]>[0];
 
 async function renderStates(c: Contract): Promise<Rendered> {
-  const file = `./${c.title}.astro`;
+  const file = `/src/${familyOf(c)}/${c.title}.astro`;
   const mod = components[file];
   if (!mod) throw new Error(`${c.name}: no ${file}`);
   const out: Rendered = {};
@@ -67,20 +76,31 @@ async function renderStates(c: Contract): Promise<Rendered> {
 }
 
 describe("coverage", () => {
-  const astroFiles = readdirSync(appDir)
-    .filter((f) => f.endsWith(".astro"))
-    .sort();
+  test.each(FAMILIES)(
+    "every %s component has exactly one contract, and every contract a component",
+    (family) => {
+      const astroFiles = readdirSync(new URL(`${family}/`, srcDir))
+        .filter((f) => f.endsWith(".astro"))
+        .sort();
+      const titles = contracts
+        .filter((c) => familyOf(c) === family)
+        .map((c) => `${c.title}.astro`)
+        .sort();
+      expect(titles).toEqual(astroFiles);
+    },
+  );
 
-  test("every app component has exactly one contract, and every contract a component", () => {
-    const titles = contracts.map((c) => `${c.title}.astro`).sort();
-    expect(titles).toEqual(astroFiles);
+  test("every contract is in a family this test reads", () => {
+    for (const c of contracts)
+      expect(FAMILIES as readonly string[], c.name).toContain(familyOf(c));
   });
 
   test("the index lists every contract file, at its version", () => {
-    const files = readdirSync(new URL("app/", contractsDir))
-      .filter((f) => f.endsWith(".contract.json"))
-      .map((f) => `app/${f}`)
-      .sort();
+    const files = FAMILIES.flatMap((family) =>
+      readdirSync(new URL(`${family}/`, contractsDir))
+        .filter((f) => f.endsWith(".contract.json"))
+        .map((f) => `${family}/${f}`),
+    ).sort((a, b) => a.localeCompare(b));
     expect(index.contracts.map((e) => e.file).sort()).toEqual(files);
     for (const [i, entry] of index.contracts.entries()) {
       expect(contracts[i]?.version, entry.name).toBe(entry.version);
@@ -100,7 +120,7 @@ describe("coverage", () => {
 describe.each(contracts.map((c) => [c.title, c] as const))(
   "%s keeps its contract",
   (_title, c) => {
-    const source = readFileSync(new URL(`${c.title}.astro`, appDir), "utf8");
+    const source = readFileSync(sourceOf(c), "utf8");
     let rendered: Rendered;
     beforeAll(async () => {
       rendered = await renderStates(c);
@@ -139,7 +159,9 @@ describe.each(contracts.map((c) => [c.title, c] as const))(
     });
 
     test("no-JS: the script the contract allows, and no islands", () => {
-      const scripts = source.match(/<script\b/g) ?? [];
+      // JSON-LD (type="application/ld+json") is data, not script.
+      const scripts =
+        source.match(/<script\b(?![^>]*application\/ld\+json)/g) ?? [];
       expect(scripts.length).toBe(c.noJs.script === "none" ? 0 : 1);
       for (const html of Object.values(rendered)) {
         expect(html).not.toMatch(/<astro-island/i);

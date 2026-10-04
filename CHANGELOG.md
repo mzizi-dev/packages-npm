@@ -31,6 +31,9 @@ version it should be, and the other packages still publish. A major needs a manu
 
 ### Changed (repository)
 
+- **`pnpm contracts:fetch` reads every contract family** (`FAMILIES` in
+  `scripts/contract-paths.mjs`: `app`, `discover`), and the path guard accepts
+  only those directories.
 - **The canon snapshot carries `events` (Mukoko Events).** `api.mzizi.dev` now
   serves canon's `events` row (mzizi-dev/mzizi-registry#411, through
   mzizi-dev/mzizi-api-gateway#39), so the `LOCAL_BRAND_MINERALS` bridge for it is
@@ -60,9 +63,10 @@ policy, so each package's next release is one minor above what npm has. npm has
 at 0.1.0.
 
 **This one entry carries all of the unreleased entries before it.** The changes this
-file recorded under `@bundu/ui` 0.3.0, 0.4.0, 0.4.1 and 0.5.0 and `@nyuchi/ui` 0.3.0 and
-0.4.0 are all here. None of those versions reached npm, and 0.4.0, 0.4.1 and 0.5.0 are not used.
-Breaking changes are marked **Breaking**.
+file recorded under `@bundu/ui` 0.3.0, 0.4.0, 0.4.1 and 0.5.0, `@nyuchi/ui` 0.3.0 and
+0.4.0, and the Discover Standard (Unreleased) are all here. None of those versions
+reached npm, and 0.4.0, 0.4.1 and 0.5.0 are not used. Breaking changes are marked
+**Breaking**.
 
 ### Added
 
@@ -164,6 +168,22 @@ Breaking changes are marked **Breaking**.
   in both packages. Canon's row is `events` (mzizi-dev/mzizi-registry#411). Until
   the snapshot carries it, the mineral is bridged in `LOCAL_BRAND_MINERALS`.
 
+#### The Mzizi Discover Standard (`@bundu/ui`)
+
+Owner decision, 2026-10-04: the discover pages of news, events, circles and
+weather must be identical, so they move into the Mukoko super-app on the web
+unchanged (mzizi-dev/mzizi-registry#413).
+
+- **Eleven pure Astro components, `@bundu/ui/discover/*`**: `DiscoverShell`,
+  `DiscoverMeta`, `DiscoverHero`, `DiscoverSearch`, `CategoryChips`,
+  `CategoryChip`, `DiscoverSection`, `ResultGrid`, `DiscoverCard` (variants
+  `article`, `event`, `circle`, `place`), `LoadMore` and `OpenInApp`. No client
+  JavaScript, no inline styles, and each works in a server-filled shell
+  (`{{placeholders}}`).
+- **Contracts**: `contracts/discover/` (11), fetched from the registry, rendered
+  in every state by `src/app/contracts.test.ts`; `src/discover/discover.test.ts`
+  renders a whole Discover page and the server-filled mode.
+
 ### Changed
 
 - **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies
@@ -215,6 +235,19 @@ Breaking changes are marked **Breaking**.
   brand overlays added since (`brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
   `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
   `brand-learning`) need a new version to ship. Additive only: new exports.
+
+- **No inline `style` attributes anywhere**, so a page's CSP needs no
+  `style-src-attr 'unsafe-inline'`. `MineralStrip` colours its segments from
+  its stylesheet (`data-mineral`); `AppShell accent` is `data-accent` plus the
+  shell's stylesheet; `BarChart` draws bars as SVG geometry. The contract
+  runner now fails any rendered `style` attribute.
+- **`app/FilterBar`**: `search={false}` leaves the search field out (selects
+  only); `searchLabel` and `q` are optional; a select whose value is `""` is no
+  longer an active filter, so it no longer shows "Clear".
+- **Contracts**: `app/filter-bar` 1.1.0, `app/app-shell` 1.1.0, `app/bar-chart`
+  1.0.1.
+- **`.link` in `globals.css`**: inline text links, underlined at rest (WCAG
+  1.4.1). Upstreamed from circles.mukoko.com, which defined it locally.
 
 ### Changed (repository)
 
