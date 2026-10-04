@@ -1,0 +1,28 @@
+---
+/**
+ * EmptyState — the Astro port of Mzizi `mzizi-empty-state`: a quiet icon,
+ * what is missing, and what to do about it.
+ */
+import Icon from "./Icon.astro";
+
+interface Props {
+  icon?: "image" | "mail" | "history" | "layers" | "grid" | "search";
+  title: string;
+  body?: string;
+  id?: string;
+  class?: string;
+}
+
+const { icon = "image", title, body, id, class: className } = Astro.props;
+---
+
+<div
+  id={id}
+  data-slot="empty-state"
+  class={["flex flex-col items-center justify-center gap-2 rounded-[14px] border border-dashed border-border px-6 py-10 text-center", className].filter(Boolean).join(" ")}
+>
+  <span class="grid h-12 w-12 place-items-center rounded-full bg-muted text-xl text-foreground/80"><Icon name={icon} /></span>
+  <p class="font-medium text-foreground">{title}</p>
+  {body && <p class="max-w-sm text-body-sm text-foreground/80">{body}</p>}
+  <slot />
+</div>

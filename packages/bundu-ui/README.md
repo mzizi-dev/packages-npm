@@ -20,6 +20,10 @@ developed by Nyuchi. This package is not Mzizi itself.
 - **Astro marketing components** — `Hero`, `Section`, `SectionHeader`, `Container`,
   `MineralStrip`, `Icon`, `SocialIcon`, and `Breadcrumb` (emits valid schema.org
   `BreadcrumbList` JSON-LD for Google rich results).
+- **Astro app components** — `AppShell`, `PageHeader`, `SegmentedControl`,
+  `EmptyState`, `NativeSelect`, `Toaster`, `SafeAreaFrame` (geometry:
+  `safeAreaBands` from the package root), for server-rendered app pages with
+  minimal script.
 - **shadcn CVA + `cn()` React primitives** — `Button`, `Card`, `Badge`, `Input`,
   `Textarea`, `Select`, `Label`, `Alert`, `Avatar`, `Separator`, `Skeleton`, `Switch`,
   `Checkbox`, `Tabs`, `Tooltip`.

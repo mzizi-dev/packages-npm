@@ -15,6 +15,20 @@ the npm registry.
 
 ## [Unreleased]
 
+### Added
+
+- **`@bundu/ui`: Astro app components.** For server-rendered Astro apps, not only
+  marketing pages — first used by nyuchi-tools (`nyuchi/workspace-tools`):
+  `AppShell` (sidebar + top bar + off-canvas drawer, `inert` when closed, skip link,
+  theme switch), `PageHeader`, `SegmentedControl` (native radios, no script),
+  `EmptyState`, `NativeSelect`, `Toaster` (`window.toast()` in a polite live region)
+  and `SafeAreaFrame` with its geometry, `safeAreaBands`, exported from the root —
+  the same numbers as the registry's `safe-area-frame` in React and Rust
+  (mzizi-dev/mzizi-registry#398). `Icon` gains `home`, `image`, `layers`, `mail`,
+  `grid`, `download`, `upload`, `copy`, `sun`, `moon`, `sparkle`, `shield` and
+  `history`. Tests render each component through Astro's container API
+  (`pnpm --filter @bundu/ui test`).
+
 ### Changed
 
 - **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies

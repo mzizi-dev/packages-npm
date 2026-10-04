@@ -56,7 +56,15 @@
     "./styles/brand-shamwari.css": "./styles/brand-shamwari.css",
     "./styles/brand-mzizi.css": "./styles/brand-mzizi.css",
     "./tokens.json": "./tokens.json",
-    "./tailwind-palette": "./tailwind-palette.mjs"
+    "./tailwind-palette": "./tailwind-palette.mjs",
+    "./AppShell.astro": "./src/AppShell.astro",
+    "./PageHeader.astro": "./src/PageHeader.astro",
+    "./SegmentedControl.astro": "./src/SegmentedControl.astro",
+    "./EmptyState.astro": "./src/EmptyState.astro",
+    "./Toaster.astro": "./src/Toaster.astro",
+    "./NativeSelect.astro": "./src/NativeSelect.astro",
+    "./SafeAreaFrame.astro": "./src/SafeAreaFrame.astro",
+    "./safe-area": "./src/safe-area.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -86,5 +94,12 @@
     "marketing",
     "astro",
     "ui"
-  ]
+  ],
+  "devDependencies": {
+    "astro": "^7.3.5",
+    "vitest": "^4.1.11"
+  },
+  "scripts": {
+    "test": "vitest run"
+  }
 }
