@@ -1,9 +1,11 @@
 ---
 /**
  * BrandMark — an ecosystem brand's official mark, with its wordmark when
- * asked. The images are the canonical icon pair from the Mzizi registry
- * (mzizi-dev/mzizi-registry, public/icons/<brand>-icon-{light,dark}.png),
- * scaled to 128px and never redrawn: the light-surface mark and the
+ * asked. The images are the official bundu-ecosystem-icons pair
+ * (<brand>-icon-{light,dark}.png, as vendored in nyuchi/workspace-tools; the
+ * same mark as mzizi-registry's public/icons, in its deeper, higher-contrast
+ * colourway with a tighter frame), scaled to 128px (2x for up to 64px) and
+ * never redrawn: the light-surface mark and the
  * dark-surface mark are both in the page and CSS shows the one that fits
  * the theme (`[data-theme="dark"]`, or the system setting when the app
  * follows it), so it needs no script.
@@ -34,7 +36,7 @@ interface Props {
   decorative?: boolean;
   class?: string;
 }
-const { brand = "nyuchi", size = 24, wordmark = false, suffix, decorative = false, class: extra } = Astro.props;
+const { brand = "nyuchi", size = 28, wordmark = false, suffix, decorative = false, class: extra } = Astro.props;
 const mark = MARKS[brand];
 const src = (m: { src: string } | string) => (typeof m === "string" ? m : m.src);
 const alt = decorative || wordmark ? "" : mark.name;

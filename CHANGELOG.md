@@ -16,6 +16,25 @@ the npm registry.
 
 ## [Unreleased]
 
+### Changed (`@bundu/ui` 0.4.1)
+
+- **Brand fills from canon.** The generator now emits `--color-<mineral>-brand`
+  (the mineral's brand `hex` from canon, the same in both themes) and
+  `--color-<mineral>-on-brand` (whichever of the mineral's own container pair
+  has the higher WCAG contrast on it) in `tokens.css`, `theme.css`,
+  `color-scheme.css` and `tokens.json`, for both packages. Light-mode
+  `--color-gold` stays the deep `lightHex` for text on light surfaces.
+- **`AppShell` `accent`.** A mineral whose brand fill colours primary actions
+  and the current item's indicator inside the shell (`"gold"` for Nyuchi:
+  #FFD740 with #3E2723 text, about 11:1). Text links and the focus ring keep
+  the contrast-safe primary and ring.
+- **`StatTile` trend.** The badge is short and never wraps ("+12.5%",
+  "−3 pts", "No change"), with "vs …" after it as quiet text; screen readers
+  still hear the full sentence once.
+- **`BrandMark`.** 28px by default, and the official mark in its deeper,
+  higher-contrast colourway with a tighter frame (the bundu-ecosystem-icons
+  pair), still scaled to 128px and never redrawn.
+
 ### Added
 
 - **`@bundu/ui` — Button `destructive` and `destructive-outline` variants**

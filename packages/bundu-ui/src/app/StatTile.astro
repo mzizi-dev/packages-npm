@@ -41,6 +41,14 @@ const trendText = !hasTrend
   : trend === 0
     ? `No change${versus ? ` on ${versus}` : ""}`
     : `${trend > 0 ? "Up" : "Down"} ${Math.abs(trend).toLocaleString(locale, { maximumFractionDigits: 1 })}${unit}${versus ? ` on ${versus}` : ""}`;
+// The badge is short and never wraps ("+12.5%", "−3 points", "No change");
+// what it is compared with follows as quiet text that may wrap. Screen
+// readers hear the full sentence once.
+const shortTrend = !hasTrend
+  ? null
+  : trend === 0
+    ? "No change"
+    : `${trend > 0 ? "+" : "−"}${Math.abs(trend).toLocaleString(locale, { maximumFractionDigits: 1 })}${points ? " pts" : "%"}`;
 const good = hasTrend && trend !== 0 ? (trend > 0) === upIsGood : null;
 const tone = good === null ? "text-muted-foreground" : good ? "text-malachite-on-container bg-malachite-container" : "text-terracotta-on-container bg-terracotta-container";
 ---
@@ -54,7 +62,17 @@ const tone = good === null ? "text-muted-foreground" : good ? "text-malachite-on
     <span class="text-h4 font-semibold tracking-tight tabular-nums">
       {shown ?? <span class="text-body text-muted-foreground">Not available</span>}
     </span>
-    {trendText && <span class={`w-fit rounded-sm px-2 py-0.5 text-caption font-medium ${good === null ? "" : tone}`}>{trendText}</span>}
+    {
+      trendText && (
+        <span class="flex flex-wrap items-baseline gap-x-1.5 text-caption" data-slot="stat-trend">
+          <span class="sr-only">{trendText}</span>
+          <span aria-hidden="true" class={`w-fit shrink-0 rounded-sm px-1.5 py-px font-medium whitespace-nowrap tabular-nums ${good === null ? "bg-muted" : tone}`}>
+            {shortTrend}
+          </span>
+          {versus && trend !== 0 && <span aria-hidden="true" class="text-muted-foreground">vs {versus}</span>}
+        </span>
+      )
+    }
     {note && <span class="text-caption text-muted-foreground">{note}</span>}
   </dd>
 </div>

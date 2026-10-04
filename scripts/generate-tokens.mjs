@@ -79,6 +79,13 @@ function buildModel(canon) {
     name: m.name,
     light: m.lightHex,
     dark: m.darkHex,
+    // The mineral's own brand colour, the same in both themes, for filled
+    // brand surfaces (a primary button). lightHex is the darker variant for
+    // text on light surfaces; it is not the brand fill.
+    brand: m.hex,
+    // Text on the brand fill: whichever of the mineral's own container pair
+    // contrasts more with it (WCAG 2 ratio), so it is canon, not invented.
+    onBrand: betterContrast(m.hex, m.onContainerLight, m.containerLight),
     containerLight: m.containerLight,
     containerDark: m.containerDark,
     // /v1/brand does not project on-container for minerals. fetch-canon
@@ -166,6 +173,25 @@ function buildModel(canon) {
 const v = (name) => ({ ref: name });
 const lit = (value) => ({ lit: value });
 
+/** WCAG 2 relative luminance of a #rrggbb colour. */
+function luminance(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrast(a, b) {
+  const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+}
+/** Of `options`, the colour with the highest contrast against `bg`. */
+function betterContrast(bg, ...options) {
+  return options.reduce((best, o) =>
+    contrast(bg, o) > contrast(bg, best) ? o : best,
+  );
+}
+
 function declarations(m) {
   const out = [];
   const push = (section, name, light, dark, comment) =>
@@ -190,6 +216,19 @@ function declarations(m) {
       `--color-${x.name}-on-container`,
       lit(x.onContainerLight),
       lit(x.onContainerDark),
+    );
+    push(
+      "minerals",
+      `--color-${x.name}-brand`,
+      lit(x.brand),
+      lit(x.brand),
+      "The brand fill, both themes",
+    );
+    push(
+      "minerals",
+      `--color-${x.name}-on-brand`,
+      lit(x.onBrand),
+      lit(x.onBrand),
     );
   }
 
@@ -697,6 +736,8 @@ function emitThemeCss(pkg, m) {
     push(`  --color-${x.name}: ${norm(x.light)};`);
     push(`  --color-${x.name}-container: ${norm(x.containerLight)};`);
     push(`  --color-${x.name}-on-container: ${norm(x.onContainerLight)};`);
+    push(`  --color-${x.name}-brand: ${norm(x.brand)};`);
+    push(`  --color-${x.name}-on-brand: ${norm(x.onBrand)};`);
   }
   push("");
   for (const x of m.heritage) push(`  --color-${x.name}: ${norm(x.light)};`);

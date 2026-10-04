@@ -38,16 +38,25 @@ interface Props {
   footerLinks?: FooterLink[];
   /** Accessible name of the sidebar landmark. */
   sidebarLabel?: string;
+  /**
+   * A mineral whose brand fill (`--color-<mineral>-brand`, with its
+   * `-on-brand` text) colours primary actions and the current item's
+   * indicator inside the shell, e.g. "gold" for Nyuchi. Text links and the
+   * focus ring keep the theme's primary and ring, which are the mineral's
+   * contrast-safe variants.
+   */
+  accent?: "cobalt" | "tanzanite" | "malachite" | "gold" | "terracotta" | "sodalite" | "copper";
   /** Prefix for the shell's ids; unique per page. */
   id?: string;
 }
-const { navLabel = "Navigation", sidebarLabel = "Sidebar", collapsed = false, persist, footerLinks = [], id = "app" } = Astro.props;
+const { navLabel = "Navigation", sidebarLabel = "Sidebar", collapsed = false, persist, footerLinks = [], accent, id = "app" } = Astro.props;
+const accentStyle = accent ? `--app-accent: var(--color-${accent}-brand); --app-accent-foreground: var(--color-${accent}-on-brand);` : undefined;
 const drawerId = `${id}-sidebar`;
 const collapseId = `${id}-collapse`;
 const hasFooter = footerLinks.length > 0 || Astro.slots.has("footer");
 ---
 
-<div data-slot="app-shell" data-persist={persist}>
+<div data-slot="app-shell" data-persist={persist} data-accent={accent} style={accentStyle}>
   <aside id={drawerId} popover aria-label={sidebarLabel} data-slot="app-sidebar">
     <div class="flex items-center gap-1 px-2 pt-1.5" data-slot="sidebar-head">
       <div class="min-w-0 flex-1"><slot name="workspace" /></div>
