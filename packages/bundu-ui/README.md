@@ -20,6 +20,11 @@ developed by Nyuchi. This package is not Mzizi itself.
 - **Astro marketing components** — `Hero`, `Section`, `SectionHeader`, `Container`,
   `MineralStrip`, `Icon`, `SocialIcon`, and `Breadcrumb` (emits valid schema.org
   `BreadcrumbList` JSON-LD for Google rich results).
+- **Astro form and media components** — `SegmentedControl` (native radios),
+  `NativeSelect`, `Toaster` (`window.toast()` in a polite live region) and
+  `SafeAreaFrame` (geometry: `safeAreaBands` from the package root), imported as
+  `@bundu/ui/<Name>.astro`. They have no registry contract yet; the
+  contract-tested app patterns are under `@bundu/ui/app/*` (below).
 - **shadcn CVA + `cn()` React primitives** — `Button`, `Card`, `Badge`, `Input`,
   `Textarea`, `Select`, `Label`, `Alert`, `Avatar`, `Separator`, `Skeleton`, `Switch`,
   `Checkbox`, `Tabs`, `Tooltip`.
