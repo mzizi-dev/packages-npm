@@ -111,13 +111,15 @@
       "voice": "Helpful, warm, intelligent"
     },
     {
-      "description": "Community events and cultural gatherings. Standalone brand calling the same platform API. Edge-first check-in via geographic Durable Objects for sub-10ms ticket validation at venue doors.",
-      "language": "Shona",
+      "aliases": ["nhimbe"],
+      "description": "Mukoko Events: community events and cultural gatherings across African cities, with RSVPs that never oversell a room, QR check-in at the door, and venues verified by Kweli. Formerly branded nhimbe, after the Shona communal work gathering.",
+      "displayName": "Mukoko Events",
+      "language": "English",
       "meaning": "Gathering",
       "mineral": "malachite",
-      "name": "nhimbe",
+      "name": "events",
       "role": "Events & gatherings",
-      "url": "https://nhimbe.com",
+      "url": "https://events.mukoko.com",
       "voice": "Celebratory, communal, vibrant"
     },
     {
@@ -249,6 +251,46 @@
       "role": "Language, registry and design system",
       "url": "https://mzizi.dev",
       "voice": "Precise, honest, grounded"
+    },
+    {
+      "description": "The Africa Trust Platform: place, organisation and person verification for the whole Mukoko ecosystem, and the public face of the geographic knowledge graph. Every place gets one canonical page, and the kweli verification badge travels with the entity across every Mukoko app.",
+      "language": "Swahili",
+      "meaning": "Truth",
+      "mineral": "malachite",
+      "name": "kweli",
+      "role": "Trust and verification",
+      "url": "https://kweli.mukoko.com",
+      "voice": "Honest, rigorous, reassuring"
+    },
+    {
+      "description": "Nyuchi Learning: the Nyuchi education surface, and the home of the classroom tools Nyuchi Web Services builds for schools. A Nyuchi brand, so it wears Nyuchi gold.",
+      "language": "English",
+      "meaning": "Learning",
+      "mineral": "gold",
+      "name": "learning",
+      "role": "Education",
+      "url": "https://learning.nyuchi.com",
+      "voice": "Patient, practical, encouraging"
+    },
+    {
+      "description": "Mukoko News: cross-source African news with journalist attribution and source credibility, feeding Pulse.",
+      "language": "English",
+      "meaning": "News",
+      "mineral": "cobalt",
+      "name": "news",
+      "role": "News and journalism",
+      "url": "https://news.mukoko.com",
+      "voice": "Clear, credible, balanced"
+    },
+    {
+      "description": "Mukoko Weather: forecasts and severity-graded weather alerts for African places.",
+      "language": "English",
+      "meaning": "Weather",
+      "mineral": "cobalt",
+      "name": "weather",
+      "role": "Weather and alerts",
+      "url": "https://weather.mukoko.com",
+      "voice": "Calm, precise, timely"
     }
   ],
   "experimental": [
@@ -550,7 +592,7 @@
       "dark": "#B388FF",
       "light": "#4B0082",
       "name": "brand-accent",
-      "usage": "Per-app/per-context saturated brand mineral for accent fills and CTAs. Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app or per-event/category (nhimbe). Distinct from the semantic --accent (a pale container for hover/selected states)."
+      "usage": "Per-app/per-context saturated brand mineral for accent fills and CTAs. Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app or per-event/category (Mukoko Events). Distinct from the semantic --accent (a pale container for hover/selected states)."
     },
     {
       "dark": "#3E1818",

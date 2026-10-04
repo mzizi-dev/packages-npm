@@ -29,30 +29,44 @@
   --color-cobalt: #0047ab; /* Primary blue, links, CTAs */
   --color-cobalt-container: #e3f2fd;
   --color-cobalt-on-container: #002966;
+  --color-cobalt-brand: #0047ab; /* The brand fill, both themes */
+  --color-cobalt-on-brand: #e3f2fd;
 
   --color-tanzanite: #4b0082; /* Purple accent, brand/logo, social features */
   --color-tanzanite-container: #f3e5f5;
   --color-tanzanite-on-container: #2e004d;
+  --color-tanzanite-brand: #b388ff; /* The brand fill, both themes */
+  --color-tanzanite-on-brand: #2e004d;
 
   --color-malachite: #004d40; /* Success states, positive actions */
   --color-malachite-container: #e0f2f1;
   --color-malachite-on-container: #00332b;
+  --color-malachite-brand: #64ffda; /* The brand fill, both themes */
+  --color-malachite-on-brand: #00332b;
 
   --color-gold: #5d4037; /* Achievements, rewards, highlights */
   --color-gold-container: #fff8e1;
   --color-gold-on-container: #3e2723;
+  --color-gold-brand: #ffd740; /* The brand fill, both themes */
+  --color-gold-on-brand: #3e2723;
 
   --color-terracotta: #a0522d; /* Community features, warmth */
   --color-terracotta-container: #f5e6d3;
   --color-terracotta-on-container: #5d2906;
+  --color-terracotta-brand: #a0522d; /* The brand fill, both themes */
+  --color-terracotta-on-brand: #f5e6d3;
 
   --color-sodalite: #283593; /* AI/Shamwari surfaces, deep-reasoning states */
   --color-sodalite-container: #e8eaf6;
   --color-sodalite-on-container: #141a5c;
+  --color-sodalite-brand: #283593; /* The brand fill, both themes */
+  --color-sodalite-on-brand: #e8eaf6;
 
   --color-copper: #bf5a36; /* Bundu ecosystem identity, the commons */
   --color-copper-container: #fbe4da;
   --color-copper-on-container: #5c2410;
+  --color-copper-brand: #bf5a36; /* The brand fill, both themes */
+  --color-copper-on-brand: #fbe4da;
 
   /* === Seven heritage tones — atmospheric anchors. Canon carries light/dark
      only for these; there is no container step. */
@@ -133,8 +147,8 @@
      overlays repoint it alongside --primary. */
   /* Per-app/per-context saturated brand mineral for accent fills and CTAs.
      Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app
-     or per-event/category (nhimbe). Distinct from the semantic --accent (a pale
-     container for hover/selected states). */
+     or per-event/category (Mukoko Events). Distinct from the semantic --accent
+     (a pale container for hover/selected states). */
   --brand-accent: #4b0082;
   --brand-accent-foreground: #ffffff;
 
@@ -211,30 +225,44 @@
   --color-cobalt: #00b0ff; /* Primary blue, links, CTAs */
   --color-cobalt-container: #001f3f;
   --color-cobalt-on-container: #b3e5fc;
+  --color-cobalt-brand: #0047ab; /* The brand fill, both themes */
+  --color-cobalt-on-brand: #e3f2fd;
 
   --color-tanzanite: #b388ff; /* Purple accent, brand/logo, social features */
   --color-tanzanite-container: #1a0033;
   --color-tanzanite-on-container: #e1bee7;
+  --color-tanzanite-brand: #b388ff; /* The brand fill, both themes */
+  --color-tanzanite-on-brand: #2e004d;
 
   --color-malachite: #64ffda; /* Success states, positive actions */
   --color-malachite-container: #00251a;
   --color-malachite-on-container: #a7ffeb;
+  --color-malachite-brand: #64ffda; /* The brand fill, both themes */
+  --color-malachite-on-brand: #00332b;
 
   --color-gold: #ffd740; /* Achievements, rewards, highlights */
   --color-gold-container: #332200;
   --color-gold-on-container: #ffecb3;
+  --color-gold-brand: #ffd740; /* The brand fill, both themes */
+  --color-gold-on-brand: #3e2723;
 
   --color-terracotta: #e1b07e; /* Community features, warmth */
   --color-terracotta-container: #3e2817;
   --color-terracotta-on-container: #f5e6d3;
+  --color-terracotta-brand: #a0522d; /* The brand fill, both themes */
+  --color-terracotta-on-brand: #f5e6d3;
 
   --color-sodalite: #3d5afe; /* AI/Shamwari surfaces, deep-reasoning states */
   --color-sodalite-container: #0d1442;
   --color-sodalite-on-container: #c5cae9;
+  --color-sodalite-brand: #283593; /* The brand fill, both themes */
+  --color-sodalite-on-brand: #e8eaf6;
 
   --color-copper: #ff8a65; /* Bundu ecosystem identity, the commons */
   --color-copper-container: #3a1a0e;
   --color-copper-on-container: #ffd3c2;
+  --color-copper-brand: #bf5a36; /* The brand fill, both themes */
+  --color-copper-on-brand: #fbe4da;
 
   /* === Seven heritage tones — atmospheric anchors. Canon carries light/dark
      only for these; there is no container step. */
@@ -315,8 +343,8 @@
      overlays repoint it alongside --primary. */
   /* Per-app/per-context saturated brand mineral for accent fills and CTAs.
      Defaults to tanzanite — the Mukoko/Nyuchi brand mineral. Swappable per app
-     or per-event/category (nhimbe). Distinct from the semantic --accent (a pale
-     container for hover/selected states). */
+     or per-event/category (Mukoko Events). Distinct from the semantic --accent
+     (a pale container for hover/selected states). */
   --brand-accent: #b388ff;
   --brand-accent-foreground: #0e0d0c;
 

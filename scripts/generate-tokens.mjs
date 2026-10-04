@@ -79,6 +79,13 @@ function buildModel(canon) {
     name: m.name,
     light: m.lightHex,
     dark: m.darkHex,
+    // The mineral's own brand colour, the same in both themes, for filled
+    // brand surfaces (a primary button). lightHex is the darker variant for
+    // text on light surfaces; it is not the brand fill.
+    brand: m.hex,
+    // Text on the brand fill: whichever of the mineral's own container pair
+    // contrasts more with it (WCAG 2 ratio), so it is canon, not invented.
+    onBrand: betterContrast(m.hex, m.onContainerLight, m.containerLight),
     containerLight: m.containerLight,
     containerDark: m.containerDark,
     // /v1/brand does not project on-container for minerals. fetch-canon
@@ -166,6 +173,25 @@ function buildModel(canon) {
 const v = (name) => ({ ref: name });
 const lit = (value) => ({ lit: value });
 
+/** WCAG 2 relative luminance of a #rrggbb colour. */
+function luminance(hex) {
+  const [r, g, b] = [1, 3, 5].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrast(a, b) {
+  const [x, y] = [luminance(a), luminance(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+}
+/** Of `options`, the colour with the highest contrast against `bg`. */
+function betterContrast(bg, ...options) {
+  return options.reduce((best, o) =>
+    contrast(bg, o) > contrast(bg, best) ? o : best,
+  );
+}
+
 function declarations(m) {
   const out = [];
   const push = (section, name, light, dark, comment) =>
@@ -190,6 +216,19 @@ function declarations(m) {
       `--color-${x.name}-on-container`,
       lit(x.onContainerLight),
       lit(x.onContainerDark),
+    );
+    push(
+      "minerals",
+      `--color-${x.name}-brand`,
+      lit(x.brand),
+      lit(x.brand),
+      "The brand fill, both themes",
+    );
+    push(
+      "minerals",
+      `--color-${x.name}-on-brand`,
+      lit(x.onBrand),
+      lit(x.onBrand),
     );
   }
 
@@ -697,6 +736,8 @@ function emitThemeCss(pkg, m) {
     push(`  --color-${x.name}: ${norm(x.light)};`);
     push(`  --color-${x.name}-container: ${norm(x.containerLight)};`);
     push(`  --color-${x.name}-on-container: ${norm(x.onContainerLight)};`);
+    push(`  --color-${x.name}-brand: ${norm(x.brand)};`);
+    push(`  --color-${x.name}-on-brand: ${norm(x.onBrand)};`);
   }
   push("");
   for (const x of m.heritage) push(`  --color-${x.name}: ${norm(x.light)};`);
@@ -941,31 +982,56 @@ function emitTokensJson(pkg, m, decls, meta) {
 
 /**
  * Brands that ship an overlay. Canon's `ecosystem` table supplies the mineral
- * for every one of these; mzizi's row is new (see below).
+ * for every one of these.
  */
-const OVERLAY_BRANDS = ["bundu", "nyuchi", "mukoko", "shamwari", "mzizi"];
+const OVERLAY_BRANDS = [
+  "bundu",
+  "nyuchi",
+  "mukoko",
+  "shamwari",
+  "mzizi",
+  // Sub-apps that adopt the Mzizi Dashboard Standard (mzizi-registry#404).
+  // `events` is Mukoko Events (events.mukoko.com), formerly nhimbe; see
+  // DEPRECATED_OVERLAY_ALIASES for the old file name.
+  "events",
+  "lingo",
+  "bushtrade",
+  "campfire",
+  "news",
+  "weather",
+  "kweli",
+  "learning",
+];
 
 /**
- * mzizi -> hematite is the OWNER'S DECISION (2026-09-30), not a judgement call
- * made here. Hematite's canon symbolism is "Foundation, endurance, the
- * substrate" and its usage "Neutral anchor".
+ * A bridge for a brand whose canon row is decided but not yet in
+ * tokens/canon.snapshot.json: canon's `ecosystem` table reaches `/v1/brand`
+ * (and so the snapshot) only once api.mzizi.dev's registry pin moves past the
+ * merge that adds the row. An entry here is `{ mineral, note }`, with the note
+ * naming the owner decision and the canon row it is recorded in. Once the
+ * snapshot carries the row, canon wins, and a canon row that disagrees with an
+ * entry here fails the generator rather than silently picking one; remove the
+ * entry then.
  *
- * The decision is recorded in canon: mzizi-registry -> lib/tokens/brand.source.ts
- * gains a `mzizi` row in its `ecosystem` table. api.mzizi.dev serves that table
- * from a pinned registry commit, so the row reaches `/v1/brand` (and therefore
- * tokens/canon.snapshot.json) only once the gateway's pin moves past it. Until
- * then this entry supplies the same answer. Once canon carries the row, canon
- * wins, and a canon row that disagrees with this entry fails the generator
- * rather than silently picking one.
+ * Empty: every overlay brand has its canon row. mzizi (hematite, owner
+ * decision 2026-09-30), news, weather, kweli and learning (cobalt, cobalt,
+ * malachite, gold; owner decisions 2026-10-04, mzizi-registry#404 and #409)
+ * and events (malachite, Mukoko Events, formerly nhimbe; owner decision
+ * 2026-10-04, mzizi-registry#411) were bridged here until the snapshot picked
+ * them up.
  */
-const LOCAL_BRAND_MINERALS = {
-  mzizi: {
-    mineral: "hematite",
-    note:
-      "Owner decision (2026-09-30): mzizi's brand mineral is hematite, " +
-      "recorded in canon as mzizi-registry lib/tokens/brand.source.ts -> " +
-      "ecosystem[name=mzizi].",
-  },
+const LOCAL_BRAND_MINERALS = {};
+
+/**
+ * Overlay files kept under a retired brand name, each re-exporting the
+ * overlay that replaced it so an existing `@import` keeps working. Never
+ * import one in new code. Mirrors canon's `aliases` on the replacing row.
+ *
+ * nhimbe -> events: owner decision, 2026-10-04 (mukoko-dev/nhimbe#155). The
+ * nhimbe brand is retired; the events platform is Mukoko Events.
+ */
+const DEPRECATED_OVERLAY_ALIASES = {
+  nhimbe: "events",
 };
 
 function brandOverlays(m) {
@@ -975,7 +1041,7 @@ function brandOverlays(m) {
     ...Object.fromEntries(m.heritage.map((x) => [x.name, "heritage tone"])),
   };
 
-  return OVERLAY_BRANDS.map((brand) => {
+  const overlays = OVERLAY_BRANDS.map((brand) => {
     const canonMineral = eco[brand]?.mineral;
     const local = canonMineral ? undefined : LOCAL_BRAND_MINERALS[brand];
     if (
@@ -1023,6 +1089,39 @@ function brandOverlays(m) {
 
     return [`styles/brand-${brand}.css`, body, mineral];
   });
+
+  const aliases = Object.entries(DEPRECATED_OVERLAY_ALIASES).map(
+    ([alias, target]) => {
+      const live = overlays.find(
+        ([rel]) => rel === `styles/brand-${target}.css`,
+      );
+      if (!live) {
+        throw new Error(
+          `deprecated overlay ${alias} points at "${target}", which ships no overlay`,
+        );
+      }
+      if (OVERLAY_BRANDS.includes(alias)) {
+        throw new Error(
+          `${alias} is both a live overlay and a deprecated alias`,
+        );
+      }
+      const body = [
+        wrapComment(
+          `brand-${alias} — DEPRECATED alias of brand-${target}.css. ` +
+            `The ${alias} brand is retired (owner decision, 2026-10-04): ` +
+            `import brand-${target}.css instead. This file re-exports it so ` +
+            "existing imports keep working. GENERATED by " +
+            "scripts/generate-tokens.mjs; do not edit.",
+          0,
+        ),
+        `@import "./brand-${target}.css";`,
+        "",
+      ].join("\n");
+      return [`styles/brand-${alias}.css`, body, live[2]];
+    },
+  );
+
+  return [...overlays, ...aliases];
 }
 
 /* ------------------------------------------------------------------ *

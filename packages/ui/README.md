@@ -70,13 +70,22 @@ The unbranded `--primary` / `--ring` default is **tanzanite** / **cobalt**
 as `--primary`"). A brand overlay remaps `--primary` and `--ring`, and nothing
 else:
 
-| Overlay              | Primary mineral     |
-| -------------------- | ------------------- |
-| `brand-bundu.css`    | copper              |
-| `brand-nyuchi.css`   | gold                |
-| `brand-mukoko.css`   | tanzanite           |
-| `brand-shamwari.css` | sodalite            |
-| `brand-mzizi.css`    | hematite (heritage) |
+| Overlay               | Primary mineral                                 |
+| --------------------- | ----------------------------------------------- |
+| `brand-bundu.css`     | copper                                          |
+| `brand-nyuchi.css`    | gold                                            |
+| `brand-mukoko.css`    | tanzanite                                       |
+| `brand-shamwari.css`  | sodalite                                        |
+| `brand-mzizi.css`     | hematite (heritage)                             |
+| `brand-events.css`    | malachite                                       |
+| `brand-nhimbe.css`    | deprecated alias: re-exports `brand-events.css` |
+| `brand-lingo.css`     | cobalt                                          |
+| `brand-bushtrade.css` | gold                                            |
+| `brand-campfire.css`  | malachite                                       |
+| `brand-news.css`      | cobalt                                          |
+| `brand-weather.css`   | cobalt                                          |
+| `brand-kweli.css`     | malachite                                       |
+| `brand-learning.css`  | gold                                            |
 
 ### Outside the browser
 

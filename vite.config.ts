@@ -3,11 +3,6 @@
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  // @bundu/ui's Astro component tests render .astro files, which need
-  // Astro's own Vite pipeline (packages/bundu-ui/vitest.config.ts). The root
-  // runner has no Astro plugin, so it leaves them to
-  // `pnpm --filter @bundu/ui test`.
-  test: { exclude: ["**/node_modules/**", "packages/bundu-ui/test/**"] },
   // `vp check` reads ONLY this block, not .oxfmtrc.json. These values mirror
   // nyuchi/.github/.oxfmtrc.json, which the org-required `vite-plus / fmt`
   // job uses on Markdown and JSON. Keep the two identical: two formatters
@@ -25,6 +20,17 @@ export default defineConfig({
         files: ["*.md", "*.mdx"],
         options: { embeddedLanguageFormatting: "off" },
       },
+    ],
+  },
+  // Tests run per package (`pnpm test` runs each package's `test` script),
+  // because @bundu/ui's vitest.config.ts compiles .astro files and a root
+  // run would not. Excluded here so a bare `vp test` at the root neither
+  // runs them with the wrong config nor runs them twice.
+  test: {
+    exclude: [
+      "**/node_modules/**",
+      "packages/bundu-ui/**",
+      "packages/bundu-server/**",
     ],
   },
   lint: {

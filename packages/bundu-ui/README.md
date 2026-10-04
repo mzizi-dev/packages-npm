@@ -20,10 +20,11 @@ developed by Nyuchi. This package is not Mzizi itself.
 - **Astro marketing components** — `Hero`, `Section`, `SectionHeader`, `Container`,
   `MineralStrip`, `Icon`, `SocialIcon`, and `Breadcrumb` (emits valid schema.org
   `BreadcrumbList` JSON-LD for Google rich results).
-- **Astro app components** — `AppShell`, `PageHeader`, `SegmentedControl`,
-  `EmptyState`, `NativeSelect`, `Toaster`, `SafeAreaFrame` (geometry:
-  `safeAreaBands` from the package root), for server-rendered app pages with
-  minimal script.
+- **Astro form and media components** — `SegmentedControl` (native radios),
+  `NativeSelect`, `Toaster` (`window.toast()` in a polite live region) and
+  `SafeAreaFrame` (geometry: `safeAreaBands` from the package root), imported as
+  `@bundu/ui/<Name>.astro`. They have no registry contract yet; the
+  contract-tested app patterns are under `@bundu/ui/app/*` (below).
 - **shadcn CVA + `cn()` React primitives** — `Button`, `Card`, `Badge`, `Input`,
   `Textarea`, `Select`, `Label`, `Alert`, `Avatar`, `Separator`, `Skeleton`, `Switch`,
   `Checkbox`, `Tabs`, `Tooltip`.
@@ -36,7 +37,12 @@ developed by Nyuchi. This package is not Mzizi itself.
   `tailwind-preset.mjs` is the v3-shape preset, still shipped and still working (v4 loads
   it through `@config`).
 - **Brand overlays** — `brand-bundu`, `brand-nyuchi`, `brand-mukoko`, `brand-shamwari`,
-  `brand-mzizi`. Each repoints `--primary` and `--ring` and nothing else.
+  `brand-mzizi`, and the sub-apps `brand-events` (Mukoko Events), `brand-lingo`,
+  `brand-bushtrade`, `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli` and
+  `brand-learning`. `brand-nhimbe` is a deprecated alias that re-exports `brand-events`
+  (the nhimbe brand is retired; the events platform is Mukoko Events).
+  Each repoints `--primary` and `--ring` and nothing else; the mineral comes from
+  canon's ecosystem table.
 - **`tokens.json`** — the same values machine-readable, including every custom property
   resolved to a literal hex per mode, for the surfaces that cannot consume CSS at all:
   Expo (`mukoko-weather-mobile`) and Satori-based OG-image / email / PDF generators.
@@ -225,6 +231,241 @@ combination of the 0.1.x props against the published 0.1.1 tarball.
 
 See [BUILDING.md](https://github.com/mzizi-dev/packages-npm/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
 21 colour families, and the no-raw-hex rule.
+
+## App patterns (0.3.0)
+
+Server-rendered building blocks for signed-in apps and consoles, under
+`@bundu/ui/app/*`. They are **pure Astro**: no React (or any framework) under
+them and no client JavaScript, as the Mzizi doctrine has it for Astro. Filters
+are GET forms, paging is links, menus are `<details>`, and a toast is dismissed
+with a label for a hidden checkbox. Every colour is a token, so light and dark
+follow `tokens.css` / `color-scheme.css`. The class recipes are shared with the
+React primitives through `@bundu/ui/ui/variants`, so both builds look the same.
+
+| Component                                                                   | What it does                                                                                                      |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `AppShell.astro`                                                            | Sticky top bar (`brand`, `account` slots), sidebar navigation from `lg` and a disclosure below, `main#main`       |
+| `SideNav.astro`                                                             | Section list with label and summary; `aria-current="page"` on the current item; 48px targets                      |
+| `AccountMenu.astro`                                                         | Who is signed in, a slot for account actions (an appearance form, links), and a sign-out POST form                |
+| `PageHeader.astro`                                                          | The page's one `<h1>`, description, breadcrumbs, `actions` slot                                                   |
+| `DataTable.astro`                                                           | A real `<table>` with caption and scoped headers; one card per row on narrow screens; cells are data, not markup  |
+| `FilterBar.astro`                                                           | Search and select filters as a `role="search"` GET form; "Clear" when anything is set                             |
+| `Pagination.astro`                                                          | "Showing 26–50 of 112" and previous, numbered and next links; hidden when one page is enough                      |
+| `DetailPanel.astro`                                                         | One record as a description list, an optional "Full record" JSON disclosure, an `actions` slot                    |
+| `FormLayout.astro`                                                          | A titled form card; fields in two columns when the card is wide (container query); form-level alert               |
+| `FormField.astro`                                                           | Visible label, input, hint and error wired with `aria-describedby` and `aria-invalid`                             |
+| `StateMessage.astro`                                                        | Empty, error, not-configured, unavailable and loading (skeleton) states with fixed wording                        |
+| `Toast.astro`                                                               | The last action's result in a polite live region; stays until dismissed (WCAG 2.2.3)                              |
+| `StatTile.astro`                                                            | One headline figure in a `<dl>`: label, value ("Not available", never 0), the trend written in words              |
+| `BarChart.astro`                                                            | Columns or rows of bars as HTML, a captioned `<figure>`, and the exact figures in a real table under a disclosure |
+| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; `appButtonVariants`, incl. `destructive` and `destructive-outline`            |
+| `Badge.astro`                                                               | The Mzizi registry `badge` contract: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`            |
+| `Card.astro`, `Alert.astro`, `Input.astro`, `Label.astro`, `Skeleton.astro` | The primitives the patterns are built from, pure Astro                                                            |
+
+`@bundu/ui/lib/table` holds the pure helpers behind `DataTable`, `FilterBar` and
+`Pagination`: `parseTableQuery` (URL → query, clamped), `filterRows` (every word,
+case- and accent-insensitive, plus exact-match filters), `paginate` and `withParams`.
+
+```astro
+---
+import AppShell from "@bundu/ui/app/AppShell.astro";
+import SideNav from "@bundu/ui/app/SideNav.astro";
+import AccountMenu from "@bundu/ui/app/AccountMenu.astro";
+import PageHeader from "@bundu/ui/app/PageHeader.astro";
+import FilterBar from "@bundu/ui/app/FilterBar.astro";
+import DataTable from "@bundu/ui/app/DataTable.astro";
+import Pagination from "@bundu/ui/app/Pagination.astro";
+import { filterRows, paginate, parseTableQuery, withParams } from "@bundu/ui/lib/table";
+
+const query = parseTableQuery(Astro.url.searchParams, ["role"]);
+const rows = filterRows(people, query, (p) => [p.name], (p, f) => (f === "role" ? p.role : null));
+const page = paginate(rows, query.page, query.perPage);
+---
+
+<AppShell>
+  <a slot="brand" href="/">Your app</a>
+  <AccountMenu slot="account" name="Tendai Moyo" email="tendai@example.com" signOutAction="/auth/logout" />
+  <SideNav slot="nav" items={[{ href: "/people", label: "People", summary: "Everyone in your family" }]} />
+
+  <PageHeader title="People" description="Everyone in your family." />
+  <FilterBar searchLabel="Search people" q={query.q} values={query.filters} clearHref={withParams(Astro.url, { q: null, role: null, page: null })} />
+  <DataTable
+    caption={`People, ${page.total} in all`}
+    columns={[{ key: "name", label: "Name" }, { key: "role", label: "Role" }]}
+    rows={page.rows.map((p) => ({ name: { text: p.name, href: `/people/${p.id}` }, role: { text: p.role, badge: "outline" } }))}
+  />
+  <Pagination url={Astro.url} {...page} noun="people" />
+</AppShell>
+```
+
+They need only Astro and the Tailwind v4 setup above, including the `@source`
+line so the classes inside the package are generated. `BarChart` sizes its bars
+with inline `style` attributes, so a Content-Security-Policy needs
+`style-src 'unsafe-inline'` (or the hashes) on pages that use it.
+
+`DataTable` badges (`{ text, badge }`) take the registry badge variants. Before
+0.3.0 the console's copy used the mineral variants of the React `Badge`;
+`primary` there is `default` here.
+
+### The product-dashboard shell
+
+The app patterns make a full-width product dashboard, dense like a
+console rather than roomy like a marketing page.
+
+| Component                                    | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppShell.astro`                             | The whole viewport: a fixed 16.25rem sidebar (`workspace`, `search`, `nav` slots, a collapse toggle at the bottom) and a main column filling the rest (a thin top bar with `brand`, `actions`, `account`; the page; `footerLinks` / `footer`). No centred page container. Collapses to a 3.5rem icon rail (a real checkbox; `collapsed` and `persist` keep it across pages). Below 64rem the sidebar is an off-canvas drawer: the same element as a Popover API popover, so Escape and a click outside close it. `overlay` slot for a `CommandPalette` |
+| `SideNav.astro`                              | `groups` under quiet labels (or 0.3's flat `items`), an icon per item, `badge` ("New"), nested items under a chevron disclosure (open when a child is current), the current item filled with a gold indicator. **Label only**: an item's `description` is a tooltip on hover and keyboard focus and its `aria-describedby`; in the collapsed rail the tooltip shows the label too                                                                                                                                                                      |
+| `WorkspaceSwitcher.astro`                    | The product mark (`mark` slot) over the current workspace; a `<details>` list of workspaces and links, or a plain link home when there is nothing to switch to                                                                                                                                                                                                                                                                                                                                                                                         |
+| `QuickSearch.astro` + `CommandPalette.astro` | The sidebar's search button with its ⌘K hint opens the palette (`popovertarget`): every nav item, grouped, as links, and with `action` a GET search form for the server                                                                                                                                                                                                                                                                                                                                                                                |
+| `TopBarAction.astro`                         | An icon-and-label link or button for the top bar ("Ask AI", "Support"); icon only below `sm` with the label as its name                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `Toolbar.astro` + `ToolbarMenu.astro`        | A full-width GET search box joined to a button group; `ToolbarMenu` is a `<details>` list of links (a date range)                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `StatTiles.astro`                            | One bordered row of equal `StatTile`s with hairline dividers; `StatTile` gains `info`                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `InfoTip.astro`                              | A focusable info icon whose tooltip is its accessible description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `EmptyState.astro`                           | A bordered card: a heading, help text and actions; `StateMessage kind="empty"` uses it                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `BrandMark.astro`                            | The official Nyuchi mark (the bee, the Mzizi registry's light/dark icon pair, scaled, never redrawn), with the lowercase serif wordmark and a muted suffix when asked; the right variant per theme by CSS                                                                                                                                                                                                                                                                                                                                              |
+
+`@bundu/ui/app/nav` (also from the root) holds the pure helpers: `groupNav` turns
+flat one-line registrations (`group`, `parent`) into ordered, nested groups;
+`currentHref` picks the longest matching href; `searchNav` / `matchesQuery`
+match every word, case- and accent-insensitively.
+
+**Density.** `Button`, `Input`, `FilterBar`, `DataTable`, `Pagination`,
+`DetailPanel`, `FormLayout`, `PageHeader` and `StatTile` take the app density
+(`appButtonVariants`, `appInputClasses` in `@bundu/ui/ui/variants`): 36px
+controls, 14px text and ~40px table rows with a fine pointer; 44–48px targets
+and 16px inputs on touch (`pointer-coarse:`). Headings inside `AppShell` use the
+body sans. The marketing primitives are unchanged.
+
+**Script.** Two components carry one small module each, and both work without
+it: `AppShell` (it writes the collapse choice to the `persist` cookie and lets
+Escape hide a tooltip) and `CommandPalette` (the ⌘K / Ctrl+K shortcut, live
+filtering with the count announced, Enter and the arrow keys). A keyboard
+shortcut and live filtering cannot be done in CSS. Astro bundles them as files,
+so a `script-src 'self'` CSP works if the app does not inline small scripts
+(set `vite.build.assetsInlineLimit: 0`).
+
+```astro
+---
+import AppShell from "@bundu/ui/app/AppShell.astro";
+import BrandMark from "@bundu/ui/app/BrandMark.astro";
+import CommandPalette from "@bundu/ui/app/CommandPalette.astro";
+import QuickSearch from "@bundu/ui/app/QuickSearch.astro";
+import SideNav from "@bundu/ui/app/SideNav.astro";
+import TopBarAction from "@bundu/ui/app/TopBarAction.astro";
+import WorkspaceSwitcher from "@bundu/ui/app/WorkspaceSwitcher.astro";
+import { groupNav } from "@bundu/ui/app/nav";
+
+const groups = groupNav(
+  [
+    { href: "/", label: "Home", icon: "home" },
+    { href: "/people", label: "People", icon: "users", group: "Identity & people", description: "Everyone in your organisation" },
+    { href: "/keys", label: "API keys", group: "Developer", parent: "/dev" },
+    { href: "/dev", label: "Developer", icon: "terminal", group: "Developer" },
+  ],
+  ["Identity & people", "Developer"],
+);
+---
+
+<AppShell collapsed={Astro.cookies.get("sidebar")?.value === "collapsed"} persist="sidebar" footerLinks={[{ label: "Status", href: "https://status.example" }]}>
+  <WorkspaceSwitcher slot="workspace" name="Nyuchi Africa" href="/"><BrandMark slot="mark" wordmark suffix="console" /></WorkspaceSwitcher>
+  <QuickSearch slot="search" target="palette" />
+  <SideNav slot="nav" groups={groups} />
+  <TopBarAction slot="actions" label="Support" icon="help" href="/support" />
+  <slot />
+  <CommandPalette slot="overlay" id="palette" groups={groups} action="/search" />
+</AppShell>
+```
+
+## Discover patterns (the Mzizi Discover Standard)
+
+One design for every public discover and browse page in the Mukoko family:
+circles, news, events, weather, and the super-app on the web. Pure Astro, no
+client JavaScript, no inline styles. Eleven components under
+`@bundu/ui/discover/*`:
+
+| Component         | What it is                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------ |
+| `DiscoverShell`   | Skip link, mineral strip, header (brand, main nav, one action), `<main id="main">`, footer |
+| `DiscoverMeta`    | `<head>` tags: title, robots, canonical, Open Graph, X card, JSON-LD                       |
+| `DiscoverHero`    | Breadcrumbs, eyebrow, the one `<h1>`, lead, then the `search` and `actions` slots          |
+| `DiscoverSearch`  | A GET search form, 48px on every pointer                                                   |
+| `CategoryChips`   | A named nav of `CategoryChip` links that wraps                                             |
+| `CategoryChip`    | One category link with a count; `current` marks it                                         |
+| `DiscoverSection` | A named band: eyebrow, heading, description, "See all", content                            |
+| `ResultGrid`      | Status line, cards, empty state and "load more"; layouts `grid`, `list`, `rail`            |
+| `DiscoverCard`    | One card, variants `article`, `event`, `circle`, `place`, sharing one anatomy              |
+| `LoadMore`        | Cursor pagination: one `rel="next"` link to `?cursor=…`                                    |
+| `OpenInApp`       | The "Open in Mukoko" action: an https link and one line saying what happens                |
+
+```astro
+---
+import DiscoverShell from "@bundu/ui/discover/DiscoverShell.astro";
+import DiscoverHero from "@bundu/ui/discover/DiscoverHero.astro";
+import DiscoverSearch from "@bundu/ui/discover/DiscoverSearch.astro";
+import DiscoverSection from "@bundu/ui/discover/DiscoverSection.astro";
+import ResultGrid from "@bundu/ui/discover/ResultGrid.astro";
+import DiscoverCard from "@bundu/ui/discover/DiscoverCard.astro";
+import LoadMore from "@bundu/ui/discover/LoadMore.astro";
+---
+<DiscoverShell homeLabel="mukoko circles, home" nav={[{ label: "All circles", href: "/circles" }]}>
+  <span slot="brand">mukoko circles</span>
+  <DiscoverHero size="home" eyebrow="Mukoko Circles" title="Find your people.">
+    <DiscoverSearch slot="search" label="Search circles" />
+  </DiscoverHero>
+  <DiscoverSection id="featured" title="Circles worth joining" seeAllHref="/circles">
+    <ResultGrid label="Featured circles" summary={`${circles.length} circles`}>
+      {circles.map((c) => <DiscoverCard variant="circle" href={c.href} title={c.name} initial={c.name[0]} meta={[c.members]} />)}
+      <LoadMore slot="more" href={next} label="More circles" />
+    </ResultGrid>
+  </DiscoverSection>
+</DiscoverShell>
+```
+
+Tailwind must see the components' classes: add
+`@source "../../node_modules/@bundu/ui/src";` (the path from your CSS file)
+after the `@bundu/ui` imports.
+
+**Server-filled shells.** Every Discover component also works when the page is
+built once with `{{placeholders}}` and a server fills it (as circles.mukoko.com's
+Rust Worker does): text props are plain strings, empty text hides itself, and
+state switches (`ResultGrid state`, `LoadMore state`, `DiscoverCard badgeTone`,
+`CategoryChip current`) are attributes styled by classes, so the template needs
+no logic.
+
+## Component contracts
+
+Every app and Discover component carries a contract, as everything built in Mzizi does. The
+contracts are authored in the Mzizi registry
+([`mzizi-dev/mzizi-registry`, `contracts/`](https://github.com/mzizi-dev/mzizi-registry/tree/main/contracts))
+and shipped here, one JSON file per component:
+
+```js
+import contract from "@bundu/ui/contracts/app/side-nav.contract.json" with { type: "json" };
+```
+
+Each states the component's props and slots with types, its behaviour and named
+states, accessibility (roles, keyboard, focus, ARIA), density for a fine and a
+coarse pointer, theming (brand overlay tokens only; layout never varies by
+brand), the no-JavaScript fallback and the responsive rules, plus a
+`contract … end` block in the Mzizi language's clause grammar. The schema is
+`@bundu/ui/contracts/schema/component-contract.schema.json`.
+
+`src/app/contracts.test.ts` renders every component in every named state and
+evaluates its contract: the clauses, the selector checks, the density table and
+the brand-overlay rule. A clause the runner cannot evaluate fails, and so does
+any inline `style` attribute (a page's CSP never needs
+`style-src-attr 'unsafe-inline'`). `contracts/app/` is the **Mzizi Dashboard
+Standard** and `contracts/discover/` the **Mzizi Discover Standard**
+(docs.mzizi.dev).
+
+**Upstream first.** A component an app needs that is not here, or a change to
+one that is, comes here (and its contract to the registry) straight away. An
+app keeps a local copy only while that PR is open, marked
+`TODO(mzizi): <PR URL>`.
+
+Do not edit `contracts/` here. Change the registry, then
+`pnpm contracts:fetch` (or `pnpm contracts:check [ref]` to compare).
 
 ## Licence
 

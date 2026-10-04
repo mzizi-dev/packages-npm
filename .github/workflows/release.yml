@@ -1,0 +1,155 @@
+# Release (auto publish + tag).
+#
+# Every push to `main` publishes each workspace package whose package.json
+# version is not on npm yet, then tags it `<name>@<version>` and opens a GitHub
+# release with that version's CHANGELOG.md section. Nobody pushes a tag by
+# hand: bumping `version` in a package's package.json, with a changelog entry,
+# in the PR IS the release. A merge that bumps nothing publishes nothing.
+#
+# This replaces publish.yml, which ran only on a hand-pushed `v*` tag or a
+# published GitHub release. Nobody pushed one after 0.2.0, so the next @bundu/ui and
+# @nyuchi/ui and the new @bundu/server 0.1.0 sat unpublished on `main`
+# (mzizi-dev/packages-npm#25).
+#
+# Gated in the job, not on another workflow: the offline token check and every
+# package's tests run here, on the exact commit being published, before
+# anything reaches npm. (The weekly canon-parity check stays in tokens.yml; a
+# drift in live canon is a reason to refresh the snapshot, not to block a
+# release of what the snapshot already says.)
+#
+# Idempotent. scripts/release-publish.mjs skips every version npm already has
+# and publishes the rest one package at a time, in dependency order
+# (@bundu/server before @bundu/ui, which depends on it), so one refused package
+# does not hold back unrelated ones; a package whose workspace dependency is
+# not on npm is held back rather than published uninstallable.
+# scripts/release-tags.mjs then tags only versions that are on npm and have no
+# tag yet, and the job fails at the end if anything was not published.
+# Re-running the workflow, or a merge that bumps nothing, does nothing.
+#
+# Tokens. NPM_TOKEN (mzizi-dev org secret) publishes; it needs publish rights in
+# both npm orgs, @bundu and @nyuchi. RELEASE_BUMP_TOKEN (mzizi-dev org secret)
+# pushes the tags and creates the releases, so they are made by a real token
+# and can trigger other workflows (the default GITHUB_TOKEN's cannot). The job
+# needs no `contents: write` of its own.
+#
+# Supply chain. This job holds NPM_TOKEN and RELEASE_BUMP_TOKEN, so every
+# action is pinned to a full commit SHA (version in the trailing comment), the
+# checkout keeps no credential, each token is passed only to the one step that
+# uses it, and the job's own GITHUB_TOKEN is read-only.
+#
+# Versioning policy (nyuchi/.github#80). A version is published only if it is
+# the next MINOR above the highest stable version of that package on npm
+# (x.y.z -> x.y+1.0); a MAJOR only on a manual run with bump: major. Each
+# segment holds 0..999. release-publish.mjs applies the org's shared
+# calculator (nyuchi/.github next-version.mjs, checked out below at a pinned
+# commit) to each package and records a refused version like an npm refusal.
+#
+# Provenance. npm provenance (NPM_CONFIG_PROVENANCE) links each tarball to this
+# workflow run; it needs `id-token: write` and a public repository.
+
+name: Release (auto publish + tag)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Override the release bump (major is manual only).
+        type: choice
+        options: [minor, patch, major]
+        default: minor
+
+# One release at a time, in merge order; never cancel one mid-publish.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: publish, tag and release
+    # A manual run from another branch must not publish that branch.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          # No token left in .git/config while dependencies install, tests run
+          # and lifecycle scripts execute. "Tag and release" authenticates git
+          # itself, from RELEASE_BUMP_TOKEN, only for its own push.
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Offline. A tarball whose styles/tokens.css does not match the
+      # generator is a tarball nobody can reproduce from this commit.
+      - name: Verify generated token artifacts
+        run: pnpm tokens:check
+
+      - name: Test
+        run: pnpm test
+
+      # The org's versioning calculator, at a pinned commit. Data only: the
+      # script is imported by release-publish.mjs; nothing in it runs here.
+      - name: Checkout the versioning policy
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: nyuchi/.github
+          ref: de909ab7468d998ba2cf87416ac2042616eba75d # main, 2026-10-04
+          path: .versioning
+          sparse-checkout: .github/actions/next-version
+          persist-credentials: false
+
+      # Each package on its own: one that npm refuses is recorded and the rest
+      # still publish (a dependant of a refused package is held back). This
+      # step does not fail; the last step does, after the tags.
+      - name: Publish unpublished versions to npm
+        id: publish
+        run: node scripts/release-publish.mjs
+        env:
+          NEXT_VERSION_SCRIPT: .versioning/.github/actions/next-version/next-version.mjs
+          RELEASE_BUMP: ${{ inputs.bump || '' }}
+          RELEASE_MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+
+      - name: Tag and release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # gh as git's credential helper: the push uses GH_TOKEN, which only
+          # this step has.
+          gh auth setup-git --hostname github.com
+          node scripts/release-tags.mjs
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_BUMP_TOKEN }}
+
+      - name: Fail if any package did not publish
+        if: steps.publish.outputs.failed != ''
+        env:
+          FAILED: ${{ steps.publish.outputs.failed }}
+        run: |
+          echo "::error::Not published: $FAILED (see the npm publish table in the run summary)"
+          exit 1

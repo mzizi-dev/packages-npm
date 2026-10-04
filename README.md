@@ -3,28 +3,29 @@
 > Shared, publishable UI packages — Nyuchi's implementation of the Mzizi architecture, consumed by the marketing and documentation sites.
 
 [![Lint](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
-[![Publish](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml)
+[![Release](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+**Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) · [`@bundu/server`](https://www.npmjs.com/package/@bundu/server) | **Architecture:** [mzizi.dev](https://mzizi.dev)
 
 ---
 
 ## What this is
 
 A [pnpm workspace](https://pnpm.io/workspaces) holding the UI packages Nyuchi
-publishes to npm. Both packages implement the [Mzizi](https://mzizi.dev)
+publishes to npm. The packages implement the [Mzizi](https://mzizi.dev)
 architecture — an open-architecture project of the Bundu Foundation, operated
 and developed by Nyuchi — but the packages themselves are **Nyuchi-owned
 implementations**, not Mzizi itself. Mzizi's own registry lives at
 [`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry).
 
-| Package                                                                              | Framework          | What it is                                                               |
-| ------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------ |
-| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)      | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                         |
-| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui) | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites |
+| Package                                                                                      | Framework          | What it is                                                                                                         |
+| -------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)              | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                                                                   |
+| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles |
+| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs)     | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging   |
 
-Both packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
+Both UI packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
 `tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
 one generator, not two hand-maintained files.
 
@@ -61,18 +62,36 @@ pnpm lint
 
 ## Publishing
 
-Published to npm automatically by the
-[`publish` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/publish.yml)
-when a GitHub Release is published (or a `v*` tag is pushed) — `@nyuchi/*` under the
-[`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org and `@bundu/*` under the
-[`@bundu`](https://www.npmjs.com/org/bundu) npm org. The workflow requires an
-`NPM_TOKEN` with publish access to both orgs. `NPM_TOKEN` is an **organisation** secret
-on `mzizi-dev`, visible to all its repositories (the repo moved here from
-`mukoko-dev` on 2026-10-02), so no repository-level secret is needed. Check that
-this token can publish to both npm orgs before the first release from here.
+Releases are automatic. On every push to `main` the
+[`release` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/release.yml)
+runs the token check and the tests, publishes each package whose `package.json`
+version is not on npm yet, then tags it `<name>@<version>` (for example
+`@bundu/ui@0.3.0`) and creates a GitHub release from that version's
+`CHANGELOG.md` section. Nobody pushes a tag by hand.
 
-Publishing is the owner's call. CI does not publish on a branch push — only on a
-published GitHub Release or a `v*` tag.
+To release a package, bump its `version` in its `package.json` and add a
+`## [<name> <version>] - <date>` section to `CHANGELOG.md` (one heading may name
+several packages) in the same pull request. A merge that bumps nothing publishes
+nothing, and a re-run skips every version npm already has.
+
+`@nyuchi/*` publish under the [`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org
+and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) npm org, with
+npm provenance. Two **organisation** secrets on `mzizi-dev` are used, so no
+repository-level secret is needed: `NPM_TOKEN` (publish access to both npm orgs)
+and `RELEASE_BUMP_TOKEN` (pushes the tags and creates the releases).
+
+## Versioning
+
+From 2026-10-04 each package follows the org versioning policy
+([nyuchi/.github#80](https://github.com/nyuchi/.github/issues/80)):
+
+- A release is the next **minor** above that package's highest version on npm
+  (x.y.z → x.y+1.0). The releasing PR sets `version` to it.
+- A **major** is only released by hand: run the Release workflow with
+  `bump: major`. Each segment holds 0–999.
+- The Release workflow refuses any other version before publishing it, names
+  the version it expects, and still publishes the other packages. Versions
+  already on npm are never renumbered.
 
 ## Licence
 
