@@ -83,6 +83,8 @@ else:
 | `brand-campfire.css`  | malachite           |
 | `brand-news.css`      | cobalt              |
 | `brand-weather.css`   | cobalt              |
+| `brand-kweli.css`     | malachite           |
+| `brand-learning.css`  | gold                |
 
 ### Outside the browser
 

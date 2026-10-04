@@ -1,6 +1,6 @@
 {
   "name": "@nyuchi/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Svelte 5 / SvelteKit component library for the Nyuchi Design System — accessible primitives on the seven African-mineral tokens. Nyuchi's implementation of the Mzizi architecture.",
   "type": "module",
   "license": "MIT",
@@ -37,6 +37,8 @@
     "./styles/brand-campfire.css": "./styles/brand-campfire.css",
     "./styles/brand-news.css": "./styles/brand-news.css",
     "./styles/brand-weather.css": "./styles/brand-weather.css",
+    "./styles/brand-kweli.css": "./styles/brand-kweli.css",
+    "./styles/brand-learning.css": "./styles/brand-learning.css",
     "./tokens.json": "./tokens.json",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
