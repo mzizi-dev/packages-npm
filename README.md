@@ -83,9 +83,44 @@ nothing, and a re-run skips every version npm already has.
 
 `@nyuchi/*` publish under the [`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org
 and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) npm org, with
-npm provenance. Two **organisation** secrets on `mzizi-dev` are used, so no
-repository-level secret is needed: `NPM_TOKEN` (publish access to both npm orgs)
-and `RELEASE_BUMP_TOKEN` (pushes the tags and creates the releases).
+npm provenance, by
+[npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC): the
+workflow holds no npm token. Each package is packed with `pnpm pack` (which
+rewrites `workspace:` ranges) and published with `npm publish` (npm >= 11.5.1,
+pinned in the workflow), which exchanges the job's GitHub OIDC token for a
+short-lived token for that one package. The only secret used is the
+**organisation** secret `RELEASE_BUMP_TOKEN` on `mzizi-dev` (pushes the tags and
+creates the releases).
+
+### Trusted publisher setup (once per package, on npmjs.com)
+
+An owner of the npm org does this for every package the workflow publishes
+(`@bundu/server`, `@bundu/ui`, `@nyuchi/ui`, and any package added under
+`packages/` later):
+
+1. On npmjs.com, open the package → **Settings** → **Trusted publishing** →
+   **GitHub Actions**, and enter: organization `mzizi-dev`, repository
+   `packages-npm`, workflow filename `release.yml` (no environment). Under
+   **Allowed actions**, allow **`npm publish`** (direct publishing): the
+   workflow publishes directly, and a configuration made after 2026-09-03
+   allows only `npm stage publish` unless this is ticked.
+2. Then **Settings** → **Publishing access** → **Require two-factor
+   authentication and disallow tokens** → **Update Package Settings**.
+3. Once every package is set up and a release has published through OIDC, the
+   `NPM_TOKEN` organisation secret is no longer read by anything here and can be
+   deleted (and the npm token behind it revoked).
+
+npm only accepts a trusted publisher for a package that already exists. A
+package that has never been published (check with `npm view <name> version`)
+needs its first version published some other way, for example by an owner with 2FA from a
+clean checkout of the release commit (`pnpm pack` in the package directory, then
+`npm publish <tarball> --access public`); after that, set it up as above and the
+workflow publishes the rest. Until then the workflow reports that package as
+"failed" and anything that depends on it as "blocked", and publishes the others.
+
+Each package's `repository.url` must stay
+`git+https://github.com/mzizi-dev/packages-npm.git`: npm checks it against the
+repository the OIDC token comes from.
 
 ## Versioning
 
