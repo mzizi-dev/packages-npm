@@ -26,16 +26,25 @@
 # tag yet, and the job fails at the end if anything was not published.
 # Re-running the workflow, or a merge that bumps nothing, does nothing.
 #
-# Tokens. NPM_TOKEN (mzizi-dev org secret) publishes; it needs publish rights in
-# both npm orgs, @bundu and @nyuchi. RELEASE_BUMP_TOKEN (mzizi-dev org secret)
-# pushes the tags and creates the releases, so they are made by a real token
-# and can trigger other workflows (the default GITHUB_TOKEN's cannot). The job
-# needs no `contents: write` of its own.
+# Publishing to npm: trusted publishing (OIDC), no npm token. Each package
+# on npmjs.com names this workflow (mzizi-dev/packages-npm, release.yml) as its
+# trusted publisher. With `id-token: write`, the npm CLI (>= 11.5.1, installed
+# below) exchanges this job's GitHub OIDC token for a short-lived token that
+# can publish that one package, for this one publish. No NPM_TOKEN secret is
+# read: the long-lived one npm now refuses (401) is gone from this workflow.
+# The README's "Publishing" section has the one-time npmjs.com setup each
+# package needs, and what to do for a package that has never been published.
 #
-# Supply chain. This job holds NPM_TOKEN and RELEASE_BUMP_TOKEN, so every
-# action is pinned to a full commit SHA (version in the trailing comment), the
-# checkout keeps no credential, each token is passed only to the one step that
-# uses it, and the job's own GITHUB_TOKEN is read-only.
+# RELEASE_BUMP_TOKEN (mzizi-dev org secret) pushes the tags and creates the
+# releases, so they are made by a real token and can trigger other workflows
+# (the default GITHUB_TOKEN's cannot). The job needs no `contents: write` of
+# its own.
+#
+# Supply chain. This job can mint an npm publish token (id-token: write) and
+# holds RELEASE_BUMP_TOKEN, so every action is pinned to a full commit SHA
+# (version in the trailing comment), npm itself is pinned to an exact version,
+# the checkout keeps no credential, RELEASE_BUMP_TOKEN is passed only to the
+# one step that uses it, and the job's own GITHUB_TOKEN is read-only.
 #
 # Versioning policy (nyuchi/.github#80). A version is published only if it is
 # the next MINOR above the highest stable version of that package on npm
@@ -44,8 +53,10 @@
 # calculator (nyuchi/.github next-version.mjs, checked out below at a pinned
 # commit) to each package and records a refused version like an npm refusal.
 #
-# Provenance. npm provenance (NPM_CONFIG_PROVENANCE) links each tarball to this
-# workflow run; it needs `id-token: write` and a public repository.
+# Provenance. npm provenance links each tarball to this workflow run; it needs
+# `id-token: write` and a public repository. Trusted publishing from a public
+# repository turns it on by itself; NPM_CONFIG_PROVENANCE says so explicitly,
+# so a publish that somehow ran without OIDC would still carry provenance.
 
 name: Release (auto publish + tag)
 
@@ -98,7 +109,20 @@ jobs:
         with:
           node-version: "lts/*"
           cache: pnpm
+          # Writes an .npmrc whose auth token is ${NODE_AUTH_TOKEN}, which
+          # setup-node fills with a placeholder when unset (it is: no npm
+          # token here). Harmless for OIDC: npm sets the exchanged token on
+          # its command line config, which outranks any .npmrc.
           registry-url: "https://registry.npmjs.org"
+
+      # Trusted publishing needs npm >= 11.5.1 (and Node >= 22.14.0, which
+      # lts/* is); the npm bundled with Node can be older. Pinned exactly,
+      # like the actions, so a new npm release cannot change how we publish.
+      - name: Install npm for trusted publishing
+        run: |
+          npm install -g npm@11.21.0
+          node --version
+          npm --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -125,6 +149,8 @@ jobs:
       # Each package on its own: one that npm refuses is recorded and the rest
       # still publish (a dependant of a refused package is held back). This
       # step does not fail; the last step does, after the tags.
+      # `pnpm pack` then `npm publish <tarball>`, authenticated by OIDC
+      # (trusted publishing): no npm token in this step's environment.
       - name: Publish unpublished versions to npm
         id: publish
         run: node scripts/release-publish.mjs
@@ -132,7 +158,6 @@ jobs:
           NEXT_VERSION_SCRIPT: .versioning/.github/actions/next-version/next-version.mjs
           RELEASE_BUMP: ${{ inputs.bump || '' }}
           RELEASE_MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
 
       - name: Tag and release

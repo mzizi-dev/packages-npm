@@ -2,9 +2,9 @@
 // yet, EACH ON ITS OWN. Run by .github/workflows/release.yml.
 //
 // `pnpm -r publish` stops at the first failure, so one package npm refuses
-// (a token without rights to a new name, say) held back every other package
-// in the same run. Here each package is published separately and the run
-// carries on: a failure is recorded, not fatal. The workflow tags and
+// (a name with no trusted publisher on npmjs.com yet, say) would hold back
+// every other package in the same run. Here each package is published
+// separately and the run carries on: a failure is recorded, not fatal. The workflow tags and
 // releases whatever did publish, then fails the job if anything did not.
 //
 // Packages go in dependency order, and a package whose workspace dependency
@@ -12,8 +12,15 @@
 // @bundu/server ^0.1.0, and publishing it while that version is missing would
 // put a package on npm that nobody can install. It is reported as blocked.
 //
-// `pnpm publish` in the package directory rewrites `workspace:^` to the real
-// range and runs `prepack`. Provenance comes from NPM_CONFIG_PROVENANCE.
+// Each package is packed with `pnpm pack` in its directory, which rewrites
+// `workspace:^` to the real range and runs `prepack`, and the tarball is
+// published with the npm CLI (`npm publish <tarball>`). npm, not pnpm, does
+// the publish because npm trusted publishing (OIDC) is an npm CLI feature
+// (npm >= 11.5.1): in GitHub Actions with `id-token: write`, npm exchanges the
+// job's OIDC token for a short-lived publish token for that one package, so
+// no long-lived npm token is involved. Provenance comes from
+// NPM_CONFIG_PROVENANCE (and trusted publishing turns it on for a public
+// repository anyway).
 //
 // Writes a per-package table to $GITHUB_STEP_SUMMARY and `failed=<names>` to
 // $GITHUB_OUTPUT. Always exits 0 unless the script itself breaks.
@@ -29,8 +36,15 @@
 // refused version is recorded like an npm refusal: the rest still publish.
 
 import { spawnSync } from "node:child_process";
-import { appendFileSync, realpathSync } from "node:fs";
-import { resolve } from "node:path";
+import {
+  appendFileSync,
+  mkdtempSync,
+  readdirSync,
+  realpathSync,
+  rmSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { onNpm, workspacePackages } from "./release-tags.mjs";
@@ -114,22 +128,60 @@ export function publishAll(
         name,
         version,
         result: "failed",
-        detail: "npm refused it; see the log above",
+        detail:
+          "npm refused it; see the log above (does it have a trusted publisher on npmjs.com?)",
       });
     }
   }
   return results;
 }
 
-function publishWithPnpm(pkg) {
-  console.log(`\n::group::pnpm publish ${pkg.name}@${pkg.version}`);
-  const args = ["publish", "--access", "public", "--no-git-checks"];
+/**
+ * The `npm publish` arguments for one packed tarball. No `--tag`: npm applies
+ * `latest`, as before. Exported for the tests.
+ */
+export function npmPublishArgs(tarball, { dryRun = false } = {}) {
+  const args = ["publish", tarball, "--access", "public"];
   if (dryRun) args.push("--dry-run");
-  const r = spawnSync("pnpm", args, { cwd: pkg.dir, stdio: "inherit" });
+  return args;
+}
+
+/**
+ * `pnpm pack` the package into a fresh directory, then `npm publish` that
+ * tarball. True on success.
+ */
+function packAndPublish(pkg) {
+  const dest = mkdtempSync(join(tmpdir(), "release-pack-"));
+  try {
+    const packed = spawnSync("pnpm", ["pack", "--pack-destination", dest], {
+      cwd: pkg.dir,
+      stdio: "inherit",
+    });
+    if (packed.status !== 0) return false;
+    const tarballs = readdirSync(dest).filter((f) => f.endsWith(".tgz"));
+    if (tarballs.length !== 1) {
+      console.log(
+        `expected one tarball from pnpm pack, got ${tarballs.length}`,
+      );
+      return false;
+    }
+    const r = spawnSync(
+      "npm",
+      npmPublishArgs(join(dest, tarballs[0]), { dryRun }),
+      { cwd: pkg.dir, stdio: "inherit" },
+    );
+    return r.status === 0;
+  } finally {
+    rmSync(dest, { recursive: true, force: true });
+  }
+}
+
+function publishWithNpm(pkg) {
+  console.log(`\n::group::npm publish ${pkg.name}@${pkg.version}`);
+  const ok = packAndPublish(pkg);
   console.log("::endgroup::");
-  if (r.status !== 0)
-    console.log(`::error::${pkg.name}@${pkg.version} was not published`);
-  return r.status === 0;
+  if (!ok) console.log(`::error::${pkg.name}@${pkg.version} was not published`);
+  return ok;
 }
 
 /** Every version of `name` on npm ([] when it has never been published). */
@@ -175,7 +227,7 @@ async function main() {
     : () => null;
   const results = publishAll(workspacePackages(), {
     isOnNpm: (name, version) => onNpm(name, version, 1),
-    publish: publishWithPnpm,
+    publish: publishWithNpm,
     checkVersion,
   });
   const failed = results.filter(

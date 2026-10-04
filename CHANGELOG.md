@@ -45,6 +45,21 @@ The README links the Design System artifact
 claude.ai, and names its source of truth: the `design-system/` folder in
 `mzizi-dev/mzizi-registry`, arriving with mzizi-registry#418. No package changes.
 
+### Changed (repository): releases publish with npm trusted publishing (OIDC), not `NPM_TOKEN`
+
+npm refused the `NPM_TOKEN` secret (401), so nothing published. The Release workflow
+now publishes by [npm trusted publishing](https://docs.npmjs.com/trusted-publishers):
+the job's GitHub OIDC token (`id-token: write`) is exchanged for a short-lived token for
+each package, and no npm token is read. The workflow installs npm 11.21.0 (pinned;
+trusted publishing needs npm >= 11.5.1) and prints `npm --version`;
+`scripts/release-publish.mjs` packs each package with `pnpm pack` (which still rewrites
+`workspace:` ranges and runs `prepack`) and publishes the tarball with
+`npm publish <tarball> --access public`, with provenance. The already-published skip,
+the versioning policy check, the tags and releases (`RELEASE_BUMP_TOKEN`) and the
+"Not published" failure are unchanged. Each package needs a one-time trusted publisher
+setup on npmjs.com before it can publish this way; the README's "Publishing" section has
+the steps. No package changes.
+
 ### Changed (repository): releases follow the org versioning policy
 
 The Release workflow checks each unpublished version against the org's shared calculator
