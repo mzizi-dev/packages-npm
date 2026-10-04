@@ -16,6 +16,19 @@ the npm registry.
 
 ## [Unreleased]
 
+### Added
+
+- **Brand overlays for six sub-apps, in both packages:** `brand-nhimbe.css`
+  (malachite), `brand-lingo.css` (cobalt), `brand-bushtrade.css` (gold),
+  `brand-campfire.css` (malachite), `brand-news.css` (cobalt) and
+  `brand-weather.css` (cobalt), so their dashboards can adopt the Mzizi
+  Dashboard Standard (mzizi-dev/mzizi-registry#404). Generated like the others:
+  the first four from canon's ecosystem table; news and weather have no canon
+  row yet, so their mineral comes from the registry's own mini-app accent table
+  (`lib/tokens/index.ts` `brandOverrides`) until canon carries one, and a canon
+  row that disagrees fails the generator. Each repoints `--primary` and
+  `--ring` only.
+
 ### Changed (`@bundu/ui` 0.4.1)
 
 - **Brand fills from canon.** The generator now emits `--color-<mineral>-brand`

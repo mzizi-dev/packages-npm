@@ -984,7 +984,21 @@ function emitTokensJson(pkg, m, decls, meta) {
  * Brands that ship an overlay. Canon's `ecosystem` table supplies the mineral
  * for every one of these; mzizi's row is new (see below).
  */
-const OVERLAY_BRANDS = ["bundu", "nyuchi", "mukoko", "shamwari", "mzizi"];
+const OVERLAY_BRANDS = [
+  "bundu",
+  "nyuchi",
+  "mukoko",
+  "shamwari",
+  "mzizi",
+  // Sub-apps that adopt the Mzizi Dashboard Standard (mzizi-registry#404).
+  // Canon's ecosystem table maps the first four; news and weather are below.
+  "nhimbe",
+  "lingo",
+  "bushtrade",
+  "campfire",
+  "news",
+  "weather",
+];
 
 /**
  * mzizi -> hematite is the OWNER'S DECISION (2026-09-30), not a judgement call
@@ -1000,6 +1014,26 @@ const OVERLAY_BRANDS = ["bundu", "nyuchi", "mukoko", "shamwari", "mzizi"];
  * rather than silently picking one.
  */
 const LOCAL_BRAND_MINERALS = {
+  // news and weather have no row in canon's `ecosystem` table yet. Their
+  // mineral is the registry's own: mzizi-registry lib/tokens/index.ts
+  // `brandOverrides` (the per-mini-app accent table) and
+  // `brandIndustryCategories.mukoko` both say cobalt ("info / education /
+  // productivity"). When canon gains the rows, canon wins, and a canon row
+  // that disagrees fails the generator.
+  news: {
+    mineral: "cobalt",
+    note:
+      "mzizi-registry lib/tokens/index.ts brandOverrides.news and " +
+      "brandIndustryCategories.mukoko.news map Mukoko News to cobalt; " +
+      "canon's ecosystem table has no news row yet.",
+  },
+  weather: {
+    mineral: "cobalt",
+    note:
+      "mzizi-registry lib/tokens/index.ts brandOverrides.weather and " +
+      "brandIndustryCategories.mukoko.productivity map Weather to cobalt; " +
+      "canon's ecosystem table has no weather row yet.",
+  },
   mzizi: {
     mineral: "hematite",
     note:
