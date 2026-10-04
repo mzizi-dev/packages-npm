@@ -16,6 +16,25 @@ the npm registry.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.4.1, @nyuchi/ui 0.3.0] - 2026-10-04
+
+The first versions published by the release workflow, which publishes and tags on
+merge to `main` with no hand-pushed tag (mzizi-dev/packages-npm#25). `@bundu/ui`
+0.3.0 and 0.4.0 were never published to npm: 0.4.1 is the first `@bundu/ui` on npm
+since 0.2.0 and carries both, so their entries below and under 0.3.0 apply to it.
+`@bundu/server` 0.1.0 (see 0.3.0 below) reaches npm for the first time in the same
+run.
+
+### Changed (repository)
+
+- **Releases are automatic.** `.github/workflows/release.yml` replaces `publish.yml`.
+  On every push to `main` it runs the token check and the tests, publishes each
+  package whose `package.json` version is not on npm yet (with npm provenance), then
+  tags it `<name>@<version>` (for example `@bundu/ui@0.4.1`) and creates a GitHub
+  release from that version's section here, using `RELEASE_BUMP_TOKEN`. Bumping a
+  package's version in a PR is the release; a merge that bumps nothing publishes
+  nothing. The old `v*` tags stay as history; new tags are per package.
+
 ### Changed (`@bundu/ui` 0.4.1)
 
 - **Brand fills from canon.** The generator now emits `--color-<mineral>-brand`
@@ -37,8 +56,7 @@ the npm registry.
 
 ### Changed (`@nyuchi/ui` 0.3.0)
 
-- **`@nyuchi/ui` is 0.3.0** (version bumped in `packages/ui/package.json`; not
-  yet published: it is released from a tag). 0.2.0 is on npm, so the eight
+- **`@nyuchi/ui` is 0.3.0** (published by the release workflow). 0.2.0 is on npm, so the eight
   brand overlays added since (`brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
   `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
   `brand-learning`) need a new version to ship. Additive only: new exports.
@@ -90,8 +108,7 @@ the npm registry.
   console's local `TODO(mzizi)` destructive buttons
   (nyuchi/nyuchi-platform#330).
 - **`@bundu/ui` 0.4.0 — the app patterns become a full-width product dashboard**
-  (version bumped in `packages/bundu-ui/package.json`; not yet published: it is
-  released from a `v0.4.0` tag). New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
+  (never published on its own; it reaches npm in 0.4.1). New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
   `QuickSearch` and `CommandPalette` (⌘K), `TopBarAction`, `Toolbar` and
   `ToolbarMenu`, `StatTiles`, `InfoTip`, `EmptyState`, and `BrandMark` with the
   official Nyuchi mark (the Mzizi registry's bee icon pair, scaled to 128px, in
@@ -124,7 +141,9 @@ the npm registry.
 
 ## [@bundu/ui 0.3.0, @bundu/server 0.1.0] - 2026-10-04
 
-Published to npm from the `v0.3.0` tag. `@nyuchi/ui` is unchanged at 0.2.0.
+Never published to npm on its own: no `v0.3.0` tag was pushed. These changes reach npm in
+`@bundu/ui` 0.4.1, and `@bundu/server` 0.1.0 is first published alongside it.
+`@nyuchi/ui` is unchanged at 0.2.0.
 
 ### Added
 
