@@ -95,6 +95,8 @@
     "./styles/brand-campfire.css": "./styles/brand-campfire.css",
     "./styles/brand-news.css": "./styles/brand-news.css",
     "./styles/brand-weather.css": "./styles/brand-weather.css",
+    "./styles/brand-kweli.css": "./styles/brand-kweli.css",
+    "./styles/brand-learning.css": "./styles/brand-learning.css",
     "./tokens.json": "./tokens.json",
     "./contracts/index.json": "./contracts/index.json",
     "./contracts/schema/component-contract.schema.json": "./contracts/schema/component-contract.schema.json",

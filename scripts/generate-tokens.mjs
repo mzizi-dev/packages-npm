@@ -991,13 +991,16 @@ const OVERLAY_BRANDS = [
   "shamwari",
   "mzizi",
   // Sub-apps that adopt the Mzizi Dashboard Standard (mzizi-registry#404).
-  // Canon's ecosystem table maps the first four; news and weather are below.
+  // Canon's ecosystem table maps the first four; news, weather, kweli and
+  // learning are bridged below until the snapshot carries their rows.
   "nhimbe",
   "lingo",
   "bushtrade",
   "campfire",
   "news",
   "weather",
+  "kweli",
+  "learning",
 ];
 
 /**
@@ -1014,25 +1017,40 @@ const OVERLAY_BRANDS = [
  * rather than silently picking one.
  */
 const LOCAL_BRAND_MINERALS = {
-  // news and weather have no row in canon's `ecosystem` table yet. Their
-  // mineral is the registry's own: mzizi-registry lib/tokens/index.ts
-  // `brandOverrides` (the per-mini-app accent table) and
-  // `brandIndustryCategories.mukoko` both say cobalt ("info / education /
-  // productivity"). When canon gains the rows, canon wins, and a canon row
-  // that disagrees fails the generator.
+  // news, weather, kweli and learning: owner decisions, 2026-10-04
+  // (mzizi-registry#404). The rows are in canon's `ecosystem` table
+  // (mzizi-registry lib/tokens/brand.source.ts, mzizi-registry#409) but
+  // reach /v1/brand, and so tokens/canon.snapshot.json, only once the
+  // gateway's registry pin moves past that merge. These entries give the
+  // same answers until then. Once the snapshot carries a row, canon wins,
+  // and a canon row that disagrees fails the generator.
   news: {
     mineral: "cobalt",
     note:
-      "mzizi-registry lib/tokens/index.ts brandOverrides.news and " +
-      "brandIndustryCategories.mukoko.news map Mukoko News to cobalt; " +
-      "canon's ecosystem table has no news row yet.",
+      "Owner decision (2026-10-04): Mukoko News is cobalt, recorded in " +
+      "canon as mzizi-registry lib/tokens/brand.source.ts -> " +
+      "ecosystem[name=news].",
   },
   weather: {
     mineral: "cobalt",
     note:
-      "mzizi-registry lib/tokens/index.ts brandOverrides.weather and " +
-      "brandIndustryCategories.mukoko.productivity map Weather to cobalt; " +
-      "canon's ecosystem table has no weather row yet.",
+      "Owner decision (2026-10-04): Mukoko Weather is cobalt, recorded in " +
+      "canon as mzizi-registry lib/tokens/brand.source.ts -> " +
+      "ecosystem[name=weather].",
+  },
+  kweli: {
+    mineral: "malachite",
+    note:
+      "Owner decision (2026-10-04): Kweli is malachite (it used to borrow " +
+      "Mukoko's tanzanite), recorded in canon as mzizi-registry " +
+      "lib/tokens/brand.source.ts -> ecosystem[name=kweli].",
+  },
+  learning: {
+    mineral: "gold",
+    note:
+      "Owner decision (2026-10-04): Nyuchi Learning (education) is gold, " +
+      "because every Nyuchi brand is gold, recorded in canon as " +
+      "mzizi-registry lib/tokens/brand.source.ts -> ecosystem[name=learning].",
   },
   mzizi: {
     mineral: "hematite",
