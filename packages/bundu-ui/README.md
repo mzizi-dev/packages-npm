@@ -297,6 +297,76 @@ with inline `style` attributes, so a Content-Security-Policy needs
 0.3.0 the console's copy used the mineral variants of the React `Badge`;
 `primary` there is `default` here.
 
+### The product-dashboard shell (0.4.0)
+
+0.4.0 makes the app patterns a full-width product dashboard, dense like a
+console rather than roomy like a marketing page.
+
+| Component                                    | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppShell.astro`                             | The whole viewport: a fixed 16.25rem sidebar (`workspace`, `search`, `nav` slots, a collapse toggle at the bottom) and a main column filling the rest (a thin top bar with `brand`, `actions`, `account`; the page; `footerLinks` / `footer`). No centred page container. Collapses to a 3.5rem icon rail (a real checkbox; `collapsed` and `persist` keep it across pages). Below 64rem the sidebar is an off-canvas drawer: the same element as a Popover API popover, so Escape and a click outside close it. `overlay` slot for a `CommandPalette` |
+| `SideNav.astro`                              | `groups` under quiet labels (or 0.3's flat `items`), an icon per item, `badge` ("New"), nested items under a chevron disclosure (open when a child is current), the current item filled with a gold indicator. **Label only**: an item's `description` is a tooltip on hover and keyboard focus and its `aria-describedby`; in the collapsed rail the tooltip shows the label too                                                                                                                                                                      |
+| `WorkspaceSwitcher.astro`                    | The product mark (`mark` slot) over the current workspace; a `<details>` list of workspaces and links, or a plain link home when there is nothing to switch to                                                                                                                                                                                                                                                                                                                                                                                         |
+| `QuickSearch.astro` + `CommandPalette.astro` | The sidebar's search button with its ⌘K hint opens the palette (`popovertarget`): every nav item, grouped, as links, and with `action` a GET search form for the server                                                                                                                                                                                                                                                                                                                                                                                |
+| `TopBarAction.astro`                         | An icon-and-label link or button for the top bar ("Ask AI", "Support"); icon only below `sm` with the label as its name                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `Toolbar.astro` + `ToolbarMenu.astro`        | A full-width GET search box joined to a button group; `ToolbarMenu` is a `<details>` list of links (a date range)                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `StatTiles.astro`                            | One bordered row of equal `StatTile`s with hairline dividers; `StatTile` gains `info`                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `InfoTip.astro`                              | A focusable info icon whose tooltip is its accessible description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `EmptyState.astro`                           | A bordered card: a heading, help text and actions; `StateMessage kind="empty"` uses it                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `BrandMark.astro`                            | The official Nyuchi mark (the bee, the Mzizi registry's light/dark icon pair, scaled, never redrawn), with the lowercase serif wordmark and a muted suffix when asked; the right variant per theme by CSS                                                                                                                                                                                                                                                                                                                                              |
+
+`@bundu/ui/app/nav` (also from the root) holds the pure helpers: `groupNav` turns
+flat one-line registrations (`group`, `parent`) into ordered, nested groups;
+`currentHref` picks the longest matching href; `searchNav` / `matchesQuery`
+match every word, case- and accent-insensitively.
+
+**Density.** `Button`, `Input`, `FilterBar`, `DataTable`, `Pagination`,
+`DetailPanel`, `FormLayout`, `PageHeader` and `StatTile` take the app density
+(`appButtonVariants`, `appInputClasses` in `@bundu/ui/ui/variants`): 36px
+controls, 14px text and ~40px table rows with a fine pointer; 44–48px targets
+and 16px inputs on touch (`pointer-coarse:`). Headings inside `AppShell` use the
+body sans. The marketing primitives are unchanged.
+
+**Script.** Two components carry one small module each, and both work without
+it: `AppShell` (it writes the collapse choice to the `persist` cookie and lets
+Escape hide a tooltip) and `CommandPalette` (the ⌘K / Ctrl+K shortcut, live
+filtering with the count announced, Enter and the arrow keys). A keyboard
+shortcut and live filtering cannot be done in CSS. Astro bundles them as files,
+so a `script-src 'self'` CSP works if the app does not inline small scripts
+(set `vite.build.assetsInlineLimit: 0`).
+
+```astro
+---
+import AppShell from "@bundu/ui/app/AppShell.astro";
+import BrandMark from "@bundu/ui/app/BrandMark.astro";
+import CommandPalette from "@bundu/ui/app/CommandPalette.astro";
+import QuickSearch from "@bundu/ui/app/QuickSearch.astro";
+import SideNav from "@bundu/ui/app/SideNav.astro";
+import TopBarAction from "@bundu/ui/app/TopBarAction.astro";
+import WorkspaceSwitcher from "@bundu/ui/app/WorkspaceSwitcher.astro";
+import { groupNav } from "@bundu/ui/app/nav";
+
+const groups = groupNav(
+  [
+    { href: "/", label: "Home", icon: "home" },
+    { href: "/people", label: "People", icon: "users", group: "Identity & people", description: "Everyone in your organisation" },
+    { href: "/keys", label: "API keys", group: "Developer", parent: "/dev" },
+    { href: "/dev", label: "Developer", icon: "terminal", group: "Developer" },
+  ],
+  ["Identity & people", "Developer"],
+);
+---
+
+<AppShell collapsed={Astro.cookies.get("sidebar")?.value === "collapsed"} persist="sidebar" footerLinks={[{ label: "Status", href: "https://status.example" }]}>
+  <WorkspaceSwitcher slot="workspace" name="Nyuchi Africa" href="/"><BrandMark slot="mark" wordmark suffix="console" /></WorkspaceSwitcher>
+  <QuickSearch slot="search" target="palette" />
+  <SideNav slot="nav" groups={groups} />
+  <TopBarAction slot="actions" label="Support" icon="help" href="/support" />
+  <slot />
+  <CommandPalette slot="overlay" id="palette" groups={groups} action="/search" />
+</AppShell>
+```
+
 ## Licence
 
 [MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.
