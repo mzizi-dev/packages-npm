@@ -1,7 +1,7 @@
 {
   "name": "@bundu/ui",
-  "version": "0.2.0",
-  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
+  "version": "0.3.0",
+  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, server-rendered Astro app patterns for consoles (app shell, data table, filters, pagination, detail panel, forms, states, toast) and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
@@ -44,7 +44,20 @@
     "./Icon.astro": "./src/Icon.astro",
     "./SocialIcon.astro": "./src/SocialIcon.astro",
     "./Breadcrumb.astro": "./src/Breadcrumb.astro",
+    "./app/AppShell.astro": "./src/app/AppShell.astro",
+    "./app/SideNav.astro": "./src/app/SideNav.astro",
+    "./app/AccountMenu.astro": "./src/app/AccountMenu.astro",
+    "./app/PageHeader.astro": "./src/app/PageHeader.astro",
+    "./app/DataTable.astro": "./src/app/DataTable.astro",
+    "./app/FilterBar.astro": "./src/app/FilterBar.astro",
+    "./app/Pagination.astro": "./src/app/Pagination.astro",
+    "./app/DetailPanel.astro": "./src/app/DetailPanel.astro",
+    "./app/FormLayout.astro": "./src/app/FormLayout.astro",
+    "./app/FormField.astro": "./src/app/FormField.astro",
+    "./app/StateMessage.astro": "./src/app/StateMessage.astro",
+    "./app/Toast.astro": "./src/app/Toast.astro",
     "./lib/utils": "./src/lib/utils.ts",
+    "./lib/table": "./src/lib/table.ts",
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",
     "./styles/color-scheme.css": "./styles/color-scheme.css",
@@ -69,6 +82,7 @@
   },
   "files": [
     "src",
+    "!src/**/*.test.ts",
     "styles",
     "tailwind-preset.mjs",
     "tailwind-palette.mjs",
@@ -85,6 +99,9 @@
     "tailwind",
     "marketing",
     "astro",
-    "ui"
+    "ui",
+    "console",
+    "app-shell",
+    "data-table"
   ]
 }

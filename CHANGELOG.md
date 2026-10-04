@@ -15,6 +15,17 @@ the npm registry.
 
 ## [Unreleased]
 
+### Added
+
+- **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`,
+  0.3.0). `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable`,
+  `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`, `StateMessage`
+  and `Toast`, all server-rendered Astro over the existing React primitives, with no
+  client JavaScript; and `@bundu/ui/lib/table` (`parseTableQuery`, `filterRows`,
+  `paginate`, `withParams`) with unit tests. Built for the Nyuchi console's move to
+  Astro and Rust (nyuchi/nyuchi-platform#330), which keeps local copies until this
+  release is published. No change to existing exports.
+
 ### Changed
 
 - **Repository tooling: Vite+ 1.0.** `vite-plus` joins the root dev dependencies

@@ -1,0 +1,52 @@
+---
+/**
+ * SideNav — an app's section list. The current item carries
+ * aria-current="page"; each item has a label and an optional one-line
+ * summary. Targets are at least 48px tall.
+ *
+ * `current` is the href of the current section; when omitted, an item is
+ * current when the page path equals its href or starts with it plus "/".
+ */
+export interface SideNavItem {
+  href: string;
+  label: string;
+  summary?: string;
+}
+interface Props {
+  items: SideNavItem[];
+  /** Accessible name of the navigation landmark. */
+  label?: string;
+  current?: string;
+  id?: string;
+}
+const { items, label = "Sections", current, id } = Astro.props;
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  current !== undefined ? current === href : path === href || path.startsWith(`${href}/`);
+---
+
+<nav aria-label={label} id={id} data-slot="side-nav">
+  <ul class="grid gap-1">
+    {
+      items.map((item) => {
+        const here = isCurrent(item.href);
+        return (
+          <li>
+            <a
+              href={item.href}
+              aria-current={here ? "page" : undefined}
+              class={`flex min-h-12 flex-col justify-center rounded-lg px-4 py-2 transition-colors ${
+                here ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
+              }`}
+            >
+              <span class="text-body font-medium">{item.label}</span>
+              {item.summary && (
+                <span class={`text-body-sm ${here ? "opacity-80" : "text-muted-foreground"}`}>{item.summary}</span>
+              )}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
