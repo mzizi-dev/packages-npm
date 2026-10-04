@@ -2,8 +2,9 @@
 
 All notable changes to the packages in this repository are recorded here:
 [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) (`packages/bundu-ui`) and
-[`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) (`packages/ui`). Each entry
-names the package it applies to.
+[`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) (`packages/ui`) and
+[`@bundu/server`](https://www.npmjs.com/package/@bundu/server) (`packages/bundu-server`).
+Each entry names the package it applies to.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and both
 packages follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). While they
@@ -15,8 +16,25 @@ the npm registry.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.3.0, @bundu/server 0.1.0] - 2026-10-04
+
+Published to npm from the `v0.3.0` tag. `@nyuchi/ui` is unchanged at 0.2.0.
+
 ### Added
 
+- **`@bundu/server` 0.1.0 — a new package: server-side helpers**, the companion to
+  `@bundu/ui` as `mzizi-roots-server` is to `mzizi-roots`. Dependency-free on Web APIs,
+  so it runs in Astro server routes, Node 20+ and Cloudflare Workers alike:
+  `createSealer` (AES-256-GCM values bound to a purpose, wire-compatible with the Rust
+  sealer in the Nyuchi console backend, checked both ways), `randomToken`,
+  `pkceChallenge`, cookie helpers with safe defaults, `createFlash` (one-shot messages
+  carried as a key, never text), the theme preference, `safeBack` (same-origin return
+  paths, refusing `//`, `\` and control characters), `parseOrigin` (bare `https`
+  origins), `withSecurityHeaders`, and the table query and paging core. Built from
+  TypeScript to `dist/` with declarations on `prepack`. 36 unit tests. Tracking:
+  mzizi-dev/packages-npm#19.
+- **`@bundu/ui` — `@bundu/ui/lib/table` now re-exports `@bundu/server/table`**, which
+  holds the code, and `@bundu/ui` depends on `@bundu/server`. The same API.
 - **`@bundu/ui` — app patterns for signed-in apps and consoles** (`@bundu/ui/app/*`).
   `AppShell`, `SideNav`, `AccountMenu`, `PageHeader`, `DataTable` (one card per row on
   phones), `FilterBar`, `Pagination`, `DetailPanel`, `FormLayout`, `FormField`,

@@ -20,8 +20,17 @@ importers:
         specifier: 1.0.0
         version: 1.0.0(@vitest/ui@5.0.1(vitest@5.0.1))(esbuild@0.28.2)(svelte@5.56.4)(typescript@5.9.3)
 
+  packages/bundu-server:
+    devDependencies:
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
   packages/bundu-ui:
     dependencies:
+      '@bundu/server':
+        specifier: workspace:^
+        version: link:../bundu-server
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1

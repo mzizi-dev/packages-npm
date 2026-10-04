@@ -7,7 +7,7 @@ import {
   paginate,
   parseTableQuery,
   withParams,
-} from "./table";
+} from "./table.js";
 
 describe("parseTableQuery", () => {
   test("parses and clamps the URL state", () => {
