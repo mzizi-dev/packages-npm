@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "../lib/utils";
+import { labelClasses } from "./variants";
 
 /**
  * Label — native <label> styled to the Nyuchi Design System tokens
@@ -8,7 +9,6 @@ import { cn } from "../lib/utils";
  * Dependency-free and SSR-friendly. Forwards every standard label prop
  * (htmlFor / for, id, …) via `...props` and renders its children as-is.
  */
-export const labelClasses = "text-body-sm font-medium text-foreground";
 
 export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /** Astro-style class attribute (merged with `className`). */
@@ -38,3 +38,5 @@ export function Label({
     </label>
   );
 }
+
+export { labelClasses };

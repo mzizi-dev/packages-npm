@@ -1,0 +1,85 @@
+{
+  "name": "@bundu/server",
+  "version": "0.1.0",
+  "description": "Server-side helpers for Bundu Ecosystem apps, the companion to @bundu/ui — Nyuchi's implementation of the Mzizi design system, mirroring Mzizi Roots' mzizi-roots-server. Framework-agnostic and dependency-free on Web APIs (Web Crypto, URL, Headers), so the same code runs in Astro server routes and middleware, Node and Cloudflare Workers: purpose-bound sealed cookies (AES-256-GCM, wire-compatible with the Rust sealer), one-shot flash messages, the theme preference cookie, same-origin return paths, bare-origin URL checks, cookie and Set-Cookie helpers, security headers, and the URL-driven table query and paging core.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Nyuchi Africa (Pvt) Ltd",
+  "homepage": "https://github.com/mzizi-dev/packages-npm#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mzizi-dev/packages-npm.git",
+    "directory": "packages/bundu-server"
+  },
+  "bugs": {
+    "url": "https://github.com/mzizi-dev/packages-npm/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./seal": {
+      "types": "./dist/seal.d.ts",
+      "import": "./dist/seal.js"
+    },
+    "./cookies": {
+      "types": "./dist/cookies.d.ts",
+      "import": "./dist/cookies.js"
+    },
+    "./flash": {
+      "types": "./dist/flash.d.ts",
+      "import": "./dist/flash.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "import": "./dist/theme.js"
+    },
+    "./redirect": {
+      "types": "./dist/redirect.d.ts",
+      "import": "./dist/redirect.js"
+    },
+    "./origin": {
+      "types": "./dist/origin.d.ts",
+      "import": "./dist/origin.js"
+    },
+    "./security": {
+      "types": "./dist/security.d.ts",
+      "import": "./dist/security.js"
+    },
+    "./table": {
+      "types": "./dist/table.d.ts",
+      "import": "./dist/table.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vp test",
+    "prepack": "tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "bundu",
+    "mzizi",
+    "server",
+    "astro",
+    "cloudflare-workers",
+    "cookies",
+    "session",
+    "web-crypto"
+  ]
+}

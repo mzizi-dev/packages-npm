@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "../lib/utils";
+import { skeletonClasses } from "./variants";
 
 /**
  * Skeleton — a loading placeholder using the semantic `muted` token
@@ -22,7 +23,7 @@ export function Skeleton({
     <div
       data-slot="skeleton"
       aria-hidden="true"
-      className={cn("animate-pulse rounded-md bg-muted", astroClass, className)}
+      className={cn(skeletonClasses, astroClass, className)}
       {...props}
     />
   );

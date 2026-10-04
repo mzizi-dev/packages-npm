@@ -1,0 +1,44 @@
+---
+/**
+ * PageHeader — a section's title, one-line description, breadcrumbs and
+ * actions. The one <h1> on an app page.
+ */
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  title: string;
+  description?: string;
+  crumbs?: Crumb[];
+}
+const { title, description, crumbs = [] } = Astro.props;
+---
+
+<header class="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between" data-slot="page-header">
+  <div class="min-w-0">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-2">
+          <ol class="flex flex-wrap items-center gap-1 text-body-sm text-muted-foreground">
+            {crumbs.map((c, i) => (
+              <li class="flex items-center gap-1">
+                {i > 0 && <span aria-hidden="true">/</span>}
+                {c.href ? (
+                  <a class="underline-offset-4 hover:underline" href={c.href}>
+                    {c.label}
+                  </a>
+                ) : (
+                  <span aria-current="page">{c.label}</span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <h1 class="text-h2 font-semibold tracking-tight">{title}</h1>
+    {description && <p class="mt-2 max-w-3xl text-body text-muted-foreground">{description}</p>}
+  </div>
+  <div class="flex flex-wrap gap-3"><slot name="actions" /></div>
+</header>

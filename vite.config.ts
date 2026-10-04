@@ -22,6 +22,17 @@ export default defineConfig({
       },
     ],
   },
+  // Tests run per package (`pnpm test` runs each package's `test` script),
+  // because @bundu/ui's vitest.config.ts compiles .astro files and a root
+  // run would not. Excluded here so a bare `vp test` at the root neither
+  // runs them with the wrong config nor runs them twice.
+  test: {
+    exclude: [
+      "**/node_modules/**",
+      "packages/bundu-ui/**",
+      "packages/bundu-server/**",
+    ],
+  },
   lint: {
     // typeCheck is OFF here, deliberately and visibly (the org CI job warns
     // about it on every PR). Turned on, it reports 112 errors that are about

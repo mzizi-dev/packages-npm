@@ -1,0 +1,54 @@
+---
+/**
+ * StatTile — one headline figure: a label, the value, and an optional
+ * trend against the previous period and a one-line note. The trend is
+ * written out in words ("up 12% on the previous 30 days"), never shown by
+ * colour or an arrow alone. A missing value reads "Not available", never 0.
+ *
+ * Use several in a <dl> grid via StatTile's own <div> wrapper: each tile is
+ * a description-list group, so screen readers hear "label, value".
+ *
+ * Follows the Mzizi registry's `stats-card` contract (value, trend,
+ * description). Numbers are formatted for `locale` (default en-GB).
+ */
+interface Props {
+  label: string;
+  value: string | number | null | undefined;
+  /** Change against the previous period; percentage points if `points`. */
+  trend?: number | null;
+  /** The trend is in percentage points, not per cent. */
+  points?: boolean;
+  /** Whether a rise is good news (default true). Only affects the tone word. */
+  upIsGood?: boolean;
+  /** What the trend is compared with, e.g. "the previous 30 days". */
+  versus?: string;
+  note?: string;
+  href?: string;
+  /** BCP 47 locale for number formatting. */
+  locale?: string;
+}
+const { label, value, trend, points = false, upIsGood = true, versus, note, href, locale = "en-GB" } = Astro.props;
+const shown = value === null || value === undefined || value === "" ? null : typeof value === "number" ? value.toLocaleString(locale) : value;
+const hasTrend = typeof trend === "number" && Number.isFinite(trend);
+const unit = points ? " points" : "%";
+const trendText = !hasTrend
+  ? null
+  : trend === 0
+    ? `No change${versus ? ` on ${versus}` : ""}`
+    : `${trend > 0 ? "Up" : "Down"} ${Math.abs(trend).toLocaleString(locale, { maximumFractionDigits: 1 })}${unit}${versus ? ` on ${versus}` : ""}`;
+const good = hasTrend && trend !== 0 ? (trend > 0) === upIsGood : null;
+const tone = good === null ? "text-muted-foreground" : good ? "text-malachite-on-container bg-malachite-container" : "text-terracotta-on-container bg-terracotta-container";
+---
+
+<div class="flex min-w-0 flex-col gap-2 rounded-lg border border-border bg-card p-5" data-slot="stat-tile">
+  <dt class="text-body-sm font-medium text-muted-foreground">
+    {href ? <a href={href} class="underline-offset-4 hover:underline">{label}</a> : label}
+  </dt>
+  <dd class="flex flex-col gap-2">
+    <span class="text-h2 font-semibold tracking-tight tabular-nums">
+      {shown ?? <span class="text-body text-muted-foreground">Not available</span>}
+    </span>
+    {trendText && <span class={`w-fit rounded-full px-2.5 py-0.5 text-body-sm font-medium ${good === null ? "" : tone}`}>{trendText}</span>}
+    {note && <span class="text-body-sm text-muted-foreground">{note}</span>}
+  </dd>
+</div>

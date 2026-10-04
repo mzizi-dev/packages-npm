@@ -1,0 +1,16 @@
+---
+/**
+ * Input — a native <input>, pure Astro, 48px tall. Every attribute other
+ * than `class` is passed through (name, type, value, required,
+ * autocomplete, aria-*, …). Classes are `inputClasses`.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+import { cn } from "../lib/utils";
+import { inputClasses } from "../ui/variants";
+
+type Props = HTMLAttributes<"input">;
+const { class: extra, ...attrs } = Astro.props;
+---
+
+<input data-slot="input" class={cn(inputClasses, extra as string | undefined)} {...attrs} />

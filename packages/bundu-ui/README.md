@@ -222,6 +222,81 @@ combination of the 0.1.x props against the published 0.1.1 tarball.
 See [BUILDING.md](https://github.com/mzizi-dev/packages-npm/blob/main/packages/bundu-ui/BUILDING.md) for the full toolchain — the mzizi MCP, the shadcn CLI, the
 21 colour families, and the no-raw-hex rule.
 
+## App patterns (0.3.0)
+
+Server-rendered building blocks for signed-in apps and consoles, under
+`@bundu/ui/app/*`. They are **pure Astro**: no React (or any framework) under
+them and no client JavaScript, as the Mzizi doctrine has it for Astro. Filters
+are GET forms, paging is links, menus are `<details>`, and a toast is dismissed
+with a label for a hidden checkbox. Every colour is a token, so light and dark
+follow `tokens.css` / `color-scheme.css`. The class recipes are shared with the
+React primitives through `@bundu/ui/ui/variants`, so both builds look the same.
+
+| Component                                                                   | What it does                                                                                                      |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `AppShell.astro`                                                            | Sticky top bar (`brand`, `account` slots), sidebar navigation from `lg` and a disclosure below, `main#main`       |
+| `SideNav.astro`                                                             | Section list with label and summary; `aria-current="page"` on the current item; 48px targets                      |
+| `AccountMenu.astro`                                                         | Who is signed in, a slot for account actions (an appearance form, links), and a sign-out POST form                |
+| `PageHeader.astro`                                                          | The page's one `<h1>`, description, breadcrumbs, `actions` slot                                                   |
+| `DataTable.astro`                                                           | A real `<table>` with caption and scoped headers; one card per row on narrow screens; cells are data, not markup  |
+| `FilterBar.astro`                                                           | Search and select filters as a `role="search"` GET form; "Clear" when anything is set                             |
+| `Pagination.astro`                                                          | "Showing 26–50 of 112" and previous, numbered and next links; hidden when one page is enough                      |
+| `DetailPanel.astro`                                                         | One record as a description list, an optional "Full record" JSON disclosure, an `actions` slot                    |
+| `FormLayout.astro`                                                          | A titled form card; fields in two columns when the card is wide (container query); form-level alert               |
+| `FormField.astro`                                                           | Visible label, input, hint and error wired with `aria-describedby` and `aria-invalid`                             |
+| `StateMessage.astro`                                                        | Empty, error, not-configured, unavailable and loading (skeleton) states with fixed wording                        |
+| `Toast.astro`                                                               | The last action's result in a polite live region; stays until dismissed (WCAG 2.2.3)                              |
+| `StatTile.astro`                                                            | One headline figure in a `<dl>`: label, value ("Not available", never 0), the trend written in words              |
+| `BarChart.astro`                                                            | Columns or rows of bars as HTML, a captioned `<figure>`, and the exact figures in a real table under a disclosure |
+| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; the `buttonVariants` recipe; 48px or taller                                   |
+| `Badge.astro`                                                               | The Mzizi registry `badge` contract: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`            |
+| `Card.astro`, `Alert.astro`, `Input.astro`, `Label.astro`, `Skeleton.astro` | The primitives the patterns are built from, pure Astro                                                            |
+
+`@bundu/ui/lib/table` holds the pure helpers behind `DataTable`, `FilterBar` and
+`Pagination`: `parseTableQuery` (URL → query, clamped), `filterRows` (every word,
+case- and accent-insensitive, plus exact-match filters), `paginate` and `withParams`.
+
+```astro
+---
+import AppShell from "@bundu/ui/app/AppShell.astro";
+import SideNav from "@bundu/ui/app/SideNav.astro";
+import AccountMenu from "@bundu/ui/app/AccountMenu.astro";
+import PageHeader from "@bundu/ui/app/PageHeader.astro";
+import FilterBar from "@bundu/ui/app/FilterBar.astro";
+import DataTable from "@bundu/ui/app/DataTable.astro";
+import Pagination from "@bundu/ui/app/Pagination.astro";
+import { filterRows, paginate, parseTableQuery, withParams } from "@bundu/ui/lib/table";
+
+const query = parseTableQuery(Astro.url.searchParams, ["role"]);
+const rows = filterRows(people, query, (p) => [p.name], (p, f) => (f === "role" ? p.role : null));
+const page = paginate(rows, query.page, query.perPage);
+---
+
+<AppShell>
+  <a slot="brand" href="/">Your app</a>
+  <AccountMenu slot="account" name="Tendai Moyo" email="tendai@example.com" signOutAction="/auth/logout" />
+  <SideNav slot="nav" items={[{ href: "/people", label: "People", summary: "Everyone in your family" }]} />
+
+  <PageHeader title="People" description="Everyone in your family." />
+  <FilterBar searchLabel="Search people" q={query.q} values={query.filters} clearHref={withParams(Astro.url, { q: null, role: null, page: null })} />
+  <DataTable
+    caption={`People, ${page.total} in all`}
+    columns={[{ key: "name", label: "Name" }, { key: "role", label: "Role" }]}
+    rows={page.rows.map((p) => ({ name: { text: p.name, href: `/people/${p.id}` }, role: { text: p.role, badge: "outline" } }))}
+  />
+  <Pagination url={Astro.url} {...page} noun="people" />
+</AppShell>
+```
+
+They need only Astro and the Tailwind v4 setup above, including the `@source`
+line so the classes inside the package are generated. `BarChart` sizes its bars
+with inline `style` attributes, so a Content-Security-Policy needs
+`style-src 'unsafe-inline'` (or the hashes) on pages that use it.
+
+`DataTable` badges (`{ text, badge }`) take the registry badge variants. Before
+0.3.0 the console's copy used the mineral variants of the React `Badge`;
+`primary` there is `default` here.
+
 ## Licence
 
 [MIT](https://github.com/mzizi-dev/packages-npm/blob/main/LICENSE) © Nyuchi Africa (Pvt) Ltd.

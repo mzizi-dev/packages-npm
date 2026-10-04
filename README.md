@@ -6,25 +6,26 @@
 [![Publish](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/publish.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+**Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) · [`@bundu/server`](https://www.npmjs.com/package/@bundu/server) | **Architecture:** [mzizi.dev](https://mzizi.dev)
 
 ---
 
 ## What this is
 
 A [pnpm workspace](https://pnpm.io/workspaces) holding the UI packages Nyuchi
-publishes to npm. Both packages implement the [Mzizi](https://mzizi.dev)
+publishes to npm. The packages implement the [Mzizi](https://mzizi.dev)
 architecture — an open-architecture project of the Bundu Foundation, operated
 and developed by Nyuchi — but the packages themselves are **Nyuchi-owned
 implementations**, not Mzizi itself. Mzizi's own registry lives at
 [`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry).
 
-| Package                                                                              | Framework          | What it is                                                               |
-| ------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------ |
-| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)      | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                         |
-| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui) | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites |
+| Package                                                                                      | Framework          | What it is                                                                                                         |
+| -------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)              | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                                                                   |
+| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles |
+| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs)     | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging   |
 
-Both packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
+Both UI packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
 `tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
 one generator, not two hand-maintained files.
 
