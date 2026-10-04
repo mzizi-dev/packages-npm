@@ -16,6 +16,41 @@ the npm registry.
 
 ## [Unreleased]
 
+### Added
+
+- **`@bundu/ui` 0.4.0 — the app patterns become a full-width product dashboard**
+  (version bumped in `packages/bundu-ui/package.json`; not yet published: it is
+  released from a `v0.4.0` tag). New under `@bundu/ui/app/*`: `WorkspaceSwitcher`,
+  `QuickSearch` and `CommandPalette` (⌘K), `TopBarAction`, `Toolbar` and
+  `ToolbarMenu`, `StatTiles`, `InfoTip`, `EmptyState`, and `BrandMark` with the
+  official Nyuchi mark (the Mzizi registry's bee icon pair, scaled to 128px, in
+  `assets/brand/`). `@bundu/ui/app/nav` (and the root) gains `groupNav`,
+  `currentHref`, `flattenNav`, `searchNav` and `matchesQuery`. `Icon` gains 36
+  app glyphs. `ui/variants` gains `appButtonVariants` and `appInputClasses`.
+  Built for the Nyuchi console (nyuchi/nyuchi-platform#330).
+
+### Changed
+
+- **Breaking — `AppShell` is full width.** A fixed sidebar (16.25rem) and a main
+  column filling the rest, with no `max-w-[96rem]` centred container; the nav
+  is rendered once (the sidebar is a popover drawer below 64rem) instead of
+  twice; new slots `workspace`, `search`, `actions`, `overlay`; new props
+  `collapsed`, `persist`, `footerLinks`, `sidebarLabel`, `id`. The sidebar
+  collapses to an icon rail.
+- **Breaking — `SideNav` shows the label only.** An item's `description` (or
+  0.3's `summary`) is a tooltip and the link's `aria-describedby`, no longer
+  printed under the label. Takes `groups` with icons, badges and nested items;
+  flat `items` still work.
+- **App density.** `Button` (36px; 48px on touch), `Input`, `FilterBar`,
+  `DataTable` (~40px rows, 14px text), `Pagination`, `DetailPanel`,
+  `FormLayout`, `PageHeader` (a 20px title and a `docsHref` pill, no rule),
+  `StatTile` (`info` tooltip) and `AccountMenu` are compact with a fine pointer
+  and keep 44–48px targets on touch. `StateMessage kind="empty"` is an
+  `EmptyState` card. Headings inside `AppShell` use the body sans.
+- `AppShell` and `CommandPalette` each carry one small enhancement script (the
+  collapse cookie and Escape for tooltips; the ⌘K shortcut and live filtering);
+  everything works without them. The app components stay framework-free.
+
 ## [@bundu/ui 0.3.0, @bundu/server 0.1.0] - 2026-10-04
 
 Published to npm from the `v0.3.0` tag. `@nyuchi/ui` is unchanged at 0.2.0.

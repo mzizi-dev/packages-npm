@@ -8,6 +8,16 @@ import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, test } from "vite-plus/test";
 
 import AccountMenu from "./AccountMenu.astro";
+import BrandMark from "./BrandMark.astro";
+import CommandPalette from "./CommandPalette.astro";
+import EmptyState from "./EmptyState.astro";
+import InfoTip from "./InfoTip.astro";
+import QuickSearch from "./QuickSearch.astro";
+import StatTiles from "./StatTiles.astro";
+import Toolbar from "./Toolbar.astro";
+import ToolbarMenu from "./ToolbarMenu.astro";
+import TopBarAction from "./TopBarAction.astro";
+import WorkspaceSwitcher from "./WorkspaceSwitcher.astro";
 import Alert from "./Alert.astro";
 import Badge from "./Badge.astro";
 import BarChart from "./BarChart.astro";
@@ -445,6 +455,365 @@ describe("SideNav", () => {
   });
 });
 
+describe("SideNav, grouped (0.4)", () => {
+  const groups = [
+    { items: [{ href: "/dashboard", label: "Overview", icon: "home" }] },
+    {
+      label: "Identity & people",
+      items: [
+        {
+          href: "/dashboard/identity",
+          label: "Identity",
+          icon: "user",
+          description: "Your own person record",
+        },
+        {
+          href: "/dashboard/family",
+          label: "Family",
+          icon: "users",
+          badge: "New",
+        },
+      ],
+    },
+    {
+      label: "Developer",
+      items: [
+        {
+          href: "/dashboard/developer",
+          label: "Developer",
+          icon: "terminal",
+          description: "Build on the Nyuchi API",
+          children: [
+            {
+              href: "/dashboard/developer/keys",
+              label: "API keys",
+              description: "Mint and revoke keys",
+            },
+            { href: "/dashboard/developer/mcp", label: "MCP" },
+          ],
+        },
+      ],
+    },
+  ];
+
+  test("quiet group labels name their lists; items show the label only", async () => {
+    const html = await render(
+      SideNav,
+      { groups, idPrefix: "n" },
+      { request: new Request("https://x.test/dashboard/identity") },
+    );
+    expect(html).toMatch(
+      /<p id="n-group-1" data-slot="nav-group-label"[^>]*>\s*Identity &amp; people/,
+    );
+    expect(html).toMatch(/<ul role="list" aria-labelledby="n-group-1"/);
+    // The description is a tooltip and the link's accessible description,
+    // not text inside the link.
+    expect(html).toMatch(
+      /<span role="tooltip" id="n-tip-2"[^>]*>[\s\S]*?<span id="n-tip-2-d">Your own person record<\/span>/,
+    );
+    expect(html).toMatch(
+      /<a href="\/dashboard\/identity" aria-current="page" aria-describedby="n-tip-2-d"/,
+    );
+    const link = html.slice(
+      html.indexOf('<a href="/dashboard/identity"'),
+      html.indexOf("</a>", html.indexOf('<a href="/dashboard/identity"')),
+    );
+    expect(link).not.toContain("Your own person record");
+    expect(html).toMatch(/data-icon="user"/);
+    expect(html).toMatch(/>\s*New\s*<\/span>/);
+    expectNoClientJs(html);
+  });
+
+  test("the longest matching href is current, so the overview is not current everywhere", async () => {
+    const html = await render(
+      SideNav,
+      { groups },
+      { request: new Request("https://x.test/dashboard/family") },
+    );
+    expect(html).toMatch(/href="\/dashboard\/family" aria-current="page"/);
+    expect(html).not.toMatch(/href="\/dashboard" aria-current/);
+  });
+
+  test("nested items sit under a disclosure that is open when a child is current", async () => {
+    const closed = await render(
+      SideNav,
+      { groups },
+      { request: new Request("https://x.test/dashboard/identity") },
+    );
+    expect(closed).toMatch(/<details data-slot="nav-branch">/);
+    const open = await render(
+      SideNav,
+      { groups },
+      { request: new Request("https://x.test/dashboard/developer/keys/3") },
+    );
+    expect(open).toMatch(/<details data-slot="nav-branch" open>/);
+    expect(open).toMatch(
+      /href="\/dashboard\/developer\/keys" aria-current="page"/,
+    );
+    expect(open).toContain('data-icon="chevron-right"');
+    // The collapsed rail's single link to the group.
+    expect(open).toMatch(
+      /<a href="\/dashboard\/developer" data-slot="nav-rail-link"/,
+    );
+  });
+
+  test("every item has a tooltip carrying its label, for the collapsed rail", async () => {
+    const html = await render(SideNav, { groups });
+    expect(html.match(/data-tip-label/g)?.length).toBe(4);
+    // An item with no description has a tooltip only for the rail.
+    expect(html).toMatch(/data-slot="nav-tip" data-empty/);
+  });
+});
+
+describe("BrandMark", () => {
+  test("is the official mark pair, named once, with the wordmark when asked", async () => {
+    const mark = await render(BrandMark, { size: 20 });
+    expect(mark.match(/<img /g)).toHaveLength(2);
+    expect(mark).toMatch(/nyuchi-mark-light\.png/);
+    expect(mark).toMatch(/nyuchi-mark-dark\.png/);
+    expect(mark).toMatch(/alt="nyuchi"/);
+    expect(mark).toContain('width="20"');
+    const lockup = await render(BrandMark, {
+      wordmark: true,
+      suffix: "console",
+    });
+    expect(lockup).not.toContain('alt="nyuchi"');
+    expect(lockup).toMatch(/data-slot="brand-wordmark"[^>]*>\s*nyuchi/);
+    expect(lockup).toContain("console");
+    expectNoClientJs(lockup);
+  });
+});
+
+describe("WorkspaceSwitcher", () => {
+  test("is a plain link home when there is nothing to switch to", async () => {
+    const html = await render(
+      WorkspaceSwitcher,
+      { name: "Nyuchi Africa", href: "/dashboard" },
+      { slots: { mark: "<b>mark</b>" } },
+    );
+    expect(html).toMatch(
+      /<a href="\/dashboard"[^>]*data-slot="workspace-switcher"/,
+    );
+    expect(html).not.toContain("<details");
+    expect(html).not.toContain("chevrons-up-down");
+    expect(html).toContain("Nyuchi Africa");
+  });
+
+  test("is a disclosure listing workspaces, the current one marked", async () => {
+    const html = await render(
+      WorkspaceSwitcher,
+      {
+        name: "Nyuchi Africa",
+        label: "Switch organisation",
+        workspaces: [
+          { name: "Nyuchi Africa", href: "/w/1", current: true },
+          { name: "Mukoko", href: "/w/2" },
+        ],
+        links: [{ label: "Console home", href: "/dashboard" }],
+      },
+      { slots: { mark: "<b>mark</b>" } },
+    );
+    expect(html).toContain("<details");
+    expect(html).toMatch(/aria-label="Switch organisation: Nyuchi Africa"/);
+    expect(html).toMatch(/href="\/w\/1"[^>]*aria-current="true"/);
+    expect(html).not.toMatch(/href="\/w\/2"[^>]*aria-current/);
+    expect(html).toContain("Console home");
+    expectNoClientJs(html);
+  });
+});
+
+describe("QuickSearch and CommandPalette", () => {
+  const groups = [
+    { items: [{ href: "/dashboard", label: "Overview", icon: "home" }] },
+    {
+      label: "Content",
+      items: [
+        {
+          href: "/dashboard/news",
+          label: "News",
+          description: "Articles and sources",
+        },
+      ],
+    },
+  ];
+
+  test("the button opens the palette with no script and advertises the shortcut", async () => {
+    const html = await render(QuickSearch, { target: "cmdk" });
+    expect(html).toMatch(
+      /<button type="button" popovertarget="cmdk" aria-label="Quick search" aria-keyshortcuts="Meta\+K Control\+K"/,
+    );
+    expect(html).toMatch(/<kbd data-qs-kbd aria-hidden="true"/);
+  });
+
+  test("the palette lists every item as a link, grouped, with a labelled search box", async () => {
+    const html = await render(CommandPalette, {
+      groups,
+      id: "cmdk",
+      action: "/dashboard/search",
+    });
+    expect(html).toMatch(
+      /<div id="cmdk" popover role="dialog" aria-label="Search" data-slot="command-palette"/,
+    );
+    expect(html).toMatch(
+      /<form method="get" action="\/dashboard\/search" role="search"/,
+    );
+    expect(html).toMatch(/<label for="cmdk-q" class="sr-only">/);
+    expect(html).toMatch(/<input id="cmdk-q" name="q" type="search"/);
+    expect(html).toMatch(/aria-label="Go to"/);
+    expect(html).toMatch(/aria-label="Content"/);
+    expect(html).toMatch(/data-search="News Articles and sources Content"/);
+    expect(html).toContain('href="/dashboard/news"');
+    expect(html).toMatch(/data-cmdk-status class="sr-only" aria-live="polite"/);
+  });
+
+  test("without an action the box is not a form", async () => {
+    const html = await render(CommandPalette, { groups });
+    expect(html).not.toContain("<form");
+  });
+});
+
+describe("TopBarAction", () => {
+  test("a link with an icon keeps its label as the accessible name on phones", async () => {
+    const html = await render(TopBarAction, {
+      label: "Ask Nyuchi AI",
+      icon: "sparkles",
+      href: "/dashboard/nyuchi-ai",
+    });
+    expect(html).toMatch(/<a href="\/dashboard\/nyuchi-ai"/);
+    expect(html).toMatch(/class="sr-only sm:not-sr-only">Ask Nyuchi AI</);
+  });
+
+  test("external links say they open a new tab", async () => {
+    const html = await render(TopBarAction, {
+      label: "Support",
+      href: "mailto:support@example.com",
+      external: true,
+    });
+    expect(html).toContain('rel="noopener"');
+    expect(html).toContain("(opens in a new tab)");
+  });
+});
+
+describe("Toolbar and ToolbarMenu", () => {
+  test("a GET search with a label, carried parameters and a filter group", async () => {
+    const html = await render(
+      Toolbar,
+      { label: "Search agents", value: "kudu", keep: { range: "7d" }, id: "t" },
+      { slots: { filters: "<span>Last 7 days</span>" } },
+    );
+    expect(html).toMatch(/<form method="get" role="search"/);
+    expect(html).toMatch(
+      /<label for="t-q" class="sr-only">Search agents<\/label>/,
+    );
+    expect(html).toMatch(
+      /<input id="t-q" name="q" type="search" value="kudu" placeholder="Search agents"/,
+    );
+    expect(html).toMatch(/<input type="hidden" name="range" value="7d">/);
+    expect(html).toContain('data-slot="toolbar-filters"');
+    expectNoClientJs(html);
+  });
+
+  test("the menu shows the current choice and lists links", async () => {
+    const html = await render(ToolbarMenu, {
+      label: "Date range",
+      icon: "calendar",
+      choices: [
+        { label: "Last 24 hours", href: "?range=1d" },
+        { label: "Last 7 days", href: "?range=7d", current: true },
+      ],
+    });
+    expect(html).toMatch(
+      /<span class="sr-only">Date range: <\/span>\s*<span>Last 7 days<\/span>/,
+    );
+    expect(html).toMatch(/href="\?range=7d" aria-current="true"/);
+    expect(html).not.toMatch(/href="\?range=1d" aria-current/);
+  });
+});
+
+describe("StatTiles, StatTile and InfoTip", () => {
+  test("one bordered description list of tiles", async () => {
+    const html = await render(
+      StatTiles,
+      { label: "Activity", columns: 4 },
+      {
+        slots: {
+          default: "<div data-slot='stat-tile'><dt>A</dt><dd>1</dd></div>",
+        },
+      },
+    );
+    expect(html).toMatch(
+      /<dl aria-label="Activity" class="[^"]*lg:grid-cols-4/,
+    );
+    expect(html).toContain("*:border-l");
+  });
+
+  test("a tile's info icon is a focusable button described by its tooltip", async () => {
+    const html = await render(StatTile, {
+      label: "Sessions",
+      value: 0,
+      info: "Signed-in sessions in the range",
+    });
+    expect(html).toMatch(
+      /<button type="button" aria-label="About Sessions" aria-describedby="stat-sessions-info"/,
+    );
+    expect(html).toMatch(
+      /<span role="tooltip" id="stat-sessions-info"[^>]*>\s*Signed-in sessions in the range/,
+    );
+    // Zero is a value, not "Not available".
+    expect(html).toMatch(/tabular-nums">\s*0\s*</);
+  });
+
+  test("InfoTip alone", async () => {
+    const html = await render(InfoTip, {
+      text: "Why",
+      about: "Runs",
+      id: "i1",
+    });
+    expect(html).toContain('aria-describedby="i1"');
+    expectNoClientJs(html);
+  });
+});
+
+describe("EmptyState", () => {
+  test("a bordered card with a heading, help and actions", async () => {
+    const html = await render(
+      EmptyState,
+      {
+        title: "No agent activity yet",
+        message: "Agents appear here after their first request.",
+        level: 3,
+      },
+      { slots: { default: "<a href='/new'>Build your first agent</a>" } },
+    );
+    expect(html).toMatch(/<h3 class="[^"]*">No agent activity yet<\/h3>/);
+    expect(html).toContain("Agents appear here");
+    expect(html).toContain("Build your first agent");
+    expect(html).toContain("border-border");
+    expect(html).not.toContain("border-dashed");
+  });
+
+  test("has no empty action row without actions", async () => {
+    const html = await render(EmptyState, { title: "Nothing" });
+    expect(html).not.toContain("mt-3 flex");
+  });
+});
+
+describe("PageHeader (0.4)", () => {
+  test("a compact title with a docs pill and one line of description", async () => {
+    const html = await render(PageHeader, {
+      title: "Agent tracing",
+      description: "Review traced activity.",
+      docsHref: "https://docs.example/agents",
+    });
+    expect(html).toMatch(/<h1 class="text-h5[^"]*">Agent tracing<\/h1>/);
+    expect(html).toMatch(
+      /<a href="https:\/\/docs.example\/agents"[^>]*data-slot="docs-pill">\s*View docs\s*<span class="sr-only"> for Agent tracing<\/span>/,
+    );
+    expect(html).toContain("Review traced activity.");
+    expect(html).not.toMatch(/[" ]border-b[" ]/);
+  });
+});
+
 describe("AccountMenu", () => {
   test("is a disclosure with initials, the account and a sign-out POST", async () => {
     const html = await render(
@@ -475,51 +844,94 @@ describe("AccountMenu", () => {
 });
 
 describe("AppShell", () => {
-  test("places the nav twice (sidebar and disclosure) and one main", async () => {
-    const html = await render(
-      AppShell,
-      { navLabel: "Menu" },
-      {
-        slots: {
-          brand: "<a href='/'>Brand</a>",
-          account: "<span>account</span>",
-          nav: "<nav aria-label='Sections'>links</nav>",
-          default: "<h1>Page</h1>",
-          footer: "Footer text",
-        },
-      },
-    );
+  const slots = {
+    brand: "<a href='/'>Brand</a>",
+    workspace: "<a href='/'>Workspace</a>",
+    search: "<button type='button'>Search</button>",
+    account: "<span>account</span>",
+    actions: "<a href='/ai'>Ask AI</a>",
+    nav: "<nav aria-label='Sections'>links</nav>",
+    default: "<h1>Page</h1>",
+    footer: "Footer text",
+  };
+
+  test("is full width: one sidebar holding the nav once, one main, no page container", async () => {
+    const html = await render(AppShell, { navLabel: "Menu" }, { slots });
     expect(
       html.match(
         /<nav aria-label='Sections'>links<\/nav>|<nav aria-label="Sections">links<\/nav>/g,
       ),
-    ).toHaveLength(2);
-    expect(html).toMatch(/<summary[^>]*>Menu<\/summary>/);
+    ).toHaveLength(1);
     expect(html.match(/<main/g)).toHaveLength(1);
     expect(html).toContain('id="main"');
     expect(html).toContain("<header");
     expect(html).toContain("Footer text");
-    expectNoClientJs(html);
+    expect(html).not.toMatch(/max-w-\[96rem\]|mx-auto/);
   });
 
-  test("has no nav chrome or footer when those slots are empty", async () => {
+  test("the sidebar is a popover drawer on phones, opened and closed by buttons", async () => {
     const html = await render(
+      AppShell,
+      { navLabel: "Menu", id: "c" },
+      { slots },
+    );
+    expect(html).toMatch(
+      /<aside id="c-sidebar" popover aria-label="Sidebar" data-slot="app-sidebar"/,
+    );
+    expect(html).toMatch(
+      /<button type="button" popovertarget="c-sidebar"[^>]*aria-label="Open menu"/,
+    );
+    expect(html).toMatch(
+      /popovertarget="c-sidebar" popovertargetaction="hide"[^>]*aria-label="Close menu"/,
+    );
+  });
+
+  test("collapse is a labelled checkbox, set from the server and persisted to a named cookie", async () => {
+    const open = await render(
+      AppShell,
+      { id: "c", persist: "pref_sidebar" },
+      { slots },
+    );
+    expect(open).toMatch(
+      /<input type="checkbox" id="c-collapse" data-shell-collapse(?! checked)/,
+    );
+    expect(open).toMatch(
+      /<label for="c-collapse"[^>]*>[\s\S]*Collapse navigation/,
+    );
+    expect(open).toContain('data-persist="pref_sidebar"');
+    const shut = await render(
+      AppShell,
+      { id: "c", collapsed: true },
+      { slots },
+    );
+    expect(shut).toMatch(/id="c-collapse" data-shell-collapse checked/);
+  });
+
+  test("renders footer links and leaves the footer out when there is none", async () => {
+    const withLinks = await render(
+      AppShell,
+      { footerLinks: [{ label: "Status", href: "https://status.example" }] },
+      { slots: { default: "<h1>Page</h1>" } },
+    );
+    expect(withLinks).toMatch(
+      /<footer[\s\S]*href="https:\/\/status.example"[^>]*>\s*Status/,
+    );
+    const bare = await render(
       AppShell,
       {},
       { slots: { default: "<h1>Page</h1>" } },
     );
-    expect(html).not.toContain("mobile-nav");
-    expect(html).not.toContain("<aside");
-    expect(html).not.toContain("<footer");
+    expect(bare).not.toContain("<footer");
   });
 });
 
 describe("pure Astro", () => {
   const dir = new URL(".", import.meta.url);
   const files = readdirSync(dir).filter((f) => f.endsWith(".astro"));
+  const SCRIPTED = ["AppShell.astro", "CommandPalette.astro"];
 
   test("every app component is here and imports no framework", () => {
-    expect(files.length).toBeGreaterThanOrEqual(21);
+    expect(files.length).toBeGreaterThanOrEqual(31);
     for (const file of files) {
       const source = readFileSync(new URL(file, dir), "utf8");
       expect(source, file).not.toMatch(
@@ -529,7 +941,18 @@ describe("pure Astro", () => {
         /from\s+["'][^"']+\.(tsx|jsx|svelte|vue)["']/,
       );
       expect(source, file).not.toMatch(/client:(load|idle|visible|media|only)/);
-      expect(source, file).not.toMatch(/<script/);
+      // Only the shell (collapse persistence, Escape for tooltips) and the
+      // command palette (the shortcut, live filtering) carry a script, and
+      // both work without it.
+      if (!SCRIPTED.includes(file)) expect(source, file).not.toMatch(/<script/);
+    }
+  });
+
+  test("the two scripts are progressive enhancement over working HTML", () => {
+    for (const file of SCRIPTED) {
+      const source = readFileSync(new URL(file, dir), "utf8");
+      expect(source.match(/<script>/g), file).toHaveLength(1);
+      expect(source, file).not.toMatch(/innerHTML|eval\(|fetch\(/);
     }
   });
 });
@@ -559,7 +982,9 @@ describe("primitives", () => {
       { slots: { default: "Save" } },
     );
     expect(html).toMatch(/<button type="submit"/);
-    expect(html).toContain("h-12");
+    // App density: 36px with a fine pointer, 48px on touch.
+    expect(html).toContain("h-9");
+    expect(html).toContain("pointer-coarse:h-12");
   });
 
   test("Alert announces itself", async () => {
