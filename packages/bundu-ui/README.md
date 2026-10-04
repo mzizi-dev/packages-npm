@@ -32,8 +32,10 @@ developed by Nyuchi. This package is not Mzizi itself.
   `tailwind-preset.mjs` is the v3-shape preset, still shipped and still working (v4 loads
   it through `@config`).
 - **Brand overlays** — `brand-bundu`, `brand-nyuchi`, `brand-mukoko`, `brand-shamwari`,
-  `brand-mzizi`, and the sub-apps `brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
-  `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli` and `brand-learning`.
+  `brand-mzizi`, and the sub-apps `brand-events` (Mukoko Events), `brand-lingo`,
+  `brand-bushtrade`, `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli` and
+  `brand-learning`. `brand-nhimbe` is a deprecated alias that re-exports `brand-events`
+  (the nhimbe brand is retired; the events platform is Mukoko Events).
   Each repoints `--primary` and `--ring` and nothing else; the mineral comes from
   canon's ecosystem table.
 - **`tokens.json`** — the same values machine-readable, including every custom property
