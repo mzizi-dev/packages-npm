@@ -32,7 +32,9 @@ developed by Nyuchi. This package is not Mzizi itself.
   `tailwind-preset.mjs` is the v3-shape preset, still shipped and still working (v4 loads
   it through `@config`).
 - **Brand overlays** — `brand-bundu`, `brand-nyuchi`, `brand-mukoko`, `brand-shamwari`,
-  `brand-mzizi`. Each repoints `--primary` and `--ring` and nothing else.
+  `brand-mzizi`, and the sub-apps `brand-nhimbe`, `brand-lingo`, `brand-bushtrade`,
+  `brand-campfire`, `brand-news` and `brand-weather`. Each repoints `--primary` and
+  `--ring` and nothing else; the mineral comes from canon's ecosystem table.
 - **`tokens.json`** — the same values machine-readable, including every custom property
   resolved to a literal hex per mode, for the surfaces that cannot consume CSS at all:
   Expo (`mukoko-weather-mobile`) and Satori-based OG-image / email / PDF generators.

@@ -17,11 +17,19 @@ your site's primary mineral. Order matters: the brand overlay must come **after*
 @import "@bundu/ui/styles/brand-nyuchi.css";
 ```
 
-| Overlay            | Brand  | Primary mineral |
-| ------------------ | ------ | --------------- |
-| `brand-bundu.css`  | bundu  | terracotta      |
-| `brand-nyuchi.css` | nyuchi | gold            |
-| `brand-mukoko.css` | mukoko | tanzanite       |
+| Overlay               | Brand          | Primary mineral     |
+| --------------------- | -------------- | ------------------- |
+| `brand-bundu.css`     | bundu          | copper              |
+| `brand-nyuchi.css`    | nyuchi         | gold                |
+| `brand-mukoko.css`    | mukoko         | tanzanite           |
+| `brand-shamwari.css`  | shamwari       | sodalite            |
+| `brand-mzizi.css`     | mzizi          | hematite (heritage) |
+| `brand-nhimbe.css`    | nhimbe         | malachite           |
+| `brand-lingo.css`     | lingo          | cobalt              |
+| `brand-bushtrade.css` | bushtrade      | gold                |
+| `brand-campfire.css`  | campfire       | malachite           |
+| `brand-news.css`      | Mukoko News    | cobalt              |
+| `brand-weather.css`   | Mukoko Weather | cobalt              |
 
 `globals.css` alone defaults `--primary` / `--ring` to **cobalt** — the canonical Mzizi
 default — so it's usable without any overlay.
