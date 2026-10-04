@@ -7,10 +7,10 @@
 import type { HTMLAttributes } from "astro/types";
 
 import { cn } from "../lib/utils";
-import { inputClasses } from "../ui/variants";
+import { appInputClasses } from "../ui/variants";
 
 type Props = HTMLAttributes<"input">;
 const { class: extra, ...attrs } = Astro.props;
 ---
 
-<input data-slot="input" class={cn(inputClasses, extra as string | undefined)} {...attrs} />
+<input data-slot="input" class={cn(appInputClasses, extra as string | undefined)} {...attrs} />

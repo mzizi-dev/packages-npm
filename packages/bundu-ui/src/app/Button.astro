@@ -1,11 +1,11 @@
 ---
 /**
  * Button — pure Astro. An <a> when `href` is set, otherwise a <button>.
- * The classes are `buttonVariants` (shared with the React `Button`), so
- * targets are 48px or more.
+ * App density (`appButtonVariants`): 36px by default (32px `sm`, 40px
+ * `lg`) with a fine pointer, 44–48px on touch, small corners.
  */
 import { cn } from "../lib/utils";
-import { buttonVariants } from "../ui/variants";
+import { appButtonVariants } from "../ui/variants";
 
 interface Props {
   href?: string;
@@ -19,7 +19,7 @@ interface Props {
   class?: string;
 }
 const { href, type = "button", variant, size, fullWidth, disabled, name, value, class: extra } = Astro.props;
-const classes = cn(buttonVariants({ variant, size, fullWidth }), extra);
+const classes = cn(appButtonVariants({ variant, size, fullWidth }), extra);
 ---
 
 {

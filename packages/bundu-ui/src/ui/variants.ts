@@ -82,6 +82,44 @@ export const inputClasses =
 
 export const labelClasses = "text-body-sm font-medium text-foreground";
 
+/*
+ * App density (0.4.0). Consoles and signed-in apps are dense, not
+ * marketing-roomy: 36px controls and 14px text on a fine pointer, growing
+ * to 48px targets and 16px text on a coarse pointer (touch), so phones keep
+ * WCAG-sized targets and iOS never zooms an input. Corners are the small
+ * radius, not the marketing pill. The app components (`../app/*.astro`)
+ * use these; the marketing primitives above are unchanged.
+ */
+export const appButtonVariants = cva(
+  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap font-medium rounded-sm border border-transparent transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed",
+  {
+    variants: {
+      variant: {
+        primary: "bg-primary text-primary-foreground hover:opacity-90",
+        secondary: "bg-foreground text-background hover:opacity-90",
+        outline: "border-border bg-card text-foreground hover:bg-muted",
+        ghost: "text-foreground hover:bg-muted",
+      },
+      size: {
+        sm: "h-8 px-3 text-body-sm pointer-coarse:h-11 pointer-coarse:px-4",
+        md: "h-9 px-3.5 text-body-sm pointer-coarse:h-12 pointer-coarse:px-5 pointer-coarse:text-body",
+        lg: "h-10 px-4 text-body pointer-coarse:h-12 pointer-coarse:px-6",
+      },
+      fullWidth: {
+        true: "w-full",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  },
+);
+
+/** A dense app input or select: 36px, 48px on touch. */
+export const appInputClasses =
+  "flex h-9 w-full min-w-0 rounded-sm border border-border bg-card px-3 text-body-sm text-foreground transition-colors placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 disabled:opacity-50 disabled:cursor-not-allowed pointer-coarse:h-12 pointer-coarse:text-body";
+
 /**
  * Badge, to the Mzizi registry's `badge` contract (`badge.tsx` / `badge.rs`
  * in mzizi-dev/mzizi-registry, N2): the same six variants, the same

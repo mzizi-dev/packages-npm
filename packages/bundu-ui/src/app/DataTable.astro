@@ -45,14 +45,14 @@ const asObject = (cell: Cell): CellObject | null => {
 };
 ---
 
-<div class="overflow-hidden rounded-lg border border-border bg-card" data-slot="data-table">
-  <table class="w-full border-collapse text-body">
-    <caption class={showCaption ? "px-4 py-3 text-start text-body-sm text-muted-foreground" : "sr-only"}>{caption}</caption>
-    <thead class="hidden bg-muted md:table-header-group">
+<div class="overflow-hidden rounded-md border border-border bg-card" data-slot="data-table">
+  <table class="w-full border-collapse text-body-sm">
+    <caption class={showCaption ? "px-3 py-2 text-start text-caption text-muted-foreground" : "sr-only"}>{caption}</caption>
+    <thead class="hidden border-b border-border bg-surface-muted md:table-header-group">
       <tr>
         {
           columns.map((c) => (
-            <th scope="col" class={`px-4 py-3 text-body-sm font-semibold ${c.align === "end" ? "text-end" : "text-start"}`}>
+            <th scope="col" class={`h-9 px-3 text-caption font-medium text-muted-foreground ${c.align === "end" ? "text-end" : "text-start"}`}>
               {c.label}
             </th>
           ))
@@ -65,16 +65,16 @@ const asObject = (cell: Cell): CellObject | null => {
           const id = rowKey ? String((asObject(row[rowKey]) ?? { text: "" }).text) : undefined;
           const current = columns.some((c) => asObject(row[c.key])?.current);
           return (
-            <tr data-row={id} aria-current={current ? "true" : undefined} class={`block px-4 py-3 md:table-row md:p-0 ${current ? "bg-muted" : ""}`}>
+            <tr data-row={id} aria-current={current ? "true" : undefined} class={`block px-3 py-2.5 hover:bg-surface-muted md:table-row md:p-0 ${current ? "bg-muted" : ""}`}>
               {columns.map((c, i) => {
                 const cell = asObject(row[c.key]);
                 const Tag = i === 0 ? "th" : "td";
                 return (
                   <Tag
                     scope={i === 0 ? "row" : undefined}
-                    class={`flex items-baseline justify-between gap-4 py-1 font-normal md:table-cell md:px-4 md:py-3 ${c.align === "end" ? "md:text-end" : "text-start"}`}
+                    class={`flex items-baseline justify-between gap-4 py-1 font-normal md:table-cell md:h-10 md:px-3 md:py-2 md:align-middle ${c.align === "end" ? "md:text-end" : "text-start"}`}
                   >
-                    <span class="text-body-sm text-muted-foreground md:hidden" aria-hidden="true">
+                    <span class="text-caption text-muted-foreground md:hidden" aria-hidden="true">
                       {c.label}
                     </span>
                     <span class="min-w-0 text-end md:text-start">
@@ -90,9 +90,9 @@ const asObject = (cell: Cell): CellObject | null => {
                           {cell.text}
                         </a>
                       ) : (
-                        <span class={cell.mono ? "font-mono text-body-sm" : ""}>{cell.text}</span>
+                        <span class={cell.mono ? "font-mono text-caption" : ""}>{cell.text}</span>
                       )}
-                      {cell?.sub && <span class="block text-body-sm text-muted-foreground">{cell.sub}</span>}
+                      {cell?.sub && <span class="block text-caption text-muted-foreground">{cell.sub}</span>}
                     </span>
                   </Tag>
                 );

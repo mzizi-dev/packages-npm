@@ -14,3 +14,15 @@ export {
   type Page,
   type TableQuery,
 } from "./lib/table";
+export {
+  containsHref,
+  currentHref,
+  flattenNav,
+  groupNav,
+  isCurrentHref,
+  matchesQuery,
+  searchNav,
+  type NavEntry,
+  type NavGroup,
+  type NavItem,
+} from "./app/nav";

@@ -18,11 +18,11 @@ const { url, page, pageCount, total, from, to, noun = "results" } = Astro.props;
 const pages = Array.from({ length: pageCount }, (_, i) => i + 1).filter(
   (p) => p === 1 || p === pageCount || Math.abs(p - page) <= 1,
 );
-const link = "inline-flex min-h-12 min-w-12 items-center justify-center rounded-full px-4 text-body-sm font-medium";
+const link = "inline-flex h-8 min-w-8 items-center justify-center rounded-sm px-2.5 text-body-sm font-medium pointer-coarse:h-11 pointer-coarse:min-w-11";
 ---
 
-<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" data-slot="pagination">
-  <p class="text-body-sm text-muted-foreground" aria-live="polite">
+<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" data-slot="pagination">
+  <p class="text-caption text-muted-foreground" aria-live="polite">
     {total === 0 ? `No ${noun}` : `Showing ${from}–${to} of ${total} ${noun}`}
   </p>
   {
