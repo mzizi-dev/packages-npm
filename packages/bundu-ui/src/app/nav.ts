@@ -23,6 +23,11 @@ export interface NavItem {
   badge?: string;
   /** Nested items, shown under a disclosure with a chevron. */
   children?: NavItem[];
+  /**
+   * When an item with children is a page itself, it is listed first under
+   * its disclosure with this label (default "Overview").
+   */
+  overviewLabel?: string;
 }
 
 export interface NavGroup {

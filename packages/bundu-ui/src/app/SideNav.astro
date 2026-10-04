@@ -100,6 +100,10 @@ const tip =
                   </li>
                 );
               }
+              // A parent that is a page itself is listed first among its
+              // children ("Overview"), so the disclosure never hides it.
+              const own = item.href !== "" && !kids.some((k) => k.href === item.href);
+              const branch: NavItem[] = own ? [{ href: item.href, label: item.overviewLabel ?? "Overview" }, ...kids] : kids;
               const open = containsHref(item, current);
               const railHref = item.href !== "" ? item.href : (kids[0]?.href ?? "#");
               return (
@@ -128,7 +132,7 @@ const tip =
                       <Icon name="chevron-right" class="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     </summary>
                     <ul role="list" class="mt-0.5 ml-[1.0625rem] grid gap-0.5 border-l border-border pl-2" data-slot="nav-children">
-                      {kids.map((child) => {
+                      {branch.map((child) => {
                         const childDesc = describe(child);
                         const childTip = nextId();
                         const childDescId = `${childTip}-d`;

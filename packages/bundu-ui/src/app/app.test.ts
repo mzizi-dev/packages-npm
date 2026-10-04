@@ -551,6 +551,10 @@ describe("SideNav, grouped (0.4)", () => {
       /href="\/dashboard\/developer\/keys" aria-current="page"/,
     );
     expect(open).toContain('data-icon="chevron-right"');
+    // The parent is a page too, so it is listed first, as "Overview".
+    expect(open).toMatch(
+      /data-slot="nav-children"[\s\S]*?href="\/dashboard\/developer"[^>]*>\s*<span[^>]*>Overview</,
+    );
     // The collapsed rail's single link to the group.
     expect(open).toMatch(
       /<a href="\/dashboard\/developer" data-slot="nav-rail-link"/,
