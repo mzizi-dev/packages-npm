@@ -4,7 +4,7 @@
 // have, each package on its own.
 //
 // For each public package under packages/*:
-//   - the tag is `<name>@<version>` (for example `@bundu/ui@0.4.1`), annotated,
+//   - the tag is `<name>@<version>` (for example `@bundu/ui@0.3.0`), annotated,
 //     on the commit the workflow built (GITHUB_SHA, else HEAD);
 //   - the GitHub release carries that version's CHANGELOG.md section, the one
 //     whose `## [...]` heading names `<name> <version>`.

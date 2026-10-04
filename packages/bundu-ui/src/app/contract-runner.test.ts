@@ -138,7 +138,12 @@ describe("brand overlay", () => {
       default:
         '<div class="bg-gold text-[#5D4037]" style="color: rgb(0 0 0)"></div>',
     };
-    expect(evaluateTheming(base, bad)).toHaveLength(3);
+    // A mineral class, a hex value, a colour function, and the inline style itself.
+    expect(evaluateTheming(base, bad)).toHaveLength(4);
+    const inline = { default: '<span style="--x: 1"></span>' };
+    expect(evaluateTheming(base, inline)).toEqual([
+      "[default] an inline style attribute on <span> (needs style-src-attr 'unsafe-inline')",
+    ]);
     const status = { default: '<div class="bg-malachite-container"></div>' };
     expect(
       evaluateTheming(

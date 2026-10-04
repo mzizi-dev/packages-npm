@@ -66,7 +66,7 @@ Releases are automatic. On every push to `main` the
 [`release` workflow](https://github.com/mzizi-dev/packages-npm/blob/main/.github/workflows/release.yml)
 runs the token check and the tests, publishes each package whose `package.json`
 version is not on npm yet, then tags it `<name>@<version>` (for example
-`@bundu/ui@0.4.1`) and creates a GitHub release from that version's
+`@bundu/ui@0.3.0`) and creates a GitHub release from that version's
 `CHANGELOG.md` section. Nobody pushes a tag by hand.
 
 To release a package, bump its `version` in its `package.json` and add a
@@ -79,6 +79,19 @@ and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) npm org, wi
 npm provenance. Two **organisation** secrets on `mzizi-dev` are used, so no
 repository-level secret is needed: `NPM_TOKEN` (publish access to both npm orgs)
 and `RELEASE_BUMP_TOKEN` (pushes the tags and creates the releases).
+
+## Versioning
+
+From 2026-10-04 each package follows the org versioning policy
+([nyuchi/.github#80](https://github.com/nyuchi/.github/issues/80)):
+
+- A release is the next **minor** above that package's highest version on npm
+  (x.y.z → x.y+1.0). The releasing PR sets `version` to it.
+- A **major** is only released by hand: run the Release workflow with
+  `bump: major`. Each segment holds 0–999.
+- The Release workflow refuses any other version before publishing it, names
+  the version it expects, and still publishes the other packages. Versions
+  already on npm are never renumbered.
 
 ## Licence
 
