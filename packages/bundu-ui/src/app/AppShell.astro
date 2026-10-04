@@ -50,13 +50,12 @@ interface Props {
   id?: string;
 }
 const { navLabel = "Navigation", sidebarLabel = "Sidebar", collapsed = false, persist, footerLinks = [], accent, id = "app" } = Astro.props;
-const accentStyle = accent ? `--app-accent: var(--color-${accent}-brand); --app-accent-foreground: var(--color-${accent}-on-brand);` : undefined;
 const drawerId = `${id}-sidebar`;
 const collapseId = `${id}-collapse`;
 const hasFooter = footerLinks.length > 0 || Astro.slots.has("footer");
 ---
 
-<div data-slot="app-shell" data-persist={persist} data-accent={accent} style={accentStyle}>
+<div data-slot="app-shell" data-persist={persist} data-accent={accent}>
   <aside id={drawerId} popover aria-label={sidebarLabel} data-slot="app-sidebar">
     <div class="flex items-center gap-1 px-2 pt-1.5" data-slot="sidebar-head">
       <div class="min-w-0 flex-1"><slot name="workspace" /></div>
@@ -126,6 +125,36 @@ const hasFooter = footerLinks.length > 0 || Astro.slots.has("footer");
     min-height: 100dvh;
     background: var(--background);
     color: var(--foreground);
+  }
+  /* The accent: a mineral's brand fill, set by data-accent rather than an
+     inline style, so a CSP needs no style-src-attr 'unsafe-inline'. */
+  [data-slot="app-shell"][data-accent="cobalt"] {
+    --app-accent: var(--color-cobalt-brand);
+    --app-accent-foreground: var(--color-cobalt-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="tanzanite"] {
+    --app-accent: var(--color-tanzanite-brand);
+    --app-accent-foreground: var(--color-tanzanite-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="malachite"] {
+    --app-accent: var(--color-malachite-brand);
+    --app-accent-foreground: var(--color-malachite-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="gold"] {
+    --app-accent: var(--color-gold-brand);
+    --app-accent-foreground: var(--color-gold-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="terracotta"] {
+    --app-accent: var(--color-terracotta-brand);
+    --app-accent-foreground: var(--color-terracotta-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="sodalite"] {
+    --app-accent: var(--color-sodalite-brand);
+    --app-accent-foreground: var(--color-sodalite-on-brand);
+  }
+  [data-slot="app-shell"][data-accent="copper"] {
+    --app-accent: var(--color-copper-brand);
+    --app-accent-foreground: var(--color-copper-on-brand);
   }
   /* A console reads in one face: headings in the body sans, not the
      marketing serif. (The wordmark keeps its serif; it is the logo.) */
