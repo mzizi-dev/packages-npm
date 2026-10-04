@@ -17,7 +17,13 @@ const DECIDED = {
   weather: "cobalt",
   nyuchi: "gold",
   mzizi: "hematite",
+  // Mukoko Events, formerly nhimbe (owner decision, 2026-10-04,
+  // mukoko-dev/nhimbe#155): malachite.
+  events: "malachite",
 };
+
+/** Retired overlay names, each re-exporting the overlay that replaced it. */
+const ALIASES = { nhimbe: "events" };
 
 function overlays(pkg) {
   const dir = resolve(ROOT, pkg, "styles");
@@ -54,8 +60,23 @@ for (const pkg of PACKAGES) {
       }
     });
 
+    test("keeps each retired overlay as a re-export of its replacement", () => {
+      const byBrand = Object.fromEntries(all);
+      for (const [alias, target] of Object.entries(ALIASES)) {
+        expect(byBrand[alias], alias).toBeDefined();
+        expect(declarations(byBrand[alias]), alias).toEqual([]);
+        const imports = [
+          ...byBrand[alias]
+            .replace(/\/\*[\s\S]*?\*\//g, "")
+            .matchAll(/@import\s+"([^"]+)";/g),
+        ].map(([, path]) => path);
+        expect(imports, alias).toEqual([`./brand-${target}.css`]);
+      }
+    });
+
     test("each overlay repoints --primary and --ring only, light and dark", () => {
       for (const [brand, css] of all) {
+        if (brand in ALIASES) continue;
         const decls = declarations(css);
         expect(
           decls.map(([p]) => p),
