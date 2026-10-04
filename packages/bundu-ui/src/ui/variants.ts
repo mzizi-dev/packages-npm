@@ -24,6 +24,13 @@ export const buttonVariants = cva(
         outline:
           "border border-foreground text-foreground hover:bg-foreground hover:text-background",
         ghost: "text-foreground hover:bg-muted",
+        // Danger is never a brand colour: only the destructive tokens,
+        // whatever brand overlay is active. The label must say what is
+        // destroyed; colour is never the only signal.
+        destructive:
+          "bg-destructive text-destructive-foreground hover:opacity-90",
+        "destructive-outline":
+          "border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground",
       },
       size: {
         sm: "h-12 px-4 text-body-sm",
@@ -99,6 +106,12 @@ export const appButtonVariants = cva(
         secondary: "bg-foreground text-background hover:opacity-90",
         outline: "border-border bg-card text-foreground hover:bg-muted",
         ghost: "text-foreground hover:bg-muted",
+        /** The one irreversible action on a page (e.g. "Delete my account"). */
+        destructive:
+          "bg-destructive text-destructive-foreground hover:opacity-90",
+        /** A secondary destructive action in a list or panel (revoke, remove). */
+        "destructive-outline":
+          "border-destructive bg-card text-destructive hover:bg-destructive hover:text-destructive-foreground",
       },
       size: {
         sm: "h-8 px-3 text-body-sm pointer-coarse:h-11 pointer-coarse:px-4",

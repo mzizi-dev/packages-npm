@@ -248,7 +248,7 @@ React primitives through `@bundu/ui/ui/variants`, so both builds look the same.
 | `Toast.astro`                                                               | The last action's result in a polite live region; stays until dismissed (WCAG 2.2.3)                              |
 | `StatTile.astro`                                                            | One headline figure in a `<dl>`: label, value ("Not available", never 0), the trend written in words              |
 | `BarChart.astro`                                                            | Columns or rows of bars as HTML, a captioned `<figure>`, and the exact figures in a real table under a disclosure |
-| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; the `buttonVariants` recipe; 48px or taller                                   |
+| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; `appButtonVariants`, incl. `destructive` and `destructive-outline`            |
 | `Badge.astro`                                                               | The Mzizi registry `badge` contract: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`            |
 | `Card.astro`, `Alert.astro`, `Input.astro`, `Label.astro`, `Skeleton.astro` | The primitives the patterns are built from, pure Astro                                                            |
 
