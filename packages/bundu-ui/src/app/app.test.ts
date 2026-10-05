@@ -1194,7 +1194,7 @@ describe("FormField controls", () => {
     expect(html).toMatch(/aria-describedby="field-kind-hint"/);
     expect(html).toMatch(/<option value="" selected>Choose a type<\/option>/);
     expect(html.match(/<option/g)).toHaveLength(3);
-    expect(html).not.toMatch(/<select[^>]*disabled/);
+    expect(html).not.toMatch(/<select[^>]*\sdisabled[\s>]/);
   });
 
   test("a read-only select is disabled with its value selected", async () => {
@@ -1209,7 +1209,7 @@ describe("FormField controls", () => {
         { value: "event", label: "Event" },
       ],
     });
-    expect(html).toMatch(/<select[^>]*disabled/);
+    expect(html).toMatch(/<select[^>]*\sdisabled[\s>]/);
     expect(html).toMatch(/<option value="event" selected>Event<\/option>/);
     expect(html).toMatch(/<option value="article">Article<\/option>/);
     expect(html).not.toContain('<option value=""');
