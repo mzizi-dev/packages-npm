@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed (repository): the registry pin follows the v4.4.0 release on registry `main`
+
+`scripts/registry-ref.json` moves from `95318a9` on registry `staging` to `5067b5e`, mzizi-dev/mzizi-registry#447. That is the v4.4.0 release of `staging` to `main`, and its tree is the same as `95318a9` plus the version bump (mzizi-dev/mzizi-registry#446). No package file changes: `pnpm registry:check` reports all 86 files identical, and `contracts/` match at the new pin (66 contracts). The packages are now built from a released registry commit rather than a `staging` one.
+
 ### Added (@bundu/ui): the Nyuchi console's form, chart and table deltas, and the registry primitives
 
 The registry pin moves to mzizi-dev/mzizi-registry#443 (`95318a9` on registry `staging`). That PR takes four deltas from the Nyuchi console (`nyuchi/nyuchi-platform` `console/web`) into the Dashboard Standard contracts.
