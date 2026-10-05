@@ -4,9 +4,9 @@ import { describe, expect, test } from "vite-plus/test";
 
 import {
   childEnv,
+  firstPublishMessage,
   neverPublished,
   npmPublishArgs,
-  publishAuth,
   policyCheck,
   publishAll,
   publishOrder,
@@ -154,26 +154,19 @@ describe("npmPublishArgs", () => {
 });
 
 describe("first publish of a never-published package", () => {
-  test("only a never-published package with a token uses the token", () => {
-    expect(
-      publishAuth({ neverPublished: true, hasFirstPublishToken: true }),
-    ).toBe("token");
-    expect(
-      publishAuth({ neverPublished: true, hasFirstPublishToken: false }),
-    ).toBe("oidc");
-    expect(
-      publishAuth({ neverPublished: false, hasFirstPublishToken: true }),
-    ).toBe("oidc");
-  });
-
-  test("childEnv strips the token, and hands it over only for token auth", () => {
-    const env = { NPM_FIRST_PUBLISH_TOKEN: "npm_x", PATH: "/bin" };
-    expect(childEnv("oidc", env)).toEqual({ PATH: "/bin" });
-    expect(childEnv("token", env)).toEqual({
+  test("childEnv strips every npm token variable and keeps the rest", () => {
+    const env = {
       PATH: "/bin",
-      NODE_AUTH_TOKEN: "npm_x",
+      NODE_AUTH_TOKEN: "XXXXX-XXXXX-XXXXX-XXXXX",
+      NPM_TOKEN: "npm_x",
+      npm_config__authToken: "npm_y",
+      "npm_config_//registry.npmjs.org/:_authToken": "npm_z",
+      NPM_CONFIG_PROVENANCE: "true",
+    };
+    expect(childEnv(env)).toEqual({
+      PATH: "/bin",
+      NPM_CONFIG_PROVENANCE: "true",
     });
-    expect(() => childEnv("token", { PATH: "/bin" })).toThrow(/token/);
   });
 
   test("neverPublished is true only on an E404", () => {
@@ -193,14 +186,35 @@ describe("first publish of a never-published package", () => {
     expect(neverPublished("@bundu/ui", offline)).toBe(false);
   });
 
-  test("a token publish is reported as published, with its note", () => {
-    const results = publishAll([server], {
+  test("a never-published package fails with the manual steps; its dependants are blocked", () => {
+    const published = [];
+    const results = publishAll(pkgs, {
       isOnNpm: () => false,
-      publish: () => "first publish, by NPM_TOKEN",
+      isNew: (name) => name === "@bundu/server",
+      publish: (p) => {
+        published.push(p.name);
+        return true;
+      },
     });
-    expect(results[0]).toMatchObject({
-      result: "published",
-      detail: "first publish, by NPM_TOKEN",
+    const by = Object.fromEntries(results.map((r) => [r.name, r]));
+    expect(by["@bundu/server"]).toMatchObject({
+      result: "failed",
+      detail: firstPublishMessage("@bundu/server"),
+      firstPublish: true,
     });
+    expect(by["@bundu/ui"]).toMatchObject({
+      result: "blocked",
+      detail: "needs @bundu/server on npm first",
+    });
+    expect(by["@nyuchi/ui"].result).toBe("published");
+    expect(published).toEqual(["@nyuchi/ui"]);
+  });
+
+  test("the first-publish message names the package and the manual steps", () => {
+    const msg = firstPublishMessage("@bundu/server");
+    expect(msg).toMatch(/^@bundu\/server has never been published/);
+    expect(msg).toContain("npm login --auth-type=web");
+    expect(msg).toContain("npm publish <tgz> --access public");
+    expect(msg).toContain("trusted publisher on npmjs.com");
   });
 });

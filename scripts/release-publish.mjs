@@ -22,19 +22,16 @@
 // NPM_CONFIG_PROVENANCE (and trusted publishing turns it on for a public
 // repository anyway).
 //
-// First publish of a new package: the one token fallback. npm attaches a
-// trusted publisher to a package that already exists, so a name npm has never
-// had (@bundu/server before 0.1.0) cannot be published by OIDC. For such a
-// package ONLY, and only when the workflow passes NPM_FIRST_PUBLISH_TOKEN
-// (from the NPM_TOKEN secret), `npm publish` gets that token as
-// NODE_AUTH_TOKEN. "Never published" means npm answered E404 for the name; any
-// other failure to look it up (network, rate limit) is not proof, and that
-// package goes the OIDC way. Every other package is published with the token
-// stripped from its environment, and `pnpm pack` (which runs lifecycle
-// scripts) never sees it. The summary marks a token publish so the owner sets
-// up that package's trusted publisher next; after that it publishes by OIDC
-// like the rest. Without the secret, a never-published package simply fails
-// (OIDC has nothing to match) and its dependants are held back, as before.
+// Trusted publishing only: no npm token, ever (owner decision, 2026-10-05).
+// npm attaches a trusted publisher only to a package that already exists, so
+// a name npm has never had cannot be published here. Before publishing, each
+// package is checked: if npm answers E404 for its name it is reported as
+// "failed" with the manual first-publish steps (see firstPublishMessage), and
+// anything that depends on it is held back as "blocked". Any other failure to
+// look the name up (network, rate limit) is not proof, and the publish is
+// attempted by OIDC as usual. Every child process runs with npm token
+// variables (a stray NODE_AUTH_TOKEN, NPM_TOKEN, ...) stripped from its
+// environment, so OIDC is npm's only credential.
 //
 // Writes a per-package table to $GITHUB_STEP_SUMMARY and `failed=<names>` to
 // $GITHUB_OUTPUT. Always exits 0 unless the script itself breaks.
@@ -101,13 +98,15 @@ export function publishOrder(pkgs) {
  * Decide and carry out each package's publish. `isOnNpm(name, version)` and
  * `publish(pkg)` (returns true on success) are injected so tests need no
  * network, as is `checkVersion(pkg)`: null when the versioning policy allows
- * the version, else the reason it does not. Returns
+ * the version, else the reason it does not, and `isNew(name)`: true when npm
+ * has never had the name (it then fails with firstPublishMessage, since OIDC
+ * cannot publish it, and its dependants are blocked). Returns
  * [{ name, version, result, detail }] where result is one of
  * "already on npm", "published", "failed", "blocked", "refused".
  */
 export function publishAll(
   pkgs,
-  { isOnNpm, publish, checkVersion = () => null },
+  { isOnNpm, publish, checkVersion = () => null, isNew = () => false },
 ) {
   const names = new Set(pkgs.map((p) => p.name));
   const ok = new Set(); // names whose current version is on npm
@@ -129,21 +128,24 @@ export function publishAll(
       });
       continue;
     }
+    if (isNew(name)) {
+      results.push({
+        name,
+        version,
+        result: "failed",
+        detail: firstPublishMessage(name),
+        firstPublish: true,
+      });
+      continue;
+    }
     const refusal = checkVersion(pkg);
     if (refusal) {
       results.push({ name, version, result: "refused", detail: refusal });
       continue;
     }
-    const published = publish(pkg);
-    if (published) {
+    if (publish(pkg)) {
       ok.add(name);
-      results.push({
-        name,
-        version,
-        result: "published",
-        // publish() may return a note (a first publish by token) instead of true.
-        detail: typeof published === "string" ? published : "",
-      });
+      results.push({ name, version, result: "published", detail: "" });
     } else {
       results.push({
         name,
@@ -167,31 +169,35 @@ export function npmPublishArgs(tarball, { dryRun = false } = {}) {
   return args;
 }
 
-/** The step-env variable that carries the first-publish token (see the header). */
-export const FIRST_PUBLISH_TOKEN_VAR = "NPM_FIRST_PUBLISH_TOKEN";
+/**
+ * Environment variables that could hand npm a token. Removed from every child
+ * process so a stray one can never stand in for (or mask a failure of) OIDC.
+ */
+const TOKEN_VARS = new Set(["NODE_AUTH_TOKEN", "NPM_TOKEN"]);
+const isTokenVar = (key) =>
+  TOKEN_VARS.has(key) || /^npm_config_.*_auth(token)?$/i.test(key);
 
 /**
- * How one package authenticates: "token" only when npm has never had the
- * name AND a first-publish token was provided, otherwise "oidc".
+ * The environment for a child process: `env` without any npm token variable.
+ * Exported for the tests.
  */
-export function publishAuth({ neverPublished, hasFirstPublishToken }) {
-  return neverPublished && hasFirstPublishToken ? "token" : "oidc";
+export function childEnv(env = process.env) {
+  return Object.fromEntries(
+    Object.entries(env).filter(([key]) => !isTokenVar(key)),
+  );
 }
 
 /**
- * The environment for a child process. The first-publish token is always
- * removed; with auth "token" it comes back as NODE_AUTH_TOKEN, which the
- * .npmrc that setup-node writes reads. Exported for the tests.
+ * Why a never-published package was not published, and what to do. Exported
+ * for the tests.
  */
-export function childEnv(auth, env = process.env) {
-  const out = { ...env };
-  const token = out[FIRST_PUBLISH_TOKEN_VAR];
-  delete out[FIRST_PUBLISH_TOKEN_VAR];
-  if (auth === "token") {
-    if (!token) throw new Error("token auth without a first-publish token");
-    out.NODE_AUTH_TOKEN = token;
-  }
-  return out;
+export function firstPublishMessage(name) {
+  return (
+    `${name} has never been published: npm can attach a trusted publisher only ` +
+    `to an existing package. Publish its first version manually ` +
+    `(npm login --auth-type=web; pnpm pack; npm publish <tgz> --access public), ` +
+    `add its trusted publisher on npmjs.com, then re-run.`
+  );
 }
 
 /**
@@ -208,21 +214,21 @@ export function neverPublished(name, view = npmViewName) {
 function npmViewName(name) {
   return spawnSync("npm", ["view", name, "name", "--json"], {
     encoding: "utf8",
-    env: childEnv("oidc"),
+    env: childEnv(),
   });
 }
 
 /**
  * `pnpm pack` the package into a fresh directory, then `npm publish` that
- * tarball with the given auth. True on success.
+ * tarball by OIDC. True on success.
  */
-function packAndPublish(pkg, auth) {
+function packAndPublish(pkg) {
   const dest = mkdtempSync(join(tmpdir(), "release-pack-"));
   try {
     const packed = spawnSync("pnpm", ["pack", "--pack-destination", dest], {
       cwd: pkg.dir,
       stdio: "inherit",
-      env: childEnv("oidc"),
+      env: childEnv(),
     });
     if (packed.status !== 0) return false;
     const tarballs = readdirSync(dest).filter((f) => f.endsWith(".tgz"));
@@ -235,7 +241,7 @@ function packAndPublish(pkg, auth) {
     const r = spawnSync(
       "npm",
       npmPublishArgs(join(dest, tarballs[0]), { dryRun }),
-      { cwd: pkg.dir, stdio: "inherit", env: childEnv(auth) },
+      { cwd: pkg.dir, stdio: "inherit", env: childEnv() },
     );
     return r.status === 0;
   } finally {
@@ -244,26 +250,13 @@ function packAndPublish(pkg, auth) {
 }
 
 function publishWithNpm(pkg) {
-  const hasFirstPublishToken = Boolean(process.env[FIRST_PUBLISH_TOKEN_VAR]);
-  const auth = publishAuth({
-    neverPublished: hasFirstPublishToken && neverPublished(pkg.name),
-    hasFirstPublishToken,
-  });
   console.log(
-    `\n::group::npm publish ${pkg.name}@${pkg.version} (${auth === "token" ? "first publish, NPM_TOKEN" : "trusted publishing, OIDC"})`,
+    `\n::group::npm publish ${pkg.name}@${pkg.version} (trusted publishing, OIDC)`,
   );
-  const ok = packAndPublish(pkg, auth);
+  const ok = packAndPublish(pkg);
   console.log("::endgroup::");
-  if (!ok) {
-    console.log(`::error::${pkg.name}@${pkg.version} was not published`);
-    return false;
-  }
-  if (auth === "token") {
-    const note = `first publish, by NPM_TOKEN: set up its trusted publisher on npmjs.com now`;
-    console.log(`::warning::${pkg.name}@${pkg.version}: ${note}`);
-    return note;
-  }
-  return true;
+  if (!ok) console.log(`::error::${pkg.name}@${pkg.version} was not published`);
+  return ok;
 }
 
 /** Every version of `name` on npm ([] when it has never been published). */
@@ -311,12 +304,15 @@ async function main() {
     isOnNpm: (name, version) => onNpm(name, version, 1),
     publish: publishWithNpm,
     checkVersion,
+    isNew: (name) => neverPublished(name),
   });
   const failed = results.filter(
     (r) =>
       r.result === "failed" || r.result === "blocked" || r.result === "refused",
   );
-  for (const r of results.filter((r) => r.result === "refused"))
+  for (const r of results.filter(
+    (r) => r.result === "refused" || r.firstPublish,
+  ))
     console.log(`::error::${r.name}@${r.version}: ${r.detail}`);
 
   const table = [
