@@ -36,6 +36,21 @@ folder in `mzizi-dev/mzizi-registry` (arriving with mzizi-registry#418), which t
 built from file for file, so a change to the design system goes there, never on the artifact
 page.
 
+## Components are built from the Mzizi registry
+
+Every `@bundu/ui` `.astro` component and the modules it uses, `@bundu/server`'s helpers, the
+brand marks and the contract runner are **built from**
+[`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry), the single source
+of every component in every format, at the commit pinned in `scripts/registry-ref.json`:
+
+```sh
+pnpm registry:sync   # write them from the registry at the pin (network)
+pnpm registry:check  # CI gate: fail on any drift, or on an .astro the registry does not have
+```
+
+Never edit those files here. Change the component in the registry (its contract, `.astro` and
+`.tsx` together), then bump the pin and run `pnpm registry:sync`.
+
 ## Tokens
 
 All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one

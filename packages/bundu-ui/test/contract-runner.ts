@@ -1,4 +1,7 @@
 /**
+ * The contract runner. Canonical here, in mzizi-registry; mzizi-dev/packages-npm
+ * syncs a copy (`pnpm registry:sync`) so its package tests run offline.
+ *
  * Evaluates a Mzizi component contract (contracts/schema/
  * component-contract.schema.json) against rendered HTML.
  *
@@ -52,7 +55,14 @@ export interface Contract {
   }[];
   slots: { name: string }[];
   implementations: {
-    astro: { package: string; export: string; since: string } | null;
+    astro: {
+      registry?: string;
+      package: string;
+      export: string;
+      since: string;
+    } | null;
+    tsx?: { registry: string; identity: string } | null;
+    rs?: { registry: string; identity: string } | null;
   };
 }
 export interface Check {
@@ -78,11 +88,15 @@ export type Rendered = Record<string, string>;
 
 const SKIP = new Set(["style", "script", "link", "meta"]);
 
-/** Parse rendered HTML; entities in text and attributes are decoded. */
+/**
+ * Parse rendered HTML; entities in text and attributes are decoded, and
+ * attribute names are lower-cased as a browser's HTML parser does, so a React
+ * build's `noValidate=""` and an Astro build's `novalidate` are one attribute.
+ */
 export function doc(html: string): Document {
   return parseDocument(html, {
     decodeEntities: true,
-    lowerCaseAttributeNames: false,
+    lowerCaseAttributeNames: true,
   });
 }
 
@@ -101,7 +115,7 @@ export function text(node: AnyNode): string {
 }
 
 function select(html: string, selector: string): Element[] {
-  return selectAll(selector, doc(html));
+  return selectAll<AnyNode, Element>(selector, doc(html));
 }
 
 /** The component's own root: the first element that is not a style or script. */

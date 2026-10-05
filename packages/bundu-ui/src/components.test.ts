@@ -1,5 +1,6 @@
-// Rendering tests for the root-level Astro components that have no registry
-// contract yet (SegmentedControl, NativeSelect, Toaster, SafeAreaFrame) and
+// Rendering tests for the root-level Astro components SegmentedControl,
+// NativeSelect, Toaster and SafeAreaFrame (their contracts, ui/ in the
+// registry, run in app/contracts.test.ts), and
 // the shared safe-area geometry, through Astro's container API.
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it } from "vite-plus/test";

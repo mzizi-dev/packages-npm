@@ -3,7 +3,7 @@
  * pure helpers behind them. Data-driven on purpose: an app registers a
  * section as one object, and the shell groups, nests and orders it.
  */
-import type { IconName } from "../Icon.astro";
+import type { IconName } from "../icons";
 
 export type { IconName };
 

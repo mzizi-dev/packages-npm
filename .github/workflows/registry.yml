@@ -1,0 +1,40 @@
+# Registry drift gate.
+#
+# @bundu/ui's components (.astro), the framework-free modules they use, the
+# brand assets they import, @bundu/server's helpers and the contract runner
+# are BUILT FROM mzizi-dev/mzizi-registry, the single source of every
+# component in every format, at the commit pinned in scripts/registry-ref.json
+# (`pnpm registry:sync`). This job fails if any of those files differs from
+# the registry at that commit, or if a package holds a component source the
+# registry does not: a hand edit here is a fork, and the fix is upstream.
+#
+# It reads raw.githubusercontent.com at a pinned commit, so the answer is the
+# same on every run. Moving the pin is a pull request.
+
+name: Registry
+
+on:
+  pull_request:
+  push:
+    branches: [main, staging]
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: packages match the registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - run: node scripts/sync-registry.mjs --check
+      - run: node scripts/fetch-contracts.mjs --check "$(node -p "require('./scripts/registry-ref.json').ref")"

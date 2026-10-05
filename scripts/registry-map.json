@@ -1,0 +1,399 @@
+{
+  "components": {
+    "alert": {
+      "package": "bundu-ui",
+      "path": "src/app/Alert.astro",
+      "registry": "n2-primitives/alert.astro"
+    },
+    "app-account-menu": {
+      "package": "bundu-ui",
+      "path": "src/app/AccountMenu.astro",
+      "registry": "n7-shell/app-account-menu.astro"
+    },
+    "app-bar-chart": {
+      "package": "bundu-ui",
+      "path": "src/app/BarChart.astro",
+      "registry": "n6-pages/app-bar-chart.astro"
+    },
+    "app-brand-mark": {
+      "package": "bundu-ui",
+      "path": "src/app/BrandMark.astro",
+      "registry": "n3-brand/app-brand-mark.astro"
+    },
+    "app-command-palette": {
+      "package": "bundu-ui",
+      "path": "src/app/CommandPalette.astro",
+      "registry": "n7-shell/app-command-palette.astro"
+    },
+    "app-data-table": {
+      "package": "bundu-ui",
+      "path": "src/app/DataTable.astro",
+      "registry": "n6-pages/app-data-table.astro"
+    },
+    "app-detail-panel": {
+      "package": "bundu-ui",
+      "path": "src/app/DetailPanel.astro",
+      "registry": "n6-pages/app-detail-panel.astro"
+    },
+    "app-empty-state": {
+      "package": "bundu-ui",
+      "path": "src/app/EmptyState.astro",
+      "registry": "n6-pages/app-empty-state.astro"
+    },
+    "app-filter-bar": {
+      "package": "bundu-ui",
+      "path": "src/app/FilterBar.astro",
+      "registry": "n6-pages/app-filter-bar.astro"
+    },
+    "app-form-field": {
+      "package": "bundu-ui",
+      "path": "src/app/FormField.astro",
+      "registry": "n6-pages/app-form-field.astro"
+    },
+    "app-form-layout": {
+      "package": "bundu-ui",
+      "path": "src/app/FormLayout.astro",
+      "registry": "n6-pages/app-form-layout.astro"
+    },
+    "app-info-tip": {
+      "package": "bundu-ui",
+      "path": "src/app/InfoTip.astro",
+      "registry": "n6-pages/app-info-tip.astro"
+    },
+    "app-nav": {
+      "package": "bundu-ui",
+      "path": "src/app/nav.ts",
+      "registry": "n7-shell/app-nav.ts"
+    },
+    "app-page-header": {
+      "package": "bundu-ui",
+      "path": "src/app/PageHeader.astro",
+      "registry": "n6-pages/app-page-header.astro"
+    },
+    "app-pagination": {
+      "package": "bundu-ui",
+      "path": "src/app/Pagination.astro",
+      "registry": "n6-pages/app-pagination.astro"
+    },
+    "app-quick-search": {
+      "package": "bundu-ui",
+      "path": "src/app/QuickSearch.astro",
+      "registry": "n7-shell/app-quick-search.astro"
+    },
+    "app-shell": {
+      "package": "bundu-ui",
+      "path": "src/app/AppShell.astro",
+      "registry": "n7-shell/app-shell.astro"
+    },
+    "app-side-nav": {
+      "package": "bundu-ui",
+      "path": "src/app/SideNav.astro",
+      "registry": "n7-shell/app-side-nav.astro"
+    },
+    "app-stat-tile": {
+      "package": "bundu-ui",
+      "path": "src/app/StatTile.astro",
+      "registry": "n6-pages/app-stat-tile.astro"
+    },
+    "app-stat-tiles": {
+      "package": "bundu-ui",
+      "path": "src/app/StatTiles.astro",
+      "registry": "n6-pages/app-stat-tiles.astro"
+    },
+    "app-state-message": {
+      "package": "bundu-ui",
+      "path": "src/app/StateMessage.astro",
+      "registry": "n6-pages/app-state-message.astro"
+    },
+    "app-toast": {
+      "package": "bundu-ui",
+      "path": "src/app/Toast.astro",
+      "registry": "n6-pages/app-toast.astro"
+    },
+    "app-toolbar": {
+      "package": "bundu-ui",
+      "path": "src/app/Toolbar.astro",
+      "registry": "n6-pages/app-toolbar.astro"
+    },
+    "app-toolbar-menu": {
+      "package": "bundu-ui",
+      "path": "src/app/ToolbarMenu.astro",
+      "registry": "n6-pages/app-toolbar-menu.astro"
+    },
+    "app-top-bar-action": {
+      "package": "bundu-ui",
+      "path": "src/app/TopBarAction.astro",
+      "registry": "n7-shell/app-top-bar-action.astro"
+    },
+    "app-workspace-switcher": {
+      "package": "bundu-ui",
+      "path": "src/app/WorkspaceSwitcher.astro",
+      "registry": "n7-shell/app-workspace-switcher.astro"
+    },
+    "badge": {
+      "package": "bundu-ui",
+      "path": "src/app/Badge.astro",
+      "registry": "n2-primitives/badge.astro"
+    },
+    "button": {
+      "package": "bundu-ui",
+      "path": "src/app/Button.astro",
+      "registry": "n2-primitives/button.astro"
+    },
+    "card": {
+      "package": "bundu-ui",
+      "path": "src/app/Card.astro",
+      "registry": "n2-primitives/card.astro"
+    },
+    "discover-breadcrumb": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverBreadcrumb.astro",
+      "registry": "n6-pages/discover-breadcrumb.astro"
+    },
+    "discover-card": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverCard.astro",
+      "registry": "n6-pages/discover-card.astro"
+    },
+    "discover-category-chip": {
+      "package": "bundu-ui",
+      "path": "src/discover/CategoryChip.astro",
+      "registry": "n6-pages/discover-category-chip.astro"
+    },
+    "discover-category-chips": {
+      "package": "bundu-ui",
+      "path": "src/discover/CategoryChips.astro",
+      "registry": "n6-pages/discover-category-chips.astro"
+    },
+    "discover-detail-actions": {
+      "package": "bundu-ui",
+      "path": "src/discover/DetailActions.astro",
+      "registry": "n6-pages/discover-detail-actions.astro"
+    },
+    "discover-detail-hero": {
+      "package": "bundu-ui",
+      "path": "src/discover/DetailHero.astro",
+      "registry": "n6-pages/discover-detail-hero.astro"
+    },
+    "discover-hero": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverHero.astro",
+      "registry": "n6-pages/discover-hero.astro"
+    },
+    "discover-load-more": {
+      "package": "bundu-ui",
+      "path": "src/discover/LoadMore.astro",
+      "registry": "n6-pages/discover-load-more.astro"
+    },
+    "discover-meta": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverMeta.astro",
+      "registry": "n6-pages/discover-meta.astro"
+    },
+    "discover-meta-list": {
+      "package": "bundu-ui",
+      "path": "src/discover/MetaList.astro",
+      "registry": "n6-pages/discover-meta-list.astro"
+    },
+    "discover-open-in-app": {
+      "package": "bundu-ui",
+      "path": "src/discover/OpenInApp.astro",
+      "registry": "n6-pages/discover-open-in-app.astro"
+    },
+    "discover-open-link": {
+      "package": "bundu-ui",
+      "path": "src/discover/open.ts",
+      "registry": "n6-pages/discover-open-link.ts"
+    },
+    "discover-related-rail": {
+      "package": "bundu-ui",
+      "path": "src/discover/RelatedRail.astro",
+      "registry": "n6-pages/discover-related-rail.astro"
+    },
+    "discover-result-grid": {
+      "package": "bundu-ui",
+      "path": "src/discover/ResultGrid.astro",
+      "registry": "n6-pages/discover-result-grid.astro"
+    },
+    "discover-search": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverSearch.astro",
+      "registry": "n6-pages/discover-search.astro"
+    },
+    "discover-section": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverSection.astro",
+      "registry": "n6-pages/discover-section.astro"
+    },
+    "discover-shell": {
+      "package": "bundu-ui",
+      "path": "src/discover/DiscoverShell.astro",
+      "registry": "n7-shell/discover-shell.astro"
+    },
+    "input": {
+      "package": "bundu-ui",
+      "path": "src/app/Input.astro",
+      "registry": "n2-primitives/input.astro"
+    },
+    "label": {
+      "package": "bundu-ui",
+      "path": "src/app/Label.astro",
+      "registry": "n2-primitives/label.astro"
+    },
+    "native-select": {
+      "package": "bundu-ui",
+      "path": "src/NativeSelect.astro",
+      "registry": "n2-primitives/native-select.astro"
+    },
+    "safe-area": {
+      "package": "bundu-ui",
+      "path": "src/safe-area.ts",
+      "registry": "n2-primitives/safe-area.ts"
+    },
+    "safe-area-frame": {
+      "package": "bundu-ui",
+      "path": "src/SafeAreaFrame.astro",
+      "registry": "n2-primitives/safe-area-frame.astro"
+    },
+    "segmented-control": {
+      "package": "bundu-ui",
+      "path": "src/SegmentedControl.astro",
+      "registry": "n2-primitives/segmented-control.astro"
+    },
+    "server-base64url": {
+      "package": "bundu-server",
+      "path": "src/base64url.ts",
+      "registry": "n4-safety/server-base64url.ts"
+    },
+    "server-cookies": {
+      "package": "bundu-server",
+      "path": "src/cookies.ts",
+      "registry": "n4-safety/server-cookies.ts"
+    },
+    "server-flash": {
+      "package": "bundu-server",
+      "path": "src/flash.ts",
+      "registry": "n4-safety/server-flash.ts"
+    },
+    "server-origin": {
+      "package": "bundu-server",
+      "path": "src/origin.ts",
+      "registry": "n4-safety/server-origin.ts"
+    },
+    "server-redirect": {
+      "package": "bundu-server",
+      "path": "src/redirect.ts",
+      "registry": "n4-safety/server-redirect.ts"
+    },
+    "server-seal": {
+      "package": "bundu-server",
+      "path": "src/seal.ts",
+      "registry": "n4-safety/server-seal.ts"
+    },
+    "server-security": {
+      "package": "bundu-server",
+      "path": "src/security.ts",
+      "registry": "n4-safety/server-security.ts"
+    },
+    "server-table": {
+      "package": "bundu-server",
+      "path": "src/table.ts",
+      "registry": "n4-safety/server-table.ts"
+    },
+    "server-theme": {
+      "package": "bundu-server",
+      "path": "src/theme.ts",
+      "registry": "n4-safety/server-theme.ts"
+    },
+    "site-breadcrumb": {
+      "package": "bundu-ui",
+      "path": "src/Breadcrumb.astro",
+      "registry": "n6-pages/site-breadcrumb.astro"
+    },
+    "site-breadcrumbs": {
+      "package": "bundu-ui",
+      "path": "src/breadcrumbs.ts",
+      "registry": "n6-pages/site-breadcrumbs.ts"
+    },
+    "site-container": {
+      "package": "bundu-ui",
+      "path": "src/Container.astro",
+      "registry": "n6-pages/site-container.astro"
+    },
+    "site-cta-button": {
+      "package": "bundu-ui",
+      "path": "src/CtaButton.astro",
+      "registry": "n2-primitives/site-cta-button.astro"
+    },
+    "site-hero": {
+      "package": "bundu-ui",
+      "path": "src/Hero.astro",
+      "registry": "n6-pages/site-hero.astro"
+    },
+    "site-icon": {
+      "package": "bundu-ui",
+      "path": "src/Icon.astro",
+      "registry": "n2-primitives/site-icon.astro"
+    },
+    "site-icons": {
+      "package": "bundu-ui",
+      "path": "src/icons.ts",
+      "registry": "n2-primitives/site-icons.ts"
+    },
+    "site-mineral-strip": {
+      "package": "bundu-ui",
+      "path": "src/MineralStrip.astro",
+      "registry": "n3-brand/site-mineral-strip.astro"
+    },
+    "site-section": {
+      "package": "bundu-ui",
+      "path": "src/Section.astro",
+      "registry": "n6-pages/site-section.astro"
+    },
+    "site-section-header": {
+      "package": "bundu-ui",
+      "path": "src/SectionHeader.astro",
+      "registry": "n6-pages/site-section-header.astro"
+    },
+    "site-social-icon": {
+      "package": "bundu-ui",
+      "path": "src/SocialIcon.astro",
+      "registry": "n3-brand/site-social-icon.astro"
+    },
+    "skeleton": {
+      "package": "bundu-ui",
+      "path": "src/app/Skeleton.astro",
+      "registry": "n2-primitives/skeleton.astro"
+    },
+    "toaster": {
+      "package": "bundu-ui",
+      "path": "src/Toaster.astro",
+      "registry": "n2-primitives/toaster.astro"
+    },
+    "ui-utils": {
+      "package": "bundu-ui",
+      "path": "src/lib/utils.ts",
+      "registry": "n2-primitives/ui-utils.ts"
+    },
+    "ui-variants": {
+      "package": "bundu-ui",
+      "path": "src/ui/variants.ts",
+      "registry": "n2-primitives/ui-variants.ts"
+    }
+  },
+  "assets": {
+    "assets/nyuchi-mark-light.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/nyuchi-mark-light.png"
+    },
+    "assets/nyuchi-mark-dark.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/nyuchi-mark-dark.png"
+    }
+  },
+  "aliases": {
+    "bundu-ui": {
+      "server-table": "src/lib/table.ts"
+    }
+  }
+}
