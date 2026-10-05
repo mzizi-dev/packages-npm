@@ -26,3 +26,8 @@ export {
   type NavGroup,
   type NavItem,
 } from "./app/nav";
+export {
+  safeAreaBands,
+  type SafeAreaBands,
+  type SafeInsets,
+} from "./safe-area";

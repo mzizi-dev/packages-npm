@@ -19,8 +19,8 @@ pnpm --filter @nyuchi/ui build        # svelte-package -> dist/
 pnpm --filter @nyuchi/ui check        # svelte-check (0 errors, 0 warnings)
 ```
 
-`prepack` re-runs `svelte-package`, so `pnpm publish` always ships a fresh
-`dist/`. `files` publishes `dist`, `styles`, and `tailwind-preset.mjs`.
+`prepack` re-runs `svelte-package`, so the tarball the release workflow packs
+(`pnpm pack`, then `npm publish`) always ships a fresh `dist/`. `files` publishes `dist`, `styles`, and `tailwind-preset.mjs`.
 
 ## Design rules
 

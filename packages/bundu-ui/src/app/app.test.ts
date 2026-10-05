@@ -1129,3 +1129,286 @@ describe("BarChart", () => {
     expect(html).toMatch(/<ul class="grid gap-3" aria-hidden="true">/);
   });
 });
+
+// The Nyuchi console's deltas (app/form-field 1.1.0, app/form-layout 1.1.0,
+// app/bar-chart 1.1.0, app/data-table 1.1.0).
+
+describe("FormField controls", () => {
+  test("a textarea is wired like an input, at app density", async () => {
+    const html = await render(FormField, {
+      name: "bio",
+      label: "About",
+      as: "textarea",
+      value: "Teacher <b>and</b> parent.",
+      rows: 4,
+      hint: "A sentence or two.",
+      error: "Too long.",
+      required: true,
+      maxlength: 200,
+    });
+    expect(html).toMatch(/<textarea[^>]*data-slot="textarea"/);
+    expect(html).toMatch(/<textarea[^>]*id="field-bio"/);
+    expect(html).toMatch(/<textarea[^>]*name="bio"/);
+    expect(html).toMatch(/<textarea[^>]*rows="4"/);
+    expect(html).toMatch(/<textarea[^>]*required/);
+    expect(html).toMatch(/<textarea[^>]*maxlength="200"/);
+    expect(html).toMatch(/aria-describedby="field-bio-hint field-bio-error"/);
+    expect(html).toContain('aria-invalid="true"');
+    // Not a 36px strip: a floor, and the height from rows.
+    expect(html).toContain("min-h-20");
+    expect(html).not.toMatch(/<textarea[^>]*\bh-9\b/);
+    // The value is text, escaped.
+    expect(html).toContain("Teacher &lt;b&gt;and&lt;/b&gt; parent.");
+    expect(html).not.toContain("<input");
+    expectNoClientJs(html);
+  });
+
+  test("a read-only textarea sits on a muted fill", async () => {
+    const html = await render(FormField, {
+      name: "bio",
+      label: "About",
+      as: "textarea",
+      readonly: true,
+    });
+    expect(html).toMatch(/<textarea[^>]*readonly/);
+    expect(html).toMatch(/<textarea[^>]*class="[^"]*bg-muted/);
+  });
+
+  test("a select with an empty first option, selected with no value", async () => {
+    const html = await render(FormField, {
+      name: "kind",
+      label: "Type",
+      as: "select",
+      emptyOption: "Choose a type",
+      options: [
+        { value: "article", label: "Article" },
+        { value: "event", label: "Event" },
+      ],
+      required: true,
+      hint: "What you are adding.",
+    });
+    expect(html).toMatch(/<select[^>]*data-slot="select"/);
+    expect(html).toMatch(/<select[^>]*id="field-kind"/);
+    expect(html).toMatch(/<select[^>]*required/);
+    expect(html).toMatch(/<select[^>]*h-9/);
+    expect(html).toMatch(/aria-describedby="field-kind-hint"/);
+    expect(html).toMatch(/<option value="" selected>Choose a type<\/option>/);
+    expect(html.match(/<option/g)).toHaveLength(3);
+    expect(html).not.toMatch(/<select[^>]*\sdisabled[\s>]/);
+  });
+
+  test("a read-only select is disabled with its value selected", async () => {
+    const html = await render(FormField, {
+      name: "kind",
+      label: "Type",
+      as: "select",
+      value: "event",
+      readonly: true,
+      options: [
+        { value: "article", label: "Article" },
+        { value: "event", label: "Event" },
+      ],
+    });
+    expect(html).toMatch(/<select[^>]*\sdisabled[\s>]/);
+    expect(html).toMatch(/<option value="event" selected>Event<\/option>/);
+    expect(html).toMatch(/<option value="article">Article<\/option>/);
+    expect(html).not.toContain('<option value=""');
+  });
+
+  test("a file input takes types and several files, and never a value", async () => {
+    const html = await render(FormField, {
+      name: "photos",
+      label: "Photos",
+      type: "file",
+      value: "ignored.jpg",
+      accept: "image/*",
+      multiple: true,
+      wide: true,
+    });
+    expect(html).toMatch(/<input[^>]*type="file"/);
+    expect(html).toMatch(/<input[^>]*accept="image\/\*"/);
+    expect(html).toMatch(/<input[^>]*multiple/);
+    expect(html).not.toContain("ignored.jpg");
+    expect(html).not.toMatch(/<input[^>]*\svalue=/);
+    expect(html).toContain("file:rounded-full");
+    // `wide` spans both of FormLayout's columns.
+    expect(html).toMatch(/data-slot="form-field"/);
+    expect(html).toContain("@xl:col-span-2");
+  });
+
+  test("a number input carries its bounds and keyboard", async () => {
+    const html = await render(FormField, {
+      name: "seats",
+      label: "Seats",
+      type: "number",
+      value: "12",
+      min: 1,
+      max: 500,
+      step: 1,
+      inputmode: "numeric",
+    });
+    expect(html).toMatch(/<input[^>]*type="number"/);
+    expect(html).toMatch(/<input[^>]*min="1"/);
+    expect(html).toMatch(/<input[^>]*max="500"/);
+    expect(html).toMatch(/<input[^>]*step="1"/);
+    expect(html).toMatch(/<input[^>]*inputmode="numeric"/);
+    expect(html).toMatch(/<input[^>]*value="12"/);
+    expect(html).not.toContain("@xl:col-span-2");
+  });
+
+  test("a date input", async () => {
+    const html = await render(FormField, {
+      name: "starts",
+      label: "Starts",
+      type: "date",
+      value: "2026-10-05",
+      min: "2026-01-01",
+    });
+    expect(html).toMatch(/<input[^>]*type="date"/);
+    expect(html).toMatch(/<input[^>]*min="2026-01-01"/);
+    expect(html).toMatch(/<input[^>]*value="2026-10-05"/);
+  });
+});
+
+describe("FormLayout enctype", () => {
+  test("a form with a file field posts multipart", async () => {
+    const html = await render(
+      FormLayout,
+      { title: "Photos", enctype: "multipart/form-data" },
+      { slots: { default: "<p>fields</p>" } },
+    );
+    expect(html).toMatch(/<form[^>]*enctype="multipart\/form-data"/);
+  });
+
+  test("no enctype unless asked for", async () => {
+    const html = await render(FormLayout, { title: "Profile" });
+    expect(html).not.toContain("enctype");
+  });
+});
+
+describe("BarChart axis labels", () => {
+  const points = (n: number) =>
+    Array.from({ length: n }, (_, i) => ({ label: `D${i + 1}`, value: i + 1 }));
+  /** The axis labels, with whether each shows on a phone and from sm up. */
+  async function axis(n: number) {
+    const html = await render(BarChart, {
+      title: "Sign-ups",
+      caption: `Last ${n} days`,
+      data: points(n),
+    });
+    const row = /data-axis[^>]*>([\s\S]*?)<div class="h-6"/.exec(html)?.[1];
+    expect(row, "the axis row").toBeDefined();
+    return [...(row ?? "").matchAll(/<span class="([^"]*)">([^<]*)<\/span>/g)]
+      .map((m) => ({ classes: (m[1] ?? "").split(/\s+/), label: m[2] ?? "" }))
+      .map(({ classes, label }) => ({
+        label,
+        phone: !classes.includes("hidden"),
+        wide: !classes.includes("sm:hidden"),
+      }));
+  }
+  const shown = (
+    labels: Awaited<ReturnType<typeof axis>>,
+    on: "phone" | "wide",
+  ) => labels.filter((l) => l[on]).map((l) => l.label);
+
+  test("twelve points: six labels from sm up, first / middle / last on a phone", async () => {
+    const labels = await axis(12);
+    expect(shown(labels, "wide")).toEqual([
+      "D1",
+      "D3",
+      "D5",
+      "D7",
+      "D9",
+      "D12",
+    ]);
+    expect(shown(labels, "phone")).toEqual(["D1", "D7", "D12"]);
+  });
+
+  test("never a label crowding the last", async () => {
+    for (const n of [7, 12, 13, 30]) {
+      const labels = await axis(n);
+      const wide = shown(labels, "wide");
+      expect(wide.length, `${n} points`).toBeLessThanOrEqual(6);
+      expect(wide[0]).toBe("D1");
+      expect(wide.at(-1)).toBe(`D${n}`);
+      expect(wide.at(-2)).not.toBe(`D${n - 1}`);
+      expect(shown(labels, "phone").length, `${n} points`).toBe(3);
+    }
+  });
+
+  test("the middle label shows on a phone only from five points", async () => {
+    expect(shown(await axis(4), "phone")).toEqual(["D1", "D4"]);
+    expect(shown(await axis(5), "phone")).toEqual(["D1", "D3", "D5"]);
+  });
+
+  test("a few points all show from sm up", async () => {
+    expect(shown(await axis(3), "wide")).toEqual(["D1", "D2", "D3"]);
+  });
+});
+
+describe("DataTable status pills", () => {
+  const columns = [
+    { key: "name", label: "Source" },
+    { key: "state", label: "State" },
+  ];
+
+  test("a cell's tone is a status pill in a fixed status colour", async () => {
+    const html = await render(DataTable, {
+      caption: "Sources",
+      columns,
+      rows: [
+        { name: "Herald", state: { text: "Active", tone: "success" } },
+        { name: "Chronicle", state: { text: "Paused", tone: "warning" } },
+        { name: "Gazette", state: { text: "Draft", tone: "neutral" } },
+        { name: "Mirror", state: { text: "New", tone: "info" } },
+        { name: "Post", state: { text: "Featured", tone: "accent" } },
+        { name: "Times", state: { text: "Partner", tone: "premium" } },
+      ],
+    });
+    expect(html.match(/data-slot="status"/g)).toHaveLength(6);
+    expect(html).toMatch(
+      /data-slot="status" data-tone="success" class="[^"]*bg-malachite-container text-malachite-on-container[^"]*">\s*Active/,
+    );
+    expect(html).toMatch(/data-tone="warning" class="[^"]*bg-gold-container/);
+    expect(html).toMatch(
+      /data-tone="neutral" class="[^"]*bg-muted text-muted-foreground/,
+    );
+    expect(html).toMatch(/data-tone="info" class="[^"]*bg-cobalt-container/);
+    expect(html).toMatch(
+      /data-tone="accent" class="[^"]*bg-terracotta-container/,
+    );
+    expect(html).toMatch(
+      /data-tone="premium" class="[^"]*bg-tanzanite-container/,
+    );
+    expectNoClientJs(html);
+  });
+
+  test("tone wins over badge, and the text stays escaped", async () => {
+    const html = await render(DataTable, {
+      caption: "Sources",
+      columns,
+      rows: [
+        {
+          name: "Gazette",
+          state: { text: "<b>Draft</b>", tone: "neutral", badge: "outline" },
+        },
+      ],
+    });
+    expect(html).toContain('data-slot="status"');
+    expect(html).not.toContain('data-slot="badge"');
+    expect(html).not.toContain("<b>");
+    expect(html).toContain("&lt;b&gt;Draft&lt;/b&gt;");
+  });
+
+  test("badge keeps the registry badge variants", async () => {
+    const html = await render(DataTable, {
+      caption: "Sources",
+      columns,
+      rows: [{ name: "Herald", state: { text: "Guest", badge: "outline" } }],
+    });
+    expect(html).toMatch(
+      /data-slot="badge"[^>]*data-variant="outline"|data-variant="outline"[^>]*data-slot="badge"/,
+    );
+    expect(html).not.toContain('data-slot="status"');
+  });
+});

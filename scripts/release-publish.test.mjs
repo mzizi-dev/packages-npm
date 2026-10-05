@@ -2,7 +2,15 @@
 // the orders and outcomes it must produce without touching npm.
 import { describe, expect, test } from "vite-plus/test";
 
-import { policyCheck, publishAll, publishOrder } from "./release-publish.mjs";
+import {
+  childEnv,
+  firstPublishMessage,
+  neverPublished,
+  npmPublishArgs,
+  policyCheck,
+  publishAll,
+  publishOrder,
+} from "./release-publish.mjs";
 
 const ui = {
   name: "@bundu/ui",
@@ -125,5 +133,88 @@ describe("versioning policy", () => {
         RELEASE_MANUAL: "true",
       })(pkg),
     ).toBeNull();
+  });
+});
+
+describe("npmPublishArgs", () => {
+  // The npm CLI publishes the tarball pnpm packed: trusted publishing (OIDC)
+  // is an npm feature. No token flag and no --tag: npm applies `latest`.
+  test("publishes the packed tarball, public", () => {
+    expect(npmPublishArgs("/tmp/x/bundu-ui-0.4.0.tgz")).toEqual([
+      "publish",
+      "/tmp/x/bundu-ui-0.4.0.tgz",
+      "--access",
+      "public",
+    ]);
+  });
+
+  test("passes --dry-run through", () => {
+    expect(npmPublishArgs("a.tgz", { dryRun: true })).toContain("--dry-run");
+  });
+});
+
+describe("first publish of a never-published package", () => {
+  test("childEnv strips every npm token variable and keeps the rest", () => {
+    const env = {
+      PATH: "/bin",
+      NODE_AUTH_TOKEN: "XXXXX-XXXXX-XXXXX-XXXXX",
+      NPM_TOKEN: "npm_x",
+      npm_config__authToken: "npm_y",
+      "npm_config_//registry.npmjs.org/:_authToken": "npm_z",
+      NPM_CONFIG_PROVENANCE: "true",
+    };
+    expect(childEnv(env)).toEqual({
+      PATH: "/bin",
+      NPM_CONFIG_PROVENANCE: "true",
+    });
+  });
+
+  test("neverPublished is true only on an E404", () => {
+    const e404 = () => ({
+      status: 1,
+      stdout: '{"error":{"code":"E404"}}',
+      stderr: "npm error code E404",
+    });
+    const found = () => ({ status: 0, stdout: '"@bundu/ui"', stderr: "" });
+    const offline = () => ({
+      status: 1,
+      stdout: "",
+      stderr: "npm error code ETIMEDOUT",
+    });
+    expect(neverPublished("@bundu/server", e404)).toBe(true);
+    expect(neverPublished("@bundu/ui", found)).toBe(false);
+    expect(neverPublished("@bundu/ui", offline)).toBe(false);
+  });
+
+  test("a never-published package fails with the manual steps; its dependants are blocked", () => {
+    const published = [];
+    const results = publishAll(pkgs, {
+      isOnNpm: () => false,
+      isNew: (name) => name === "@bundu/server",
+      publish: (p) => {
+        published.push(p.name);
+        return true;
+      },
+    });
+    const by = Object.fromEntries(results.map((r) => [r.name, r]));
+    expect(by["@bundu/server"]).toMatchObject({
+      result: "failed",
+      detail: firstPublishMessage("@bundu/server"),
+      firstPublish: true,
+    });
+    expect(by["@bundu/ui"]).toMatchObject({
+      result: "blocked",
+      detail: "needs @bundu/server on npm first",
+    });
+    expect(by["@nyuchi/ui"].result).toBe("published");
+    expect(published).toEqual(["@nyuchi/ui"]);
+  });
+
+  test("the first-publish message names the package and the manual steps", () => {
+    const msg = firstPublishMessage("@bundu/server");
+    expect(msg).toMatch(/^@bundu\/server has never been published/);
+    expect(msg).toContain("npm login --auth-type=web");
+    expect(msg).toContain("npm publish <tgz> --access public");
+    expect(msg).toContain("trusted publisher on npmjs.com");
   });
 });

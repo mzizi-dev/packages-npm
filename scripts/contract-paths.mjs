@@ -12,10 +12,11 @@ import { isAbsolute, relative, resolve, sep } from "node:path";
 
 /**
  * The contract families, one directory each: `app/` (the Dashboard
- * Standard) and `discover/` (the Discover Standard). A new family is added
- * here and nowhere else in this script.
+ * Standard), `discover/` (the Discover Standard), `site/` (the
+ * marketing-site components) and `ui/` (Astro ports of registry primitives).
+ * A new family is added here and nowhere else in this script.
  */
-export const FAMILIES = ["app", "discover"];
+export const FAMILIES = ["app", "discover", "site", "ui"];
 /** `<family>/<kebab>.contract.json`: the only shape a contract file has. */
 export const CONTRACT_FILE = new RegExp(
   `^(?:${FAMILIES.join("|")})\\/[a-z0-9]+(?:-[a-z0-9]+)*\\.contract\\.json$`,

@@ -36,6 +36,21 @@ folder in `mzizi-dev/mzizi-registry` (arriving with mzizi-registry#418), which t
 built from file for file, so a change to the design system goes there, never on the artifact
 page.
 
+## Components are built from the Mzizi registry
+
+Every `@bundu/ui` `.astro` component and the modules it uses, `@bundu/server`'s helpers, the
+brand marks and the contract runner are **built from**
+[`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry), the single source
+of every component in every format, at the commit pinned in `scripts/registry-ref.json`:
+
+```sh
+pnpm registry:sync   # write them from the registry at the pin (network)
+pnpm registry:check  # CI gate: fail on any drift, or on an .astro the registry does not have
+```
+
+Never edit those files here. Change the component in the registry (its contract, `.astro` and
+`.tsx` together), then bump the pin and run `pnpm registry:sync`.
+
 ## Tokens
 
 All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one
@@ -83,9 +98,54 @@ nothing, and a re-run skips every version npm already has.
 
 `@nyuchi/*` publish under the [`@nyuchi`](https://www.npmjs.com/org/nyuchi) npm org
 and `@bundu/*` under the [`@bundu`](https://www.npmjs.com/org/bundu) npm org, with
-npm provenance. Two **organisation** secrets on `mzizi-dev` are used, so no
-repository-level secret is needed: `NPM_TOKEN` (publish access to both npm orgs)
-and `RELEASE_BUMP_TOKEN` (pushes the tags and creates the releases).
+npm provenance, by
+[npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC): the
+workflow holds no npm token. Each package is packed with `pnpm pack` (which
+rewrites `workspace:` ranges) and published with `npm publish` (npm >= 11.5.1,
+pinned in the workflow), which exchanges the job's GitHub OIDC token for a
+short-lived token for that one package. The only secret used is the
+**organisation** secret `RELEASE_BUMP_TOKEN` on `mzizi-dev` (pushes the tags and
+creates the releases).
+
+### Trusted publisher setup (once per package, on npmjs.com)
+
+An owner of the npm org does this for every package the workflow publishes
+(`@bundu/server`, `@bundu/ui`, `@nyuchi/ui`, and any package added under
+`packages/` later):
+
+1. On npmjs.com, open the package → **Settings** → **Trusted publishing** →
+   **GitHub Actions**, and enter: organization `mzizi-dev`, repository
+   `packages-npm`, workflow filename `release.yml` (no environment). Under
+   **Allowed actions**, allow **`npm publish`** (direct publishing): the
+   workflow publishes directly, and a configuration made after 2026-09-03
+   allows only `npm stage publish` unless this is ticked.
+2. Then **Settings** → **Publishing access** → **Require two-factor
+   authentication and disallow tokens** → **Update Package Settings**.
+
+Publishing is **trusted publishing only: no npm token, ever** (owner decision,
+2026-10-05). There is no `NPM_TOKEN` secret and no token fallback; do not add one.
+
+### First publish of a new package (manual, by an owner)
+
+npm attaches a trusted publisher only to a package that already exists, so a
+package that has never been published (check with `npm view <name> version`) cannot
+be published by the workflow. The release run checks for that first: it reports the
+package as "failed" with the steps below, holds back anything that depends on it
+(`@bundu/ui` on `@bundu/server`) as "blocked", and publishes the others. An owner
+then does the first publish by hand, signed in with their own npm account and no
+token:
+
+1. From a clean checkout of the release commit: `npm login --auth-type=web`
+   (2FA in the browser).
+2. In the package directory: `pnpm pack` (rewrites `workspace:` ranges), then
+   `npm publish <tarball>.tgz --access public`.
+3. Set up its trusted publisher on npmjs.com as above (both steps), then re-run
+   the Release workflow (by hand if nothing new has merged). From then on it
+   publishes by OIDC, and its dependants follow.
+
+Each package's `repository.url` must stay
+`git+https://github.com/mzizi-dev/packages-npm.git`: npm checks it against the
+repository the OIDC token comes from.
 
 ## Versioning
 
