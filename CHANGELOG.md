@@ -40,17 +40,19 @@ The registry pin moves to mzizi-dev/mzizi-registry#443 (`95318a9` on registry `s
 - **`ui/variants`:** `appTextareaClasses`, `appFileInputClasses`, `STATUS_TONES` / `StatusTone` and `statusToneClasses`.
 - **The registry primitives** with `ui/` contracts are now shipped as `@bundu/ui/{Alert,Button,Card,Input,Label,Skeleton,StatusBadge}.astro`. The `app/` builds of Alert, Button, Card, Input, Label and Skeleton now come from the registry's `app-*` files (mzizi-dev/mzizi-registry#428). `NativeSelect`, `SegmentedControl` and `Toaster` follow mzizi-dev/mzizi-registry#441 and #442.
 
-### Changed (repository): a never-published package gets one token-based first publish
+### Changed (repository): trusted publishing only, and a never-published package fails clearly
 
-npm attaches a trusted publisher only to a package that already exists, so
-`@bundu/server` (never published) could not publish by OIDC and held back
-`@bundu/ui`. The Release workflow now passes the `NPM_TOKEN` secret to the publish
-step as `NPM_FIRST_PUBLISH_TOKEN`, and `scripts/release-publish.mjs` uses it only for
-a package npm answers `E404` for, as `NODE_AUTH_TOKEN` for that one `npm publish`.
-Every other package still publishes by OIDC with the token stripped from its
-environment, and `pnpm pack` never sees it. A token publish is a warning in the log
-and "first publish, by NPM_TOKEN" in the run summary. With the secret unset, nothing
-changes. The README's "Publishing" section has the owner steps. No package changes.
+Owner decision, 2026-10-05: npm publishing is trusted publishing (OIDC) only, with no
+npm token ever; the `NPM_TOKEN` org secret is deleted. The short-lived token fallback for
+first publishes is gone from the Release workflow and `scripts/release-publish.mjs`.
+npm attaches a trusted publisher only to an existing package, so the script now checks
+each unpublished package first: when npm answers `E404` for its name, it is reported as
+"failed" with the manual first-publish steps (`npm login --auth-type=web`, `pnpm pack`,
+`npm publish <tgz> --access public`, then add its trusted publisher and re-run), and its
+dependants stay blocked. Every child process runs with `NODE_AUTH_TOKEN`, `NPM_TOKEN`
+and `npm_config_*_authToken` variables stripped. `setup-node` no longer gets a
+`registry-url`, so no `.npmrc` placeholder token can mask a failed OIDC exchange. The
+README's "Publishing" section has the owner steps. No package changes.
 
 ### Changed (repository): `@bundu/ui` and `@bundu/server` are built from the Mzizi registry
 
