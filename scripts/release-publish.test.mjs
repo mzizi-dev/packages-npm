@@ -3,7 +3,10 @@
 import { describe, expect, test } from "vite-plus/test";
 
 import {
+  childEnv,
+  neverPublished,
   npmPublishArgs,
+  publishAuth,
   policyCheck,
   publishAll,
   publishOrder,
@@ -147,5 +150,57 @@ describe("npmPublishArgs", () => {
 
   test("passes --dry-run through", () => {
     expect(npmPublishArgs("a.tgz", { dryRun: true })).toContain("--dry-run");
+  });
+});
+
+describe("first publish of a never-published package", () => {
+  test("only a never-published package with a token uses the token", () => {
+    expect(
+      publishAuth({ neverPublished: true, hasFirstPublishToken: true }),
+    ).toBe("token");
+    expect(
+      publishAuth({ neverPublished: true, hasFirstPublishToken: false }),
+    ).toBe("oidc");
+    expect(
+      publishAuth({ neverPublished: false, hasFirstPublishToken: true }),
+    ).toBe("oidc");
+  });
+
+  test("childEnv strips the token, and hands it over only for token auth", () => {
+    const env = { NPM_FIRST_PUBLISH_TOKEN: "npm_x", PATH: "/bin" };
+    expect(childEnv("oidc", env)).toEqual({ PATH: "/bin" });
+    expect(childEnv("token", env)).toEqual({
+      PATH: "/bin",
+      NODE_AUTH_TOKEN: "npm_x",
+    });
+    expect(() => childEnv("token", { PATH: "/bin" })).toThrow(/token/);
+  });
+
+  test("neverPublished is true only on an E404", () => {
+    const e404 = () => ({
+      status: 1,
+      stdout: '{"error":{"code":"E404"}}',
+      stderr: "npm error code E404",
+    });
+    const found = () => ({ status: 0, stdout: '"@bundu/ui"', stderr: "" });
+    const offline = () => ({
+      status: 1,
+      stdout: "",
+      stderr: "npm error code ETIMEDOUT",
+    });
+    expect(neverPublished("@bundu/server", e404)).toBe(true);
+    expect(neverPublished("@bundu/ui", found)).toBe(false);
+    expect(neverPublished("@bundu/ui", offline)).toBe(false);
+  });
+
+  test("a token publish is reported as published, with its note", () => {
+    const results = publishAll([server], {
+      isOnNpm: () => false,
+      publish: () => "first publish, by NPM_TOKEN",
+    });
+    expect(results[0]).toMatchObject({
+      result: "published",
+      detail: "first publish, by NPM_TOKEN",
+    });
   });
 });
