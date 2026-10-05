@@ -40,6 +40,7 @@
     "./styles/brand-weather.css": "./styles/brand-weather.css",
     "./styles/brand-kweli.css": "./styles/brand-kweli.css",
     "./styles/brand-learning.css": "./styles/brand-learning.css",
+    "./styles/brand-circles.css": "./styles/brand-circles.css",
     "./tokens.json": "./tokens.json",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
