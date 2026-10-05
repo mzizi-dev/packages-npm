@@ -21,6 +21,21 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added (@bundu/ui): the Nyuchi console's form, chart and table deltas, and the registry primitives
+
+The registry pin moves to mzizi-dev/mzizi-registry#443. That PR takes four deltas from the Nyuchi console (`nyuchi/nyuchi-platform` `console/web`) into the Dashboard Standard contracts.
+
+- **`app/FormField.astro`** (contract `app/form-field` 1.1.0):
+  - `as: "textarea"` with `rows` (default 5), or `as: "select"` with `options` (`{ value, label }[]`) and `emptyOption`. Both have the same wiring and app density as the input; a read-only select is disabled.
+  - `type` adds `number`, `date` and `file`. `accept` and `multiple` apply to a file input, which never carries a value; `min`, `max` and `step` to number and date inputs.
+  - `inputmode` adds `numeric` and `decimal`.
+  - `wide` spans both FormLayout columns.
+- **`app/FormLayout.astro`** (1.1.0): `enctype: "multipart/form-data"` for a form with a file field.
+- **`app/BarChart.astro`** (1.1.0): column-layout axis labels never crowd. At most 6 show from `sm` up; below `sm`, only the first, the middle (from 5 points) and the last.
+- **`app/DataTable.astro`** (1.1.0): a cell's `tone` (`neutral`, `success`, `warning`, `info`, `accent` or `premium`) is a status pill, `data-slot="status"` in the mineral status colours. `badge` keeps the registry badge variants.
+- **`ui/variants`:** `appTextareaClasses`, `appFileInputClasses`, `STATUS_TONES` / `StatusTone` and `statusToneClasses`.
+- **The registry primitives** with `ui/` contracts are now shipped as `@bundu/ui/{Alert,Button,Card,Input,Label,Skeleton,StatusBadge}.astro`. The `app/` builds of Alert, Button, Card, Input, Label and Skeleton now come from the registry's `app-*` files (mzizi-dev/mzizi-registry#428). `NativeSelect`, `SegmentedControl` and `Toaster` follow mzizi-dev/mzizi-registry#441 and #442.
+
 ### Changed (repository): a never-published package gets one token-based first publish
 
 npm attaches a trusted publisher only to a package that already exists, so
