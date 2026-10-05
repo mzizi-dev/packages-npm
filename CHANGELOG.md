@@ -21,6 +21,17 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.4.0] - 2026-10-06
+
+The release of `staging` to `main` after `@bundu/ui` 0.3.0, which npm has had since
+2026-10-05 (published from `main` at `4ce82a7`). Under the org versioning policy this
+release is the next minor, so `@bundu/ui` is 0.4.0: it carries every `@bundu/ui` entry
+below, down to the 0.3.0 heading, which were merged into `staging` after 0.3.0 left
+`main`. `@nyuchi/ui` (0.3.0) and `@bundu/server` (0.1.0) have no package changes and
+are not republished. Three repository entries below (the README's design-system link,
+the versioning policy and the last "Changed (repository)" list) were already on `main`
+when 0.3.0 was published.
+
 ### Changed (repository): the registry pin follows the v4.4.0 release on registry `main`
 
 `scripts/registry-ref.json` moves from `95318a9` on registry `staging` to `5067b5e`, mzizi-dev/mzizi-registry#447. That is the v4.4.0 release of `staging` to `main`, and its tree is the same as `95318a9` plus the version bump (mzizi-dev/mzizi-registry#446). No package file changes: `pnpm registry:check` reports all 86 files identical, and `contracts/` match at the new pin (66 contracts). The packages are now built from a released registry commit rather than a `staging` one.
