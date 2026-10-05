@@ -21,12 +21,111 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.4.0] - 2026-10-06
+
+The release of `staging` to `main` after `@bundu/ui` 0.3.0, which npm has had since
+2026-10-05 (published from `main` at `4ce82a7`). Under the org versioning policy this
+release is the next minor, so `@bundu/ui` is 0.4.0: it carries every `@bundu/ui` entry
+below, down to the 0.3.0 heading, which were merged into `staging` after 0.3.0 left
+`main`. `@nyuchi/ui` (0.3.0) and `@bundu/server` (0.1.0) have no package changes and
+are not republished. Three repository entries below (the README's design-system link,
+the versioning policy and the last "Changed (repository)" list) were already on `main`
+when 0.3.0 was published.
+
+### Changed (repository): the registry pin follows the v4.4.0 release on registry `main`
+
+`scripts/registry-ref.json` moves from `95318a9` on registry `staging` to `5067b5e`, mzizi-dev/mzizi-registry#447. That is the v4.4.0 release of `staging` to `main`, and its tree is the same as `95318a9` plus the version bump (mzizi-dev/mzizi-registry#446). No package file changes: `pnpm registry:check` reports all 86 files identical, and `contracts/` match at the new pin (66 contracts). The packages are now built from a released registry commit rather than a `staging` one.
+
+### Added (@bundu/ui): the Nyuchi console's form, chart and table deltas, and the registry primitives
+
+The registry pin moves to mzizi-dev/mzizi-registry#443 (`95318a9` on registry `staging`). That PR takes four deltas from the Nyuchi console (`nyuchi/nyuchi-platform` `console/web`) into the Dashboard Standard contracts.
+
+- **`app/FormField.astro`** (contract `app/form-field` 1.1.0):
+  - `as: "textarea"` with `rows` (default 5), or `as: "select"` with `options` (`{ value, label }[]`) and `emptyOption`. Both have the same wiring and app density as the input; a read-only select is disabled.
+  - `type` adds `number`, `date` and `file`. `accept` and `multiple` apply to a file input, which never carries a value; `min`, `max` and `step` to number and date inputs.
+  - `inputmode` adds `numeric` and `decimal`.
+  - `wide` spans both FormLayout columns.
+- **`app/FormLayout.astro`** (1.1.0): `enctype: "multipart/form-data"` for a form with a file field.
+- **`app/BarChart.astro`** (1.1.0): column-layout axis labels never crowd. At most 6 show from `sm` up; below `sm`, only the first, the middle (from 5 points) and the last.
+- **`app/DataTable.astro`** (1.1.0): a cell's `tone` (`neutral`, `success`, `warning`, `info`, `accent` or `premium`) is a status pill, `data-slot="status"` in the mineral status colours. `badge` keeps the registry badge variants.
+- **`ui/variants`:** `appTextareaClasses`, `appFileInputClasses`, `STATUS_TONES` / `StatusTone` and `statusToneClasses`.
+- **The registry primitives** with `ui/` contracts are now shipped as `@bundu/ui/{Alert,Button,Card,Input,Label,Skeleton,StatusBadge}.astro`. The `app/` builds of Alert, Button, Card, Input, Label and Skeleton now come from the registry's `app-*` files (mzizi-dev/mzizi-registry#428). `NativeSelect`, `SegmentedControl` and `Toaster` follow mzizi-dev/mzizi-registry#441 and #442.
+
+### Changed (repository): trusted publishing only, and a never-published package fails clearly
+
+Owner decision, 2026-10-05: npm publishing is trusted publishing (OIDC) only, with no
+npm token ever; the `NPM_TOKEN` org secret is deleted. The short-lived token fallback for
+first publishes is gone from the Release workflow and `scripts/release-publish.mjs`.
+npm attaches a trusted publisher only to an existing package, so the script now checks
+each unpublished package first: when npm answers `E404` for its name, it is reported as
+"failed" with the manual first-publish steps (`npm login --auth-type=web`, `pnpm pack`,
+`npm publish <tgz> --access public`, then add its trusted publisher and re-run), and its
+dependants stay blocked. Every child process runs with `NODE_AUTH_TOKEN`, `NPM_TOKEN`
+and `npm_config_*_authToken` variables stripped. `setup-node` no longer gets a
+`registry-url`, so no `.npmrc` placeholder token can mask a failed OIDC exchange. The
+README's "Publishing" section has the owner steps. No package changes.
+
+### Changed (repository): `@bundu/ui` and `@bundu/server` are built from the Mzizi registry
+
+Owner decision, 2026-10-04: `mzizi-dev/mzizi-registry` is the single source of every component in every format. The 54 Astro components and their modules moved there (mzizi-dev/mzizi-registry#430), beside each component's `.tsx` and `.rs`, and this repo now builds them from it.
+
+- **`pnpm registry:sync`** (`scripts/sync-registry.mjs`) writes, from the registry at the commit pinned in `scripts/registry-ref.json`:
+  - every `@bundu/ui` `.astro` component and the modules they use (`lib/utils`, `ui/variants`, `app/nav`, `icons`, `breadcrumbs`, `safe-area`, `discover/open`);
+  - every `@bundu/server` helper (the registry's `n4-safety/server-*.ts`, the TypeScript mirror of `mzizi-roots-server`);
+  - the brand-mark PNGs;
+  - the contract runner.
+
+  `scripts/registry-map.json` names the package file each registry item becomes. `scripts/registry-imports.mjs` rewrites the registry's flat imports into the published layout, and its test checks every mapped file survives the round trip.
+
+- **`pnpm registry:check`**, run by the new `Registry` workflow on every PR and push, fails if any of those files differs from the registry, or if a package holds an `.astro` that the registry does not. The same workflow checks `contracts/` at the same pin. Never edit these files here: fix the registry, then bump the pin.
+- **Package APIs are unchanged.** Every export keeps its path and its props.
+- **`@nyuchi/ui` is not built from the registry.** It is Svelte, and the registry has no Svelte format.
+
+### Added
+
+- **`@bundu/ui`: the Discover detail pattern** (mzizi-dev/mzizi-registry#429): `@bundu/ui/discover/DetailHero.astro`, `DiscoverBreadcrumb.astro`, `MetaList.astro`, `DetailActions.astro` and `RelatedRail.astro`, each with its registry contract.
+- **`@bundu/ui/discover/open`** (`openInMukokoUrl`) builds the canonical Open in Mukoko link, `https://mukoko.com/open/<service>/<id>`. `OpenInApp` (contract 1.1.0) gains `service` and `id`, and `href` stays as an override.
+- **`@bundu/ui`: contracts for every component.** The `site/` family covers Hero, Section, SectionHeader, Container, Breadcrumb, Icon, SocialIcon and MineralStrip. The `ui/` family covers NativeSelect, SegmentedControl, Toaster and SafeAreaFrame. `src/app/contracts.test.ts` runs all 59.
+- **`@bundu/ui`: `Hero` no longer renders `@bundu/ui/ui/button` (React) under Astro.** It uses an internal pure-Astro `CtaButton` that renders the same markup from the same `buttonVariants`.
+- **`SafeAreaFrame` draws SVG geometry** instead of inline `style` attributes, so pages can keep `style-src 'self'`.
+- **`Breadcrumb` and `SocialIcon` gain a root `data-slot`.**
+
+- **`@bundu/ui`: `SegmentedControl`, `NativeSelect`, `Toaster` and
+  `SafeAreaFrame`** (`@bundu/ui/<Name>.astro`), first used by nyuchi-tools
+  (`nyuchi/workspace-tools`). `SegmentedControl` is native radios, so it needs
+  no script; `NativeSelect` is a real `<select>` in the pill input style;
+  `Toaster` is `window.toast(message, kind?)` in a polite live region, for
+  client-side feedback (server-rendered flash messages stay with
+  `@bundu/ui/app/Toast.astro`); `SafeAreaFrame` draws a canvas shape with its
+  platform-covered bands, and its geometry, `safeAreaBands`, is exported from the
+  root and `@bundu/ui/safe-area` with the same numbers as the registry's
+  `safe-area-frame` in React and Rust (mzizi-dev/mzizi-registry#398). `Icon`
+  gains `image`, `layers`, `mail`, `grid`, `download`, `upload`, `copy`, `sun`,
+  `moon`, `sparkle`, `shield` and `history`. `src/components.test.ts` renders
+  each through Astro's container API. None of the four has a registry contract
+  yet, so they are not under `@bundu/ui/app/*`.
+
 ### Added (repository): the README links the published Mzizi design system
 
 The README links the Design System artifact
 (<https://claude.ai/artifact/G8CCtAbZ8w717uQ3R5itCc>), the Mzizi design system published on
 claude.ai, and names its source of truth: the `design-system/` folder in
 `mzizi-dev/mzizi-registry`, arriving with mzizi-registry#418. No package changes.
+
+### Changed (repository): releases publish with npm trusted publishing (OIDC), not `NPM_TOKEN`
+
+npm refused the `NPM_TOKEN` secret (401), so nothing published. The Release workflow
+now publishes by [npm trusted publishing](https://docs.npmjs.com/trusted-publishers):
+the job's GitHub OIDC token (`id-token: write`) is exchanged for a short-lived token for
+each package, and no npm token is read. The workflow installs npm 11.21.0 (pinned;
+trusted publishing needs npm >= 11.5.1) and prints `npm --version`;
+`scripts/release-publish.mjs` packs each package with `pnpm pack` (which still rewrites
+`workspace:` ranges and runs `prepack`) and publishes the tarball with
+`npm publish <tarball> --access public`, with provenance. The already-published skip,
+the versioning policy check, the tags and releases (`RELEASE_BUMP_TOKEN`) and the
+"Not published" failure are unchanged. Each package needs a one-time trusted publisher
+setup on npmjs.com before it can publish this way; the README's "Publishing" section has
+the steps. No package changes.
 
 ### Changed (repository): releases follow the org versioning policy
 

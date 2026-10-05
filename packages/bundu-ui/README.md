@@ -20,6 +20,12 @@ developed by Nyuchi. This package is not Mzizi itself.
 - **Astro marketing components** — `Hero`, `Section`, `SectionHeader`, `Container`,
   `MineralStrip`, `Icon`, `SocialIcon`, and `Breadcrumb` (emits valid schema.org
   `BreadcrumbList` JSON-LD for Google rich results).
+- **Astro form and media components** — `SegmentedControl` (native radios),
+  `NativeSelect`, `Toaster` (`window.toast()` in a polite live region) and
+  `SafeAreaFrame` (geometry: `safeAreaBands` from the package root), imported as
+  `@bundu/ui/<Name>.astro`, beside the registry primitives `Alert`, `Button`,
+  `Card`, `Input`, `Label`, `Skeleton` and `StatusBadge`. Each keeps its registry
+  contract (`contracts/ui/`); the app patterns are under `@bundu/ui/app/*` (below).
 - **shadcn CVA + `cn()` React primitives** — `Button`, `Card`, `Badge`, `Input`,
   `Textarea`, `Select`, `Label`, `Alert`, `Avatar`, `Separator`, `Skeleton`, `Switch`,
   `Checkbox`, `Tabs`, `Tooltip`.
@@ -237,25 +243,25 @@ with a label for a hidden checkbox. Every colour is a token, so light and dark
 follow `tokens.css` / `color-scheme.css`. The class recipes are shared with the
 React primitives through `@bundu/ui/ui/variants`, so both builds look the same.
 
-| Component                                                                   | What it does                                                                                                      |
-| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `AppShell.astro`                                                            | Sticky top bar (`brand`, `account` slots), sidebar navigation from `lg` and a disclosure below, `main#main`       |
-| `SideNav.astro`                                                             | Section list with label and summary; `aria-current="page"` on the current item; 48px targets                      |
-| `AccountMenu.astro`                                                         | Who is signed in, a slot for account actions (an appearance form, links), and a sign-out POST form                |
-| `PageHeader.astro`                                                          | The page's one `<h1>`, description, breadcrumbs, `actions` slot                                                   |
-| `DataTable.astro`                                                           | A real `<table>` with caption and scoped headers; one card per row on narrow screens; cells are data, not markup  |
-| `FilterBar.astro`                                                           | Search and select filters as a `role="search"` GET form; "Clear" when anything is set                             |
-| `Pagination.astro`                                                          | "Showing 26–50 of 112" and previous, numbered and next links; hidden when one page is enough                      |
-| `DetailPanel.astro`                                                         | One record as a description list, an optional "Full record" JSON disclosure, an `actions` slot                    |
-| `FormLayout.astro`                                                          | A titled form card; fields in two columns when the card is wide (container query); form-level alert               |
-| `FormField.astro`                                                           | Visible label, input, hint and error wired with `aria-describedby` and `aria-invalid`                             |
-| `StateMessage.astro`                                                        | Empty, error, not-configured, unavailable and loading (skeleton) states with fixed wording                        |
-| `Toast.astro`                                                               | The last action's result in a polite live region; stays until dismissed (WCAG 2.2.3)                              |
-| `StatTile.astro`                                                            | One headline figure in a `<dl>`: label, value ("Not available", never 0), the trend written in words              |
-| `BarChart.astro`                                                            | Columns or rows of bars as HTML, a captioned `<figure>`, and the exact figures in a real table under a disclosure |
-| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; `appButtonVariants`, incl. `destructive` and `destructive-outline`            |
-| `Badge.astro`                                                               | The Mzizi registry `badge` contract: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`            |
-| `Card.astro`, `Alert.astro`, `Input.astro`, `Label.astro`, `Skeleton.astro` | The primitives the patterns are built from, pure Astro                                                            |
+| Component                                                                   | What it does                                                                                                                                                                |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AppShell.astro`                                                            | Sticky top bar (`brand`, `account` slots), sidebar navigation from `lg` and a disclosure below, `main#main`                                                                 |
+| `SideNav.astro`                                                             | Section list with label and summary; `aria-current="page"` on the current item; 48px targets                                                                                |
+| `AccountMenu.astro`                                                         | Who is signed in, a slot for account actions (an appearance form, links), and a sign-out POST form                                                                          |
+| `PageHeader.astro`                                                          | The page's one `<h1>`, description, breadcrumbs, `actions` slot                                                                                                             |
+| `DataTable.astro`                                                           | A real `<table>` with caption and scoped headers; one card per row on narrow screens; cells are data, not markup                                                            |
+| `FilterBar.astro`                                                           | Search and select filters as a `role="search"` GET form; "Clear" when anything is set                                                                                       |
+| `Pagination.astro`                                                          | "Showing 26–50 of 112" and previous, numbered and next links; hidden when one page is enough                                                                                |
+| `DetailPanel.astro`                                                         | One record as a description list, an optional "Full record" JSON disclosure, an `actions` slot                                                                              |
+| `FormLayout.astro`                                                          | A titled form card; fields in two columns when the card is wide (container query); form-level alert; `enctype` for files                                                    |
+| `FormField.astro`                                                           | Visible label and an input (text, number, date, file…), textarea or select, with hint and error wired with `aria-describedby` and `aria-invalid`; `wide` spans both columns |
+| `StateMessage.astro`                                                        | Empty, error, not-configured, unavailable and loading (skeleton) states with fixed wording                                                                                  |
+| `Toast.astro`                                                               | The last action's result in a polite live region; stays until dismissed (WCAG 2.2.3)                                                                                        |
+| `StatTile.astro`                                                            | One headline figure in a `<dl>`: label, value ("Not available", never 0), the trend written in words                                                                        |
+| `BarChart.astro`                                                            | Columns or rows of bars as SVG, a captioned `<figure>`, axis labels that never crowd, and the exact figures in a real table under a disclosure                              |
+| `Button.astro`                                                              | `<a>` with `href`, else `<button>`; `appButtonVariants`, incl. `destructive` and `destructive-outline`                                                                      |
+| `Badge.astro`                                                               | The Mzizi registry `badge` contract: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`                                                                      |
+| `Card.astro`, `Alert.astro`, `Input.astro`, `Label.astro`, `Skeleton.astro` | The primitives the patterns are built from, pure Astro                                                                                                                      |
 
 `@bundu/ui/lib/table` holds the pure helpers behind `DataTable`, `FilterBar` and
 `Pagination`: `parseTableQuery` (URL → query, clamped), `filterRows` (every word,
@@ -295,12 +301,15 @@ const page = paginate(rows, query.page, query.perPage);
 
 They need only Astro and the Tailwind v4 setup above, including the `@source`
 line so the classes inside the package are generated. `BarChart` sizes its bars
-with inline `style` attributes, so a Content-Security-Policy needs
-`style-src 'unsafe-inline'` (or the hashes) on pages that use it.
+as SVG geometry, never inline `style`, so a Content-Security-Policy needs no
+`style-src-attr 'unsafe-inline'`.
 
 `DataTable` badges (`{ text, badge }`) take the registry badge variants. Before
 0.3.0 the console's copy used the mineral variants of the React `Badge`;
-`primary` there is `default` here.
+`primary` there is `default` here. For a record's state, a cell's `tone`
+(`{ text, tone }`: `neutral`, `success`, `warning`, `info`, `accent`, `premium`)
+is a status pill in a fixed status colour (`statusToneClasses` in
+`@bundu/ui/ui/variants`); `tone` wins over `badge`.
 
 ### The product-dashboard shell
 
