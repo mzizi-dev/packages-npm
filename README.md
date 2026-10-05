@@ -122,16 +122,32 @@ An owner of the npm org does this for every package the workflow publishes
 2. Then **Settings** → **Publishing access** → **Require two-factor
    authentication and disallow tokens** → **Update Package Settings**.
 3. Once every package is set up and a release has published through OIDC, the
-   `NPM_TOKEN` organisation secret is no longer read by anything here and can be
-   deleted (and the npm token behind it revoked).
+   `NPM_TOKEN` secret is only the first-publish fallback below; delete it (and
+   revoke the npm token behind it) and add it back only for a new package's
+   first publish.
 
-npm only accepts a trusted publisher for a package that already exists. A
-package that has never been published (check with `npm view <name> version`)
-needs its first version published some other way, for example by an owner with 2FA from a
-clean checkout of the release commit (`pnpm pack` in the package directory, then
-`npm publish <tarball> --access public`); after that, set it up as above and the
-workflow publishes the rest. Until then the workflow reports that package as
-"failed" and anything that depends on it as "blocked", and publishes the others.
+npm only accepts a trusted publisher for a package that already exists, so a package
+that has never been published (check with `npm view <name> version`; today that is
+`@bundu/server`) needs one token-based first publish. The workflow does that by
+itself, for that package only:
+
+1. An owner puts a fresh npm **granular access token** in the `NPM_TOKEN` secret
+   (organisation secret on `mzizi-dev`, or a repository secret here): packages and
+   scopes **Read and write** on the scope of the new package (`@bundu`), **Bypass
+   two-factor authentication** ticked, the shortest expiry npm offers (7 days).
+2. The next release run publishes the new package with it. Only a package npm
+   answers `E404` for gets the token (as `NODE_AUTH_TOKEN`, for its `npm publish`
+   alone); every other package publishes by OIDC with the token stripped from its
+   environment. The run summary marks it "first publish, by NPM_TOKEN" and the log
+   has a warning. Re-run the Release workflow by hand if nothing new has merged.
+3. Set up that package's trusted publisher as above, then delete the `NPM_TOKEN`
+   secret and revoke the token on npmjs.com. From then on it publishes by OIDC.
+
+Alternatively an owner can do the first publish by hand with 2FA, from a clean
+checkout of the release commit (`pnpm pack` in the package directory, then
+`npm publish <tarball> --access public`). Without either, the workflow reports that
+package as "failed" and anything that depends on it (`@bundu/ui` on `@bundu/server`)
+as "blocked", and publishes the others.
 
 Each package's `repository.url` must stay
 `git+https://github.com/mzizi-dev/packages-npm.git`: npm checks it against the

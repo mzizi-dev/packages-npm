@@ -35,16 +35,28 @@
 # The README's "Publishing" section has the one-time npmjs.com setup each
 # package needs, and what to do for a package that has never been published.
 #
+# First publish only: the NPM_TOKEN fallback. npm attaches a trusted publisher
+# to an existing package, so a name npm has never had (@bundu/server before
+# 0.1.0) cannot be published by OIDC. The publish step therefore gets the
+# NPM_TOKEN secret as NPM_FIRST_PUBLISH_TOKEN, and release-publish.mjs uses it
+# for a package npm answers E404 for, and for nothing else: every other publish
+# and every `pnpm pack` runs with it stripped from the environment. A token
+# publish shows as a warning and in the run summary. When the secret is unset
+# or empty there is no fallback, and a never-published package fails as
+# before. Once every package exists and has its trusted publisher, delete the
+# NPM_TOKEN secret: this line then passes an empty string and changes nothing.
+#
 # RELEASE_BUMP_TOKEN (mzizi-dev org secret) pushes the tags and creates the
 # releases, so they are made by a real token and can trigger other workflows
 # (the default GITHUB_TOKEN's cannot). The job needs no `contents: write` of
 # its own.
 #
 # Supply chain. This job can mint an npm publish token (id-token: write) and
-# holds RELEASE_BUMP_TOKEN, so every action is pinned to a full commit SHA
+# holds RELEASE_BUMP_TOKEN (and, while it exists, NPM_TOKEN for first
+# publishes), so every action is pinned to a full commit SHA
 # (version in the trailing comment), npm itself is pinned to an exact version,
-# the checkout keeps no credential, RELEASE_BUMP_TOKEN is passed only to the
-# one step that uses it, and the job's own GITHUB_TOKEN is read-only.
+# the checkout keeps no credential, RELEASE_BUMP_TOKEN and NPM_TOKEN are each
+# passed only to the one step that uses them, and the job's own GITHUB_TOKEN is read-only.
 #
 # Versioning policy (nyuchi/.github#80). A version is published only if it is
 # the next MINOR above the highest stable version of that package on npm
@@ -150,7 +162,8 @@ jobs:
       # still publish (a dependant of a refused package is held back). This
       # step does not fail; the last step does, after the tags.
       # `pnpm pack` then `npm publish <tarball>`, authenticated by OIDC
-      # (trusted publishing): no npm token in this step's environment.
+      # (trusted publishing). NPM_FIRST_PUBLISH_TOKEN is used only for a
+      # package npm has never had (see the header); never for an existing one.
       - name: Publish unpublished versions to npm
         id: publish
         run: node scripts/release-publish.mjs
@@ -159,6 +172,7 @@ jobs:
           RELEASE_BUMP: ${{ inputs.bump || '' }}
           RELEASE_MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
           NPM_CONFIG_PROVENANCE: "true"
+          NPM_FIRST_PUBLISH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Tag and release
         run: |

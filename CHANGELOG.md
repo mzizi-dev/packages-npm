@@ -21,6 +21,18 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed (repository): a never-published package gets one token-based first publish
+
+npm attaches a trusted publisher only to a package that already exists, so
+`@bundu/server` (never published) could not publish by OIDC and held back
+`@bundu/ui`. The Release workflow now passes the `NPM_TOKEN` secret to the publish
+step as `NPM_FIRST_PUBLISH_TOKEN`, and `scripts/release-publish.mjs` uses it only for
+a package npm answers `E404` for, as `NODE_AUTH_TOKEN` for that one `npm publish`.
+Every other package still publishes by OIDC with the token stripped from its
+environment, and `pnpm pack` never sees it. A token publish is a warning in the log
+and "first publish, by NPM_TOKEN" in the run summary. With the secret unset, nothing
+changes. The README's "Publishing" section has the owner steps. No package changes.
+
 ### Changed (repository): `@bundu/ui` and `@bundu/server` are built from the Mzizi registry
 
 Owner decision, 2026-10-04: `mzizi-dev/mzizi-registry` is the single source of every component in every format. The 54 Astro components and their modules moved there (mzizi-dev/mzizi-registry#430), beside each component's `.tsx` and `.rs`, and this repo now builds them from it.
