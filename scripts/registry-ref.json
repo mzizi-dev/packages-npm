@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/mzizi-dev/mzizi-registry",
+  "ref": "409a04781044c888518c691c1a9be691eb69b10f",
+  "note": "The mzizi-registry commit @bundu/ui and @bundu/server are built from (pnpm registry:sync) and checked against (pnpm registry:check). Move it in a pull request."
+}

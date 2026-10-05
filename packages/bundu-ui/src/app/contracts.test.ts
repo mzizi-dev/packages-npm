@@ -27,11 +27,13 @@ import {
 
 const contractsDir = new URL("../../contracts/", import.meta.url);
 const srcDir = new URL("../", import.meta.url);
-/** Contract families and the source directory each one's components live in. */
-const FAMILIES = ["app", "discover"] as const;
+/** The contract families. */
+const FAMILIES = ["app", "discover", "site", "ui"] as const;
 const familyOf = (c: { name: string }) => c.name.split("/")[0] ?? "";
-const sourceOf = (c: { name: string; title: string }) =>
-  new URL(`${familyOf(c)}/${c.title}.astro`, srcDir);
+/** The package file a contract's Astro export points at: "src/<…>.astro". */
+const fileOf = (c: Contract) =>
+  `src/${(c.implementations.astro?.export ?? "").replace(/^@bundu\/ui\//, "")}`;
+const sourceOf = (c: Contract) => new URL(`../${fileOf(c)}`, srcDir);
 const pkg = JSON.parse(
   readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
 ) as { exports: Record<string, string> };
@@ -46,9 +48,9 @@ const contracts: Contract[] = index.contracts.map(
     ) as Contract,
 );
 
-// Keyed by path from the package root: "/src/<family>/<Title>.astro".
+// Keyed by path from the package root: "/src/<…>.astro".
 const components = import.meta.glob<{ default: unknown }>(
-  ["/src/app/*.astro", "/src/discover/*.astro"],
+  ["/src/*.astro", "/src/app/*.astro", "/src/discover/*.astro"],
   { eager: true },
 );
 
@@ -60,7 +62,7 @@ beforeAll(async () => {
 type Component = Parameters<AstroContainer["renderToString"]>[0];
 
 async function renderStates(c: Contract): Promise<Rendered> {
-  const file = `/src/${familyOf(c)}/${c.title}.astro`;
+  const file = `/${fileOf(c)}`;
   const mod = components[file];
   if (!mod) throw new Error(`${c.name}: no ${file}`);
   const out: Rendered = {};
@@ -76,19 +78,16 @@ async function renderStates(c: Contract): Promise<Rendered> {
 }
 
 describe("coverage", () => {
-  test.each(FAMILIES)(
-    "every %s component has exactly one contract, and every contract a component",
-    (family) => {
-      const astroFiles = readdirSync(new URL(`${family}/`, srcDir))
-        .filter((f) => f.endsWith(".astro"))
-        .sort();
-      const titles = contracts
-        .filter((c) => familyOf(c) === family)
-        .map((c) => `${c.title}.astro`)
-        .sort();
-      expect(titles).toEqual(astroFiles);
-    },
-  );
+  test("every component has exactly one contract, and every contract a component", () => {
+    // Every .astro the package ships, except the building blocks that are
+    // not components of their own (CtaButton is Hero's call to action).
+    const SUPPORT = new Set(["src/CtaButton.astro"]);
+    const astroFiles = Object.keys(components)
+      .map((k) => k.slice(1))
+      .filter((f) => !SUPPORT.has(f))
+      .sort();
+    expect(contracts.map(fileOf).sort()).toEqual(astroFiles);
+  });
 
   test("every contract is in a family this test reads", () => {
     for (const c of contracts)

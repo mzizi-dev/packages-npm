@@ -21,7 +21,30 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed (repository): `@bundu/ui` and `@bundu/server` are built from the Mzizi registry
+
+Owner decision, 2026-10-04: `mzizi-dev/mzizi-registry` is the single source of every component in every format. The 54 Astro components and their modules moved there (mzizi-dev/mzizi-registry#430), beside each component's `.tsx` and `.rs`, and this repo now builds them from it.
+
+- **`pnpm registry:sync`** (`scripts/sync-registry.mjs`) writes, from the registry at the commit pinned in `scripts/registry-ref.json`:
+  - every `@bundu/ui` `.astro` component and the modules they use (`lib/utils`, `ui/variants`, `app/nav`, `icons`, `breadcrumbs`, `safe-area`, `discover/open`);
+  - every `@bundu/server` helper (the registry's `n4-safety/server-*.ts`, the TypeScript mirror of `mzizi-roots-server`);
+  - the brand-mark PNGs;
+  - the contract runner.
+
+  `scripts/registry-map.json` names the package file each registry item becomes. `scripts/registry-imports.mjs` rewrites the registry's flat imports into the published layout, and its test checks every mapped file survives the round trip.
+
+- **`pnpm registry:check`**, run by the new `Registry` workflow on every PR and push, fails if any of those files differs from the registry, or if a package holds an `.astro` that the registry does not. The same workflow checks `contracts/` at the same pin. Never edit these files here: fix the registry, then bump the pin.
+- **Package APIs are unchanged.** Every export keeps its path and its props.
+- **`@nyuchi/ui` is not built from the registry.** It is Svelte, and the registry has no Svelte format.
+
 ### Added
+
+- **`@bundu/ui`: the Discover detail pattern** (mzizi-dev/mzizi-registry#429): `@bundu/ui/discover/DetailHero.astro`, `DiscoverBreadcrumb.astro`, `MetaList.astro`, `DetailActions.astro` and `RelatedRail.astro`, each with its registry contract.
+- **`@bundu/ui/discover/open`** (`openInMukokoUrl`) builds the canonical Open in Mukoko link, `https://mukoko.com/open/<service>/<id>`. `OpenInApp` (contract 1.1.0) gains `service` and `id`, and `href` stays as an override.
+- **`@bundu/ui`: contracts for every component.** The `site/` family covers Hero, Section, SectionHeader, Container, Breadcrumb, Icon, SocialIcon and MineralStrip. The `ui/` family covers NativeSelect, SegmentedControl, Toaster and SafeAreaFrame. `src/app/contracts.test.ts` runs all 59.
+- **`@bundu/ui`: `Hero` no longer renders `@bundu/ui/ui/button` (React) under Astro.** It uses an internal pure-Astro `CtaButton` that renders the same markup from the same `buttonVariants`.
+- **`SafeAreaFrame` draws SVG geometry** instead of inline `style` attributes, so pages can keep `style-src 'self'`.
+- **`Breadcrumb` and `SocialIcon` gain a root `data-slot`.**
 
 - **`@bundu/ui`: `SegmentedControl`, `NativeSelect`, `Toaster` and
   `SafeAreaFrame`** (`@bundu/ui/<Name>.astro`), first used by nyuchi-tools
