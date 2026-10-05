@@ -23,7 +23,7 @@ Versions published before then are not renumbered.
 
 ### Added (@bundu/ui): the Nyuchi console's form, chart and table deltas, and the registry primitives
 
-The registry pin moves to mzizi-dev/mzizi-registry#443. That PR takes four deltas from the Nyuchi console (`nyuchi/nyuchi-platform` `console/web`) into the Dashboard Standard contracts.
+The registry pin moves to mzizi-dev/mzizi-registry#443 (`95318a9` on registry `staging`). That PR takes four deltas from the Nyuchi console (`nyuchi/nyuchi-platform` `console/web`) into the Dashboard Standard contracts.
 
 - **`app/FormField.astro`** (contract `app/form-field` 1.1.0):
   - `as: "textarea"` with `rows` (default 5), or `as: "select"` with `options` (`{ value, label }[]`) and `emptyOption`. Both have the same wiring and app density as the input; a read-only select is disabled.
