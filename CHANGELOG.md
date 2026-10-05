@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added (@bundu/ui, @nyuchi/ui): `brand-circles.css`, tanzanite with a terracotta `--brand-accent`
+
+Mukoko Circles (circles.mukoko.com) is tanzanite primary + terracotta accent (owner decision, 2026-10-06). The canon row is corrected in mzizi-dev/mzizi-registry#449. The overlay sets `--primary` and `--ring` to tanzanite and `--brand-accent` to terracotta, light and dark, and both packages export it. The generator learns an optional accent family per brand. A `LOCAL_BRAND_MINERALS` bridge entry can now `supersede` a snapshot row that canon is correcting; once the snapshot catches up, canon wins.
+
 ## [@bundu/ui 0.4.0] - 2026-10-06
 
 The release of `staging` to `main` after `@bundu/ui` 0.3.0, which npm has had since
