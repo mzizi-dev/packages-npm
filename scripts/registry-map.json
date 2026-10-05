@@ -2,13 +2,18 @@
   "components": {
     "alert": {
       "package": "bundu-ui",
-      "path": "src/app/Alert.astro",
+      "path": "src/Alert.astro",
       "registry": "n2-primitives/alert.astro"
     },
     "app-account-menu": {
       "package": "bundu-ui",
       "path": "src/app/AccountMenu.astro",
       "registry": "n7-shell/app-account-menu.astro"
+    },
+    "app-alert": {
+      "package": "bundu-ui",
+      "path": "src/app/Alert.astro",
+      "registry": "n2-primitives/app-alert.astro"
     },
     "app-bar-chart": {
       "package": "bundu-ui",
@@ -19,6 +24,16 @@
       "package": "bundu-ui",
       "path": "src/app/BrandMark.astro",
       "registry": "n3-brand/app-brand-mark.astro"
+    },
+    "app-button": {
+      "package": "bundu-ui",
+      "path": "src/app/Button.astro",
+      "registry": "n2-primitives/app-button.astro"
+    },
+    "app-card": {
+      "package": "bundu-ui",
+      "path": "src/app/Card.astro",
+      "registry": "n2-primitives/app-card.astro"
     },
     "app-command-palette": {
       "package": "bundu-ui",
@@ -60,6 +75,16 @@
       "path": "src/app/InfoTip.astro",
       "registry": "n6-pages/app-info-tip.astro"
     },
+    "app-input": {
+      "package": "bundu-ui",
+      "path": "src/app/Input.astro",
+      "registry": "n2-primitives/app-input.astro"
+    },
+    "app-label": {
+      "package": "bundu-ui",
+      "path": "src/app/Label.astro",
+      "registry": "n2-primitives/app-label.astro"
+    },
     "app-nav": {
       "package": "bundu-ui",
       "path": "src/app/nav.ts",
@@ -89,6 +114,11 @@
       "package": "bundu-ui",
       "path": "src/app/SideNav.astro",
       "registry": "n7-shell/app-side-nav.astro"
+    },
+    "app-skeleton": {
+      "package": "bundu-ui",
+      "path": "src/app/Skeleton.astro",
+      "registry": "n2-primitives/app-skeleton.astro"
     },
     "app-stat-tile": {
       "package": "bundu-ui",
@@ -137,12 +167,12 @@
     },
     "button": {
       "package": "bundu-ui",
-      "path": "src/app/Button.astro",
+      "path": "src/Button.astro",
       "registry": "n2-primitives/button.astro"
     },
     "card": {
       "package": "bundu-ui",
-      "path": "src/app/Card.astro",
+      "path": "src/Card.astro",
       "registry": "n2-primitives/card.astro"
     },
     "discover-breadcrumb": {
@@ -232,12 +262,12 @@
     },
     "input": {
       "package": "bundu-ui",
-      "path": "src/app/Input.astro",
+      "path": "src/Input.astro",
       "registry": "n2-primitives/input.astro"
     },
     "label": {
       "package": "bundu-ui",
-      "path": "src/app/Label.astro",
+      "path": "src/Label.astro",
       "registry": "n2-primitives/label.astro"
     },
     "native-select": {
@@ -362,8 +392,13 @@
     },
     "skeleton": {
       "package": "bundu-ui",
-      "path": "src/app/Skeleton.astro",
+      "path": "src/Skeleton.astro",
       "registry": "n2-primitives/skeleton.astro"
+    },
+    "status-badge": {
+      "package": "bundu-ui",
+      "path": "src/StatusBadge.astro",
+      "registry": "n2-primitives/status-badge.astro"
     },
     "toaster": {
       "package": "bundu-ui",

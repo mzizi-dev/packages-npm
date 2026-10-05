@@ -1,0 +1,33 @@
+---
+/**
+ * Alert — the registry primitive (`contracts/ui/alert`), pure Astro: a message with
+ * `role="alert"` and the classes of `alert.tsx`, default or destructive. Title and
+ * description are markup in the slot (`data-slot="alert-title"` /
+ * `"alert-description"`), as `AlertTitle` / `AlertDescription` render them in React.
+ * The Dashboard Standard alert, with info, success and warning, is `./app-alert.astro`.
+ */
+import { cn } from "./lib/utils";
+
+interface Props {
+  variant?: "default" | "destructive";
+  class?: string;
+}
+const { variant = "default", class: extra } = Astro.props;
+
+const VARIANTS = {
+  default: "bg-card text-card-foreground",
+  destructive:
+    "text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current",
+};
+---
+
+<div
+  data-slot="alert"
+  data-portal="https://mzizi.dev/components/alert"
+  role="alert"
+  class={cn(
+    "grid gap-0.5 rounded-[var(--radius-lg,14px)] border px-4 py-3 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4 w-full relative group/alert",
+    VARIANTS[variant],
+    extra,
+  )}
+><slot /></div>

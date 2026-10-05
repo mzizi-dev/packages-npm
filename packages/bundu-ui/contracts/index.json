@@ -131,7 +131,7 @@
     {
       "name": "app/data-table",
       "title": "DataTable",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "app/data-table.contract.json",
       "astro": "app-data-table",
       "tsx": "app-data-table",
@@ -167,7 +167,7 @@
     {
       "name": "app/form-layout",
       "title": "FormLayout",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "app/form-layout.contract.json",
       "astro": "app-form-layout",
       "tsx": "app-form-layout",
@@ -176,7 +176,7 @@
     {
       "name": "app/form-field",
       "title": "FormField",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "app/form-field.contract.json",
       "astro": "app-form-field",
       "tsx": "app-form-field",
@@ -212,7 +212,7 @@
     {
       "name": "app/bar-chart",
       "title": "BarChart",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "file": "app/bar-chart.contract.json",
       "astro": "app-bar-chart",
       "tsx": "app-bar-chart",
@@ -223,9 +223,9 @@
       "title": "Button",
       "version": "1.0.0",
       "file": "app/button.contract.json",
-      "astro": "button",
-      "tsx": "button",
-      "rs": "button"
+      "astro": "app-button",
+      "tsx": "app-button",
+      "rs": null
     },
     {
       "name": "app/badge",
@@ -241,17 +241,17 @@
       "title": "Card",
       "version": "1.0.0",
       "file": "app/card.contract.json",
-      "astro": "card",
-      "tsx": "card",
-      "rs": "card"
+      "astro": "app-card",
+      "tsx": "app-card",
+      "rs": null
     },
     {
       "name": "app/alert",
       "title": "Alert",
       "version": "1.0.0",
       "file": "app/alert.contract.json",
-      "astro": "alert",
-      "tsx": "alert",
+      "astro": "app-alert",
+      "tsx": "app-alert",
       "rs": null
     },
     {
@@ -259,26 +259,26 @@
       "title": "Input",
       "version": "1.0.0",
       "file": "app/input.contract.json",
-      "astro": "input",
-      "tsx": "input",
-      "rs": "input"
+      "astro": "app-input",
+      "tsx": "app-input",
+      "rs": null
     },
     {
       "name": "app/label",
       "title": "Label",
       "version": "1.0.0",
       "file": "app/label.contract.json",
-      "astro": "label",
-      "tsx": "label",
-      "rs": "label"
+      "astro": "app-label",
+      "tsx": "app-label",
+      "rs": null
     },
     {
       "name": "app/skeleton",
       "title": "Skeleton",
       "version": "1.0.0",
       "file": "app/skeleton.contract.json",
-      "astro": "skeleton",
-      "tsx": "skeleton",
+      "astro": "app-skeleton",
+      "tsx": "app-skeleton",
       "rs": null
     },
     {
@@ -374,7 +374,7 @@
     {
       "name": "discover/open-in-app",
       "title": "OpenInApp",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "file": "discover/open-in-app.contract.json",
       "astro": "discover-open-in-app",
       "tsx": "discover-open-in-app",
@@ -392,7 +392,7 @@
     {
       "name": "discover/detail-actions",
       "title": "DetailActions",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "discover/detail-actions.contract.json",
       "astro": "discover-detail-actions",
       "tsx": "discover-detail-actions",
@@ -500,10 +500,10 @@
     {
       "name": "ui/native-select",
       "title": "NativeSelect",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "file": "ui/native-select.contract.json",
       "astro": "native-select",
-      "tsx": null,
+      "tsx": "native-select",
       "rs": null
     },
     {
@@ -518,7 +518,7 @@
     {
       "name": "ui/segmented-control",
       "title": "SegmentedControl",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "ui/segmented-control.contract.json",
       "astro": "segmented-control",
       "tsx": "segmented-control",
@@ -527,11 +527,74 @@
     {
       "name": "ui/toaster",
       "title": "Toaster",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "ui/toaster.contract.json",
       "astro": "toaster",
-      "tsx": null,
+      "tsx": "toaster",
       "rs": null
+    },
+    {
+      "name": "ui/status-badge",
+      "title": "StatusBadge",
+      "version": "1.0.0",
+      "file": "ui/status-badge.contract.json",
+      "astro": "status-badge",
+      "tsx": "status-badge",
+      "rs": "status-badge"
+    },
+    {
+      "name": "ui/skeleton",
+      "title": "Skeleton",
+      "version": "1.0.0",
+      "file": "ui/skeleton.contract.json",
+      "astro": "skeleton",
+      "tsx": "skeleton",
+      "rs": "skeleton"
+    },
+    {
+      "name": "ui/alert",
+      "title": "Alert",
+      "version": "1.0.0",
+      "file": "ui/alert.contract.json",
+      "astro": "alert",
+      "tsx": "alert",
+      "rs": "alert"
+    },
+    {
+      "name": "ui/button",
+      "title": "Button",
+      "version": "1.0.0",
+      "file": "ui/button.contract.json",
+      "astro": "button",
+      "tsx": "button",
+      "rs": "button"
+    },
+    {
+      "name": "ui/card",
+      "title": "Card",
+      "version": "1.0.0",
+      "file": "ui/card.contract.json",
+      "astro": "card",
+      "tsx": "card",
+      "rs": "card"
+    },
+    {
+      "name": "ui/input",
+      "title": "Input",
+      "version": "1.0.0",
+      "file": "ui/input.contract.json",
+      "astro": "input",
+      "tsx": "input",
+      "rs": "input"
+    },
+    {
+      "name": "ui/label",
+      "title": "Label",
+      "version": "1.0.0",
+      "file": "ui/label.contract.json",
+      "astro": "label",
+      "tsx": "label",
+      "rs": "label"
     }
   ]
 }

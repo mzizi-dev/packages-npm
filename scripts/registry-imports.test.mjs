@@ -17,7 +17,7 @@ const ROOTS = {
 
 describe("registry-imports", () => {
   test("maps a flat registry import to the package layout", () => {
-    const src = `import Card from "./card.astro";\nimport { cn } from "./ui-utils";\nimport { withParams } from "./server-table";\n`;
+    const src = `import Card from "./app-card.astro";\nimport { cn } from "./ui-utils";\nimport { withParams } from "./server-table";\n`;
     expect(
       toPackage(
         src,

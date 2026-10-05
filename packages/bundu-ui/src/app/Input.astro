@@ -1,8 +1,10 @@
 ---
 /**
- * Input — a native <input>, pure Astro, 48px tall. Every attribute other
- * than `class` is passed through (name, type, value, required,
- * autocomplete, aria-*, …). Classes are `inputClasses`.
+ * Input — the Dashboard Standard input (`contracts/app/input`), pure Astro: a native
+ * <input>, 36px (48px on touch). Every attribute other than `class` is passed
+ * through (name, type, value, required, autocomplete, aria-*, …). Classes are
+ * `appInputClasses`. Its React twin is `app-input.tsx`; the registry primitive is
+ * `./input.astro`.
  */
 import type { HTMLAttributes } from "astro/types";
 
