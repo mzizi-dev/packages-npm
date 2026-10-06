@@ -39,11 +39,12 @@ developed by Nyuchi. This package is not Mzizi itself.
   it through `@config`).
 - **Brand overlays** — `brand-bundu`, `brand-nyuchi`, `brand-mukoko`, `brand-shamwari`,
   `brand-mzizi`, and the sub-apps `brand-events` (Mukoko Events), `brand-lingo`,
-  `brand-bushtrade`, `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli` and
-  `brand-learning`. `brand-nhimbe` is a deprecated alias that re-exports `brand-events`
+  `brand-bushtrade`, `brand-campfire`, `brand-news`, `brand-weather`, `brand-kweli`,
+  `brand-learning` and `brand-circles` (Mukoko Circles). `brand-nhimbe` is a deprecated alias that re-exports `brand-events`
   (the nhimbe brand is retired; the events platform is Mukoko Events).
   Each repoints `--primary` and `--ring` and nothing else; the mineral comes from
-  canon's ecosystem table.
+  canon's ecosystem table. `brand-circles` also sets `--brand-accent` (terracotta),
+  the one brand whose canon row names an accent.
 - **`tokens.json`** — the same values machine-readable, including every custom property
   resolved to a literal hex per mode, for the surfaces that cannot consume CSS at all:
   Expo (`mukoko-weather-mobile`) and Satori-based OG-image / email / PDF generators.

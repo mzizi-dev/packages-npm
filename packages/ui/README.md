@@ -86,6 +86,7 @@ else:
 | `brand-weather.css`   | cobalt                                          |
 | `brand-kweli.css`     | malachite                                       |
 | `brand-learning.css`  | gold                                            |
+| `brand-circles.css`   | tanzanite, terracotta `--brand-accent`          |
 
 ### Outside the browser
 
