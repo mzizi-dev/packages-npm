@@ -21,6 +21,16 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed (@bundu/ui): registry pin v4.5.0 — MetaList 1.1.0 and ResultGrid 1.1.0
+
+`scripts/registry-ref.json` moves from `5067b5e` (registry v4.4.0) to `9f3631c`, the v4.5.0 release on registry `main` (mzizi-dev/mzizi-registry#454), and `pnpm registry:sync` rebuilds the two components it changes:
+
+- **`discover/MetaList`** 1.1.0 is a valid description list: each row is `<div><dt><dd></div>` with the icon inside the `<dt>`, and a row whose value is empty hides itself (mzizi-registry#450).
+- **`discover/ResultGrid`** 1.1.0 has an error state (`state="error"` and an `error` slot) beside `ok` and `empty` (mzizi-registry#451).
+- Their contracts move with them (`contracts/discover/{meta-list,result-grid}.contract.json`, `contracts/index.json`).
+
+`tokens/canon.snapshot.json` follows live canon: `circles` is tanzanite, "Mukoko Circles". api.mzizi.dev does not serve the row's `accent` yet (mzizi-dev/mzizi-api-gateway#62, on its `staging`), so the `LOCAL_BRAND_MINERALS` bridge now keeps supplying the terracotta `--brand-accent` while canon's mineral matches and canon has no accent; `brand-circles.css` is unchanged apart from its header comment.
+
 ### Added (@bundu/ui, @nyuchi/ui): `brand-circles.css`, tanzanite with a terracotta `--brand-accent`
 
 Mukoko Circles (circles.mukoko.com) is tanzanite primary + terracotta accent (owner decision, 2026-10-06). The canon row is corrected in mzizi-dev/mzizi-registry#449. The overlay sets `--primary` and `--ring` to tanzanite and `--brand-accent` to terracotta, light and dark, and both packages export it. The generator learns an optional accent family per brand. A `LOCAL_BRAND_MINERALS` bridge entry can now `supersede` a snapshot row that canon is correcting; once the snapshot catches up, canon wins.

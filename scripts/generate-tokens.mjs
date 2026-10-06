@@ -1032,8 +1032,9 @@ const OVERLAY_BRANDS = [
  *
  * circles: Mukoko Circles is tanzanite with a terracotta accent (owner
  * decision, 2026-10-06; canon row corrected in mzizi-dev/mzizi-registry#449).
- * The snapshot still says terracotta primary until api.mzizi.dev's pin
- * passes that merge.
+ * api.mzizi.dev serves the tanzanite mineral from registry v4.5.0; it drops
+ * the `accent` field until mzizi-dev/mzizi-api-gateway#62 is released, so
+ * the bridge supplies the terracotta accent until canon carries it.
  */
 const LOCAL_BRAND_MINERALS = {
   circles: {
@@ -1086,7 +1087,12 @@ function brandOverlays(m) {
       );
     }
     const mineral = local?.mineral ?? canonMineral;
-    const accent = local?.accent ?? eco[brand]?.accent;
+    // A bridge whose mineral canon now matches still supplies its accent
+    // until canon serves `ecosystem[].accent` (mzizi-api-gateway#62).
+    const accent =
+      local?.accent ??
+      eco[brand]?.accent ??
+      (bridge?.mineral === canonMineral ? bridge?.accent : undefined);
     if (accent && !families[accent]) {
       throw new Error(
         `brand ${brand} accent points at unknown family "${accent}"`,
