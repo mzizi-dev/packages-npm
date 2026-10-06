@@ -1,5 +1,6 @@
 // The generated brand-*.css overlays, in both packages. Each overlay repoints
-// --primary and --ring to one family and nothing else, every one is exported,
+// --primary and --ring to one family (and --brand-accent to a second, for a
+// brand with an accent) and nothing else, every one is exported,
 // and the owner's brand mineral decisions hold (mzizi-registry#404).
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
@@ -21,6 +22,10 @@ const DECIDED = {
   // mukoko-dev/nhimbe#155): malachite.
   events: "malachite",
 };
+
+/** Owner decision, 2026-10-06: Mukoko Circles is tanzanite (primary, ring)
+ * with a terracotta --brand-accent. The only brands with an accent. */
+const ACCENTED = { circles: { primary: "tanzanite", accent: "terracotta" } };
 
 /** Retired overlay names, each re-exporting the overlay that replaced it. */
 const ALIASES = { nhimbe: "events" };
@@ -60,6 +65,21 @@ for (const pkg of PACKAGES) {
       }
     });
 
+    test("gives an accented brand its --brand-accent, light and dark", () => {
+      const byBrand = Object.fromEntries(all);
+      for (const [brand, { primary, accent }] of Object.entries(ACCENTED)) {
+        expect(byBrand[brand], brand).toBeDefined();
+        expect(declarations(byBrand[brand]), brand).toEqual([
+          ["--primary", `var(--color-${primary})`],
+          ["--ring", `var(--color-${primary})`],
+          ["--brand-accent", `var(--color-${accent})`],
+          ["--primary", `var(--color-${primary})`],
+          ["--ring", `var(--color-${primary})`],
+          ["--brand-accent", `var(--color-${accent})`],
+        ]);
+      }
+    });
+
     test("keeps each retired overlay as a re-export of its replacement", () => {
       const byBrand = Object.fromEntries(all);
       for (const [alias, target] of Object.entries(ALIASES)) {
@@ -76,7 +96,7 @@ for (const pkg of PACKAGES) {
 
     test("each overlay repoints --primary and --ring only, light and dark", () => {
       for (const [brand, css] of all) {
-        if (brand in ALIASES) continue;
+        if (brand in ALIASES || brand in ACCENTED) continue;
         const decls = declarations(css);
         expect(
           decls.map(([p]) => p),
