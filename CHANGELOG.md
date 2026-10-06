@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.5.0, @nyuchi/ui 0.4.0] - 2026-10-06
+
+The release of `staging` to `main` after `@bundu/ui` 0.4.0 and `@nyuchi/ui` 0.3.0. Under the org versioning policy each package with changes takes the next minor: `@bundu/ui` 0.5.0 carries MetaList 1.1.0 and ResultGrid 1.1.0 from the registry v4.5.0 pin and `brand-circles.css`; `@nyuchi/ui` 0.4.0 carries `brand-circles.css` (both from the entries below). `@bundu/server` (0.1.0) has no package changes and is not republished.
+
 ### Changed (@bundu/ui): registry pin v4.5.0 — MetaList 1.1.0 and ResultGrid 1.1.0
 
 `scripts/registry-ref.json` moves from `5067b5e` (registry v4.4.0) to `9f3631c`, the v4.5.0 release on registry `main` (mzizi-dev/mzizi-registry#454), and `pnpm registry:sync` rebuilds the two components it changes:
