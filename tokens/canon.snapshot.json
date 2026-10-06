@@ -234,9 +234,10 @@
     },
     {
       "description": "Community channels — WhatsApp groups, Discord servers for Africa.",
+      "displayName": "Mukoko Circles",
       "language": "English",
       "meaning": "Circles",
-      "mineral": "terracotta",
+      "mineral": "tanzanite",
       "name": "circles",
       "role": "Community messaging",
       "url": "https://circles.mukoko.com",
