@@ -1,6 +1,6 @@
 {
   "name": "@bundu/ui",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, pure Astro app patterns for consoles with no framework and no client JavaScript (full-width app shell with a grouped, collapsible sidebar, workspace switcher, command palette, top bar, toolbar, stat tiles, empty states, data table, filters, pagination, detail panel, forms, states, toast, stat tile, bar chart, and the primitives under them) the Discover Standard's pure Astro components for public discover and browse pages (shell, meta, hero, search, category chips, sections, result grid, one card with article, event, circle and place variants, load more, open in Mukoko, and the detail pattern: detail hero, breadcrumb, meta list, actions and related rail), and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
@@ -127,6 +127,7 @@
     "./styles/brand-weather.css": "./styles/brand-weather.css",
     "./styles/brand-kweli.css": "./styles/brand-kweli.css",
     "./styles/brand-learning.css": "./styles/brand-learning.css",
+    "./styles/brand-circles.css": "./styles/brand-circles.css",
     "./tokens.json": "./tokens.json",
     "./contracts/index.json": "./contracts/index.json",
     "./contracts/schema/component-contract.schema.json": "./contracts/schema/component-contract.schema.json",
