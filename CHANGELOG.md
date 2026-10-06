@@ -21,6 +21,16 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added (@bundu/ui): `BrandMark` takes `brand="mukoko"` (registry pin 877ea97 on staging)
+
+`scripts/registry-ref.json` moves from `9f3631c` (registry v4.5.0) to `877ea97`, the merge of mzizi-dev/mzizi-registry#459 on registry `staging`. `pnpm registry:sync` rebuilds one component and adds two assets:
+
+- `app/BrandMark.astro` (contract `app/brand-mark` 1.1.0): `brand` is `"nyuchi" | "mukoko"`. `brand="mukoko"` shows the Mukoko honeycomb (the bundu-ecosystem-icons pair, scaled to 128px, never redrawn), with alt text `mukoko` and the `mukoko` wordmark.
+- `assets/brand/mukoko-icon-{light,dark}.png` ship in the package and are exported as `@bundu/ui/assets/brand/mukoko-icon-{light,dark}.png`.
+- The contract copies move to the pin: `app/brand-mark` 1.1.0, and the `site/container`, `site/hero` and `site/section` 1.0.1 text from mzizi-dev/mzizi-registry#455. Only the docs change; no component changes.
+
+Before this ships in a release, move the pin to the registry release on `main` that carries #459.
+
 ## [@bundu/ui 0.5.0, @nyuchi/ui 0.4.0] - 2026-10-06
 
 The release of `staging` to `main` after `@bundu/ui` 0.4.0 and `@nyuchi/ui` 0.3.0. Under the org versioning policy each package with changes takes the next minor: `@bundu/ui` 0.5.0 carries MetaList 1.1.0 and ResultGrid 1.1.0 from the registry v4.5.0 pin and `brand-circles.css`; `@nyuchi/ui` 0.4.0 carries `brand-circles.css` (both from the entries below). `@bundu/server` (0.1.0) has no package changes and is not republished.
