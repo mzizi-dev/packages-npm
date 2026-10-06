@@ -424,6 +424,14 @@
     "assets/nyuchi-mark-dark.png": {
       "package": "bundu-ui",
       "path": "assets/brand/nyuchi-mark-dark.png"
+    },
+    "assets/mukoko-icon-light.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/mukoko-icon-light.png"
+    },
+    "assets/mukoko-icon-dark.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/mukoko-icon-dark.png"
     }
   },
   "aliases": {

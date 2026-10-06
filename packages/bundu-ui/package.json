@@ -135,6 +135,8 @@
     "./contracts/discover/*": "./contracts/discover/*",
     "./assets/brand/nyuchi-mark-light.png": "./assets/brand/nyuchi-mark-light.png",
     "./assets/brand/nyuchi-mark-dark.png": "./assets/brand/nyuchi-mark-dark.png",
+    "./assets/brand/mukoko-icon-light.png": "./assets/brand/mukoko-icon-light.png",
+    "./assets/brand/mukoko-icon-dark.png": "./assets/brand/mukoko-icon-dark.png",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
