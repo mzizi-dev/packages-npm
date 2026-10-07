@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. It is the repository's one agent guide: [`AGENTS.md`](./AGENTS.md) points every other agent here, and carries only the org's agent rules (the dev skills, progress reports and the merge gate), which apply to Claude Code too.
 
 ## What this is
 
@@ -59,7 +59,7 @@ Hand-written: the `scripts/` tooling, `styles/globals.css`, `@nyuchi/ui` Svelte 
 - Work targets `staging`; `staging` is released to `main` with a "chore(release): staging to main" PR. Feature PRs go to `staging`.
 - `.github/workflows/release.yml` runs on every push to `main`: `tokens:check`, `pnpm test`, then `scripts/release-publish.mjs` publishes each package whose `package.json` version is not yet on npm (dependency order, `pnpm pack` then `npm publish`, OIDC trusted publishing with provenance, no npm token ever), and `scripts/release-tags.mjs` tags `<name>@<version>` and creates a GitHub release from that version's `CHANGELOG.md` section.
 - To release: bump the package's `version` and add a `## [<name> <version>] - <date>` section to `CHANGELOG.md` in the same PR. A version must be the next **minor** above the highest on npm (x.y.z → x.y+1.0); majors only via a manual workflow run with `bump: major`. The release job refuses anything else.
-- Unreleased changes go under `## [Unreleased]` in `CHANGELOG.md`, with each entry naming the package it applies to.
+- Unreleased changes go under `## [Unreleased]` in `CHANGELOG.md`, with each entry naming the package it applies to, or `(repository)` for a change to no package (docs, CI, tooling).
 - Keep each package's `repository.url` as `git+https://github.com/mzizi-dev/packages-npm.git` (npm checks it against the OIDC token). A never-published package needs a manual first publish by an owner (see README "Publishing").
 
 ## CI

@@ -21,6 +21,19 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
+
+`CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
+
+- load the Mzizi dev skills (`digital-hygiene` and `progress-report`);
+- clone only into a directory unique to you under `${TMPDIR:-/tmp}`, or the session's worktree root in a cloud session;
+- run dev work on a 10-minute progress-report loop whose ticks never publish, release, merge or deploy without the owner's approval;
+- merge only through the merge gate.
+
+`CLAUDE.md` now names `AGENTS.md` for those rules, and says a changelog entry that changes no package is scoped `(repository)`.
+
+Docs only: no package changes.
+
 ### Changed (@bundu/ui): registry pin v4.8.0 on `main`, and `MarkdownRenderer.astro`
 
 `scripts/registry-ref.json` moves from `877ea97` (the #459 merge on registry `staging`) to `f70703d`, the v4.8.0 release on registry `main` (mzizi-dev/mzizi-registry#469). That release carries #459, so the pin is now on `main` and the next `@bundu/ui` release can ship `brand="mukoko"` (#53). `BrandMark.astro`, its contract and the Mukoko assets are byte-identical at both commits.
