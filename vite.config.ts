@@ -15,6 +15,11 @@ export default defineConfig({
     endOfLine: "lf",
     trailingComma: "all",
     sortPackageJson: false,
+    // Written by `pnpm registry:sync` and byte-checked by `registry:check`,
+    // so it can't be reformatted here. The registry doesn't run a formatter
+    // over this file (no semicolons, long lines), unlike the other synced
+    // modules. Drop the entry once the registry formats it.
+    ignorePatterns: ["packages/bundu-ui/src/markdown-parse.ts"],
     overrides: [
       {
         files: ["*.md", "*.mdx"],
