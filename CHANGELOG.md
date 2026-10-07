@@ -21,6 +21,14 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Fixed (repository): a test run no longer leaves module copies in the temp directory (Vite+ 1.1.0, Vitest 5.0.3)
+
+Every `pnpm test` left three folders behind in the system temp directory (`$TMPDIR`, else `/tmp`), one per Vitest run (the root, `@bundu/server` and `@bundu/ui`, whose Astro contract tests are the largest at about 4 MB). Each folder has a 21-character random name and holds `ssr/` (and sometimes `client/`) copies of the transformed modules. The cause is Vitest 5.0.0 to 5.0.2: the root project writes its copies to a temp folder that nothing removes on close. Vitest 5.0.3 removes it.
+
+- `vite-plus` moves from 1.0.0 to 1.1.0, which brings `vitest` and `@vitest/*` 5.0.3 (and the oxc toolchain it ships) into the lockfile. No published package changes.
+- `packages/bundu-ui/README.md` rewraps one list item (same text) so that no line starts with `--`. The newer formatter in `vp check` and Prettier 3.9.4 disagreed on how to indent those lines, and now both pass.
+- Verified: `pnpm test` (148, 36 and 590 tests) with `TMPDIR` set to an empty folder leaves no such folder; on 1.0.0 the same run left three.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
