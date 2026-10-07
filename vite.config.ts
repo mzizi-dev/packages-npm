@@ -15,6 +15,15 @@ export default defineConfig({
     endOfLine: "lf",
     trailingComma: "all",
     sortPackageJson: false,
+    // A stopgap. This file is written by `pnpm registry:sync` and held byte
+    // for byte by `registry:check`, so it can't be reformatted here, and the
+    // registry doesn't run a formatter over it (no semicolons, long lines),
+    // unlike the other synced modules. The fix belongs at the source: the
+    // registry PR that formats components/registry/n2-primitives/
+    // markdown-parse.ts (it also fixes parser bugs found in review of
+    // mzizi-dev/packages-npm#55). Once a pin carries it, drop this entry and
+    // run `pnpm registry:sync`.
+    ignorePatterns: ["packages/bundu-ui/src/markdown-parse.ts"],
     overrides: [
       {
         files: ["*.md", "*.mdx"],
