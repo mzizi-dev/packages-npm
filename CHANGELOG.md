@@ -25,9 +25,9 @@ Versions published before then are not renumbered.
 
 `scripts/registry-ref.json` moves from `877ea97` (the #459 merge on registry `staging`) to `f70703d`, the v4.8.0 release on registry `main` (mzizi-dev/mzizi-registry#469). That release carries #459, so the pin is now on `main` and the next `@bundu/ui` release can ship `brand="mukoko"` (#53). `BrandMark.astro`, its contract and the Mukoko assets are byte-identical at both commits.
 
-- **Added: `@bundu/ui/MarkdownRenderer.astro`** (contract `ui/markdown-renderer` 1.1.0, mzizi-registry#462 and #465). Its contract names `@bundu/ui` as the Astro build "since 0.6.0", so the contract tests need it in the package. It renders Markdown safely by construction: the source is parsed into a typed tree and drawn as elements, raw HTML shows as text, and links pass a scheme allow-list. Its parser ships as `@bundu/ui/markdown-parse`. `scripts/registry-map.json` maps both, and `pnpm registry:sync` writes them.
+- **Added: `@bundu/ui/MarkdownRenderer.astro`** (contract `ui/markdown-renderer` 1.1.0, mzizi-registry#462 and #465). Its contract names `@bundu/ui` as the Astro build "since 0.6.0", so the contract tests need it in the package. It renders Markdown safely by construction: the source is parsed into a typed tree and drawn as elements, raw HTML shows as text, and links pass a scheme allow-list. Its parser ships as `@bundu/ui/markdown-parse`. `scripts/registry-map.json` maps both, `pnpm registry:sync` writes them, and the package README documents both exports with an example.
 - The contract copies move to the pin: `contracts/index.json` and `ui/markdown-renderer.contract.json` (67 contracts).
-- `vite.config.ts` leaves `src/markdown-parse.ts` out of `vp fmt`. The registry doesn't format that file, and `registry:check` holds it byte for byte.
+- `vite.config.ts` leaves `src/markdown-parse.ts` out of `vp fmt` as a stopgap. The registry doesn't format that file, and `registry:check` holds it byte for byte. The fix is a registry change that formats the file at its source; once a pin carries it, the entry goes.
 - `tokens/canon.snapshot.json` follows live canon: api.mzizi.dev now serves `circles`' `accent: "terracotta"` (mzizi-dev/mzizi-api-gateway#62). Every generated file is unchanged.
 
 ### Added (@bundu/ui): `BrandMark` takes `brand="mukoko"` (registry pin 877ea97 on staging)
