@@ -47,9 +47,9 @@ developed by Nyuchi. This package is not Mzizi itself.
   `Checkbox`, `Tabs`, `Tooltip`.
 - **The whole Mzizi palette** — `styles/tokens.css` carries all **21 colour families**
   under one `--color-*` namespace: 7 minerals, 7 heritage tones, 7 experimental tones.
-  Plus the nine-step surface ladder (`--pitch --void --base --surface --container
---overlay --raised --scrim --wash`) and the connectivity status trio (`--syncing
---offline --neutral`).
+  Plus the nine-step surface ladder
+  (`--pitch --void --base --surface --container --overlay --raised --scrim --wash`)
+  and the connectivity status trio (`--syncing --offline --neutral`).
 - **Tailwind v3 and v4** — `styles/theme.css` is a native v4 `@theme` entrypoint;
   `tailwind-preset.mjs` is the v3-shape preset, still shipped and still working (v4 loads
   it through `@config`).
