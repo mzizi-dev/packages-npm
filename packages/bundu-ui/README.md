@@ -26,6 +26,22 @@ developed by Nyuchi. This package is not Mzizi itself.
   `@bundu/ui/<Name>.astro`, beside the registry primitives `Alert`, `Button`,
   `Card`, `Input`, `Label`, `Skeleton` and `StatusBadge`. Each keeps its registry
   contract (`contracts/ui/`); the app patterns are under `@bundu/ui/app/*` (below).
+- **Markdown, safe by construction** — `MarkdownRenderer` (`@bundu/ui/MarkdownRenderer.astro`,
+  contract `ui/markdown-renderer`). It parses `content` into a typed tree and draws it as
+  elements, never through an HTML string. Raw HTML in the source shows as text, and links pass
+  a scheme allow-list (`links="safe"`, the default, keeps http, https, mailto, tel and relative
+  addresses; `links="https"` keeps https only); a refused link keeps its words. `from="html"`
+  or `"auto"` reads an editor's rich text, and `headingBase` sets the level a `#` heading
+  renders at. The parser it draws from is `@bundu/ui/markdown-parse`: `markdownBlocks()`,
+  `safeHref()` and the block and inline types, for code that needs the tree, not the markup.
+
+  ```astro
+  ---
+  import MarkdownRenderer from "@bundu/ui/MarkdownRenderer.astro";
+  ---
+  <MarkdownRenderer content={post.body} headingBase={2} />
+  ```
+
 - **shadcn CVA + `cn()` React primitives** — `Button`, `Card`, `Badge`, `Input`,
   `Textarea`, `Select`, `Label`, `Alert`, `Avatar`, `Separator`, `Skeleton`, `Switch`,
   `Checkbox`, `Tabs`, `Tooltip`.

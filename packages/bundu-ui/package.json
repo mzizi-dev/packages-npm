@@ -56,6 +56,8 @@
     "./Skeleton.astro": "./src/Skeleton.astro",
     "./StatusBadge.astro": "./src/StatusBadge.astro",
     "./safe-area": "./src/safe-area.ts",
+    "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
+    "./markdown-parse": "./src/markdown-parse.ts",
     "./app/AppShell.astro": "./src/app/AppShell.astro",
     "./app/SideNav.astro": "./src/app/SideNav.astro",
     "./app/AccountMenu.astro": "./src/app/AccountMenu.astro",
