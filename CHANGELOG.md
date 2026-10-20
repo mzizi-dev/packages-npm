@@ -21,6 +21,11 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Security
+
+- **Fixed (repository):** `source-map-js` is pinned to `1.2.2` through `pnpm.overrides` (`"source-map-js@<1.2.2": "^1.2.2"`), which clears GHSA-68fv-2mgg-jv7q (high, event-loop denial of service through indexed source-map section offsets). It was reached through `vite-plus` > `@voidzero-dev/vite-plus-core` > `postcss`, and the lockfile now resolves `source-map-js` 1.2.2 everywhere.
+- **Open (repository):** GHSA-ch52-4w7c-c8xp (high, `http-cache-semantics` max-stale handling can disclose cross-user cached responses) is not fixed here. `http-cache-semantics` 4.2.0 reaches the repository through `astro`, and the advisory lists no patched version. It is not ignored, so `pnpm audit --audit-level high` still fails on it, as it does on `staging`. It waits on an owner decision.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
