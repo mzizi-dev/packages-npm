@@ -21,6 +21,22 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Fixed (@bundu/ui): registry pin 516a9e2 on `main` — `markdown-parse` fixes from the 0.6.0 review, and `BrandMark`'s unknown-brand error
+
+`scripts/registry-ref.json` moves from `f70703d` (registry v4.8.0) to `516a9e2`, the newest commit on registry `main` (the v4.9.0 release, mzizi-dev/mzizi-registry#514; its tag is pending). It carries mzizi-registry#517, which fixes what the code review of #63 found in `markdown-parse.ts`. `@bundu/ui` ships that parser for the first time in 0.6.0. `pnpm registry:sync` rewrites five files, and `node scripts/fetch-contracts.mjs 516a9e2…` rewrites five under `contracts/` (three contracts, `index.json` and the schema). None is hand-edited.
+
+- **`markdown-parse` and `MarkdownRenderer.astro`** (contract `ui/markdown-renderer` 1.1.0 → 1.2.1):
+  - **Rich text: a list placed directly in a list.** A `<ul>` or `<ol>` between two `<li>`s, as Google Docs and Word paste one, was lost with its words. It now nests under the item before it.
+  - **Rich text: `<br>` in `<pre>`.** `<pre><code>line1<br>line2</code></pre>` showed `line1line2`. A `<br>` is now a line break there.
+  - **A numbered line in a paragraph.** `Text\n1984. was a year` started a list. As in CommonMark, a list interrupts a paragraph only when its first item has text and, if numbered, is numbered 1.
+  - **List indentation.** An item indented between two levels started a second nested list. It now joins the deeper one.
+  - **From 1.2.0** (mzizi-registry#483 and #500), also new to this package: each kept link has a hover `title`, its address normalised with an internationalised host as punycode (`safeLink()` is exported beside `safeHref()`); dropped elements such as `<script>`, `<template>` and `<svg>` end where a browser ends them, and a self-closing `<svg/>` is empty; text after a nested list in an `<li>` stays in order (a list item's `children` can hold `{ kind: "lines" }`); a trailing backslash on a last line is kept; tabs and backslash escapes in a link address are read as CommonMark reads them; and a long run of spaces in a heading no longer takes quadratic time.
+- **`app/BrandMark.astro`** (contract `app/brand-mark` 1.1.0 → 1.1.1): a `brand` outside the shipped set threw `Cannot read properties of undefined` during render. It now throws `BrandMark: unknown brand "bundu"; expected one of "nyuchi", "mukoko"`, and shows no other brand's mark in its place. A key such as `toString` no longer reaches the object's prototype.
+- **Contracts and the runner.** `ui/status-badge` 1.1.0 adds an `alpha` state (mzizi-registry#477). The synced `test/contract-runner.ts` and the contract schema add the `has` and `not` predicates, and a predicate that can't be evaluated now fails, `not` included. The runner also fails any element with an inline `style` attribute in any contract state (mzizi-registry#478); no `@bundu/ui` component renders one. `lib/utils.ts` only changes two comments.
+- **Tests.** The new `src/markdown.test.ts` renders `MarkdownRenderer.astro` with a self-closing `<svg/>`, a list placed directly in a `<ul>`, `<br>` inside `<pre>`, and `Text\n1984. was a year`. `src/app/app.test.ts` checks `BrandMark`'s unknown-brand error. All five fail on the files this replaces and pass on these.
+- The package README names `safeLink()`, the hover title and `BrandMark`'s error. The `vite.config.ts` comment on the `markdown-parse.ts` format exemption is updated: the registry now formats the file with Prettier, and `vp fmt` disagrees on one line only (the `MarkdownListChild` union), so the exemption stays.
+- `tokens/canon.snapshot.json` follows live canon (`pnpm canon:fetch`): api.mzizi.dev now serves `textLight` and `textDark` on every colour family, and `family`, `role` and `sortOrder` on the seven heritage tones (mzizi-dev/mzizi-api-gateway#74). `snapshot matches live canon` failed on `staging` without it. Every generated file is unchanged.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
