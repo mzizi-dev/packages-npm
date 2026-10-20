@@ -21,6 +21,42 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.6.0] - 2026-10-20
+
+The release of `staging` to `main` after `@bundu/ui` 0.5.0 and `@nyuchi/ui` 0.4.0. Under the org versioning policy `@bundu/ui` takes the next minor, 0.6.0: it carries `BrandMark` `brand="mukoko"` and `MarkdownRenderer.astro` (with `@bundu/ui/markdown-parse`) from the registry v4.8.0 pin on registry `main` (both entries below). That pin carries mzizi-registry#459, so the note below about moving the pin before a release is done. `@nyuchi/ui` (0.4.0) and `@bundu/server` (0.1.0) have no package changes and are not republished. The `AGENTS.md` entry is repository-only.
+
+### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
+
+`CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
+
+- load the Mzizi dev skills (`digital-hygiene` and `progress-report`);
+- clone only into a directory unique to you under `${TMPDIR:-/tmp}`, or the session's worktree root in a cloud session;
+- run dev work on a 10-minute progress-report loop whose ticks never publish, release, merge or deploy without the owner's approval;
+- merge only through the merge gate.
+
+`CLAUDE.md` now names `AGENTS.md` for those rules, and says a changelog entry that changes no package is scoped `(repository)`.
+
+Docs only: no package changes.
+
+### Changed (@bundu/ui): registry pin v4.8.0 on `main`, and `MarkdownRenderer.astro`
+
+`scripts/registry-ref.json` moves from `877ea97` (the #459 merge on registry `staging`) to `f70703d`, the v4.8.0 release on registry `main` (mzizi-dev/mzizi-registry#469). That release carries #459, so the pin is now on `main` and the next `@bundu/ui` release can ship `brand="mukoko"` (#53). `BrandMark.astro`, its contract and the Mukoko assets are byte-identical at both commits.
+
+- **Added: `@bundu/ui/MarkdownRenderer.astro`** (contract `ui/markdown-renderer` 1.1.0, mzizi-registry#462 and #465). Its contract names `@bundu/ui` as the Astro build "since 0.6.0", so the contract tests need it in the package. It renders Markdown safely by construction: the source is parsed into a typed tree and drawn as elements, raw HTML shows as text, and links pass a scheme allow-list. Its parser ships as `@bundu/ui/markdown-parse`. `scripts/registry-map.json` maps both, `pnpm registry:sync` writes them, and the package README documents both exports with an example.
+- The contract copies move to the pin: `contracts/index.json` and `ui/markdown-renderer.contract.json` (67 contracts).
+- `vite.config.ts` leaves `src/markdown-parse.ts` out of `vp fmt` as a stopgap. The registry doesn't format that file, and `registry:check` holds it byte for byte. The fix is a registry change that formats the file at its source; once a pin carries it, the entry goes.
+- `tokens/canon.snapshot.json` follows live canon: api.mzizi.dev now serves `circles`' `accent: "terracotta"` (mzizi-dev/mzizi-api-gateway#62). Every generated file is unchanged.
+
+### Added (@bundu/ui): `BrandMark` takes `brand="mukoko"` (registry pin 877ea97 on staging)
+
+`scripts/registry-ref.json` moves from `9f3631c` (registry v4.5.0) to `877ea97`, the merge of mzizi-dev/mzizi-registry#459 on registry `staging`. `pnpm registry:sync` rebuilds one component and adds two assets:
+
+- `app/BrandMark.astro` (contract `app/brand-mark` 1.1.0): `brand` is `"nyuchi" | "mukoko"`. `brand="mukoko"` shows the Mukoko honeycomb (the bundu-ecosystem-icons pair, scaled to 128px, never redrawn), with alt text `mukoko` and the `mukoko` wordmark.
+- `assets/brand/mukoko-icon-{light,dark}.png` ship in the package and are exported as `@bundu/ui/assets/brand/mukoko-icon-{light,dark}.png`.
+- The contract copies move to the pin: `app/brand-mark` 1.1.0, and the `site/container`, `site/hero` and `site/section` 1.0.1 text from mzizi-dev/mzizi-registry#455. Only the docs change; no component changes.
+
+Before this ships in a release, move the pin to the registry release on `main` that carries #459.
+
 ## [@bundu/ui 0.5.0, @nyuchi/ui 0.4.0] - 2026-10-06
 
 The release of `staging` to `main` after `@bundu/ui` 0.4.0 and `@nyuchi/ui` 0.3.0. Under the org versioning policy each package with changes takes the next minor: `@bundu/ui` 0.5.0 carries MetaList 1.1.0 and ResultGrid 1.1.0 from the registry v4.5.0 pin and `brand-circles.css`; `@nyuchi/ui` 0.4.0 carries `brand-circles.css` (both from the entries below). `@bundu/server` (0.1.0) has no package changes and is not republished.
