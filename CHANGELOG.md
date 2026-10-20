@@ -25,7 +25,7 @@ Versions published before then are not renumbered.
 
 - **Removed:** `packages/ui`, `@nyuchi/ui` 0.4.0, a Svelte 5 / SvelteKit component library. It is no longer in the pnpm workspace, so no release publishes it again. The 0.4.0 already on npm is not unpublished or deprecated by this change: deprecating it needs an owner with the npm credentials.
 - **Changed (repository):** `scripts/generate-tokens.mjs` generates the token files for `@bundu/ui` only. The generated files in `packages/bundu-ui` are unchanged (`pnpm tokens:check` passes).
-- **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` no longer forbids Svelte imports. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
+- **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` still refuses Svelte imports (and React, Preact, Vue and Solid imports, and `.svelte`/`.vue`/`.tsx`/`.jsx` import paths), as it did before. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
 
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
