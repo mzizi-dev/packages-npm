@@ -28,6 +28,7 @@ Every `pnpm test` left three folders behind in the system temp directory (`$TMPD
 - `vite-plus` moves from 1.0.0 to 1.1.0, which brings `vitest` and `@vitest/*` 5.0.3 (and the oxc toolchain it ships) into the lockfile. No published package changes.
 - `packages/bundu-ui/README.md` rewraps one list item (same text) so that no line starts with `--`. The newer formatter in `vp check` and Prettier 3.9.4 disagreed on how to indent those lines, and now both pass.
 - Verified: `pnpm test` (148, 36 and 590 tests) with `TMPDIR` set to an empty folder leaves no such folder; on 1.0.0 the same run left three.
+- **Security:** `source-map-js` 1.2.2 through an override (`source-map-js@<1.2.2`), for GHSA-68fv-2mgg-jv7q (a crafted source map could stall the event loop). Vite+ 1.1.0 brings 1.2.1 in through `postcss`. It is a dev-only dependency: no published package changes.
 
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
