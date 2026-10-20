@@ -948,11 +948,9 @@ describe("pure Astro", () => {
     for (const file of files) {
       const source = readFileSync(new URL(file, dir), "utf8");
       expect(source, file).not.toMatch(
-        /from\s+["'](react|react-dom|preact|svelte|vue|solid-js)/,
+        /from\s+["'](react|react-dom|preact|vue|solid-js)/,
       );
-      expect(source, file).not.toMatch(
-        /from\s+["'][^"']+\.(tsx|jsx|svelte|vue)["']/,
-      );
+      expect(source, file).not.toMatch(/from\s+["'][^"']+\.(tsx|jsx|vue)["']/);
       expect(source, file).not.toMatch(/client:(load|idle|visible|media|only)/);
       // Only the shell (collapse persistence, Escape for tooltips) and the
       // command palette (the shortcut, live filtering) carry a script, and

@@ -1,6 +1,5 @@
 node_modules/
 dist/
-.svelte-kit/
 .turbo/
 *.log
 .DS_Store

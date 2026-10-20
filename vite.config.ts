@@ -47,9 +47,8 @@ export default defineConfig({
     // about it on every PR). Turned on, it reports 112 errors that are about
     // the workspace, not the code: @bundu/ui ships React .tsx source whose
     // peers (react, @types/react, class-variance-authority, ...) are not
-    // installed in this repo, and tsgolint does not resolve .svelte modules
-    // (@nyuchi/ui is type checked by svelte-check instead). Turn it on once
-    // @bundu/ui declares its peers as devDependencies.
+    // installed in this repo. Turn it on once @bundu/ui declares its peers as
+    // devDependencies.
     options: { typeAware: true, typeCheck: false },
   },
 });
