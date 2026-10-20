@@ -8,6 +8,7 @@ import {
   evaluateChecks,
   evaluateClauses,
   evaluateDensity,
+  evaluatePredicate,
   evaluateTheming,
   heightOf,
 } from "../../test/contract-runner";
@@ -80,6 +81,94 @@ describe("clauses", () => {
     ).toHaveLength(1);
     expect(
       evaluateClauses(withClauses('class uses "primary"'), html),
+    ).toHaveLength(1);
+  });
+});
+
+describe("predicates", () => {
+  // Each value predicate, with a value it holds on and one it fails on. The
+  // grammar is the registry's (contracts/schema, RFC-0006); `has` and `not`
+  // came with registry #477.
+  const value =
+    "inline-flex rounded-full bg-[var(--primary)] hover:line-through";
+  test.each([
+    [
+      "is",
+      '"inline-flex rounded-full bg-[var(--primary)] hover:line-through"',
+      'is "inline-flex"',
+    ],
+    ["contains", 'contains "rounded"', 'contains "uppercase"'],
+    ["has", 'has "rounded-full"', 'has "line-through"'],
+    ["not_empty", "not_empty", "not_empty"],
+    [
+      "in",
+      'in "a" "inline-flex rounded-full bg-[var(--primary)] hover:line-through"',
+      'in "a" "b"',
+    ],
+    ["uses", 'uses "--primary"', 'uses "--ring"'],
+    ["not", 'not has "line-through"', 'not contains "line-through"'],
+  ])(
+    "%s holds where it should and fails where it should not",
+    (name, holds, fails) => {
+      const passing = name === "is" ? `is ${holds}` : holds;
+      expect(evaluatePredicate(value, passing)).toEqual({ ok: true });
+      // not_empty fails only on an empty value.
+      const failing =
+        name === "not_empty"
+          ? evaluatePredicate("  ", fails)
+          : evaluatePredicate(value, fails);
+      expect(failing).toEqual({ ok: false });
+    },
+  );
+
+  test("a malformed predicate is unevaluable, and `not` never turns it into a pass", () => {
+    for (const pred of [
+      "is inline-flex", // unquoted operand
+      'is "a" "b"', // an extra operand
+      'contains "open', // a quote left open
+      "in", // `in` with no operand
+      'has "two tokens"', // `has` takes one class token
+      'uses "primary"', // `uses` takes "--token"
+      'not_empty "x"', // `not_empty` takes no operand
+      'not not is "x"', // one `not` only
+      "not", // `not` needs a predicate
+      'resembles "x"', // not a predicate
+      "not is inline-flex", // `not` of an unevaluable predicate
+    ]) {
+      expect(evaluatePredicate(value, pred), pred).toHaveProperty(
+        "unevaluable",
+      );
+    }
+  });
+
+  test("each clause form holds on the markup it describes and fails on a mutation", () => {
+    const cases: [string, string][] = [
+      ['when other shows p "Other"', 'when other shows p "Another"'],
+      ["uses x", "uses y"],
+      ['button "Close" min_height 32', 'button "Close" min_height 48'],
+      ['label is "Close"', 'label is "Open"'],
+      ['class has "bg-card"', 'class not has "bg-card"'],
+    ];
+    const withLabel = {
+      ...html,
+      default: html.default.replace(
+        'role="status"',
+        'role="status" aria-label="Close"',
+      ),
+    };
+    for (const [holds, fails] of cases) {
+      expect(evaluateClauses(withClauses(holds), withLabel), holds).toEqual([]);
+      expect(
+        evaluateClauses(withClauses(fails), withLabel),
+        fails,
+      ).toHaveLength(1);
+    }
+  });
+
+  test("a predicate on an attribute the root does not carry fails, with `not` too", () => {
+    expect(evaluateClauses(withClauses('portal is "x"'), html)).toHaveLength(1);
+    expect(
+      evaluateClauses(withClauses('portal not is "x"'), html),
     ).toHaveLength(1);
   });
 });
