@@ -30,6 +30,10 @@ Every `pnpm test` left three folders behind in the system temp directory (`$TMPD
 - Verified: `pnpm test` (148, 36 and 590 tests) with `TMPDIR` set to an empty folder leaves no such folder; on 1.0.0 the same run left three.
 - **Security:** `source-map-js` 1.2.2 through an override (`source-map-js@<1.2.2`), for GHSA-68fv-2mgg-jv7q (a crafted source map could stall the event loop). Vite+ 1.1.0 brings 1.2.1 in through `postcss`. It is a dev-only dependency: no published package changes.
 
+### Added — Dependabot version updates target `staging` (2026-10-21)
+
+- (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
+
 ### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
 
 Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
