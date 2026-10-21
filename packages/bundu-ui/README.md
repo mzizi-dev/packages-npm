@@ -30,10 +30,12 @@ developed by Nyuchi. This package is not Mzizi itself.
   contract `ui/markdown-renderer`). It parses `content` into a typed tree and draws it as
   elements, never through an HTML string. Raw HTML in the source shows as text, and links pass
   a scheme allow-list (`links="safe"`, the default, keeps http, https, mailto, tel and relative
-  addresses; `links="https"` keeps https only); a refused link keeps its words. `from="html"`
+  addresses; `links="https"` keeps https only); a refused link keeps its words, and a kept one
+  shows its address on hover, normalised, with an internationalised host as punycode. `from="html"`
   or `"auto"` reads an editor's rich text, and `headingBase` sets the level a `#` heading
   renders at. The parser it draws from is `@bundu/ui/markdown-parse`: `markdownBlocks()`,
-  `safeHref()` and the block and inline types, for code that needs the tree, not the markup.
+  `safeLink()` (the checked address and its hover title), `safeHref()` and the block and inline
+  types, for code that needs the tree, not the markup.
 
   ```astro
   ---
@@ -344,7 +346,7 @@ console rather than roomy like a marketing page.
 | `StatTiles.astro`                            | One bordered row of equal `StatTile`s with hairline dividers; `StatTile` gains `info`                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `InfoTip.astro`                              | A focusable info icon whose tooltip is its accessible description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `EmptyState.astro`                           | A bordered card: a heading, help text and actions; `StateMessage kind="empty"` uses it                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `BrandMark.astro`                            | The official Nyuchi mark (the bee) or Mukoko mark (`brand="mukoko"`, the honeycomb): the Mzizi registry's light/dark icon pair, scaled, never redrawn, with the lowercase serif wordmark and a muted suffix when asked; the right variant per theme by CSS                                                                                                                                                                                                                                                                                             |
+| `BrandMark.astro`                            | The official Nyuchi mark (the bee) or Mukoko mark (`brand="mukoko"`, the honeycomb): the Mzizi registry's light/dark icon pair, scaled, never redrawn, with the lowercase serif wordmark and a muted suffix when asked; the right variant per theme by CSS. Any other `brand` is a render error that names it, never another brand's mark                                                                                                                                                                                                              |
 
 `@bundu/ui/app/nav` (also from the root) holds the pure helpers: `groupNav` turns
 flat one-line registrations (`group`, `parent`) into ordered, nested groups;

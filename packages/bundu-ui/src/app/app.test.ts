@@ -586,6 +586,17 @@ describe("BrandMark", () => {
     expect(lockup).toContain("console");
     expectNoClientJs(lockup);
   });
+
+  test("an unknown brand is an error that names it, never another brand's mark", async () => {
+    // brand-mark 1.1.1 (mzizi-registry#517): untyped data or a brand whose icon pair has not
+    // shipped. A key on Object.prototype is unknown too.
+    await expect(render(BrandMark, { brand: "bundu" })).rejects.toThrow(
+      'BrandMark: unknown brand "bundu"; expected one of "nyuchi", "mukoko"',
+    );
+    await expect(render(BrandMark, { brand: "toString" })).rejects.toThrow(
+      'BrandMark: unknown brand "toString"',
+    );
+  });
 });
 
 describe("WorkspaceSwitcher", () => {
