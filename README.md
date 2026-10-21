@@ -19,11 +19,11 @@ and developed by Nyuchi — but the packages themselves are **Nyuchi-owned
 implementations**, not Mzizi itself. Mzizi's own registry lives at
 [`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry).
 
-| Package                                                                                      | Framework          | What it is                                                                                                         |
-| -------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)              | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                                                                   |
-| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles |
-| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs)     | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging   |
+| Package                                                                                      | Framework                  | What it is                                                                                                                                                                                          |
+| -------------------------------------------------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)              | Svelte 5/SvelteKit (today) | The app-UI layer for Nyuchi apps. Svelte is out of new work across the Mzizi ecosystem (owner decision, 2026-10-20). That decision is direction, not a change to this package; it is not built here |
+| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React              | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles                                                                                  |
+| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs)             | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging                                                                                    |
 
 Both UI packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
 `tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of

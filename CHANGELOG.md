@@ -30,6 +30,12 @@ Every `pnpm test` left three folders behind in the system temp directory (`$TMPD
 - Verified: `pnpm test` (148, 36 and 590 tests) with `TMPDIR` set to an empty folder leaves no such folder; on 1.0.0 the same run left three.
 - **Security:** `source-map-js` 1.2.2 through an override (`source-map-js@<1.2.2`), for GHSA-68fv-2mgg-jv7q (a crafted source map could stall the event loop). Vite+ 1.1.0 brings 1.2.1 in through `postcss`. It is a dev-only dependency: no published package changes.
 
+### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
+
+Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
+package table now says `@nyuchi/ui` is Svelte 5 / SvelteKit today, and that the decision is
+direction, not a change to this package. No package code, version or published artifact changes.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
