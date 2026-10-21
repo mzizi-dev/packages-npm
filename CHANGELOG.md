@@ -21,9 +21,9 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
-### Security — `http-cache-semantics` and `source-map-js` raised to fixed versions (2026-10-21)
+### Security — `http-cache-semantics`, `source-map-js`, `vite` and `vite-plus` raised to fixed versions (2026-10-21)
 
-- (repository) Two pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `>=4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `>=1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. The remaining `vite` / `vite-plus` advisories wait on the vite-plus 1.x decision.
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `>=4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `>=1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. `vite-plus` moves from 1.0.0 to 1.3.0 (GHSA-587h-7wmj-h5pm, GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover `vite-plus <=1.0.0`; this repo was already on 1.x, so no `vp migrate` is involved), and a third override, `vite@>=8.0.0 <8.3.3` → `>=8.3.3`, lifts the bundled `vite` 8 to 8.3.5; `vite` 6 (`@nyuchi/ui`) resolves to 6.4.5. `pnpm audit` reports no known vulnerabilities. vite-plus 1.3.0's formatter re-flowed one README bullet, rewritten so prettier and oxfmt agree.
 
 ### Changed — canon snapshot refreshed to brand v4.0.31 (2026-10-21)
 
