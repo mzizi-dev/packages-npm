@@ -270,6 +270,16 @@
       "path": "src/Label.astro",
       "registry": "n2-primitives/label.astro"
     },
+    "markdown-parse": {
+      "package": "bundu-ui",
+      "path": "src/markdown-parse.ts",
+      "registry": "n2-primitives/markdown-parse.ts"
+    },
+    "markdown-renderer": {
+      "package": "bundu-ui",
+      "path": "src/MarkdownRenderer.astro",
+      "registry": "n2-primitives/markdown-renderer.astro"
+    },
     "native-select": {
       "package": "bundu-ui",
       "path": "src/NativeSelect.astro",
@@ -424,6 +434,14 @@
     "assets/nyuchi-mark-dark.png": {
       "package": "bundu-ui",
       "path": "assets/brand/nyuchi-mark-dark.png"
+    },
+    "assets/mukoko-icon-light.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/mukoko-icon-light.png"
+    },
+    "assets/mukoko-icon-dark.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/mukoko-icon-dark.png"
     }
   },
   "aliases": {
