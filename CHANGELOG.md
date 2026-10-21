@@ -38,6 +38,12 @@ Versions published before then are not renumbered.
 - The package README names `safeLink()`, the hover title and `BrandMark`'s error. The `vite.config.ts` comment on the `markdown-parse.ts` format exemption is updated: the registry now formats the file with Prettier, and `vp fmt` disagrees on one line only (the `MarkdownListChild` union), so the exemption stays.
 - `tokens/canon.snapshot.json` follows live canon (`pnpm canon:fetch`): api.mzizi.dev now serves `textLight` and `textDark` on every colour family, and `family`, `role` and `sortOrder` on the seven heritage tones (mzizi-dev/mzizi-api-gateway#74). `snapshot matches live canon` failed on `staging` without it. Every generated file is unchanged.
 
+### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
+
+Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
+package table now says `@nyuchi/ui` is Svelte 5 / SvelteKit today, and that the decision is
+direction, not a change to this package. No package code, version or published artifact changes.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
