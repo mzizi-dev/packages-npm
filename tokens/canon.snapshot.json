@@ -307,6 +307,8 @@
       "name": "ember",
       "onContainerDark": "#EBA68A",
       "onContainerLight": "#7A3115",
+      "textDark": "#EEC9BA",
+      "textLight": "#843D20",
       "uiDark": "#BB562D",
       "uiLight": "#CD5F33"
     },
@@ -321,6 +323,8 @@
       "name": "acacia",
       "onContainerDark": "#B6CE23",
       "onContainerLight": "#48510E",
+      "textDark": "#CDD69C",
+      "textLight": "#4D5615",
       "uiDark": "#768420",
       "uiLight": "#7E8C22"
     },
@@ -335,6 +339,8 @@
       "name": "fern",
       "onContainerDark": "#28DB28",
       "onContainerLight": "#0F570F",
+      "textDark": "#A4DFA4",
+      "textLight": "#175E17",
       "uiDark": "#228D22",
       "uiLight": "#259725"
     },
@@ -349,6 +355,8 @@
       "name": "lagoon",
       "onContainerDark": "#24D6BC",
       "onContainerLight": "#0E554B",
+      "textDark": "#A3DCD4",
+      "textLight": "#165B51",
       "uiDark": "#218A7A",
       "uiLight": "#249383"
     },
@@ -363,6 +371,8 @@
       "name": "storm",
       "onContainerDark": "#99B2EE",
       "onContainerLight": "#1A409B",
+      "textDark": "#C4D1F1",
+      "textLight": "#284CA6",
       "uiDark": "#426CD1",
       "uiLight": "#577BD6"
     },
@@ -377,6 +387,8 @@
       "name": "dusk",
       "onContainerDark": "#CC9FEF",
       "onContainerLight": "#661B9E",
+      "textDark": "#DFC8F2",
+      "textLight": "#742AAD",
       "uiDark": "#9749D3",
       "uiLight": "#A35DD8"
     },
@@ -391,6 +403,8 @@
       "name": "protea",
       "onContainerDark": "#ED98C9",
       "onContainerLight": "#841656",
+      "textDark": "#F1C4DD",
+      "textLight": "#932464",
       "uiDark": "#CA3188",
       "uiLight": "#D34998"
     }
@@ -404,6 +418,8 @@
       "name": "indigo",
       "origin": "Indigofera, West Africa textile tradition",
       "symbolism": "Dusk, depth, the dyer's craft",
+      "textDark": "#CBD0EB",
+      "textLight": "#4527A0",
       "usage": "Twilight surfaces, deep atmosphere, mini-app moods"
     },
     {
@@ -414,6 +430,8 @@
       "name": "savanna",
       "origin": "Sub-Saharan grasslands",
       "symbolism": "Sun-dried grass, open land, the dry season",
+      "textDark": "#EBCF7D",
+      "textLight": "#725915",
       "usage": "Warm grassland surfaces, daylight atmosphere"
     },
     {
@@ -424,6 +442,8 @@
       "name": "baobab",
       "origin": "Adansonia, across the African continent",
       "symbolism": "The tree of life, age, shelter",
+      "textDark": "#D9CFCC",
+      "textLight": "#4E342E",
       "usage": "Earthy surfaces, grounded atmosphere, bark tones"
     },
     {
@@ -434,6 +454,8 @@
       "name": "sunset",
       "origin": "The African horizon at dusk",
       "symbolism": "Day's end, warmth, the gathering hour",
+      "textDark": "#FFC3B0",
+      "textLight": "#A43310",
       "usage": "Warm accent surfaces, golden-hour atmosphere"
     },
     {
@@ -444,6 +466,8 @@
       "name": "river",
       "origin": "The great African rivers — Zambezi, Nile, Congo",
       "symbolism": "Flow, life, the journey",
+      "textDark": "#84DFEA",
+      "textLight": "#006064",
       "usage": "Cool surfaces, flowing atmosphere, water tones"
     },
     {
@@ -454,6 +478,8 @@
       "name": "hematite",
       "origin": "Sishen & Thabazimbi, South Africa",
       "symbolism": "Foundation, endurance, the substrate",
+      "textDark": "#C9D2D7",
+      "textLight": "#4A616B",
       "usage": "Neutral anchor, mini-app surfaces, atmosphere"
     },
     {
@@ -464,6 +490,8 @@
       "name": "kalahari",
       "origin": "Kalahari & Namib, Southern Africa",
       "symbolism": "Openness, space, the light pole",
+      "textDark": "#E8D9B5",
+      "textLight": "#675C46",
       "usage": "Light anchor, warm backgrounds, mini-app surfaces"
     }
   ],
@@ -473,13 +501,18 @@
       "containerLight": "#E3F2FD",
       "cssVar": "--color-cobalt",
       "darkHex": "#00B0FF",
+      "family": "deep-earth",
       "hex": "#0047AB",
       "lightHex": "#0047AB",
       "name": "cobalt",
       "onContainerDark": "#B3E5FC",
       "onContainerLight": "#002966",
       "origin": "Katanga (DRC) and Zambian Copperbelt",
+      "role": "Knowledge",
+      "sortOrder": 0,
       "symbolism": "Digital future, trust, knowledge",
+      "textDark": "#86DCFF",
+      "textLight": "#0047AB",
       "usage": "Primary blue, links, CTAs"
     },
     {
@@ -487,13 +520,18 @@
       "containerLight": "#F3E5F5",
       "cssVar": "--color-tanzanite",
       "darkHex": "#B388FF",
+      "family": "deep-earth",
       "hex": "#B388FF",
       "lightHex": "#4B0082",
       "name": "tanzanite",
       "onContainerDark": "#E1BEE7",
       "onContainerLight": "#2E004D",
       "origin": "Merelani Hills, Tanzania",
+      "role": "Identity",
+      "sortOrder": 1,
       "symbolism": "Premium, creativity, connection",
+      "textDark": "#DCC8FF",
+      "textLight": "#4B0082",
       "usage": "Purple accent, brand/logo, social features"
     },
     {
@@ -501,13 +539,18 @@
       "containerLight": "#E0F2F1",
       "cssVar": "--color-malachite",
       "darkHex": "#64FFDA",
+      "family": "deep-earth",
       "hex": "#64FFDA",
       "lightHex": "#004D40",
       "name": "malachite",
       "onContainerDark": "#A7FFEB",
       "onContainerLight": "#00332B",
       "origin": "Congo Copper Belt",
+      "role": "Growth",
+      "sortOrder": 2,
       "symbolism": "Growth, nature, success",
+      "textDark": "#64FFDA",
+      "textLight": "#004D40",
       "usage": "Success states, positive actions"
     },
     {
@@ -515,13 +558,18 @@
       "containerLight": "#FFF8E1",
       "cssVar": "--color-gold",
       "darkHex": "#FFD740",
+      "family": "hand",
       "hex": "#FFD740",
       "lightHex": "#5D4037",
       "name": "gold",
       "onContainerDark": "#FFECB3",
       "onContainerLight": "#3E2723",
       "origin": "Ghana, South Africa, Mali",
+      "role": "Value",
+      "sortOrder": 3,
       "symbolism": "Honey, rewards, warmth",
+      "textDark": "#FFD740",
+      "textLight": "#5D4037",
       "usage": "Achievements, rewards, highlights"
     },
     {
@@ -529,13 +577,18 @@
       "containerLight": "#F5E6D3",
       "cssVar": "--color-terracotta",
       "darkHex": "#E1B07E",
+      "family": "hand",
       "hex": "#A0522D",
       "lightHex": "#A0522D",
       "name": "terracotta",
       "onContainerDark": "#F5E6D3",
       "onContainerLight": "#5D2906",
       "origin": "Pan-African Sahel",
+      "role": "Community",
+      "sortOrder": 4,
       "symbolism": "Earth, community, grounding",
+      "textDark": "#EBCCA3",
+      "textLight": "#8E4928",
       "usage": "Community features, warmth"
     },
     {
@@ -543,13 +596,18 @@
       "containerLight": "#E8EAF6",
       "cssVar": "--color-sodalite",
       "darkHex": "#3D5AFE",
+      "family": "deep-earth",
       "hex": "#283593",
       "lightHex": "#283593",
       "name": "sodalite",
       "onContainerDark": "#C5CAE9",
       "onContainerLight": "#141A5C",
       "origin": "Kunene River, Namibia & South Africa",
+      "role": "Intelligence",
+      "sortOrder": 5,
       "symbolism": "Intelligence, depth, reasoning",
+      "textDark": "#C6CFFF",
+      "textLight": "#283593",
       "usage": "AI/Shamwari surfaces, deep-reasoning states"
     },
     {
@@ -557,13 +615,18 @@
       "containerLight": "#FBE4DA",
       "cssVar": "--color-copper",
       "darkHex": "#FF8A65",
+      "family": "hand",
       "hex": "#BF5A36",
       "lightHex": "#BF5A36",
       "name": "copper",
       "onContainerDark": "#FFD3C2",
       "onContainerLight": "#5C2410",
       "origin": "Central African Copperbelt, Zambia & DRC",
+      "role": "Stewardship",
+      "sortOrder": 6,
       "symbolism": "Connection, foundation, stewardship",
+      "textDark": "#FFC3B0",
+      "textLight": "#93452A",
       "usage": "Bundu ecosystem identity, the commons"
     }
   ],
@@ -588,7 +651,7 @@
       "dark": "#2A2927",
       "light": "#E7E5E0",
       "name": "border",
-      "usage": "Canonical border color — cards, inputs, dividers, tables. Warm stone, not cool gray."
+      "usage": "Canonical hairline — cards, dividers, tables. Decorative and never the only cue; not for the edge of a control (input, select, checkbox, radio, switch), which is the `border-control` role (APCA Lc 30 and 3:1) once components adopt it. Warm stone, not cool gray."
     },
     {
       "dark": "#B388FF",

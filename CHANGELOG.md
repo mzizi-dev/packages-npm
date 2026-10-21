@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — canon snapshot refreshed to brand v4.0.31 (2026-10-21)
+
+- (repository) `tokens/canon.snapshot.json` is re-fetched from `api.mzizi.dev/v1/brand` (brand v4.0.31, 21 families) after the API's registry pin moved (mzizi-api#83). Live canon adds `textDark` / `textLight` to all 21 colour families, `sortOrder`, `family` and `role` fields to seven entries, and new usage text for the border token (a decorative hairline; control edges become the `border-control` role once components adopt it). `pnpm tokens:build` produces no change: the generator does not read any of the new fields yet, so no generated token file, published CSS or package version changes. This turns the `snapshot matches live canon` check green again.
+
 ### Added — Dependabot version updates target `staging` (2026-10-21)
 
 - (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
