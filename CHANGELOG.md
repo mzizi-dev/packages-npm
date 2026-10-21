@@ -38,6 +38,10 @@ Versions published before then are not renumbered.
 - The package README names `safeLink()`, the hover title and `BrandMark`'s error. The `vite.config.ts` comment on the `markdown-parse.ts` format exemption is updated: the registry now formats the file with Prettier, and `vp fmt` disagrees on one line only (the `MarkdownListChild` union), so the exemption stays.
 - `tokens/canon.snapshot.json` follows live canon (`pnpm canon:fetch`): api.mzizi.dev now serves `textLight` and `textDark` on every colour family, and `family`, `role` and `sortOrder` on the seven heritage tones (mzizi-dev/mzizi-api-gateway#74). `snapshot matches live canon` failed on `staging` without it. Every generated file is unchanged.
 
+### Added — Dependabot version updates target `staging` (2026-10-21)
+
+- (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
+
 ### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
 
 Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
