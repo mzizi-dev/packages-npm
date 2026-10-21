@@ -21,6 +21,12 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
+
+Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
+package table now says `@nyuchi/ui` is Svelte 5 / SvelteKit today, and that the decision is
+direction, not a change to this package. No package code, version or published artifact changes.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:
