@@ -21,6 +21,12 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Security
+
+- **Fixed (repository):** `source-map-js` is pinned to `1.2.2` through `pnpm.overrides` (`"source-map-js@<1.2.2": "^1.2.2"`), which clears GHSA-68fv-2mgg-jv7q (high, event-loop denial of service through indexed source-map section offsets). It was reached through `vite-plus` > `@voidzero-dev/vite-plus-core` > `postcss`, and the lockfile now resolves `source-map-js` 1.2.2 everywhere.
+- **Accepted (repository):** GHSA-ch52-4w7c-c8xp (high, `http-cache-semantics` max-stale handling can disclose cross-user cached responses) is not fixed here. `http-cache-semantics` 4.2.0 reaches the repository through `astro`, and the advisory lists no patched version. It is accepted as a standing exception: the release instructions for 20 October 2026 name it as packages-npm's accepted `audit` exception. `pnpm.auditConfig.ignoreGhsas` records it, as mzizi-registry records its own, so `pnpm audit --audit-level high` passes. Remove the entry once a patched `http-cache-semantics` reaches `astro`.
+- **Fixed (repository):** GHSA-587h-7wmj-h5pm (high), GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw (moderate), published on 21 October 2026 against `vite` ≤ 6.4.3 and 8.3.0–8.3.2 and `vite-plus` ≤ 1.0.0. `vite-plus` moves 1.0.0 → 1.1.0 (dev dependency), and two `pnpm.overrides` move `vite` 6.4.3 → 6.4.5 (through `@sveltejs/vite-plugin-svelte` in `@nyuchi/ui`) and 8.3.2 → 8.3.5 (through `astro` in `@bundu/ui`). `pnpm audit --audit-level high` reports only the accepted `http-cache-semantics` advisory. `vite-plus` 1.1.0 brings `oxfmt` 0.72.0, which wanted a line in `packages/bundu-ui/README.md` reflowed; the wording is unchanged. Nothing in a published package's files changes.
+
 ### Added — Dependabot version updates target `staging` (2026-10-21)
 
 - (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
@@ -43,6 +49,10 @@ direction, not a change to this package. No package code, version or published a
 `CLAUDE.md` now names `AGENTS.md` for those rules, and says a changelog entry that changes no package is scoped `(repository)`.
 
 Docs only: no package changes.
+
+### Changed (repository): `tokens/canon.snapshot.json` follows live canon
+
+`api.mzizi.dev/v1/brand` (brand v4.0.31) now serves each mineral's `family`, `role`, `sortOrder`, `textLight` and `textDark`, so `canon:parity` failed on every pull request. Refreshed with `pnpm canon:fetch`. `pnpm tokens:build` writes no generated file differently: no token, colour or stylesheet changes.
 
 ### Changed (@bundu/ui): registry pin v4.8.0 on `main`, and `MarkdownRenderer.astro`
 
