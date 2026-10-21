@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Security — `http-cache-semantics` and `source-map-js` raised to fixed versions (2026-10-21)
+
+- (repository) Two pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `^4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `^1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. The remaining `vite` / `vite-plus` advisories wait on the vite-plus 1.x decision.
+
 ### Added — Dependabot version updates target `staging` (2026-10-21)
 
 - (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
