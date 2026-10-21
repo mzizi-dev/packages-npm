@@ -21,6 +21,13 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — package dependencies are minimum versions (2026-10-21)
+
+- (`@nyuchi/ui`, `@bundu/ui`, `@bundu/server`) Every `dependencies` and `devDependencies` entry in `packages/*/package.json` is now `>=x.y.z` with no maximum (owner, 2026-10-21: "mark packages with minimum acceptable, latest shouldn't be a blocker on too old of a version"). Each floor is the version `pnpm-lock.yaml` already resolved, so nothing in the lockfile moves. `workspace:` ranges and `@nyuchi/ui`'s `svelte` peer range (`^5`) are unchanged. No package version changes, so nothing is published.
+- (`@bundu/ui`) Consumers now need `tailwind-merge` 3.6.0 or later (was `^3.0.2`), the version this repository builds and tests against.
+- (`@nyuchi/ui`) `vite` and `@sveltejs/vite-plugin-svelte` are now `>=6.4.3` and `>=5.1.1`. A resolve without the lockfile can now cross into vite 8 and the plugin's next majors, which the owner's rule allows.
+- (`@bundu/ui`) The README's token list keeps each code span on one line. A span that wrapped inside a list item is re-indented by oxfmt 0.73 (vite-plus 1.3.0), and prettier 3.9.4 rejects the result; the wording is unchanged.
+
 ### Changed — canon snapshot refreshed to brand v4.0.31 (2026-10-21)
 
 - (repository) `tokens/canon.snapshot.json` is re-fetched from `api.mzizi.dev/v1/brand` (brand v4.0.31, 21 families) after the API's registry pin moved (mzizi-api#83). Live canon adds `textDark` / `textLight` to all 21 colour families, `sortOrder`, `family` and `role` fields to seven entries, and new usage text for the border token (a decorative hairline; control edges become the `border-control` role once components adopt it). `pnpm tokens:build` produces no change: the generator does not read any of the new fields yet, so no generated token file, published CSS or package version changes. This turns the `snapshot matches live canon` check green again.
