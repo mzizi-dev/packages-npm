@@ -23,7 +23,13 @@ export default defineConfig({
     // markdown-parse.ts (it also fixes parser bugs found in review of
     // mzizi-dev/packages-npm#55). Once a pin carries it, drop this entry and
     // run `pnpm registry:sync`.
-    ignorePatterns: ["packages/bundu-ui/src/markdown-parse.ts"],
+    // qr-matrix.ts is the same case: synced byte for byte from the registry's
+    // components/registry/n2-primitives/qr-matrix.ts (no semicolons), so it
+    // is formatted at the source or not at all.
+    ignorePatterns: [
+      "packages/bundu-ui/src/markdown-parse.ts",
+      "packages/bundu-ui/src/qr-matrix.ts",
+    ],
     overrides: [
       {
         files: ["*.md", "*.mdx"],
