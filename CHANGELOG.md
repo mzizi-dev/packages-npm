@@ -21,6 +21,15 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.
+- (`@bundu/ui`) New `@bundu/ui/MziziTrustMeter.astro`, the registry's new Astro build of `mzizi-trust-meter` (mzizi-registry#552), mapped in `scripts/registry-map.json` and exported from `package.json`. It is server-rendered with no script: a `role="meter"` root named by `title`, the Verification / Status / Ubuntu breakdown, or one 44px row per item of `signals` (`{ label, count, detail? }[]`). Its contract, `contracts/ui/mzizi-trust-meter.contract.json` (1.0.0), is synced with it, so the contract suite runs it. This closes the "Not synced" note in the 4.12.0 entry below.
+- (`@bundu/ui`) `icons.ts` (the registry's `site-icons`) gains the `star` and `trending-up` glyphs the meter uses.
+- (`@bundu/ui`) The registry's other 4.13.0 fixes (`mzizi-place-card` `linkComponent`, `mzizi-verified-badge` `label` / `ariaLabel` / `showScore`, the `mzizi-permission-gate` contrast fix, `lib/icons` without `"use client"`) are React-only in the registry and not mapped here, so nothing else changes.
+- (`@bundu/ui`) Known mismatch, to fix upstream: the synced contract says `implementations.astro.since: "0.7.0"`, but the next `@bundu/ui` release, the one that will ship this component, is 0.6.0 (`package.json` is 0.5.0). The contract is not hand-edited here; the fix belongs in mzizi-registry.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
 ### Added — the Kweli Address components, the `qr-matrix` module and the kweli marks, synced from mzizi-registry 4.12.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `f70703d` to mzizi-registry's 4.12.0 release on `main` (`6bfa9a4`, mzizi-registry#547, tracking mzizi-registry#543), and `pnpm registry:sync` rebuilds every mapped file from it.
