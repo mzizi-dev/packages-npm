@@ -202,7 +202,7 @@
   ],
   "devDependencies": {
     "astro": ">=7.3.5",
-    "css-select": ">=6.0.0",
+    "css-select": ">=7.0.0",
     "domhandler": ">=5.0.3",
     "domutils": ">=3.2.2",
     "htmlparser2": ">=10.1.0"
