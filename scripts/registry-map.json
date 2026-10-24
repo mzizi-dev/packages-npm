@@ -300,6 +300,11 @@
       "path": "src/MarkdownRenderer.astro",
       "registry": "n2-primitives/markdown-renderer.astro"
     },
+    "mzizi-trust-meter": {
+      "package": "bundu-ui",
+      "path": "src/MziziTrustMeter.astro",
+      "registry": "n3-brand/mzizi-trust-meter.astro"
+    },
     "native-select": {
       "package": "bundu-ui",
       "path": "src/NativeSelect.astro",
