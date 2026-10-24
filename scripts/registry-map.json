@@ -1,5 +1,25 @@
 {
   "components": {
+    "address-code": {
+      "package": "bundu-ui",
+      "path": "src/AddressCode.astro",
+      "registry": "n2-primitives/address-code.astro"
+    },
+    "address-private-row": {
+      "package": "bundu-ui",
+      "path": "src/AddressPrivateRow.astro",
+      "registry": "n2-primitives/address-private-row.astro"
+    },
+    "address-selector": {
+      "package": "bundu-ui",
+      "path": "src/AddressSelector.astro",
+      "registry": "n2-primitives/address-selector.astro"
+    },
+    "address-share-card": {
+      "package": "bundu-ui",
+      "path": "src/AddressShareCard.astro",
+      "registry": "n3-brand/address-share-card.astro"
+    },
     "alert": {
       "package": "bundu-ui",
       "path": "src/Alert.astro",
@@ -39,6 +59,11 @@
       "package": "bundu-ui",
       "path": "src/app/CommandPalette.astro",
       "registry": "n7-shell/app-command-palette.astro"
+    },
+    "app-confirm-action": {
+      "package": "bundu-ui",
+      "path": "src/app/ConfirmAction.astro",
+      "registry": "n6-pages/app-confirm-action.astro"
     },
     "app-data-table": {
       "package": "bundu-ui",
@@ -85,6 +110,11 @@
       "path": "src/app/Label.astro",
       "registry": "n2-primitives/app-label.astro"
     },
+    "app-money": {
+      "package": "bundu-ui",
+      "path": "src/app/Money.astro",
+      "registry": "n2-primitives/app-money.astro"
+    },
     "app-nav": {
       "package": "bundu-ui",
       "path": "src/app/nav.ts",
@@ -99,6 +129,11 @@
       "package": "bundu-ui",
       "path": "src/app/Pagination.astro",
       "registry": "n6-pages/app-pagination.astro"
+    },
+    "app-plan-summary": {
+      "package": "bundu-ui",
+      "path": "src/app/PlanSummary.astro",
+      "registry": "n6-pages/app-plan-summary.astro"
     },
     "app-quick-search": {
       "package": "bundu-ui",
@@ -134,6 +169,11 @@
       "package": "bundu-ui",
       "path": "src/app/StateMessage.astro",
       "registry": "n6-pages/app-state-message.astro"
+    },
+    "app-tier-status": {
+      "package": "bundu-ui",
+      "path": "src/app/TierStatus.astro",
+      "registry": "n6-pages/app-tier-status.astro"
     },
     "app-toast": {
       "package": "bundu-ui",
@@ -280,10 +320,35 @@
       "path": "src/MarkdownRenderer.astro",
       "registry": "n2-primitives/markdown-renderer.astro"
     },
+    "money": {
+      "package": "bundu-ui",
+      "path": "src/money.ts",
+      "registry": "n2-primitives/money.ts"
+    },
+    "mzizi-trust-meter": {
+      "package": "bundu-ui",
+      "path": "src/MziziTrustMeter.astro",
+      "registry": "n3-brand/mzizi-trust-meter.astro"
+    },
+    "mzizi-trust-tier-data": {
+      "package": "bundu-ui",
+      "path": "src/mzizi-trust-tier-data.ts",
+      "registry": "n3-brand/mzizi-trust-tier-data.ts"
+    },
+    "mzizi-verified-badge": {
+      "package": "bundu-ui",
+      "path": "src/MziziVerifiedBadge.astro",
+      "registry": "n3-brand/mzizi-verified-badge.astro"
+    },
     "native-select": {
       "package": "bundu-ui",
       "path": "src/NativeSelect.astro",
       "registry": "n2-primitives/native-select.astro"
+    },
+    "qr-matrix": {
+      "package": "bundu-ui",
+      "path": "src/qr-matrix.ts",
+      "registry": "n2-primitives/qr-matrix.ts"
     },
     "safe-area": {
       "package": "bundu-ui",
@@ -442,6 +507,42 @@
     "assets/mukoko-icon-dark.png": {
       "package": "bundu-ui",
       "path": "assets/brand/mukoko-icon-dark.png"
+    },
+    "assets/kweli-mark-light.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-light.png"
+    },
+    "assets/kweli-mark-dark.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-dark.png"
+    },
+    "assets/kweli-mark-light.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-light.svg"
+    },
+    "assets/kweli-mark-dark.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-dark.svg"
+    },
+    "assets/kweli-favicon.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-favicon.svg"
+    },
+    "assets/kweli-icon-192.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-192.png"
+    },
+    "assets/kweli-icon-512.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-512.png"
+    },
+    "assets/kweli-icon-maskable-512.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-maskable-512.png"
+    },
+    "assets/kweli-apple-touch-icon.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-apple-touch-icon.png"
     }
   },
   "aliases": {

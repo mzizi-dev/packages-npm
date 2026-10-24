@@ -55,6 +55,15 @@
     "./Label.astro": "./src/Label.astro",
     "./Skeleton.astro": "./src/Skeleton.astro",
     "./StatusBadge.astro": "./src/StatusBadge.astro",
+    "./AddressCode.astro": "./src/AddressCode.astro",
+    "./AddressShareCard.astro": "./src/AddressShareCard.astro",
+    "./AddressSelector.astro": "./src/AddressSelector.astro",
+    "./AddressPrivateRow.astro": "./src/AddressPrivateRow.astro",
+    "./MziziTrustMeter.astro": "./src/MziziTrustMeter.astro",
+    "./MziziVerifiedBadge.astro": "./src/MziziVerifiedBadge.astro",
+    "./mzizi-trust-tier-data": "./src/mzizi-trust-tier-data.ts",
+    "./money": "./src/money.ts",
+    "./qr-matrix": "./src/qr-matrix.ts",
     "./safe-area": "./src/safe-area.ts",
     "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
     "./markdown-parse": "./src/markdown-parse.ts",
@@ -89,6 +98,10 @@
     "./app/StatTiles.astro": "./src/app/StatTiles.astro",
     "./app/EmptyState.astro": "./src/app/EmptyState.astro",
     "./app/InfoTip.astro": "./src/app/InfoTip.astro",
+    "./app/ConfirmAction.astro": "./src/app/ConfirmAction.astro",
+    "./app/TierStatus.astro": "./src/app/TierStatus.astro",
+    "./app/Money.astro": "./src/app/Money.astro",
+    "./app/PlanSummary.astro": "./src/app/PlanSummary.astro",
     "./app/nav": "./src/app/nav.ts",
     "./discover/DiscoverShell.astro": "./src/discover/DiscoverShell.astro",
     "./discover/DiscoverMeta.astro": "./src/discover/DiscoverMeta.astro",
@@ -139,6 +152,15 @@
     "./assets/brand/nyuchi-mark-dark.png": "./assets/brand/nyuchi-mark-dark.png",
     "./assets/brand/mukoko-icon-light.png": "./assets/brand/mukoko-icon-light.png",
     "./assets/brand/mukoko-icon-dark.png": "./assets/brand/mukoko-icon-dark.png",
+    "./assets/brand/kweli-mark-light.png": "./assets/brand/kweli-mark-light.png",
+    "./assets/brand/kweli-mark-dark.png": "./assets/brand/kweli-mark-dark.png",
+    "./assets/brand/kweli-mark-light.svg": "./assets/brand/kweli-mark-light.svg",
+    "./assets/brand/kweli-mark-dark.svg": "./assets/brand/kweli-mark-dark.svg",
+    "./assets/brand/kweli-favicon.svg": "./assets/brand/kweli-favicon.svg",
+    "./assets/brand/kweli-icon-192.png": "./assets/brand/kweli-icon-192.png",
+    "./assets/brand/kweli-icon-512.png": "./assets/brand/kweli-icon-512.png",
+    "./assets/brand/kweli-icon-maskable-512.png": "./assets/brand/kweli-icon-maskable-512.png",
+    "./assets/brand/kweli-apple-touch-icon.png": "./assets/brand/kweli-apple-touch-icon.png",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
@@ -146,9 +168,10 @@
   },
   "dependencies": {
     "@bundu/server": "workspace:^",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.2"
+    "class-variance-authority": ">=0.7.1 <0.8.0",
+    "clsx": ">=2.1.1 <3",
+    "tailwind-merge": ">=3.6.0 <4",
+    "uqr": ">=0.1.3 <0.2.0"
   },
   "files": [
     "src",
@@ -178,10 +201,10 @@
     "discover"
   ],
   "devDependencies": {
-    "astro": "7.3.5",
-    "css-select": "6.0.0",
-    "domhandler": "5.0.3",
-    "domutils": "3.2.2",
-    "htmlparser2": "^10"
+    "astro": ">=7.3.5",
+    "css-select": ">=6.0.0",
+    "domhandler": ">=5.0.3",
+    "domutils": ">=3.2.2",
+    "htmlparser2": ">=10.1.0"
   }
 }
