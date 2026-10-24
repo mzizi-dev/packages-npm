@@ -277,4 +277,24 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-tertiary: var(--text-tertiary);
+  --color-tier-community: var(--tier-community);
+  --color-tier-community-container: var(--tier-community-container);
+  --color-tier-community-on-container: var(--tier-community-on-container);
+  --color-tier-community-text: var(--tier-community-text);
+  --color-tier-government: var(--tier-government);
+  --color-tier-government-container: var(--tier-government-container);
+  --color-tier-government-on-container: var(--tier-government-on-container);
+  --color-tier-government-text: var(--tier-government-text);
+  --color-tier-licensed: var(--tier-licensed);
+  --color-tier-licensed-container: var(--tier-licensed-container);
+  --color-tier-licensed-on-container: var(--tier-licensed-on-container);
+  --color-tier-licensed-text: var(--tier-licensed-text);
+  --color-tier-otp: var(--tier-otp);
+  --color-tier-otp-container: var(--tier-otp-container);
+  --color-tier-otp-on-container: var(--tier-otp-on-container);
+  --color-tier-otp-text: var(--tier-otp-text);
+  --color-tier-unverified: var(--tier-unverified);
+  --color-tier-unverified-container: var(--tier-unverified-container);
+  --color-tier-unverified-on-container: var(--tier-unverified-on-container);
+  --color-tier-unverified-text: var(--tier-unverified-text);
 }
