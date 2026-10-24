@@ -1,4 +1,4 @@
-// The generated brand-*.css overlays, in both packages. Each overlay repoints
+// The generated brand-*.css overlays in @bundu/ui. Each overlay repoints
 // --primary and --ring to one family (and --brand-accent to a second, for a
 // brand with an accent) and nothing else, every one is exported,
 // and the owner's brand mineral decisions hold (mzizi-registry#404).
@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 import { describe, expect, test } from "vite-plus/test";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const PACKAGES = ["packages/bundu-ui", "packages/ui"];
+const PACKAGES = ["packages/bundu-ui"];
 
 /** Owner decisions: kweli malachite, learning gold (every Nyuchi brand is
  * gold), news and weather cobalt (2026-10-04); mzizi hematite (2026-09-30). */

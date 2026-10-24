@@ -21,6 +21,14 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Removed — `@nyuchi/ui` retired (2026-10-24)
+
+Owner decision, 2026-10-24: retire `@nyuchi/ui`, the Svelte package (following the 2026-10-20 decision that Svelte is out of the Mzizi ecosystem). This supersedes the 2026-10-20 README note further down that kept it as "Svelte 5 today".
+
+- **Removed:** `packages/ui`, `@nyuchi/ui` 0.4.0, a Svelte 5 / SvelteKit component library. It is no longer in the pnpm workspace, so no release publishes it again. The 0.4.0 already on npm is not unpublished or deprecated by this change: deprecating it needs an owner with the npm credentials.
+- **Changed (repository):** `scripts/generate-tokens.mjs` generates the token files for `@bundu/ui` only. The generated files in `packages/bundu-ui` are unchanged (`pnpm tokens:check` passes).
+- **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` still refuses Svelte imports (and React, Preact, Vue and Solid imports, and `.svelte`/`.vue`/`.tsx`/`.jsx` import paths), as it did before. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
+
 ### Changed — the Kweli phase-2 fixes, synced from mzizi-registry 4.14.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `b29b1f8` (4.13.0) to mzizi-registry's 4.14.0 release on `main` (`674c94d`, mzizi-registry#561, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch 674c94d` run at that commit (105 files, 72 contracts).
