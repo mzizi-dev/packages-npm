@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.6.0] - 2026-10-24
+
+Releases `@bundu/ui` 0.6.0, the next minor above 0.5.0 (owner approval, 2026-10-24). It carries everything below since 0.5.0: the registry colour roles and `--tier-*` verification tiers, the trust meter's `tier` prop, the Kweli business-dashboard components and the provider-neutral `money` lib (synced from mzizi-registry 4.16.0), and the retirement of `@nyuchi/ui` from this workspace. `@bundu/server` stays at 0.1.0 (unchanged on npm).
+
 ### Added — the Kweli business-dashboard components and the `money` lib, synced from mzizi-registry 4.16.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `e336a5f` (4.15.0) to mzizi-registry's 4.16.0 release on `main` (`c68d3c3`, mzizi-registry#575, the gaps tracked in #79 and mzizi-registry#569), and `pnpm registry:sync` and `pnpm contracts:fetch c68d3c3` run at that commit (112 files, 77 contracts).
