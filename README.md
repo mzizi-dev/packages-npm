@@ -6,7 +6,7 @@
 [![Release](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Packages:** [`@nyuchi/ui`](https://www.npmjs.com/package/@nyuchi/ui) · [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) · [`@bundu/server`](https://www.npmjs.com/package/@bundu/server) | **Architecture:** [mzizi.dev](https://mzizi.dev)
+**Packages:** [`@bundu/ui`](https://www.npmjs.com/package/@bundu/ui) · [`@bundu/server`](https://www.npmjs.com/package/@bundu/server) | **Architecture:** [mzizi.dev](https://mzizi.dev)
 
 ---
 
@@ -19,15 +19,14 @@ and developed by Nyuchi — but the packages themselves are **Nyuchi-owned
 implementations**, not Mzizi itself. Mzizi's own registry lives at
 [`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry).
 
-| Package                                                                                      | Framework          | What it is                                                                                                         |
-| -------------------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| [`@nyuchi/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/ui)              | Svelte 5/SvelteKit | The app-UI layer for Nyuchi apps                                                                                   |
-| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React      | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles |
-| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs)     | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging   |
+| Package                                                                                      | Framework      | What it is                                                                                                         |
+| -------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [`@bundu/ui`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-ui)         | Astro + React  | The marketing UI kit behind the bundu, nyuchi and mukoko marketing sites, and pure-Astro app patterns for consoles |
+| [`@bundu/server`](https://github.com/mzizi-dev/packages-npm/tree/main/packages/bundu-server) | Any (Web APIs) | Server-side helpers: sealed cookies, flash, theme, safe redirects, origin checks, security headers, table paging   |
 
-Both UI packages ship **byte-identical** `styles/tokens.css`, `styles/theme.css`,
-`tokens.json`, `tailwind-palette.mjs` and `styles/brand-*.css`. They are two outputs of
-one generator, not two hand-maintained files.
+`@bundu/ui` ships `styles/tokens.css`, `styles/theme.css`, `tokens.json`,
+`tailwind-palette.mjs` and `styles/brand-*.css`. They are outputs of one generator
+(`scripts/generate-tokens.mjs`), not hand-maintained files.
 
 The Mzizi design system itself is published on claude.ai as the Design System artifact,
 <https://claude.ai/artifact/G8CCtAbZ8w717uQ3R5itCc>: voice and content fundamentals, visual
@@ -110,7 +109,7 @@ creates the releases).
 ### Trusted publisher setup (once per package, on npmjs.com)
 
 An owner of the npm org does this for every package the workflow publishes
-(`@bundu/server`, `@bundu/ui`, `@nyuchi/ui`, and any package added under
+(`@bundu/server`, `@bundu/ui`, and any package added under
 `packages/` later):
 
 1. On npmjs.com, open the package → **Settings** → **Trusted publishing** →

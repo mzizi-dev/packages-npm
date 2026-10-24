@@ -13,7 +13,7 @@
  *   import preset from "@bundu/ui/tailwind-preset";
  *   export default {
  *     presets: [preset],
- *     content: ["./src/**\/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
+ *     content: ["./src/**\/*.{astro,html,js,jsx,md,mdx,ts,tsx,vue}"],
  *   };
  *
  * NOTE: mineral utility classes are often composed from data

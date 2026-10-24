@@ -5,7 +5,8 @@
     "canonVersion": "4.0.31",
     "note": "Machine-written by scripts/fetch-canon.mjs. Do not hand-edit.",
     "onDiskSourceOfTruth": "mzizi-dev/mzizi-registry -> lib/tokens/palette.source.ts + brand.source.ts",
-    "paletteSource": "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/lib/tokens/palette.source.ts"
+    "paletteSource": "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/lib/tokens/palette.source.ts",
+    "rolesSource": "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/components/registry/n1-tokens/mzizi-tokens-typescript.ts"
   },
   "backgrounds": [
     {
@@ -307,6 +308,8 @@
       "name": "ember",
       "onContainerDark": "#EBA68A",
       "onContainerLight": "#7A3115",
+      "textDark": "#EEC9BA",
+      "textLight": "#843D20",
       "uiDark": "#BB562D",
       "uiLight": "#CD5F33"
     },
@@ -321,6 +324,8 @@
       "name": "acacia",
       "onContainerDark": "#B6CE23",
       "onContainerLight": "#48510E",
+      "textDark": "#CDD69C",
+      "textLight": "#4D5615",
       "uiDark": "#768420",
       "uiLight": "#7E8C22"
     },
@@ -335,6 +340,8 @@
       "name": "fern",
       "onContainerDark": "#28DB28",
       "onContainerLight": "#0F570F",
+      "textDark": "#A4DFA4",
+      "textLight": "#175E17",
       "uiDark": "#228D22",
       "uiLight": "#259725"
     },
@@ -349,6 +356,8 @@
       "name": "lagoon",
       "onContainerDark": "#24D6BC",
       "onContainerLight": "#0E554B",
+      "textDark": "#A3DCD4",
+      "textLight": "#165B51",
       "uiDark": "#218A7A",
       "uiLight": "#249383"
     },
@@ -363,6 +372,8 @@
       "name": "storm",
       "onContainerDark": "#99B2EE",
       "onContainerLight": "#1A409B",
+      "textDark": "#C4D1F1",
+      "textLight": "#284CA6",
       "uiDark": "#426CD1",
       "uiLight": "#577BD6"
     },
@@ -377,6 +388,8 @@
       "name": "dusk",
       "onContainerDark": "#CC9FEF",
       "onContainerLight": "#661B9E",
+      "textDark": "#DFC8F2",
+      "textLight": "#742AAD",
       "uiDark": "#9749D3",
       "uiLight": "#A35DD8"
     },
@@ -391,6 +404,8 @@
       "name": "protea",
       "onContainerDark": "#ED98C9",
       "onContainerLight": "#841656",
+      "textDark": "#F1C4DD",
+      "textLight": "#932464",
       "uiDark": "#CA3188",
       "uiLight": "#D34998"
     }
@@ -404,6 +419,8 @@
       "name": "indigo",
       "origin": "Indigofera, West Africa textile tradition",
       "symbolism": "Dusk, depth, the dyer's craft",
+      "textDark": "#CBD0EB",
+      "textLight": "#4527A0",
       "usage": "Twilight surfaces, deep atmosphere, mini-app moods"
     },
     {
@@ -414,6 +431,8 @@
       "name": "savanna",
       "origin": "Sub-Saharan grasslands",
       "symbolism": "Sun-dried grass, open land, the dry season",
+      "textDark": "#EBCF7D",
+      "textLight": "#725915",
       "usage": "Warm grassland surfaces, daylight atmosphere"
     },
     {
@@ -424,6 +443,8 @@
       "name": "baobab",
       "origin": "Adansonia, across the African continent",
       "symbolism": "The tree of life, age, shelter",
+      "textDark": "#D9CFCC",
+      "textLight": "#4E342E",
       "usage": "Earthy surfaces, grounded atmosphere, bark tones"
     },
     {
@@ -434,6 +455,8 @@
       "name": "sunset",
       "origin": "The African horizon at dusk",
       "symbolism": "Day's end, warmth, the gathering hour",
+      "textDark": "#FFC3B0",
+      "textLight": "#A43310",
       "usage": "Warm accent surfaces, golden-hour atmosphere"
     },
     {
@@ -444,6 +467,8 @@
       "name": "river",
       "origin": "The great African rivers — Zambezi, Nile, Congo",
       "symbolism": "Flow, life, the journey",
+      "textDark": "#84DFEA",
+      "textLight": "#006064",
       "usage": "Cool surfaces, flowing atmosphere, water tones"
     },
     {
@@ -454,6 +479,8 @@
       "name": "hematite",
       "origin": "Sishen & Thabazimbi, South Africa",
       "symbolism": "Foundation, endurance, the substrate",
+      "textDark": "#C9D2D7",
+      "textLight": "#4A616B",
       "usage": "Neutral anchor, mini-app surfaces, atmosphere"
     },
     {
@@ -464,6 +491,8 @@
       "name": "kalahari",
       "origin": "Kalahari & Namib, Southern Africa",
       "symbolism": "Openness, space, the light pole",
+      "textDark": "#E8D9B5",
+      "textLight": "#675C46",
       "usage": "Light anchor, warm backgrounds, mini-app surfaces"
     }
   ],
@@ -473,13 +502,18 @@
       "containerLight": "#E3F2FD",
       "cssVar": "--color-cobalt",
       "darkHex": "#00B0FF",
+      "family": "deep-earth",
       "hex": "#0047AB",
       "lightHex": "#0047AB",
       "name": "cobalt",
       "onContainerDark": "#B3E5FC",
       "onContainerLight": "#002966",
       "origin": "Katanga (DRC) and Zambian Copperbelt",
+      "role": "Knowledge",
+      "sortOrder": 0,
       "symbolism": "Digital future, trust, knowledge",
+      "textDark": "#86DCFF",
+      "textLight": "#0047AB",
       "usage": "Primary blue, links, CTAs"
     },
     {
@@ -487,13 +521,18 @@
       "containerLight": "#F3E5F5",
       "cssVar": "--color-tanzanite",
       "darkHex": "#B388FF",
+      "family": "deep-earth",
       "hex": "#B388FF",
       "lightHex": "#4B0082",
       "name": "tanzanite",
       "onContainerDark": "#E1BEE7",
       "onContainerLight": "#2E004D",
       "origin": "Merelani Hills, Tanzania",
+      "role": "Identity",
+      "sortOrder": 1,
       "symbolism": "Premium, creativity, connection",
+      "textDark": "#DCC8FF",
+      "textLight": "#4B0082",
       "usage": "Purple accent, brand/logo, social features"
     },
     {
@@ -501,13 +540,18 @@
       "containerLight": "#E0F2F1",
       "cssVar": "--color-malachite",
       "darkHex": "#64FFDA",
+      "family": "deep-earth",
       "hex": "#64FFDA",
       "lightHex": "#004D40",
       "name": "malachite",
       "onContainerDark": "#A7FFEB",
       "onContainerLight": "#00332B",
       "origin": "Congo Copper Belt",
+      "role": "Growth",
+      "sortOrder": 2,
       "symbolism": "Growth, nature, success",
+      "textDark": "#64FFDA",
+      "textLight": "#004D40",
       "usage": "Success states, positive actions"
     },
     {
@@ -515,13 +559,18 @@
       "containerLight": "#FFF8E1",
       "cssVar": "--color-gold",
       "darkHex": "#FFD740",
+      "family": "hand",
       "hex": "#FFD740",
       "lightHex": "#5D4037",
       "name": "gold",
       "onContainerDark": "#FFECB3",
       "onContainerLight": "#3E2723",
       "origin": "Ghana, South Africa, Mali",
+      "role": "Value",
+      "sortOrder": 3,
       "symbolism": "Honey, rewards, warmth",
+      "textDark": "#FFD740",
+      "textLight": "#5D4037",
       "usage": "Achievements, rewards, highlights"
     },
     {
@@ -529,13 +578,18 @@
       "containerLight": "#F5E6D3",
       "cssVar": "--color-terracotta",
       "darkHex": "#E1B07E",
+      "family": "hand",
       "hex": "#A0522D",
       "lightHex": "#A0522D",
       "name": "terracotta",
       "onContainerDark": "#F5E6D3",
       "onContainerLight": "#5D2906",
       "origin": "Pan-African Sahel",
+      "role": "Community",
+      "sortOrder": 4,
       "symbolism": "Earth, community, grounding",
+      "textDark": "#EBCCA3",
+      "textLight": "#8E4928",
       "usage": "Community features, warmth"
     },
     {
@@ -543,13 +597,18 @@
       "containerLight": "#E8EAF6",
       "cssVar": "--color-sodalite",
       "darkHex": "#3D5AFE",
+      "family": "deep-earth",
       "hex": "#283593",
       "lightHex": "#283593",
       "name": "sodalite",
       "onContainerDark": "#C5CAE9",
       "onContainerLight": "#141A5C",
       "origin": "Kunene River, Namibia & South Africa",
+      "role": "Intelligence",
+      "sortOrder": 5,
       "symbolism": "Intelligence, depth, reasoning",
+      "textDark": "#C6CFFF",
+      "textLight": "#283593",
       "usage": "AI/Shamwari surfaces, deep-reasoning states"
     },
     {
@@ -557,13 +616,18 @@
       "containerLight": "#FBE4DA",
       "cssVar": "--color-copper",
       "darkHex": "#FF8A65",
+      "family": "hand",
       "hex": "#BF5A36",
       "lightHex": "#BF5A36",
       "name": "copper",
       "onContainerDark": "#FFD3C2",
       "onContainerLight": "#5C2410",
       "origin": "Central African Copperbelt, Zambia & DRC",
+      "role": "Stewardship",
+      "sortOrder": 6,
       "symbolism": "Connection, foundation, stewardship",
+      "textDark": "#FFC3B0",
+      "textLight": "#93452A",
       "usage": "Bundu ecosystem identity, the commons"
     }
   ],
@@ -577,6 +641,953 @@
     "system": "Ecosystem numbers: 7, 12, 14, 17. Buttons are always pill (rounded-full).",
     "xl": "17px"
   },
+  "roles": [
+    {
+      "cssVar": "--accent",
+      "dark": "#20201F",
+      "kind": "surface",
+      "light": "#DFE2E2",
+      "name": "accent"
+    },
+    {
+      "cssVar": "--accent-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "accent-foreground"
+    },
+    {
+      "cssVar": "--app-accent",
+      "dark": "#C9D2D7",
+      "kind": "fill",
+      "light": "#546E7A",
+      "name": "app-accent"
+    },
+    {
+      "cssVar": "--app-accent-foreground",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "app-accent-foreground"
+    },
+    {
+      "cssVar": "--background",
+      "dark": "#0E0D0C",
+      "kind": "surface",
+      "light": "#F3F3F1",
+      "name": "background"
+    },
+    {
+      "cssVar": "--base",
+      "dark": "#0E0D0C",
+      "kind": "surface",
+      "light": "#F3F3F1",
+      "name": "base"
+    },
+    {
+      "cssVar": "--border",
+      "dark": "#2A2927",
+      "kind": "ui",
+      "light": "#E7E5E0",
+      "name": "border"
+    },
+    {
+      "cssVar": "--border-control",
+      "dark": "#818180",
+      "kind": "ui",
+      "light": "#787774",
+      "name": "border-control"
+    },
+    {
+      "cssVar": "--brand-accent",
+      "dark": "#C9D2D7",
+      "kind": "fill",
+      "light": "#546E7A",
+      "name": "brand-accent"
+    },
+    {
+      "cssVar": "--brand-accent-foreground",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "brand-accent-foreground"
+    },
+    {
+      "cssVar": "--card",
+      "dark": "#131211",
+      "kind": "surface",
+      "light": "#EEEEEC",
+      "name": "card"
+    },
+    {
+      "cssVar": "--card-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "card-foreground"
+    },
+    {
+      "cssVar": "--category-1",
+      "dark": "#00B0FF",
+      "kind": "fill",
+      "light": "#0047AB",
+      "name": "category-1"
+    },
+    {
+      "cssVar": "--category-2",
+      "dark": "#B388FF",
+      "kind": "fill",
+      "light": "#4B0082",
+      "name": "category-2"
+    },
+    {
+      "cssVar": "--category-3",
+      "dark": "#64FFDA",
+      "kind": "fill",
+      "light": "#004D40",
+      "name": "category-3"
+    },
+    {
+      "cssVar": "--category-4",
+      "dark": "#FFD740",
+      "kind": "fill",
+      "light": "#5D4037",
+      "name": "category-4"
+    },
+    {
+      "cssVar": "--category-5",
+      "dark": "#E1B07E",
+      "kind": "fill",
+      "light": "#A0522D",
+      "name": "category-5"
+    },
+    {
+      "cssVar": "--category-6",
+      "dark": "#3D5AFE",
+      "kind": "fill",
+      "light": "#283593",
+      "name": "category-6"
+    },
+    {
+      "cssVar": "--category-7",
+      "dark": "#FF8A65",
+      "kind": "fill",
+      "light": "#BF5A36",
+      "name": "category-7"
+    },
+    {
+      "cssVar": "--chart-1",
+      "dark": "#00B0FF",
+      "kind": "fill",
+      "light": "#0047AB",
+      "name": "chart-1"
+    },
+    {
+      "cssVar": "--chart-2",
+      "dark": "#B388FF",
+      "kind": "fill",
+      "light": "#4B0082",
+      "name": "chart-2"
+    },
+    {
+      "cssVar": "--chart-3",
+      "dark": "#64FFDA",
+      "kind": "fill",
+      "light": "#004D40",
+      "name": "chart-3"
+    },
+    {
+      "cssVar": "--chart-4",
+      "dark": "#FFD740",
+      "kind": "fill",
+      "light": "#5D4037",
+      "name": "chart-4"
+    },
+    {
+      "cssVar": "--chart-5",
+      "dark": "#E1B07E",
+      "kind": "fill",
+      "light": "#A0522D",
+      "name": "chart-5"
+    },
+    {
+      "cssVar": "--chart-6",
+      "dark": "#3D5AFE",
+      "kind": "fill",
+      "light": "#283593",
+      "name": "chart-6"
+    },
+    {
+      "cssVar": "--chart-7",
+      "dark": "#FF8A65",
+      "kind": "fill",
+      "light": "#BF5A36",
+      "name": "chart-7"
+    },
+    {
+      "cssVar": "--chart-negative",
+      "dark": "#F2B8B5",
+      "kind": "fill",
+      "light": "#B3261E",
+      "name": "chart-negative"
+    },
+    {
+      "cssVar": "--chart-neutral",
+      "dark": "#A09C93",
+      "kind": "fill",
+      "light": "#55514B",
+      "name": "chart-neutral"
+    },
+    {
+      "cssVar": "--chart-positive",
+      "dark": "#64FFDA",
+      "kind": "fill",
+      "light": "#004D40",
+      "name": "chart-positive"
+    },
+    {
+      "cssVar": "--container",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "container"
+    },
+    {
+      "cssVar": "--destructive",
+      "dark": "#F3BDBA",
+      "kind": "fill",
+      "light": "#B3261E",
+      "name": "destructive"
+    },
+    {
+      "cssVar": "--destructive-container",
+      "dark": "#3E1818",
+      "kind": "surface",
+      "light": "#FDEDED",
+      "name": "destructive-container"
+    },
+    {
+      "cssVar": "--destructive-foreground",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "destructive-foreground"
+    },
+    {
+      "cssVar": "--destructive-text",
+      "dark": "#F3C0BD",
+      "kind": "text",
+      "light": "#9F221B",
+      "name": "destructive-text"
+    },
+    {
+      "cssVar": "--error",
+      "dark": "#F2B8B5",
+      "kind": "ui",
+      "light": "#B3261E",
+      "name": "error"
+    },
+    {
+      "cssVar": "--foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "foreground"
+    },
+    {
+      "cssVar": "--hero-text",
+      "dark": "#FFFFFF",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "hero-text"
+    },
+    {
+      "cssVar": "--info",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "info"
+    },
+    {
+      "cssVar": "--input",
+      "dark": "#100F0E",
+      "kind": "surface",
+      "light": "#FFFFFF",
+      "name": "input"
+    },
+    {
+      "cssVar": "--muted",
+      "dark": "#050504",
+      "kind": "surface",
+      "light": "#FAF9F5",
+      "name": "muted"
+    },
+    {
+      "cssVar": "--muted-foreground",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "muted-foreground"
+    },
+    {
+      "cssVar": "--neutral",
+      "dark": "#A09C93",
+      "kind": "ui",
+      "light": "#55514B",
+      "name": "neutral"
+    },
+    {
+      "cssVar": "--offline",
+      "dark": "#BA9570",
+      "kind": "ui",
+      "light": "#674C32",
+      "name": "offline"
+    },
+    {
+      "cssVar": "--on-surface-qr",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#0E0D0C",
+      "name": "on-surface-qr"
+    },
+    {
+      "cssVar": "--overlay",
+      "dark": "#23221F",
+      "kind": "surface",
+      "light": "#E0DFDC",
+      "name": "overlay"
+    },
+    {
+      "cssVar": "--overlay-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "overlay-foreground"
+    },
+    {
+      "cssVar": "--pitch",
+      "dark": "#050505",
+      "kind": "surface",
+      "light": "#FAFAFA",
+      "name": "pitch"
+    },
+    {
+      "cssVar": "--popover",
+      "dark": "#23221F",
+      "kind": "surface",
+      "light": "#E0DFDC",
+      "name": "popover"
+    },
+    {
+      "cssVar": "--popover-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "popover-foreground"
+    },
+    {
+      "cssVar": "--primary",
+      "dark": "#C9D2D7",
+      "kind": "fill",
+      "light": "#546E7A",
+      "name": "primary"
+    },
+    {
+      "cssVar": "--primary-foreground",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "primary-foreground"
+    },
+    {
+      "cssVar": "--raised",
+      "dark": "#2E2C29",
+      "kind": "surface",
+      "light": "#D6D5D1",
+      "name": "raised"
+    },
+    {
+      "cssVar": "--ring",
+      "dark": "#86DCFF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "ring"
+    },
+    {
+      "cssVar": "--scrim",
+      "dark": "rgba(0, 0, 0, 0.6)",
+      "kind": "surface",
+      "light": "rgba(0, 0, 0, 0.4)",
+      "name": "scrim"
+    },
+    {
+      "cssVar": "--secondary",
+      "dark": "#1E1D1A",
+      "kind": "fill",
+      "light": "#E5E4E1",
+      "name": "secondary"
+    },
+    {
+      "cssVar": "--secondary-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "secondary-foreground"
+    },
+    {
+      "cssVar": "--sidebar",
+      "dark": "#131211",
+      "kind": "surface",
+      "light": "#EEEEEC",
+      "name": "sidebar"
+    },
+    {
+      "cssVar": "--sidebar-accent",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "sidebar-accent"
+    },
+    {
+      "cssVar": "--sidebar-accent-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "sidebar-accent-foreground"
+    },
+    {
+      "cssVar": "--sidebar-border",
+      "dark": "#2A2927",
+      "kind": "ui",
+      "light": "#E7E5E0",
+      "name": "sidebar-border"
+    },
+    {
+      "cssVar": "--sidebar-foreground",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "sidebar-foreground"
+    },
+    {
+      "cssVar": "--sidebar-primary",
+      "dark": "#C9D2D7",
+      "kind": "fill",
+      "light": "#546E7A",
+      "name": "sidebar-primary"
+    },
+    {
+      "cssVar": "--sidebar-primary-foreground",
+      "dark": "#0E0D0C",
+      "kind": "text",
+      "light": "#FFFFFF",
+      "name": "sidebar-primary-foreground"
+    },
+    {
+      "cssVar": "--sidebar-ring",
+      "dark": "#86DCFF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "sidebar-ring"
+    },
+    {
+      "cssVar": "--status-alpha",
+      "dark": "#FFD740",
+      "kind": "ui",
+      "light": "#5D4037",
+      "name": "status-alpha"
+    },
+    {
+      "cssVar": "--status-alpha-container",
+      "dark": "#332200",
+      "kind": "surface",
+      "light": "#FFF8E1",
+      "name": "status-alpha-container"
+    },
+    {
+      "cssVar": "--status-alpha-on-container",
+      "dark": "#FFECB3",
+      "kind": "text",
+      "light": "#3E2723",
+      "name": "status-alpha-on-container"
+    },
+    {
+      "cssVar": "--status-alpha-text",
+      "dark": "#FFD740",
+      "kind": "text",
+      "light": "#5D4037",
+      "name": "status-alpha-text"
+    },
+    {
+      "cssVar": "--status-beta",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "status-beta"
+    },
+    {
+      "cssVar": "--status-beta-container",
+      "dark": "#001F3F",
+      "kind": "surface",
+      "light": "#E3F2FD",
+      "name": "status-beta-container"
+    },
+    {
+      "cssVar": "--status-beta-on-container",
+      "dark": "#B3E5FC",
+      "kind": "text",
+      "light": "#002966",
+      "name": "status-beta-on-container"
+    },
+    {
+      "cssVar": "--status-beta-text",
+      "dark": "#86DCFF",
+      "kind": "text",
+      "light": "#0047AB",
+      "name": "status-beta-text"
+    },
+    {
+      "cssVar": "--status-danger",
+      "dark": "#E1B07E",
+      "kind": "ui",
+      "light": "#A0522D",
+      "name": "status-danger"
+    },
+    {
+      "cssVar": "--status-danger-container",
+      "dark": "#3E2817",
+      "kind": "surface",
+      "light": "#F5E6D3",
+      "name": "status-danger-container"
+    },
+    {
+      "cssVar": "--status-danger-on-container",
+      "dark": "#F5E6D3",
+      "kind": "text",
+      "light": "#5D2906",
+      "name": "status-danger-on-container"
+    },
+    {
+      "cssVar": "--status-danger-text",
+      "dark": "#EBCCA3",
+      "kind": "text",
+      "light": "#844425",
+      "name": "status-danger-text"
+    },
+    {
+      "cssVar": "--status-deprecated",
+      "dark": "#E1B07E",
+      "kind": "ui",
+      "light": "#A0522D",
+      "name": "status-deprecated"
+    },
+    {
+      "cssVar": "--status-deprecated-container",
+      "dark": "#3E2817",
+      "kind": "surface",
+      "light": "#F5E6D3",
+      "name": "status-deprecated-container"
+    },
+    {
+      "cssVar": "--status-deprecated-on-container",
+      "dark": "#F5E6D3",
+      "kind": "text",
+      "light": "#5D2906",
+      "name": "status-deprecated-on-container"
+    },
+    {
+      "cssVar": "--status-deprecated-text",
+      "dark": "#EBCCA3",
+      "kind": "text",
+      "light": "#844425",
+      "name": "status-deprecated-text"
+    },
+    {
+      "cssVar": "--status-error",
+      "dark": "#F3BDBA",
+      "kind": "ui",
+      "light": "#B3261E",
+      "name": "status-error"
+    },
+    {
+      "cssVar": "--status-info",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "status-info"
+    },
+    {
+      "cssVar": "--status-info-container",
+      "dark": "#001F3F",
+      "kind": "surface",
+      "light": "#E3F2FD",
+      "name": "status-info-container"
+    },
+    {
+      "cssVar": "--status-info-on-container",
+      "dark": "#B3E5FC",
+      "kind": "text",
+      "light": "#002966",
+      "name": "status-info-on-container"
+    },
+    {
+      "cssVar": "--status-info-text",
+      "dark": "#86DCFF",
+      "kind": "text",
+      "light": "#0047AB",
+      "name": "status-info-text"
+    },
+    {
+      "cssVar": "--status-neutral",
+      "dark": "#A09C93",
+      "kind": "ui",
+      "light": "#55514B",
+      "name": "status-neutral"
+    },
+    {
+      "cssVar": "--status-neutral-container",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "status-neutral-container"
+    },
+    {
+      "cssVar": "--status-neutral-on-container",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "status-neutral-on-container"
+    },
+    {
+      "cssVar": "--status-neutral-text",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "status-neutral-text"
+    },
+    {
+      "cssVar": "--status-premium",
+      "dark": "#B388FF",
+      "kind": "ui",
+      "light": "#4B0082",
+      "name": "status-premium"
+    },
+    {
+      "cssVar": "--status-premium-container",
+      "dark": "#1A0033",
+      "kind": "surface",
+      "light": "#F3E5F5",
+      "name": "status-premium-container"
+    },
+    {
+      "cssVar": "--status-premium-on-container",
+      "dark": "#E3C2E8",
+      "kind": "text",
+      "light": "#2E004D",
+      "name": "status-premium-on-container"
+    },
+    {
+      "cssVar": "--status-premium-text",
+      "dark": "#DCC8FF",
+      "kind": "text",
+      "light": "#4B0082",
+      "name": "status-premium-text"
+    },
+    {
+      "cssVar": "--status-stable",
+      "dark": "#64FFDA",
+      "kind": "ui",
+      "light": "#004D40",
+      "name": "status-stable"
+    },
+    {
+      "cssVar": "--status-stable-container",
+      "dark": "#00251A",
+      "kind": "surface",
+      "light": "#E0F2F1",
+      "name": "status-stable-container"
+    },
+    {
+      "cssVar": "--status-stable-on-container",
+      "dark": "#A7FFEB",
+      "kind": "text",
+      "light": "#00332B",
+      "name": "status-stable-on-container"
+    },
+    {
+      "cssVar": "--status-stable-text",
+      "dark": "#64FFDA",
+      "kind": "text",
+      "light": "#004D40",
+      "name": "status-stable-text"
+    },
+    {
+      "cssVar": "--status-success",
+      "dark": "#64FFDA",
+      "kind": "ui",
+      "light": "#004D40",
+      "name": "status-success"
+    },
+    {
+      "cssVar": "--status-success-container",
+      "dark": "#00251A",
+      "kind": "surface",
+      "light": "#E0F2F1",
+      "name": "status-success-container"
+    },
+    {
+      "cssVar": "--status-success-on-container",
+      "dark": "#A7FFEB",
+      "kind": "text",
+      "light": "#00332B",
+      "name": "status-success-on-container"
+    },
+    {
+      "cssVar": "--status-success-text",
+      "dark": "#64FFDA",
+      "kind": "text",
+      "light": "#004D40",
+      "name": "status-success-text"
+    },
+    {
+      "cssVar": "--status-warning",
+      "dark": "#FFD740",
+      "kind": "ui",
+      "light": "#5D4037",
+      "name": "status-warning"
+    },
+    {
+      "cssVar": "--status-warning-container",
+      "dark": "#332200",
+      "kind": "surface",
+      "light": "#FFF8E1",
+      "name": "status-warning-container"
+    },
+    {
+      "cssVar": "--status-warning-on-container",
+      "dark": "#FFECB3",
+      "kind": "text",
+      "light": "#3E2723",
+      "name": "status-warning-on-container"
+    },
+    {
+      "cssVar": "--status-warning-text",
+      "dark": "#FFD740",
+      "kind": "text",
+      "light": "#5D4037",
+      "name": "status-warning-text"
+    },
+    {
+      "cssVar": "--success",
+      "dark": "#64FFDA",
+      "kind": "ui",
+      "light": "#004D40",
+      "name": "success"
+    },
+    {
+      "cssVar": "--surface",
+      "dark": "#131211",
+      "kind": "surface",
+      "light": "#EEEEEC",
+      "name": "surface"
+    },
+    {
+      "cssVar": "--surface-qr",
+      "dark": "#FFFFFF",
+      "kind": "surface",
+      "light": "#FFFFFF",
+      "name": "surface-qr"
+    },
+    {
+      "cssVar": "--syncing",
+      "dark": "#36ABBA",
+      "kind": "ui",
+      "light": "#1C5962",
+      "name": "syncing"
+    },
+    {
+      "cssVar": "--text-primary",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "text-primary"
+    },
+    {
+      "cssVar": "--text-secondary",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "text-secondary"
+    },
+    {
+      "cssVar": "--text-tertiary",
+      "dark": "#B3B3B1",
+      "kind": "text",
+      "light": "#6B6A69",
+      "name": "text-tertiary"
+    },
+    {
+      "cssVar": "--tier-community",
+      "dark": "#E1B07E",
+      "kind": "ui",
+      "light": "#A0522D",
+      "name": "tier-community"
+    },
+    {
+      "cssVar": "--tier-community-container",
+      "dark": "#3E2817",
+      "kind": "surface",
+      "light": "#F5E6D3",
+      "name": "tier-community-container"
+    },
+    {
+      "cssVar": "--tier-community-on-container",
+      "dark": "#F5E6D3",
+      "kind": "text",
+      "light": "#5D2906",
+      "name": "tier-community-on-container"
+    },
+    {
+      "cssVar": "--tier-community-text",
+      "dark": "#EBCCA3",
+      "kind": "text",
+      "light": "#844425",
+      "name": "tier-community-text"
+    },
+    {
+      "cssVar": "--tier-government",
+      "dark": "#FFD740",
+      "kind": "ui",
+      "light": "#5D4037",
+      "name": "tier-government"
+    },
+    {
+      "cssVar": "--tier-government-container",
+      "dark": "#332200",
+      "kind": "surface",
+      "light": "#FFF8E1",
+      "name": "tier-government-container"
+    },
+    {
+      "cssVar": "--tier-government-on-container",
+      "dark": "#FFECB3",
+      "kind": "text",
+      "light": "#3E2723",
+      "name": "tier-government-on-container"
+    },
+    {
+      "cssVar": "--tier-government-text",
+      "dark": "#FFD740",
+      "kind": "text",
+      "light": "#5D4037",
+      "name": "tier-government-text"
+    },
+    {
+      "cssVar": "--tier-licensed",
+      "dark": "#B388FF",
+      "kind": "ui",
+      "light": "#4B0082",
+      "name": "tier-licensed"
+    },
+    {
+      "cssVar": "--tier-licensed-container",
+      "dark": "#1A0033",
+      "kind": "surface",
+      "light": "#F3E5F5",
+      "name": "tier-licensed-container"
+    },
+    {
+      "cssVar": "--tier-licensed-on-container",
+      "dark": "#E3C2E8",
+      "kind": "text",
+      "light": "#2E004D",
+      "name": "tier-licensed-on-container"
+    },
+    {
+      "cssVar": "--tier-licensed-text",
+      "dark": "#DCC8FF",
+      "kind": "text",
+      "light": "#4B0082",
+      "name": "tier-licensed-text"
+    },
+    {
+      "cssVar": "--tier-otp",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "tier-otp"
+    },
+    {
+      "cssVar": "--tier-otp-container",
+      "dark": "#001F3F",
+      "kind": "surface",
+      "light": "#E3F2FD",
+      "name": "tier-otp-container"
+    },
+    {
+      "cssVar": "--tier-otp-on-container",
+      "dark": "#B3E5FC",
+      "kind": "text",
+      "light": "#002966",
+      "name": "tier-otp-on-container"
+    },
+    {
+      "cssVar": "--tier-otp-text",
+      "dark": "#86DCFF",
+      "kind": "text",
+      "light": "#0047AB",
+      "name": "tier-otp-text"
+    },
+    {
+      "cssVar": "--tier-unverified",
+      "dark": "#A09C93",
+      "kind": "ui",
+      "light": "#55514B",
+      "name": "tier-unverified"
+    },
+    {
+      "cssVar": "--tier-unverified-container",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "tier-unverified-container"
+    },
+    {
+      "cssVar": "--tier-unverified-on-container",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "tier-unverified-on-container"
+    },
+    {
+      "cssVar": "--tier-unverified-text",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "tier-unverified-text"
+    },
+    {
+      "cssVar": "--void",
+      "dark": "#080807",
+      "kind": "surface",
+      "light": "#F8F8F7",
+      "name": "void"
+    },
+    {
+      "cssVar": "--warning",
+      "dark": "#FFD866",
+      "kind": "ui",
+      "light": "#7A5C00",
+      "name": "warning"
+    },
+    {
+      "cssVar": "--wash",
+      "dark": "#252524",
+      "kind": "surface",
+      "light": "#E3E5E4",
+      "name": "wash"
+    }
+  ],
   "semanticColors": [
     {
       "dark": "#001F3F",
@@ -588,7 +1599,7 @@
       "dark": "#2A2927",
       "light": "#E7E5E0",
       "name": "border",
-      "usage": "Canonical border color — cards, inputs, dividers, tables. Warm stone, not cool gray."
+      "usage": "Canonical hairline — cards, dividers, tables. Decorative and never the only cue; not for the edge of a control (input, select, checkbox, radio, switch), which is the `border-control` role (APCA Lc 30 and 3:1) once components adopt it. Warm stone, not cool gray."
     },
     {
       "dark": "#B388FF",

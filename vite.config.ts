@@ -23,7 +23,21 @@ export default defineConfig({
     // markdown-parse.ts (it also fixes parser bugs found in review of
     // mzizi-dev/packages-npm#55). Once a pin carries it, drop this entry and
     // run `pnpm registry:sync`.
-    ignorePatterns: ["packages/bundu-ui/src/markdown-parse.ts"],
+    // qr-matrix.ts is the same case: synced byte for byte from the registry's
+    // components/registry/n2-primitives/qr-matrix.ts (no semicolons), so it
+    // is formatted at the source or not at all.
+    // mzizi-registry 4.16.0 (c68d3c3) adds three more of the same: money.ts
+    // and mzizi-trust-tier-data.ts are new, and ui-utils.ts (src/lib/utils.ts)
+    // gains exactPattern and initialsOf, all without semicolons. Drop these
+    // three once the registry formats n2-primitives/money.ts,
+    // n2-primitives/ui-utils.ts and n3-brand/mzizi-trust-tier-data.ts.
+    ignorePatterns: [
+      "packages/bundu-ui/src/markdown-parse.ts",
+      "packages/bundu-ui/src/qr-matrix.ts",
+      "packages/bundu-ui/src/money.ts",
+      "packages/bundu-ui/src/mzizi-trust-tier-data.ts",
+      "packages/bundu-ui/src/lib/utils.ts",
+    ],
     overrides: [
       {
         files: ["*.md", "*.mdx"],
@@ -47,9 +61,8 @@ export default defineConfig({
     // about it on every PR). Turned on, it reports 112 errors that are about
     // the workspace, not the code: @bundu/ui ships React .tsx source whose
     // peers (react, @types/react, class-variance-authority, ...) are not
-    // installed in this repo, and tsgolint does not resolve .svelte modules
-    // (@nyuchi/ui is type checked by svelte-check instead). Turn it on once
-    // @bundu/ui declares its peers as devDependencies.
+    // installed in this repo. Turn it on once @bundu/ui declares its peers as
+    // devDependencies.
     options: { typeAware: true, typeCheck: false },
   },
 });
