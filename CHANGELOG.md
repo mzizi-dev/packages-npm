@@ -21,10 +21,38 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.
+- (`@bundu/ui`) New `@bundu/ui/MziziTrustMeter.astro`, the registry's new Astro build of `mzizi-trust-meter` (mzizi-registry#552), mapped in `scripts/registry-map.json` and exported from `package.json`. It is server-rendered with no script: a `role="meter"` root named by `title`, the Verification / Status / Ubuntu breakdown, or one 44px row per item of `signals` (`{ label, count, detail? }[]`). Its contract, `contracts/ui/mzizi-trust-meter.contract.json` (1.0.0), is synced with it, so the contract suite runs it. This closes the "Not synced" note in the 4.12.0 entry below.
+- (`@bundu/ui`) `icons.ts` (the registry's `site-icons`) gains the `star` and `trending-up` glyphs the meter uses.
+- (`@bundu/ui`) The registry's other 4.13.0 fixes (`mzizi-place-card` `linkComponent`, `mzizi-verified-badge` `label` / `ariaLabel` / `showScore`, the `mzizi-permission-gate` contrast fix, `lib/icons` without `"use client"`) are React-only in the registry and not mapped here, so nothing else changes.
+- (`@bundu/ui`) Known mismatch, to fix upstream: the synced contract says `implementations.astro.since: "0.7.0"`, but the next `@bundu/ui` release, the one that will ship this component, is 0.6.0 (`package.json` is 0.5.0). The contract is not hand-edited here; the fix belongs in mzizi-registry.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — the Kweli Address components, the `qr-matrix` module and the kweli marks, synced from mzizi-registry 4.12.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `f70703d` to mzizi-registry's 4.12.0 release on `main` (`6bfa9a4`, mzizi-registry#547, tracking mzizi-registry#543), and `pnpm registry:sync` rebuilds every mapped file from it.
+- (`@bundu/ui`) Four new Astro components, each under its registry contract in `contracts/ui/`: `@bundu/ui/AddressCode.astro`, `@bundu/ui/AddressShareCard.astro` (a QR code drawn server-side as one SVG path), `@bundu/ui/AddressSelector.astro` ("Deliver to" radios in a `<fieldset>`) and `@bundu/ui/AddressPrivateRow.astro`.
+- (`@bundu/ui`) New `@bundu/ui/qr-matrix` (`qrMatrix(text, ecc?)`), which `AddressShareCard` uses. It adds the dependency `uqr` (`>=0.1.3`, MIT, no dependencies). Like `markdown-parse.ts`, it is synced byte for byte and unformatted at the source, so `vite.config.ts` leaves it out of `vp fmt`.
+- (`@bundu/ui`) `app/BrandMark.astro` follows the registry's `app-brand-mark` 1.2.0: `brand="kweli"` shows the kweli mark, and a new `tagline` prop sets a muted line under the wordmark. The kweli marks and favicon ship as `@bundu/ui/assets/brand/kweli-mark-{light,dark}.{png,svg}` and `@bundu/ui/assets/brand/kweli-favicon.svg`.
+- (`@bundu/ui`) The pin move also brings the registry's changes since `f70703d` to `MarkdownRenderer.astro` / `markdown-parse.ts` (markdown-renderer 1.2.x), `lib/utils.ts` (comment wording) and `test/contract-runner.ts`, and `contracts/` is re-fetched at the same commit (71 contracts; `brand-mark`, `status-badge` and `markdown-renderer` move to their registry versions).
+- (`@bundu/ui`) Not synced: `mzizi-trust-meter`'s counted signals. The registry has only a React build of it (`n3-brand/mzizi-trust-meter.tsx`, importing `@/lib/harness` and `@/lib/icons`), with no `.astro` build to map, so `@bundu/ui` does not carry it yet.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Security — `zod` and `undici` raised to fixed versions (2026-10-24)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `zod@<4.6.6` → `>=4.6.6` (GHSA-mrhx-c7xc-m3w5, high; the lockfile had 4.6.5, now 4.6.7) and `undici@>=8.0.0 <8.12.2` → `>=8.12.2` (GHSA-xjj6-f33q-929c high, GHSA-4qv8-2p9j-2685 and GHSA-f72v-6w45-q472 moderate; 8.11.2 → 8.12.3, through `@bundu/ui` > `astro` > `unifont`). Dev and build tooling only: no published package's own dependencies change. `pnpm audit` reports no known vulnerabilities.
+
+### Changed — upper bounds on `@bundu/ui`'s runtime dependencies and major-scoped overrides (caps B) (2026-10-24)
+
+- (`@bundu/ui`) Owner decision, 2026-10-24 ("caps B"): the published runtime dependencies now carry an upper bound at the next breaking version, `>=current <nextMajor`: `class-variance-authority` `>=0.7.1 <0.8.0`, `clsx` `>=2.1.1 <3`, `tailwind-merge` `>=3.6.0 <4` and `uqr` `>=0.1.3 <0.2.0` (for a 0.x package the next minor is the breaking one, as in npm's caret). A consumer's install can no longer pull a major `@bundu/ui` has not been built against. `@bundu/server` stays `workspace:^`.
+- (repository) The same decision caps the third-party override selectors that are scoped to one major: `nanoid@<3.3.18` `>=3.3.19 <4` (keeps the CommonJS 3.x line), `astro>vite` `>=8.3.3 <9`, `undici@>=8.0.0 <8.12.2` `>=8.12.2 <9` and `zod@<4.6.6` `>=4.6.6 <5`. Every other range stays a floor with no upper bound. The lockfile resolves inside every range; nothing moved.
+
 ### Changed — package dependencies are minimum versions (2026-10-21)
 
 - (`@nyuchi/ui`, `@bundu/ui`, `@bundu/server`) Every `dependencies` and `devDependencies` entry in `packages/*/package.json` is now `>=x.y.z` with no maximum (owner, 2026-10-21: "mark packages with minimum acceptable, latest shouldn't be a blocker on too old of a version"). Each floor is the version `pnpm-lock.yaml` already resolved, so nothing in the lockfile moves. `workspace:` ranges and `@nyuchi/ui`'s `svelte` peer range (`^5`) are unchanged. No package version changes, so nothing is published.
-- (`@bundu/ui`) Consumers now need `tailwind-merge` 3.6.0 or later (was `^3.0.2`), the version this repository builds and tests against.
+- (`@bundu/ui`) Consumers now need `tailwind-merge` 3.6.0 or later (was `^3.0.2`), the version this repository builds and tests against (capped below 4 by the caps B entry above).
 - (`@nyuchi/ui`) `vite` and `@sveltejs/vite-plugin-svelte` are now `>=6.4.3` and `>=5.1.1`. A resolve without the lockfile can now cross into vite 8 and the plugin's next majors, which the owner's rule allows.
 - (repository) The `vite@>=8.0.0 <8.3.3` → `>=8.3.3` override is now `astro>vite` → `>=8.3.3`. pnpm applies a version-keyed override to any dependency spec whose range intersects the key, so once `@nyuchi/ui`'s `vite` became the open-ended `>=6.4.3`, the old key rewrote it to `>=8.3.3` and moved `@nyuchi/ui` onto vite 8. `astro` is the only package that resolves vite 8 here, so scoping the floor to it keeps the same fix (`astro`'s vite stays 8.3.5) and leaves `@nyuchi/ui` on vite 6.4.5. `pnpm audit` still reports nothing at high or above.
 

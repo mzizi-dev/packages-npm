@@ -1,5 +1,25 @@
 {
   "components": {
+    "address-code": {
+      "package": "bundu-ui",
+      "path": "src/AddressCode.astro",
+      "registry": "n2-primitives/address-code.astro"
+    },
+    "address-private-row": {
+      "package": "bundu-ui",
+      "path": "src/AddressPrivateRow.astro",
+      "registry": "n2-primitives/address-private-row.astro"
+    },
+    "address-selector": {
+      "package": "bundu-ui",
+      "path": "src/AddressSelector.astro",
+      "registry": "n2-primitives/address-selector.astro"
+    },
+    "address-share-card": {
+      "package": "bundu-ui",
+      "path": "src/AddressShareCard.astro",
+      "registry": "n3-brand/address-share-card.astro"
+    },
     "alert": {
       "package": "bundu-ui",
       "path": "src/Alert.astro",
@@ -280,10 +300,20 @@
       "path": "src/MarkdownRenderer.astro",
       "registry": "n2-primitives/markdown-renderer.astro"
     },
+    "mzizi-trust-meter": {
+      "package": "bundu-ui",
+      "path": "src/MziziTrustMeter.astro",
+      "registry": "n3-brand/mzizi-trust-meter.astro"
+    },
     "native-select": {
       "package": "bundu-ui",
       "path": "src/NativeSelect.astro",
       "registry": "n2-primitives/native-select.astro"
+    },
+    "qr-matrix": {
+      "package": "bundu-ui",
+      "path": "src/qr-matrix.ts",
+      "registry": "n2-primitives/qr-matrix.ts"
     },
     "safe-area": {
       "package": "bundu-ui",
@@ -442,6 +472,26 @@
     "assets/mukoko-icon-dark.png": {
       "package": "bundu-ui",
       "path": "assets/brand/mukoko-icon-dark.png"
+    },
+    "assets/kweli-mark-light.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-light.png"
+    },
+    "assets/kweli-mark-dark.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-dark.png"
+    },
+    "assets/kweli-mark-light.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-light.svg"
+    },
+    "assets/kweli-mark-dark.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-mark-dark.svg"
+    },
+    "assets/kweli-favicon.svg": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-favicon.svg"
     }
   },
   "aliases": {
