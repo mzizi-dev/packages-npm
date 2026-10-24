@@ -148,6 +148,14 @@ function buildModel(canon) {
     return { name, cssVar: `--${name}`, ...sem[name] };
   });
 
+  // The registry's colour roles (fetch-canon reads them from the generated N1
+  // TypeScript tokens), minus the ones that follow the brand: `app-accent*`
+  // and `sidebar*` resolve through --primary / --brand-accent, which the
+  // brand-*.css overlays repoint here, so a literal Mzizi value would pin
+  // them to hematite under every brand.
+  const FOLLOWS_BRAND = /^(app-accent|sidebar)/;
+  const roles = (canon.roles ?? []).filter((r) => !FOLLOWS_BRAND.test(r.name));
+
   return {
     canon,
     bg,
@@ -158,6 +166,7 @@ function buildModel(canon) {
     ladder,
     surfaceMuted,
     status,
+    roles,
   };
 }
 
@@ -452,6 +461,22 @@ function declarations(m) {
       v(`--color-${x.name}`),
       v(`--color-${x.name}`),
     );
+  }
+
+  /* --- registry roles ---------------------------------------------- */
+  // Every colour role the registry declares (lib/tokens/roles.source.ts) that
+  // the sections above do not already declare: the status tones, the
+  // verification tiers (--tier-*), --status-error, --surface-qr, the chart
+  // and category series, the text ramp. Values are the registry's resolved
+  // Mzizi pack, so they match mzizi-tokens-globals.css exactly.
+  const declared = new Set(out.filter((d) => !d.heading).map((d) => d.name));
+  const extra = m.roles.filter((r) => !declared.has(r.cssVar));
+  if (extra.length) {
+    heading(
+      "roles",
+      "Registry roles (mzizi-registry lib/tokens/roles.source.ts): what a component names — --status-* tones, --tier-* verification tiers, chart and category series. Resolved Mzizi values; regenerate with `pnpm canon:fetch && pnpm tokens:build`.",
+    );
+    for (const r of extra) push("roles", r.cssVar, lit(r.light), lit(r.dark));
   }
 
   return out;
@@ -817,6 +842,17 @@ function emitThemeCss(pkg, m) {
     "brand-accent-foreground",
   ]) {
     push(`  --color-${name}: var(--${name});`);
+  }
+  // The registry roles (bg-tier-otp, text-status-error, fill-chart-3, ...),
+  // where the names above do not already register them.
+  const registered = new Set(lines.join("\n").match(/--color-[\w-]+(?=:)/g));
+  const roleLines = m.roles
+    .filter((r) => !registered.has(`--color-${r.cssVar.slice(2)}`))
+    .map((r) => `  --color-${r.cssVar.slice(2)}: var(${r.cssVar});`);
+  if (roleLines.length) {
+    push("");
+    push("  /* Registry roles (lib/tokens/roles.source.ts) */");
+    for (const l of roleLines) push(l);
   }
   push("}");
   push("");

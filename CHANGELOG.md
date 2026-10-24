@@ -21,6 +21,14 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — the registry's colour roles reach `@bundu/ui` tokens (2026-10-24)
+
+Closes the known gap recorded under the 4.14.0 sync below: `canon:fetch` read `/v1/brand` and `palette.source.ts` but not the registry's role manifest, so `--status-error`, `--surface-qr` and `--on-surface-qr` (and any later role) never reached `@bundu/ui`, and `tokens:check` still passed. `/v1/brand` does not expose roles.
+
+- **Changed (repository):** `scripts/fetch-canon.mjs` reads a third canon source, the generated `ts-roles` region of mzizi-registry's `components/registry/n1-tokens/mzizi-tokens-typescript.ts` on `main` (emitted by the registry's `tokens:sync` from `lib/tokens/roles.source.ts`, resolved to the Mzizi pack in both themes). It parses the region entry by entry, never evaluates it, keeps only colour roles (text, fill, ui, surface) and fails on a colour role it cannot read. The snapshot gains `roles` (115 today) and `_meta.rolesSource`; `canon:parity` covers them. New `scripts/canon-roles.test.mjs`.
+- **Added (@bundu/ui):** `styles/tokens.css`, `styles/color-scheme.css` and `tokens.json` declare every registry colour role the existing sections did not (`--status-error`, `--surface-qr`, `--on-surface-qr`, the `--status-*` tones and lifecycle stages, `--chart-*`, `--category-*`, `--text-primary/secondary/tertiary`, `--border-control`, `--destructive-text`, `--overlay-foreground`, `--hero-text`), light and dark; `styles/theme.css` registers each as a Tailwind colour (`text-status-error`, `bg-surface-qr`, …). Existing variables keep their values. Roles that follow the brand (`app-accent*`, `sidebar*`) are not emitted, since a literal would pin them to Mzizi hematite under every `brand-*.css` overlay.
+- **Next:** the `--tier-*` verification-tier roles (mzizi-registry#563) are on registry `staging`; they arrive with the next registry release to `main` and a `pnpm canon:fetch && pnpm tokens:build`.
+
 ### Removed — `@nyuchi/ui` retired (2026-10-24)
 
 Owner decision, 2026-10-24: retire `@nyuchi/ui`, the Svelte package (following the 2026-10-20 decision that Svelte is out of the Mzizi ecosystem). This supersedes the 2026-10-20 README note further down that kept it as "Svelte 5 today".
