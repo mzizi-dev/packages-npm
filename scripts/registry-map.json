@@ -60,6 +60,11 @@
       "path": "src/app/CommandPalette.astro",
       "registry": "n7-shell/app-command-palette.astro"
     },
+    "app-confirm-action": {
+      "package": "bundu-ui",
+      "path": "src/app/ConfirmAction.astro",
+      "registry": "n6-pages/app-confirm-action.astro"
+    },
     "app-data-table": {
       "package": "bundu-ui",
       "path": "src/app/DataTable.astro",
@@ -105,6 +110,11 @@
       "path": "src/app/Label.astro",
       "registry": "n2-primitives/app-label.astro"
     },
+    "app-money": {
+      "package": "bundu-ui",
+      "path": "src/app/Money.astro",
+      "registry": "n2-primitives/app-money.astro"
+    },
     "app-nav": {
       "package": "bundu-ui",
       "path": "src/app/nav.ts",
@@ -119,6 +129,11 @@
       "package": "bundu-ui",
       "path": "src/app/Pagination.astro",
       "registry": "n6-pages/app-pagination.astro"
+    },
+    "app-plan-summary": {
+      "package": "bundu-ui",
+      "path": "src/app/PlanSummary.astro",
+      "registry": "n6-pages/app-plan-summary.astro"
     },
     "app-quick-search": {
       "package": "bundu-ui",
@@ -154,6 +169,11 @@
       "package": "bundu-ui",
       "path": "src/app/StateMessage.astro",
       "registry": "n6-pages/app-state-message.astro"
+    },
+    "app-tier-status": {
+      "package": "bundu-ui",
+      "path": "src/app/TierStatus.astro",
+      "registry": "n6-pages/app-tier-status.astro"
     },
     "app-toast": {
       "package": "bundu-ui",
@@ -300,10 +320,25 @@
       "path": "src/MarkdownRenderer.astro",
       "registry": "n2-primitives/markdown-renderer.astro"
     },
+    "money": {
+      "package": "bundu-ui",
+      "path": "src/money.ts",
+      "registry": "n2-primitives/money.ts"
+    },
     "mzizi-trust-meter": {
       "package": "bundu-ui",
       "path": "src/MziziTrustMeter.astro",
       "registry": "n3-brand/mzizi-trust-meter.astro"
+    },
+    "mzizi-trust-tier-data": {
+      "package": "bundu-ui",
+      "path": "src/mzizi-trust-tier-data.ts",
+      "registry": "n3-brand/mzizi-trust-tier-data.ts"
+    },
+    "mzizi-verified-badge": {
+      "package": "bundu-ui",
+      "path": "src/MziziVerifiedBadge.astro",
+      "registry": "n3-brand/mzizi-verified-badge.astro"
     },
     "native-select": {
       "package": "bundu-ui",

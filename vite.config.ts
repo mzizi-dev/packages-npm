@@ -26,9 +26,17 @@ export default defineConfig({
     // qr-matrix.ts is the same case: synced byte for byte from the registry's
     // components/registry/n2-primitives/qr-matrix.ts (no semicolons), so it
     // is formatted at the source or not at all.
+    // mzizi-registry 4.16.0 (c68d3c3) adds three more of the same: money.ts
+    // and mzizi-trust-tier-data.ts are new, and ui-utils.ts (src/lib/utils.ts)
+    // gains exactPattern and initialsOf, all without semicolons. Drop these
+    // three once the registry formats n2-primitives/money.ts,
+    // n2-primitives/ui-utils.ts and n3-brand/mzizi-trust-tier-data.ts.
     ignorePatterns: [
       "packages/bundu-ui/src/markdown-parse.ts",
       "packages/bundu-ui/src/qr-matrix.ts",
+      "packages/bundu-ui/src/money.ts",
+      "packages/bundu-ui/src/mzizi-trust-tier-data.ts",
+      "packages/bundu-ui/src/lib/utils.ts",
     ],
     overrides: [
       {
