@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Security — `zod` and `undici` raised to fixed versions (2026-10-24)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `zod@<4.6.6` → `>=4.6.6` (GHSA-mrhx-c7xc-m3w5, high; the lockfile had 4.6.5, now 4.6.7) and `undici@>=8.0.0 <8.12.2` → `>=8.12.2` (GHSA-xjj6-f33q-929c high, GHSA-4qv8-2p9j-2685 and GHSA-f72v-6w45-q472 moderate; 8.11.2 → 8.12.3, through `@bundu/ui` > `astro` > `unifont`). Dev and build tooling only: no published package's own dependencies change. `pnpm audit` reports no known vulnerabilities.
+
 ### Security — `http-cache-semantics`, `source-map-js`, `vite` and `vite-plus` raised to fixed versions (2026-10-21)
 
 - (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `>=4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `>=1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. The root `package.json` now states every version as a minimum with no maximum (owner direction, 2026-10-21: "mark packages with minimum acceptable"): `vite-plus` `>=1.3.0`, and the older overrides `devalue`, `nanoid` and `postcss` move from `^x` to `>=x`. `vite-plus` moves from 1.0.0 to 1.3.0 (GHSA-587h-7wmj-h5pm, GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover `vite-plus <=1.0.0`; this repo was already on 1.x, so no `vp migrate` is involved), and a third override, `vite@>=8.0.0 <8.3.3` → `>=8.3.3`, lifts the bundled `vite` 8 to 8.3.5; `vite` 6 (`@nyuchi/ui`) resolves to 6.4.5. `pnpm audit` reports no known vulnerabilities. vite-plus 1.3.0's formatter re-flowed one README bullet, rewritten so prettier and oxfmt agree.
