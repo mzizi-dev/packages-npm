@@ -21,6 +21,18 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — the Kweli phase-2 fixes, synced from mzizi-registry 4.14.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `b29b1f8` (4.13.0) to mzizi-registry's 4.14.0 release on `main` (`674c94d`, mzizi-registry#561, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch 674c94d` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) **Breaking (a default changes):** `MziziTrustMeter.astro` writes no raw score unless `showScore` is set; the header names the level and the root carries `aria-valuetext` (mzizi-registry#555). Its contract `ui/mzizi-trust-meter` is now 2.0.0, with the Astro build's `since` corrected to `0.6.0`, which closes the mismatch recorded in the 4.13.0 sync.
+- (`@bundu/ui`) **Breaking (a default changes):** `app/BrandMark.astro` loads both images with `loading="lazy"`; the new `loading` prop takes `"eager"` for a mark that is the page's LCP image (contract `app/brand-mark` 1.3.0, mzizi-registry#558).
+- (`@bundu/ui`) `AddressShareCard.astro` takes `codeLabel` (passed to the address code chip) and draws its QR on a `surface-qr` plate in `on-surface-qr` ink (contract `ui/address-share-card` 1.1.0, mzizi-registry#558).
+- (`@bundu/ui`) `contracts/discover/category-chip.contract.json` 1.0.1 records the React-only `linkComponent` prop in `gaps`; `discover/CategoryChip.astro` itself is unchanged (mzizi-registry#556).
+- (`@bundu/ui`) Four new brand assets, mapped in `scripts/registry-map.json` and exported from `package.json`: `assets/brand/kweli-icon-192.png`, `kweli-icon-512.png`, `kweli-icon-maskable-512.png` and `kweli-apple-touch-icon.png` (mzizi-registry#560).
+- (`@bundu/ui`) Not synced, because the registry has no Astro build of them: `mzizi-event-card`, `mzizi-review-card`, `rating`, `filter-bar`, `mzizi-cover-header`, `mzizi-place-card` and `discover-category-chip`'s `linkComponent`. `mzizi-trust-tiers` is not mapped either: it is a `registry:lib` that imports Lucide React icons from `@/lib/icons`, which `@bundu/ui` does not ship, and no Astro build imports it.
+- (`@bundu/ui`) Known gap, to fix in the token pipeline: the new canonical roles `--status-error`, `--surface-qr` and `--on-surface-qr` live in the registry's `lib/tokens/roles.source.ts`, which `canon:fetch` does not read (a refresh changes nothing), so `@bundu/ui`'s generated tokens do not define them. Until they do, `AddressShareCard`'s `bg-surface-qr` / `text-on-surface-qr` plate and the trust meter's `text-status-*` classes need the consuming app to define those colours.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
 ### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.

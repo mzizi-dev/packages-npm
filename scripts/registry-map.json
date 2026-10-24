@@ -492,6 +492,22 @@
     "assets/kweli-favicon.svg": {
       "package": "bundu-ui",
       "path": "assets/brand/kweli-favicon.svg"
+    },
+    "assets/kweli-icon-192.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-192.png"
+    },
+    "assets/kweli-icon-512.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-512.png"
+    },
+    "assets/kweli-icon-maskable-512.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-icon-maskable-512.png"
+    },
+    "assets/kweli-apple-touch-icon.png": {
+      "package": "bundu-ui",
+      "path": "assets/brand/kweli-apple-touch-icon.png"
     }
   },
   "aliases": {
