@@ -150,6 +150,10 @@
     "./assets/brand/kweli-mark-light.svg": "./assets/brand/kweli-mark-light.svg",
     "./assets/brand/kweli-mark-dark.svg": "./assets/brand/kweli-mark-dark.svg",
     "./assets/brand/kweli-favicon.svg": "./assets/brand/kweli-favicon.svg",
+    "./assets/brand/kweli-icon-192.png": "./assets/brand/kweli-icon-192.png",
+    "./assets/brand/kweli-icon-512.png": "./assets/brand/kweli-icon-512.png",
+    "./assets/brand/kweli-icon-maskable-512.png": "./assets/brand/kweli-icon-maskable-512.png",
+    "./assets/brand/kweli-apple-touch-icon.png": "./assets/brand/kweli-apple-touch-icon.png",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
