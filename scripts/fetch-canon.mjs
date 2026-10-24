@@ -18,6 +18,17 @@
  *      `onContainer` pairs exist — /v1/brand does not project them, and
  *      @bundu/ui has shipped them since 0.1.0. Fetched, not transcribed.
  *
+ *   3. mzizi-dev/mzizi-registry -> the ROLES region of
+ *      components/registry/n1-tokens/mzizi-tokens-typescript.ts (raw, public)
+ *      The role manifest (`lib/tokens/roles.source.ts`, #484) resolved to the
+ *      Mzizi pack's value in both themes: `--status-*` tones, `--status-error`,
+ *      `--surface-qr`, the verification tiers `--tier-*` (#543), chart and
+ *      category series, the text ramp. /v1/brand does not project roles, and
+ *      roles.source.ts is TypeScript that computes its values (contrast walks),
+ *      so the registry's own generated, resolved copy is what is read. Only
+ *      colour roles (kind text, fill, ui or surface) are taken, each with a
+ *      resolved colour (hex, or rgba for a translucent role) in both themes.
+ *
  * The two are cross-checked against each other here: if the API and the
  * on-disk source disagree about any mineral hex, this script fails rather than
  * silently preferring one. That disagreement is precisely how an estate ends
@@ -49,6 +60,14 @@ export const BRAND_URL = "https://api.mzizi.dev/api/v1/brand";
 
 export const PALETTE_SOURCE_URL =
   "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/lib/tokens/palette.source.ts";
+
+/**
+ * The registry's generated N1 TypeScript tokens. Everything between the
+ * `tokens:generated:ts-roles` markers is emitted by the registry's
+ * `pnpm tokens:sync` from lib/tokens/roles.source.ts.
+ */
+export const ROLES_SOURCE_URL =
+  "https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/main/components/registry/n1-tokens/mzizi-tokens-typescript.ts";
 
 const SECTIONS = [
   "minerals",
@@ -156,7 +175,50 @@ function crossCheck(apiMinerals, diskMinerals) {
   }
 }
 
-export function project(brand, brandUrl, diskMinerals) {
+const COLOR_KINDS = new Set(["text", "fill", "ui", "surface"]);
+/** A resolved colour: a hex, or an rgba() for the translucent roles (`scrim`). */
+const COLOUR = /^(#[0-9A-Fa-f]{6}|rgba\([\d., ]+\))$/;
+
+/**
+ * Pull the colour roles out of the registry's generated `roles` region:
+ * `{ name, kind, cssVar, light, dark }`, sorted by name. Parsed, never
+ * evaluated: the region is fetched text, so it is matched entry by entry and
+ * any colour role whose shape the parser does not recognise fails loudly.
+ */
+export function parseRoles(ts) {
+  const start = ts.indexOf("/* tokens:generated:ts-roles:start */");
+  const end = ts.indexOf("/* tokens:generated:ts-roles:end */");
+  if (start < 0 || end < start) {
+    throw new Error("mzizi-tokens-typescript.ts: no ts-roles region");
+  }
+  const region = ts.slice(start, end);
+  const entry =
+    /\n\s*"?([\w-]+)"?: \{\s*kind: "(\w+)",\s*cssVar: "(--[\w-]+)",\s*light: ("[^"]*"|'[^']*'),\s*dark: ("[^"]*"|'[^']*'),?\s*\},/g;
+  const roles = [];
+  for (const [, name, kind, cssVar, light, dark] of region.matchAll(entry)) {
+    if (!COLOR_KINDS.has(kind)) continue;
+    const l = light.slice(1, -1);
+    const d = dark.slice(1, -1);
+    if (!COLOUR.test(l) || !COLOUR.test(d)) {
+      throw new Error(
+        `role ${name}: expected a colour in both themes, got ${l} / ${d}`,
+      );
+    }
+    roles.push({ name, kind, cssVar, light: l, dark: d });
+  }
+  const declared = (region.match(/cssVar:/g) ?? []).length;
+  const colour = (region.match(/kind: "(text|fill|ui|surface)"/g) ?? []).length;
+  if (roles.length !== colour) {
+    throw new Error(
+      `mzizi-tokens-typescript.ts: parsed ${roles.length} of ${colour} colour roles (${declared} roles in all)`,
+    );
+  }
+  if (roles.length === 0)
+    throw new Error("mzizi-tokens-typescript.ts: no colour roles");
+  return roles.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function project(brand, brandUrl, diskMinerals, roles = []) {
   for (const section of SECTIONS) {
     if (!(section in brand)) throw new Error(`canon is missing "${section}"`);
   }
@@ -187,6 +249,7 @@ export function project(brand, brandUrl, diskMinerals) {
     _meta: {
       brandSource: brandUrl,
       paletteSource: PALETTE_SOURCE_URL,
+      rolesSource: ROLES_SOURCE_URL,
       canonVersion: brand.version,
       canonLastUpdated: brand.lastUpdated,
       onDiskSourceOfTruth:
@@ -195,6 +258,7 @@ export function project(brand, brandUrl, diskMinerals) {
     },
     ...Object.fromEntries(SECTIONS.map((s) => [s, brand[s]])),
     minerals,
+    roles,
   });
 }
 
@@ -215,14 +279,21 @@ export function sameSnapshot(a, b) {
 }
 
 export async function buildSnapshot() {
-  const [{ url, body }, ts] = await Promise.all([
-    fetchBrand(),
-    fetch(PALETTE_SOURCE_URL).then((r) => {
-      if (!r.ok) throw new Error(`${PALETTE_SOURCE_URL} -> HTTP ${r.status}`);
+  const text = (u) =>
+    fetch(u).then((r) => {
+      if (!r.ok) throw new Error(`${u} -> HTTP ${r.status}`);
       return r.text();
-    }),
+    });
+  const [{ url, body }, ts, rolesTs] = await Promise.all([
+    fetchBrand(),
+    text(PALETTE_SOURCE_URL),
+    text(ROLES_SOURCE_URL),
   ]);
-  return { url, brand: body, snapshot: project(body, url, parseMinerals(ts)) };
+  return {
+    url,
+    brand: body,
+    snapshot: project(body, url, parseMinerals(ts), parseRoles(rolesTs)),
+  };
 }
 
 async function main() {
@@ -237,6 +308,7 @@ async function main() {
         "CANON PARITY FAILED — tokens/canon.snapshot.json no longer matches canon.\n" +
           `  brand:   ${url}\n` +
           `  palette: ${PALETTE_SOURCE_URL}\n` +
+          `  roles:   ${ROLES_SOURCE_URL}\n` +
           "  Fix: `pnpm canon:fetch && pnpm tokens:build`, then commit both.",
       );
       process.exit(1);
