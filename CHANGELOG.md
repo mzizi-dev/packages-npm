@@ -21,6 +21,16 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — the Kweli Address components, the `qr-matrix` module and the kweli marks, synced from mzizi-registry 4.12.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `f70703d` to mzizi-registry's 4.12.0 release on `main` (`6bfa9a4`, mzizi-registry#547, tracking mzizi-registry#543), and `pnpm registry:sync` rebuilds every mapped file from it.
+- (`@bundu/ui`) Four new Astro components, each under its registry contract in `contracts/ui/`: `@bundu/ui/AddressCode.astro`, `@bundu/ui/AddressShareCard.astro` (a QR code drawn server-side as one SVG path), `@bundu/ui/AddressSelector.astro` ("Deliver to" radios in a `<fieldset>`) and `@bundu/ui/AddressPrivateRow.astro`.
+- (`@bundu/ui`) New `@bundu/ui/qr-matrix` (`qrMatrix(text, ecc?)`), which `AddressShareCard` uses. It adds the dependency `uqr` (`>=0.1.3`, MIT, no dependencies). Like `markdown-parse.ts`, it is synced byte for byte and unformatted at the source, so `vite.config.ts` leaves it out of `vp fmt`.
+- (`@bundu/ui`) `app/BrandMark.astro` follows the registry's `app-brand-mark` 1.2.0: `brand="kweli"` shows the kweli mark, and a new `tagline` prop sets a muted line under the wordmark. The kweli marks and favicon ship as `@bundu/ui/assets/brand/kweli-mark-{light,dark}.{png,svg}` and `@bundu/ui/assets/brand/kweli-favicon.svg`.
+- (`@bundu/ui`) The pin move also brings the registry's changes since `f70703d` to `MarkdownRenderer.astro` / `markdown-parse.ts` (markdown-renderer 1.2.x), `lib/utils.ts` (comment wording) and `test/contract-runner.ts`, and `contracts/` is re-fetched at the same commit (71 contracts; `brand-mark`, `status-badge` and `markdown-renderer` move to their registry versions).
+- (`@bundu/ui`) Not synced: `mzizi-trust-meter`'s counted signals. The registry has only a React build of it (`n3-brand/mzizi-trust-meter.tsx`, importing `@/lib/harness` and `@/lib/icons`), with no `.astro` build to map, so `@bundu/ui` does not carry it yet.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
 ### Security — `zod` and `undici` raised to fixed versions (2026-10-24)
 
 - (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `zod@<4.6.6` → `>=4.6.6` (GHSA-mrhx-c7xc-m3w5, high; the lockfile had 4.6.5, now 4.6.7) and `undici@>=8.0.0 <8.12.2` → `>=8.12.2` (GHSA-xjj6-f33q-929c high, GHSA-4qv8-2p9j-2685 and GHSA-f72v-6w45-q472 moderate; 8.11.2 → 8.12.3, through `@bundu/ui` > `astro` > `unifont`). Dev and build tooling only: no published package's own dependencies change. `pnpm audit` reports no known vulnerabilities.
