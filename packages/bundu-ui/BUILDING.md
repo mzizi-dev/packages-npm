@@ -48,7 +48,7 @@ import preset from "@bundu/ui/tailwind-preset";
 
 export default {
   presets: [preset],
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx,vue}"],
   // If you compose mineral classes from data (e.g. `bg-${mineral}`), safelist them:
   safelist: [
     {
@@ -136,6 +136,6 @@ Related invariants carried from the Mzizi doctrine:
 
 ## 5. No build step
 
-Like `@nyuchi/ui`, `@bundu/ui` is a **source-only** package — there is no compile step. The
+`@bundu/ui` is a **source-only** package — there is no compile step. The
 published `files` are `src/`, `styles/`, and `tailwind-preset.mjs`; the consumer's own
 Astro / bundler compiles the `.astro` and `.tsx` sources.

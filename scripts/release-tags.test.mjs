@@ -58,8 +58,8 @@ describe("changelogSection", () => {
 });
 
 describe("workspacePackages", () => {
-  test("lists the three public packages with a name and version", () => {
+  test("lists the two public packages with a name and version", () => {
     const names = workspacePackages().map((p) => p.name);
-    expect(names.sort()).toEqual(["@bundu/server", "@bundu/ui", "@nyuchi/ui"]);
+    expect(names.sort()).toEqual(["@bundu/server", "@bundu/ui"]);
   });
 });

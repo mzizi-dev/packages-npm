@@ -4,15 +4,13 @@
  *
  * Input   tokens/canon.snapshot.json   (machine-written by scripts/fetch-canon.mjs)
  *
- * Output  packages/bundu-ui/styles/tokens.css   packages/ui/styles/tokens.css
- *         packages/bundu-ui/styles/theme.css    packages/ui/styles/theme.css
- *         packages/bundu-ui/tokens.json         packages/ui/tokens.json
+ * Output  packages/bundu-ui/styles/tokens.css
+ *         packages/bundu-ui/styles/theme.css
+ *         packages/bundu-ui/tokens.json
+ *         packages/bundu-ui/tailwind-palette.mjs and styles/brand-*.css
  *
- * Both packages emit byte-identical token files on purpose. Until this change
- * @nyuchi/ui carried its own hand-written copy of the seven minerals inside
- * styles/globals.css — a second palette inside one repository, already drifted
- * the same way @bundu/ui's had. Two artifacts from one generator is not a
- * second source; two hand-maintained files are.
+ * The palette is generated from canon, never typed by hand: a hand-written copy
+ * of the seven minerals in any package is a second palette, and it drifts.
  *
  * Usage:  node scripts/generate-tokens.mjs           (pnpm tokens:build)
  *         node scripts/generate-tokens.mjs --check   (pnpm tokens:check)
@@ -30,7 +28,7 @@ import prettier from "prettier";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAPSHOT = resolve(ROOT, "tokens/canon.snapshot.json");
-const PACKAGES = ["packages/bundu-ui", "packages/ui"];
+const PACKAGES = ["packages/bundu-ui"];
 
 const byName = (list) => Object.fromEntries(list.map((e) => [e.name, e]));
 
@@ -693,27 +691,13 @@ const THEME_HEADER = (
  * (`text-display`, `text-body-lg`, `text-caption`, `max-w-narrow`, `p-xxs`,
  * ...). They are hand-authored package policy in the v3 preset; theme.css
  * READS them from there rather than restating them, so a v4 consumer and a
- * v3 consumer get the same scale from one definition. Both presets must agree
- * on type and widths (theme.css is byte-identical across the packages), and
- * the generator fails if they do not. Named spacing comes from @bundu/ui's
- * preset; @nyuchi/ui's declares none, and the extra names are inert there.
+ * v3 consumer get the same scale from one definition. Named spacing comes
+ * from @bundu/ui's preset.
  */
 async function presetScale() {
-  const [bundu, nyuchi] = await Promise.all(
-    PACKAGES.map((dir) =>
-      import(resolve(ROOT, dir, "tailwind-preset.mjs")).then(
-        (mod) => mod.default.theme.extend,
-      ),
-    ),
-  );
-  for (const key of ["fontSize", "maxWidth"]) {
-    if (JSON.stringify(bundu[key]) !== JSON.stringify(nyuchi[key])) {
-      throw new Error(
-        `the two tailwind-preset.mjs files disagree on theme.extend.${key}; ` +
-          "theme.css is shared, so they must match",
-      );
-    }
-  }
+  const bundu = await import(
+    resolve(ROOT, PACKAGES[0], "tailwind-preset.mjs")
+  ).then((mod) => mod.default.theme.extend);
   return {
     fontSize: bundu.fontSize,
     maxWidth: bundu.maxWidth,
@@ -976,9 +960,8 @@ function emitTokensJson(pkg, m, decls, meta) {
  * One file per brand, each repointing --primary and --ring, plus
  * --brand-accent for a brand with an accent family, and NOTHING else.
  * The brand -> mineral mapping comes from canon's own `ecosystem` table, so
- * these are generated too. Before this change the two packages disagreed:
- * @bundu/ui's brand-bundu.css said copper (canon), @nyuchi/ui's said
- * terracotta. Generating both from one table is how that stops recurring.
+ * these are generated too, so a brand's mineral cannot be typed differently
+ * in two places (brand-bundu.css is copper, because canon says copper).
  * ------------------------------------------------------------------ */
 
 /**
