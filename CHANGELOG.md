@@ -21,6 +21,22 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — the Kweli business-dashboard components and the `money` lib, synced from mzizi-registry 4.16.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `e336a5f` (4.15.0) to mzizi-registry's 4.16.0 release on `main` (`c68d3c3`, mzizi-registry#575, the gaps tracked in #79 and mzizi-registry#569), and `pnpm registry:sync` and `pnpm contracts:fetch c68d3c3` run at that commit (112 files, 77 contracts).
+- (`@bundu/ui`) New in `scripts/registry-map.json` and exported, each built from the registry's Astro build (now the default) and held to its contract:
+  - `@bundu/ui/MziziVerifiedBadge.astro` (`ui/mzizi-verified-badge` 1.0.0): the verification tier glyph with its status overlay, in words as well as colour;
+  - `@bundu/ui/mzizi-trust-tier-data` (lib `mzizi-trust-tier-data`): the five-rung ladder (`TIER_DATA`, `TIER_ORDER`, `nextTier`, `STATUS_OVERLAY`), framework-free;
+  - `@bundu/ui/money` (lib `money`): `Money`, `isCurrencyCode`, `currencyDigits`, `moneyValue` and `formatMoney`, with no default currency or locale;
+  - `@bundu/ui/app/ConfirmAction.astro` (`app/confirm-action` 1.0.0): a destructive action behind a popover form with a required confirm step, no script;
+  - `@bundu/ui/app/TierStatus.astro` (`app/tier-status` 1.0.0): the ladder, what is held and what the next rung needs;
+  - `@bundu/ui/app/Money.astro` (`app/money` 1.0.0): an amount as `<data value>` formatted for a locale;
+  - `@bundu/ui/app/PlanSummary.astro` (`app/plan-summary` 1.0.0): a provider-neutral plan, price, status and renewal summary.
+- (`@bundu/ui`) Regenerated: `app/FormField.astro` (`app/form-field` 1.2.0: checkbox, switch and choice rows), `app/DataTable.astro` (`app/data-table` 1.2.0), `lib/utils.ts` (`exactPattern`, `initialsOf`), `ui/variants.ts` (the choice-control classes) and `icons.ts` (`more`, `warning`, `phone`, `award`, `ban`, `flower`).
+- (repository) `vite.config.ts` leaves `src/money.ts`, `src/mzizi-trust-tier-data.ts` and `src/lib/utils.ts` out of `vp fmt`, as it does `markdown-parse.ts` and `qr-matrix.ts`: the registry ships them without semicolons, so they are formatted at the source or not at all. `vp lint` reports one warning in the synced `money.ts` (`restrict-template-expressions`, line 45); it is also a registry fix.
+- No tokens change: 4.16.0 adds no colour role or palette value, and `tokens:check` passes on the existing snapshot.
+- No version bump: releasing `@bundu/ui` (the contracts say "since 0.6.0") is a separate call.
+
 ### Changed — the verification tier roles and the trust meter's `tier` prop, synced from mzizi-registry 4.15.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `674c94d` (4.14.0) to mzizi-registry's 4.15.0 release on `main` (`e336a5f`, mzizi-registry#565, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch e336a5f` run at that commit (105 files, 72 contracts).
