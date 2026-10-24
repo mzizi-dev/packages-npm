@@ -55,6 +55,12 @@
     "./Label.astro": "./src/Label.astro",
     "./Skeleton.astro": "./src/Skeleton.astro",
     "./StatusBadge.astro": "./src/StatusBadge.astro",
+    "./AddressCode.astro": "./src/AddressCode.astro",
+    "./AddressShareCard.astro": "./src/AddressShareCard.astro",
+    "./AddressSelector.astro": "./src/AddressSelector.astro",
+    "./AddressPrivateRow.astro": "./src/AddressPrivateRow.astro",
+    "./MziziTrustMeter.astro": "./src/MziziTrustMeter.astro",
+    "./qr-matrix": "./src/qr-matrix.ts",
     "./safe-area": "./src/safe-area.ts",
     "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
     "./markdown-parse": "./src/markdown-parse.ts",
@@ -139,6 +145,15 @@
     "./assets/brand/nyuchi-mark-dark.png": "./assets/brand/nyuchi-mark-dark.png",
     "./assets/brand/mukoko-icon-light.png": "./assets/brand/mukoko-icon-light.png",
     "./assets/brand/mukoko-icon-dark.png": "./assets/brand/mukoko-icon-dark.png",
+    "./assets/brand/kweli-mark-light.png": "./assets/brand/kweli-mark-light.png",
+    "./assets/brand/kweli-mark-dark.png": "./assets/brand/kweli-mark-dark.png",
+    "./assets/brand/kweli-mark-light.svg": "./assets/brand/kweli-mark-light.svg",
+    "./assets/brand/kweli-mark-dark.svg": "./assets/brand/kweli-mark-dark.svg",
+    "./assets/brand/kweli-favicon.svg": "./assets/brand/kweli-favicon.svg",
+    "./assets/brand/kweli-icon-192.png": "./assets/brand/kweli-icon-192.png",
+    "./assets/brand/kweli-icon-512.png": "./assets/brand/kweli-icon-512.png",
+    "./assets/brand/kweli-icon-maskable-512.png": "./assets/brand/kweli-icon-maskable-512.png",
+    "./assets/brand/kweli-apple-touch-icon.png": "./assets/brand/kweli-apple-touch-icon.png",
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
@@ -148,7 +163,8 @@
     "@bundu/server": "workspace:^",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.2"
+    "tailwind-merge": "^3.0.2",
+    "uqr": ">=0.1.3"
   },
   "files": [
     "src",

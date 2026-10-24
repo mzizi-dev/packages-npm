@@ -21,11 +21,66 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
-### @nyuchi/ui — removed from the workspace
+### Removed — `@nyuchi/ui` retired (2026-10-24)
+
+Owner decision, 2026-10-24: retire `@nyuchi/ui`, the Svelte package (following the 2026-10-20 decision that Svelte is out of the Mzizi ecosystem). This supersedes the 2026-10-20 README note further down that kept it as "Svelte 5 today".
 
 - **Removed:** `packages/ui`, `@nyuchi/ui` 0.4.0, a Svelte 5 / SvelteKit component library. It is no longer in the pnpm workspace, so no release publishes it again. The 0.4.0 already on npm is not unpublished or deprecated by this change: deprecating it needs an owner with the npm credentials.
 - **Changed (repository):** `scripts/generate-tokens.mjs` generates the token files for `@bundu/ui` only. The generated files in `packages/bundu-ui` are unchanged (`pnpm tokens:check` passes).
 - **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` still refuses Svelte imports (and React, Preact, Vue and Solid imports, and `.svelte`/`.vue`/`.tsx`/`.jsx` import paths), as it did before. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
+
+### Changed — the Kweli phase-2 fixes, synced from mzizi-registry 4.14.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `b29b1f8` (4.13.0) to mzizi-registry's 4.14.0 release on `main` (`674c94d`, mzizi-registry#561, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch 674c94d` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) **Breaking (a default changes):** `MziziTrustMeter.astro` writes no raw score unless `showScore` is set; the header names the level and the root carries `aria-valuetext` (mzizi-registry#555). Its contract `ui/mzizi-trust-meter` is now 2.0.0, with the Astro build's `since` corrected to `0.6.0`, which closes the mismatch recorded in the 4.13.0 sync.
+- (`@bundu/ui`) **Breaking (a default changes):** `app/BrandMark.astro` loads both images with `loading="lazy"`; the new `loading` prop takes `"eager"` for a mark that is the page's LCP image (contract `app/brand-mark` 1.3.0, mzizi-registry#558).
+- (`@bundu/ui`) `AddressShareCard.astro` takes `codeLabel` (passed to the address code chip) and draws its QR on a `surface-qr` plate in `on-surface-qr` ink (contract `ui/address-share-card` 1.1.0, mzizi-registry#558).
+- (`@bundu/ui`) `contracts/discover/category-chip.contract.json` 1.0.1 records the React-only `linkComponent` prop in `gaps`; `discover/CategoryChip.astro` itself is unchanged (mzizi-registry#556).
+- (`@bundu/ui`) Four new brand assets, mapped in `scripts/registry-map.json` and exported from `package.json`: `assets/brand/kweli-icon-192.png`, `kweli-icon-512.png`, `kweli-icon-maskable-512.png` and `kweli-apple-touch-icon.png` (mzizi-registry#560).
+- (`@bundu/ui`) Not synced, because the registry has no Astro build of them: `mzizi-event-card`, `mzizi-review-card`, `rating`, `filter-bar`, `mzizi-cover-header`, `mzizi-place-card` and `discover-category-chip`'s `linkComponent`. `mzizi-trust-tiers` is not mapped either: it is a `registry:lib` that imports Lucide React icons from `@/lib/icons`, which `@bundu/ui` does not ship, and no Astro build imports it.
+- (`@bundu/ui`) Known gap, to fix in the token pipeline: the new canonical roles `--status-error`, `--surface-qr` and `--on-surface-qr` live in the registry's `lib/tokens/roles.source.ts`, which `canon:fetch` does not read (a refresh changes nothing), so `@bundu/ui`'s generated tokens do not define them. Until they do, `AddressShareCard`'s `bg-surface-qr` / `text-on-surface-qr` plate and the trust meter's `text-status-*` classes need the consuming app to define those colours.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.
+- (`@bundu/ui`) New `@bundu/ui/MziziTrustMeter.astro`, the registry's new Astro build of `mzizi-trust-meter` (mzizi-registry#552), mapped in `scripts/registry-map.json` and exported from `package.json`. It is server-rendered with no script: a `role="meter"` root named by `title`, the Verification / Status / Ubuntu breakdown, or one 44px row per item of `signals` (`{ label, count, detail? }[]`). Its contract, `contracts/ui/mzizi-trust-meter.contract.json` (1.0.0), is synced with it, so the contract suite runs it. This closes the "Not synced" note in the 4.12.0 entry below.
+- (`@bundu/ui`) `icons.ts` (the registry's `site-icons`) gains the `star` and `trending-up` glyphs the meter uses.
+- (`@bundu/ui`) The registry's other 4.13.0 fixes (`mzizi-place-card` `linkComponent`, `mzizi-verified-badge` `label` / `ariaLabel` / `showScore`, the `mzizi-permission-gate` contrast fix, `lib/icons` without `"use client"`) are React-only in the registry and not mapped here, so nothing else changes.
+- (`@bundu/ui`) Known mismatch, to fix upstream: the synced contract says `implementations.astro.since: "0.7.0"`, but the next `@bundu/ui` release, the one that will ship this component, is 0.6.0 (`package.json` is 0.5.0). The contract is not hand-edited here; the fix belongs in mzizi-registry.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — the Kweli Address components, the `qr-matrix` module and the kweli marks, synced from mzizi-registry 4.12.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `f70703d` to mzizi-registry's 4.12.0 release on `main` (`6bfa9a4`, mzizi-registry#547, tracking mzizi-registry#543), and `pnpm registry:sync` rebuilds every mapped file from it.
+- (`@bundu/ui`) Four new Astro components, each under its registry contract in `contracts/ui/`: `@bundu/ui/AddressCode.astro`, `@bundu/ui/AddressShareCard.astro` (a QR code drawn server-side as one SVG path), `@bundu/ui/AddressSelector.astro` ("Deliver to" radios in a `<fieldset>`) and `@bundu/ui/AddressPrivateRow.astro`.
+- (`@bundu/ui`) New `@bundu/ui/qr-matrix` (`qrMatrix(text, ecc?)`), which `AddressShareCard` uses. It adds the dependency `uqr` (`>=0.1.3`, MIT, no dependencies). Like `markdown-parse.ts`, it is synced byte for byte and unformatted at the source, so `vite.config.ts` leaves it out of `vp fmt`.
+- (`@bundu/ui`) `app/BrandMark.astro` follows the registry's `app-brand-mark` 1.2.0: `brand="kweli"` shows the kweli mark, and a new `tagline` prop sets a muted line under the wordmark. The kweli marks and favicon ship as `@bundu/ui/assets/brand/kweli-mark-{light,dark}.{png,svg}` and `@bundu/ui/assets/brand/kweli-favicon.svg`.
+- (`@bundu/ui`) The pin move also brings the registry's changes since `f70703d` to `MarkdownRenderer.astro` / `markdown-parse.ts` (markdown-renderer 1.2.x), `lib/utils.ts` (comment wording) and `test/contract-runner.ts`, and `contracts/` is re-fetched at the same commit (71 contracts; `brand-mark`, `status-badge` and `markdown-renderer` move to their registry versions).
+- (`@bundu/ui`) Not synced: `mzizi-trust-meter`'s counted signals. The registry has only a React build of it (`n3-brand/mzizi-trust-meter.tsx`, importing `@/lib/harness` and `@/lib/icons`), with no `.astro` build to map, so `@bundu/ui` does not carry it yet.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Security — `zod` and `undici` raised to fixed versions (2026-10-24)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `zod@<4.6.6` → `>=4.6.6` (GHSA-mrhx-c7xc-m3w5, high; the lockfile had 4.6.5, now 4.6.7) and `undici@>=8.0.0 <8.12.2` → `>=8.12.2` (GHSA-xjj6-f33q-929c high, GHSA-4qv8-2p9j-2685 and GHSA-f72v-6w45-q472 moderate; 8.11.2 → 8.12.3, through `@bundu/ui` > `astro` > `unifont`). Dev and build tooling only: no published package's own dependencies change. `pnpm audit` reports no known vulnerabilities.
+
+### Security — `http-cache-semantics`, `source-map-js`, `vite` and `vite-plus` raised to fixed versions (2026-10-21)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `>=4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `>=1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. The root `package.json` now states every version as a minimum with no maximum (owner direction, 2026-10-21: "mark packages with minimum acceptable"): `vite-plus` `>=1.3.0`, and the older overrides `devalue`, `nanoid` and `postcss` move from `^x` to `>=x`. `vite-plus` moves from 1.0.0 to 1.3.0 (GHSA-587h-7wmj-h5pm, GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover `vite-plus <=1.0.0`; this repo was already on 1.x, so no `vp migrate` is involved), and a third override, `vite@>=8.0.0 <8.3.3` → `>=8.3.3`, lifts the bundled `vite` 8 to 8.3.5; `vite` 6 (`@nyuchi/ui`) resolves to 6.4.5. `pnpm audit` reports no known vulnerabilities. vite-plus 1.3.0's formatter re-flowed one README bullet, rewritten so prettier and oxfmt agree.
+
+### Changed — canon snapshot refreshed to brand v4.0.31 (2026-10-21)
+
+- (repository) `tokens/canon.snapshot.json` is re-fetched from `api.mzizi.dev/v1/brand` (brand v4.0.31, 21 families) after the API's registry pin moved (mzizi-api#83). Live canon adds `textDark` / `textLight` to all 21 colour families, `sortOrder`, `family` and `role` fields to seven entries, and new usage text for the border token (a decorative hairline; control edges become the `border-control` role once components adopt it). `pnpm tokens:build` produces no change: the generator does not read any of the new fields yet, so no generated token file, published CSS or package version changes. This turns the `snapshot matches live canon` check green again.
+
+### Added — Dependabot version updates target `staging` (2026-10-21)
+
+- (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
+
+### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
+
+Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
+package table now says `@nyuchi/ui` is Svelte 5 / SvelteKit today, and that the decision is
+direction, not a change to this package. No package code, version or published artifact changes.
 
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
