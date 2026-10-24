@@ -21,6 +21,114 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.6.0] - 2026-10-24
+
+Releases `@bundu/ui` 0.6.0, the next minor above 0.5.0 (owner approval, 2026-10-24). It carries everything below since 0.5.0: the registry colour roles and `--tier-*` verification tiers, the trust meter's `tier` prop, the Kweli business-dashboard components and the provider-neutral `money` lib (synced from mzizi-registry 4.16.0), and the retirement of `@nyuchi/ui` from this workspace. `@bundu/server` stays at 0.1.0 (unchanged on npm).
+
+### Added — the Kweli business-dashboard components and the `money` lib, synced from mzizi-registry 4.16.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `e336a5f` (4.15.0) to mzizi-registry's 4.16.0 release on `main` (`c68d3c3`, mzizi-registry#575, the gaps tracked in #79 and mzizi-registry#569), and `pnpm registry:sync` and `pnpm contracts:fetch c68d3c3` run at that commit (112 files, 77 contracts).
+- (`@bundu/ui`) New in `scripts/registry-map.json` and exported, each built from the registry's Astro build (now the default) and held to its contract:
+  - `@bundu/ui/MziziVerifiedBadge.astro` (`ui/mzizi-verified-badge` 1.0.0): the verification tier glyph with its status overlay, in words as well as colour;
+  - `@bundu/ui/mzizi-trust-tier-data` (lib `mzizi-trust-tier-data`): the five-rung ladder (`TIER_DATA`, `TIER_ORDER`, `nextTier`, `STATUS_OVERLAY`), framework-free;
+  - `@bundu/ui/money` (lib `money`): `Money`, `isCurrencyCode`, `currencyDigits`, `moneyValue` and `formatMoney`, with no default currency or locale;
+  - `@bundu/ui/app/ConfirmAction.astro` (`app/confirm-action` 1.0.0): a destructive action behind a popover form with a required confirm step, no script;
+  - `@bundu/ui/app/TierStatus.astro` (`app/tier-status` 1.0.0): the ladder, what is held and what the next rung needs;
+  - `@bundu/ui/app/Money.astro` (`app/money` 1.0.0): an amount as `<data value>` formatted for a locale;
+  - `@bundu/ui/app/PlanSummary.astro` (`app/plan-summary` 1.0.0): a provider-neutral plan, price, status and renewal summary.
+- (`@bundu/ui`) Regenerated: `app/FormField.astro` (`app/form-field` 1.2.0: checkbox, switch and choice rows), `app/DataTable.astro` (`app/data-table` 1.2.0), `lib/utils.ts` (`exactPattern`, `initialsOf`), `ui/variants.ts` (the choice-control classes) and `icons.ts` (`more`, `warning`, `phone`, `award`, `ban`, `flower`).
+- (repository) `vite.config.ts` leaves `src/money.ts`, `src/mzizi-trust-tier-data.ts` and `src/lib/utils.ts` out of `vp fmt`, as it does `markdown-parse.ts` and `qr-matrix.ts`: the registry ships them without semicolons, so they are formatted at the source or not at all. `vp lint` reports one warning in the synced `money.ts` (`restrict-template-expressions`, line 45); it is also a registry fix.
+- No tokens change: 4.16.0 adds no colour role or palette value, and `tokens:check` passes on the existing snapshot.
+- No version bump: releasing `@bundu/ui` (the contracts say "since 0.6.0") is a separate call.
+
+### Changed — the verification tier roles and the trust meter's `tier` prop, synced from mzizi-registry 4.15.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `674c94d` (4.14.0) to mzizi-registry's 4.15.0 release on `main` (`e336a5f`, mzizi-registry#565, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch e336a5f` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) `MziziTrustMeter.astro` takes an optional `tier` (`"unverified" | "community" | "otp" | "government" | "licensed"`): the Verification signal is drawn in that tier's `--tier-*` role (`fill-tier-<id>`, `text-tier-<id>-text`), and without it stays `--status-warning`, as before (contract `ui/mzizi-trust-meter` 2.1.0, mzizi-registry#563).
+- (`@bundu/ui`) `pnpm canon:fetch && pnpm tokens:build` bring in the registry's new `--tier-*` roles (the role list in the snapshot goes from 115 to 135): `--tier-<id>`, `--tier-<id>-container`, `--tier-<id>-on-container` and `--tier-<id>-text` for each of the five tiers, light and dark, in `styles/tokens.css`, `styles/color-scheme.css` and `tokens.json`, registered as Tailwind colours in `styles/theme.css`. They are new in `@bundu/ui`, so nothing here changes value; they carry the registry's Breaking colour decision: community is terracotta (no longer malachite) and unverified is `--status-neutral` (no longer `#6B7280`). Existing variables keep their values. This closes the "Next" note in the colour-roles entry below.
+- (`@bundu/ui`) Not synced: the registry's `--color-<mineral>-light` tokens (mzizi-registry#563) are palette variables in its globals CSS, not colour roles, so `canon:fetch` does not read them; no `@bundu/ui` component uses them. The other 4.15.0 changes (`/v1/brand`'s pillar text, the `#D4A574` fallbacks, the tier components in React, the new Rust crates) touch nothing mapped here.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — the registry's colour roles reach `@bundu/ui` tokens (2026-10-24)
+
+Closes the known gap recorded under the 4.14.0 sync below: `canon:fetch` read `/v1/brand` and `palette.source.ts` but not the registry's role manifest, so `--status-error`, `--surface-qr` and `--on-surface-qr` (and any later role) never reached `@bundu/ui`, and `tokens:check` still passed. `/v1/brand` does not expose roles.
+
+- **Changed (repository):** `scripts/fetch-canon.mjs` reads a third canon source, the generated `ts-roles` region of mzizi-registry's `components/registry/n1-tokens/mzizi-tokens-typescript.ts` on `main` (emitted by the registry's `tokens:sync` from `lib/tokens/roles.source.ts`, resolved to the Mzizi pack in both themes). It parses the region entry by entry, never evaluates it, keeps only colour roles (text, fill, ui, surface) and fails on a colour role it cannot read. The snapshot gains `roles` (115 today) and `_meta.rolesSource`; `canon:parity` covers them. New `scripts/canon-roles.test.mjs`.
+- **Added (@bundu/ui):** `styles/tokens.css`, `styles/color-scheme.css` and `tokens.json` declare every registry colour role the existing sections did not (`--status-error`, `--surface-qr`, `--on-surface-qr`, the `--status-*` tones and lifecycle stages, `--chart-*`, `--category-*`, `--text-primary/secondary/tertiary`, `--border-control`, `--destructive-text`, `--overlay-foreground`, `--hero-text`), light and dark; `styles/theme.css` registers each as a Tailwind colour (`text-status-error`, `bg-surface-qr`, …). Existing variables keep their values. Roles that follow the brand (`app-accent*`, `sidebar*`) are not emitted, since a literal would pin them to Mzizi hematite under every `brand-*.css` overlay.
+- **Next:** the `--tier-*` verification-tier roles (mzizi-registry#563) are on registry `staging`; they arrive with the next registry release to `main` and a `pnpm canon:fetch && pnpm tokens:build`.
+
+### Removed — `@nyuchi/ui` retired (2026-10-24)
+
+Owner decision, 2026-10-24: retire `@nyuchi/ui`, the Svelte package (following the 2026-10-20 decision that Svelte is out of the Mzizi ecosystem). This supersedes the 2026-10-20 README note further down that kept it as "Svelte 5 today".
+
+- **Removed:** `packages/ui`, `@nyuchi/ui` 0.4.0, a Svelte 5 / SvelteKit component library. It is no longer in the pnpm workspace, so no release publishes it again. The 0.4.0 already on npm is not unpublished or deprecated by this change: deprecating it needs an owner with the npm credentials.
+- **Changed (repository):** `scripts/generate-tokens.mjs` generates the token files for `@bundu/ui` only. The generated files in `packages/bundu-ui` are unchanged (`pnpm tokens:check` passes).
+- **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` still refuses Svelte imports (and React, Preact, Vue and Solid imports, and `.svelte`/`.vue`/`.tsx`/`.jsx` import paths), as it did before. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
+
+### Changed — the Kweli phase-2 fixes, synced from mzizi-registry 4.14.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `b29b1f8` (4.13.0) to mzizi-registry's 4.14.0 release on `main` (`674c94d`, mzizi-registry#561, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch 674c94d` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) **Breaking (a default changes):** `MziziTrustMeter.astro` writes no raw score unless `showScore` is set; the header names the level and the root carries `aria-valuetext` (mzizi-registry#555). Its contract `ui/mzizi-trust-meter` is now 2.0.0, with the Astro build's `since` corrected to `0.6.0`, which closes the mismatch recorded in the 4.13.0 sync.
+- (`@bundu/ui`) **Breaking (a default changes):** `app/BrandMark.astro` loads both images with `loading="lazy"`; the new `loading` prop takes `"eager"` for a mark that is the page's LCP image (contract `app/brand-mark` 1.3.0, mzizi-registry#558).
+- (`@bundu/ui`) `AddressShareCard.astro` takes `codeLabel` (passed to the address code chip) and draws its QR on a `surface-qr` plate in `on-surface-qr` ink (contract `ui/address-share-card` 1.1.0, mzizi-registry#558).
+- (`@bundu/ui`) `contracts/discover/category-chip.contract.json` 1.0.1 records the React-only `linkComponent` prop in `gaps`; `discover/CategoryChip.astro` itself is unchanged (mzizi-registry#556).
+- (`@bundu/ui`) Four new brand assets, mapped in `scripts/registry-map.json` and exported from `package.json`: `assets/brand/kweli-icon-192.png`, `kweli-icon-512.png`, `kweli-icon-maskable-512.png` and `kweli-apple-touch-icon.png` (mzizi-registry#560).
+- (`@bundu/ui`) Not synced, because the registry has no Astro build of them: `mzizi-event-card`, `mzizi-review-card`, `rating`, `filter-bar`, `mzizi-cover-header`, `mzizi-place-card` and `discover-category-chip`'s `linkComponent`. `mzizi-trust-tiers` is not mapped either: it is a `registry:lib` that imports Lucide React icons from `@/lib/icons`, which `@bundu/ui` does not ship, and no Astro build imports it.
+- (`@bundu/ui`) Known gap, to fix in the token pipeline: the new canonical roles `--status-error`, `--surface-qr` and `--on-surface-qr` live in the registry's `lib/tokens/roles.source.ts`, which `canon:fetch` does not read (a refresh changes nothing), so `@bundu/ui`'s generated tokens do not define them. Until they do, `AddressShareCard`'s `bg-surface-qr` / `text-on-surface-qr` plate and the trust meter's `text-status-*` classes need the consuming app to define those colours.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.
+- (`@bundu/ui`) New `@bundu/ui/MziziTrustMeter.astro`, the registry's new Astro build of `mzizi-trust-meter` (mzizi-registry#552), mapped in `scripts/registry-map.json` and exported from `package.json`. It is server-rendered with no script: a `role="meter"` root named by `title`, the Verification / Status / Ubuntu breakdown, or one 44px row per item of `signals` (`{ label, count, detail? }[]`). Its contract, `contracts/ui/mzizi-trust-meter.contract.json` (1.0.0), is synced with it, so the contract suite runs it. This closes the "Not synced" note in the 4.12.0 entry below.
+- (`@bundu/ui`) `icons.ts` (the registry's `site-icons`) gains the `star` and `trending-up` glyphs the meter uses.
+- (`@bundu/ui`) The registry's other 4.13.0 fixes (`mzizi-place-card` `linkComponent`, `mzizi-verified-badge` `label` / `ariaLabel` / `showScore`, the `mzizi-permission-gate` contrast fix, `lib/icons` without `"use client"`) are React-only in the registry and not mapped here, so nothing else changes.
+- (`@bundu/ui`) Known mismatch, to fix upstream: the synced contract says `implementations.astro.since: "0.7.0"`, but the next `@bundu/ui` release, the one that will ship this component, is 0.6.0 (`package.json` is 0.5.0). The contract is not hand-edited here; the fix belongs in mzizi-registry.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Added — the Kweli Address components, the `qr-matrix` module and the kweli marks, synced from mzizi-registry 4.12.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `f70703d` to mzizi-registry's 4.12.0 release on `main` (`6bfa9a4`, mzizi-registry#547, tracking mzizi-registry#543), and `pnpm registry:sync` rebuilds every mapped file from it.
+- (`@bundu/ui`) Four new Astro components, each under its registry contract in `contracts/ui/`: `@bundu/ui/AddressCode.astro`, `@bundu/ui/AddressShareCard.astro` (a QR code drawn server-side as one SVG path), `@bundu/ui/AddressSelector.astro` ("Deliver to" radios in a `<fieldset>`) and `@bundu/ui/AddressPrivateRow.astro`.
+- (`@bundu/ui`) New `@bundu/ui/qr-matrix` (`qrMatrix(text, ecc?)`), which `AddressShareCard` uses. It adds the dependency `uqr` (`>=0.1.3`, MIT, no dependencies). Like `markdown-parse.ts`, it is synced byte for byte and unformatted at the source, so `vite.config.ts` leaves it out of `vp fmt`.
+- (`@bundu/ui`) `app/BrandMark.astro` follows the registry's `app-brand-mark` 1.2.0: `brand="kweli"` shows the kweli mark, and a new `tagline` prop sets a muted line under the wordmark. The kweli marks and favicon ship as `@bundu/ui/assets/brand/kweli-mark-{light,dark}.{png,svg}` and `@bundu/ui/assets/brand/kweli-favicon.svg`.
+- (`@bundu/ui`) The pin move also brings the registry's changes since `f70703d` to `MarkdownRenderer.astro` / `markdown-parse.ts` (markdown-renderer 1.2.x), `lib/utils.ts` (comment wording) and `test/contract-runner.ts`, and `contracts/` is re-fetched at the same commit (71 contracts; `brand-mark`, `status-badge` and `markdown-renderer` move to their registry versions).
+- (`@bundu/ui`) Not synced: `mzizi-trust-meter`'s counted signals. The registry has only a React build of it (`n3-brand/mzizi-trust-meter.tsx`, importing `@/lib/harness` and `@/lib/icons`), with no `.astro` build to map, so `@bundu/ui` does not carry it yet.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
+### Security — `zod` and `undici` raised to fixed versions (2026-10-24)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `zod@<4.6.6` → `>=4.6.6` (GHSA-mrhx-c7xc-m3w5, high; the lockfile had 4.6.5, now 4.6.7) and `undici@>=8.0.0 <8.12.2` → `>=8.12.2` (GHSA-xjj6-f33q-929c high, GHSA-4qv8-2p9j-2685 and GHSA-f72v-6w45-q472 moderate; 8.11.2 → 8.12.3, through `@bundu/ui` > `astro` > `unifont`). Dev and build tooling only: no published package's own dependencies change. `pnpm audit` reports no known vulnerabilities.
+
+### Changed — upper bounds on `@bundu/ui`'s runtime dependencies and major-scoped overrides (caps B) (2026-10-24)
+
+- (`@bundu/ui`) Owner decision, 2026-10-24 ("caps B"): the published runtime dependencies now carry an upper bound at the next breaking version, `>=current <nextMajor`: `class-variance-authority` `>=0.7.1 <0.8.0`, `clsx` `>=2.1.1 <3`, `tailwind-merge` `>=3.6.0 <4` and `uqr` `>=0.1.3 <0.2.0` (for a 0.x package the next minor is the breaking one, as in npm's caret). A consumer's install can no longer pull a major `@bundu/ui` has not been built against. `@bundu/server` stays `workspace:^`.
+- (repository) The same decision caps the third-party override selectors that are scoped to one major: `nanoid@<3.3.18` `>=3.3.19 <4` (keeps the CommonJS 3.x line), `astro>vite` `>=8.3.3 <9`, `undici@>=8.0.0 <8.12.2` `>=8.12.2 <9` and `zod@<4.6.6` `>=4.6.6 <5`. Every other range stays a floor with no upper bound. The lockfile resolves inside every range; nothing moved.
+
+### Changed — package dependencies are minimum versions (2026-10-21)
+
+- (`@bundu/ui`, `@bundu/server`) Every `dependencies` and `devDependencies` entry in `packages/*/package.json` is now `>=x.y.z` with no maximum (owner, 2026-10-21: "mark packages with minimum acceptable, latest shouldn't be a blocker on too old of a version"). Each floor is the version `pnpm-lock.yaml` already resolved, so nothing in the lockfile moves. `workspace:` ranges are unchanged. No package version changes, so nothing is published.
+- (`@bundu/ui`) Consumers now need `tailwind-merge` 3.6.0 or later (was `^3.0.2`), the version this repository builds and tests against (capped below 4 by the caps B entry above).
+- (repository) The `vite@>=8.0.0 <8.3.3` → `>=8.3.3` override is now `astro>vite` → `>=8.3.3` (capped `<9` by the caps B entry above). It was written while `@nyuchi/ui` was still in the workspace (it is retired above): pnpm applies a version-keyed override to any dependency spec whose range intersects the key, so once `@nyuchi/ui`'s `vite` became the open-ended `>=6.4.3`, the old key rewrote it to `>=8.3.3` and moved `@nyuchi/ui` onto vite 8. `astro` is the only package that resolves vite 8 here, so scoping the floor to it keeps the same fix (`astro`'s vite stays 8.3.5) and leaves `@nyuchi/ui` on vite 6.4.5. `pnpm audit` still reports nothing at high or above.
+
+### Security — `http-cache-semantics`, `source-map-js`, `vite` and `vite-plus` raised to fixed versions (2026-10-21)
+
+- (repository) pnpm overrides in `package.json`, each a floor with no upper bound: `http-cache-semantics@<4.3.0` → `>=4.3.0` (GHSA-ch52-4w7c-c8xp, high, through `@bundu/ui` > `astro`) and `source-map-js@<1.2.2` → `>=1.2.2` (GHSA-68fv-2mgg-jv7q, high). GitHub's advisory page listed no patched version for the first; npm's `latest` 4.3.0 is outside the vulnerable range (`<=4.2.0`). Dev and build tooling only: no published package's own dependencies change. The root `package.json` now states every version as a minimum with no maximum (owner direction, 2026-10-21: "mark packages with minimum acceptable"): `vite-plus` `>=1.3.0`, and the older overrides `devalue`, `nanoid` and `postcss` move from `^x` to `>=x`. `vite-plus` moves from 1.0.0 to 1.3.0 (GHSA-587h-7wmj-h5pm, GHSA-698v-4r3x-3vcv and GHSA-r825-w8mm-5pxw cover `vite-plus <=1.0.0`; this repo was already on 1.x, so no `vp migrate` is involved), and a third override, `vite@>=8.0.0 <8.3.3` → `>=8.3.3`, lifts the bundled `vite` 8 to 8.3.5; `vite` 6 (`@nyuchi/ui`) resolves to 6.4.5. `pnpm audit` reports no known vulnerabilities. vite-plus 1.3.0's formatter re-flowed one README bullet, rewritten so prettier and oxfmt agree.
+
+### Changed — canon snapshot refreshed to brand v4.0.31 (2026-10-21)
+
+- (repository) `tokens/canon.snapshot.json` is re-fetched from `api.mzizi.dev/v1/brand` (brand v4.0.31, 21 families) after the API's registry pin moved (mzizi-api#83). Live canon adds `textDark` / `textLight` to all 21 colour families, `sortOrder`, `family` and `role` fields to seven entries, and new usage text for the border token (a decorative hairline; control edges become the `border-control` role once components adopt it). `pnpm tokens:build` produces no change: the generator does not read any of the new fields yet, so no generated token file, published CSS or package version changes. This turns the `snapshot matches live canon` check green again.
+
+### Added — Dependabot version updates target `staging` (2026-10-21)
+
+- (repository) `.github/dependabot.yml` is new: weekly version updates for GitHub Actions and this repository's package manifests, every entry with `target-branch: staging` (owner rule, 2026-10-21: "all dependabot should target staging not main.") and a seven-day cooldown before a new release is proposed.
+
+### Changed (docs): the README records the Svelte decision for `@nyuchi/ui`
+
+Owner decision, 2026-10-20: Svelte is out of new work across the Mzizi ecosystem. The README's
+package table now says `@nyuchi/ui` is Svelte 5 / SvelteKit today, and that the decision is
+direction, not a change to this package. No package code, version or published artifact changes.
+
 ### Added (repository): `AGENTS.md` points to `CLAUDE.md` and carries the org's agent rules
 
 `CLAUDE.md` (#57) is the repository's one agent guide. The new `AGENTS.md` sends every other agent there and adds only "Dev skills, progress reports and the merge gate", the org rule block from nyuchi/.github#87, as in the other Mzizi repositories' `AGENTS.md`:

@@ -4,15 +4,13 @@
  *
  * Input   tokens/canon.snapshot.json   (machine-written by scripts/fetch-canon.mjs)
  *
- * Output  packages/bundu-ui/styles/tokens.css   packages/ui/styles/tokens.css
- *         packages/bundu-ui/styles/theme.css    packages/ui/styles/theme.css
- *         packages/bundu-ui/tokens.json         packages/ui/tokens.json
+ * Output  packages/bundu-ui/styles/tokens.css
+ *         packages/bundu-ui/styles/theme.css
+ *         packages/bundu-ui/tokens.json
+ *         packages/bundu-ui/tailwind-palette.mjs and styles/brand-*.css
  *
- * Both packages emit byte-identical token files on purpose. Until this change
- * @nyuchi/ui carried its own hand-written copy of the seven minerals inside
- * styles/globals.css — a second palette inside one repository, already drifted
- * the same way @bundu/ui's had. Two artifacts from one generator is not a
- * second source; two hand-maintained files are.
+ * The palette is generated from canon, never typed by hand: a hand-written copy
+ * of the seven minerals in any package is a second palette, and it drifts.
  *
  * Usage:  node scripts/generate-tokens.mjs           (pnpm tokens:build)
  *         node scripts/generate-tokens.mjs --check   (pnpm tokens:check)
@@ -30,7 +28,7 @@ import prettier from "prettier";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SNAPSHOT = resolve(ROOT, "tokens/canon.snapshot.json");
-const PACKAGES = ["packages/bundu-ui", "packages/ui"];
+const PACKAGES = ["packages/bundu-ui"];
 
 const byName = (list) => Object.fromEntries(list.map((e) => [e.name, e]));
 
@@ -150,6 +148,14 @@ function buildModel(canon) {
     return { name, cssVar: `--${name}`, ...sem[name] };
   });
 
+  // The registry's colour roles (fetch-canon reads them from the generated N1
+  // TypeScript tokens), minus the ones that follow the brand: `app-accent*`
+  // and `sidebar*` resolve through --primary / --brand-accent, which the
+  // brand-*.css overlays repoint here, so a literal Mzizi value would pin
+  // them to hematite under every brand.
+  const FOLLOWS_BRAND = /^(app-accent|sidebar)/;
+  const roles = (canon.roles ?? []).filter((r) => !FOLLOWS_BRAND.test(r.name));
+
   return {
     canon,
     bg,
@@ -160,6 +166,7 @@ function buildModel(canon) {
     ladder,
     surfaceMuted,
     status,
+    roles,
   };
 }
 
@@ -456,6 +463,22 @@ function declarations(m) {
     );
   }
 
+  /* --- registry roles ---------------------------------------------- */
+  // Every colour role the registry declares (lib/tokens/roles.source.ts) that
+  // the sections above do not already declare: the status tones, the
+  // verification tiers (--tier-*), --status-error, --surface-qr, the chart
+  // and category series, the text ramp. Values are the registry's resolved
+  // Mzizi pack, so they match mzizi-tokens-globals.css exactly.
+  const declared = new Set(out.filter((d) => !d.heading).map((d) => d.name));
+  const extra = m.roles.filter((r) => !declared.has(r.cssVar));
+  if (extra.length) {
+    heading(
+      "roles",
+      "Registry roles (mzizi-registry lib/tokens/roles.source.ts): what a component names — --status-* tones, --tier-* verification tiers, chart and category series. Resolved Mzizi values; regenerate with `pnpm canon:fetch && pnpm tokens:build`.",
+    );
+    for (const r of extra) push("roles", r.cssVar, lit(r.light), lit(r.dark));
+  }
+
   return out;
 }
 
@@ -693,27 +716,13 @@ const THEME_HEADER = (
  * (`text-display`, `text-body-lg`, `text-caption`, `max-w-narrow`, `p-xxs`,
  * ...). They are hand-authored package policy in the v3 preset; theme.css
  * READS them from there rather than restating them, so a v4 consumer and a
- * v3 consumer get the same scale from one definition. Both presets must agree
- * on type and widths (theme.css is byte-identical across the packages), and
- * the generator fails if they do not. Named spacing comes from @bundu/ui's
- * preset; @nyuchi/ui's declares none, and the extra names are inert there.
+ * v3 consumer get the same scale from one definition. Named spacing comes
+ * from @bundu/ui's preset.
  */
 async function presetScale() {
-  const [bundu, nyuchi] = await Promise.all(
-    PACKAGES.map((dir) =>
-      import(resolve(ROOT, dir, "tailwind-preset.mjs")).then(
-        (mod) => mod.default.theme.extend,
-      ),
-    ),
-  );
-  for (const key of ["fontSize", "maxWidth"]) {
-    if (JSON.stringify(bundu[key]) !== JSON.stringify(nyuchi[key])) {
-      throw new Error(
-        `the two tailwind-preset.mjs files disagree on theme.extend.${key}; ` +
-          "theme.css is shared, so they must match",
-      );
-    }
-  }
+  const bundu = await import(
+    resolve(ROOT, PACKAGES[0], "tailwind-preset.mjs")
+  ).then((mod) => mod.default.theme.extend);
   return {
     fontSize: bundu.fontSize,
     maxWidth: bundu.maxWidth,
@@ -833,6 +842,17 @@ function emitThemeCss(pkg, m) {
     "brand-accent-foreground",
   ]) {
     push(`  --color-${name}: var(--${name});`);
+  }
+  // The registry roles (bg-tier-otp, text-status-error, fill-chart-3, ...),
+  // where the names above do not already register them.
+  const registered = new Set(lines.join("\n").match(/--color-[\w-]+(?=:)/g));
+  const roleLines = m.roles
+    .filter((r) => !registered.has(`--color-${r.cssVar.slice(2)}`))
+    .map((r) => `  --color-${r.cssVar.slice(2)}: var(${r.cssVar});`);
+  if (roleLines.length) {
+    push("");
+    push("  /* Registry roles (lib/tokens/roles.source.ts) */");
+    for (const l of roleLines) push(l);
   }
   push("}");
   push("");
@@ -976,9 +996,8 @@ function emitTokensJson(pkg, m, decls, meta) {
  * One file per brand, each repointing --primary and --ring, plus
  * --brand-accent for a brand with an accent family, and NOTHING else.
  * The brand -> mineral mapping comes from canon's own `ecosystem` table, so
- * these are generated too. Before this change the two packages disagreed:
- * @bundu/ui's brand-bundu.css said copper (canon), @nyuchi/ui's said
- * terracotta. Generating both from one table is how that stops recurring.
+ * these are generated too, so a brand's mineral cannot be typed differently
+ * in two places (brand-bundu.css is copper, because canon says copper).
  * ------------------------------------------------------------------ */
 
 /**

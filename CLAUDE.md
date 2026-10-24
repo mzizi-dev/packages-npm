@@ -6,7 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A pnpm workspace (`packages/*`) that publishes Nyuchi's implementation of the Mzizi design system to npm:
 
-- `packages/ui` → `@nyuchi/ui` (Svelte 5 / SvelteKit app UI, built with `svelte-package`)
 - `packages/bundu-ui` → `@bundu/ui` (Astro components + React primitives for marketing sites and consoles; ships source, no build step)
 - `packages/bundu-server` → `@bundu/server` (framework-free server helpers on Web APIs; built with `tsc`). `@bundu/ui` depends on it via `workspace:^`.
 
@@ -16,12 +15,11 @@ Tooling is Vite+ (`vp`, from `vite-plus`); its fmt/lint/test settings live in th
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm build            # pnpm -r build: @bundu/server (tsc) and @nyuchi/ui (svelte-package)
+pnpm build            # pnpm -r build: @bundu/server (tsc)
 pnpm lint             # vp lint (oxlint, type-aware but typeCheck: false on purpose)
 pnpm check            # vp check (format + lint)
 pnpm fmt              # vp fmt (write formatting)
 pnpm test             # root vp test (scripts/*.test.mjs) + each package's `test` script
-pnpm --filter @nyuchi/ui check   # svelte-check, the type check for @nyuchi/ui
 ```
 
 Single test:
@@ -48,11 +46,11 @@ pnpm contracts:fetch [ref] / pnpm contracts:check [ref]   # network: packages/bu
 
 Most of the repo is generated. Hand-editing a generated file fails CI; fix the source instead.
 
-- **Tokens** (`scripts/generate-tokens.mjs`, input `tokens/canon.snapshot.json`): `styles/tokens.css`, `styles/theme.css`, `styles/color-scheme.css`, `tokens.json`, `tailwind-palette.mjs` and every `styles/brand-*.css` in BOTH `packages/ui` and `packages/bundu-ui`, byte-identical across the two. The snapshot itself is machine-written by `scripts/fetch-canon.mjs` from `api.mzizi.dev/api/v1/brand` cross-checked with mzizi-registry's `palette.source.ts`. Never type a raw hex; the few local values with no canon equivalent live in the `LOCAL` table in the generator.
+- **Tokens** (`scripts/generate-tokens.mjs`, input `tokens/canon.snapshot.json`): `styles/tokens.css`, `styles/theme.css`, `styles/color-scheme.css`, `tokens.json`, `tailwind-palette.mjs` and every `styles/brand-*.css` in `packages/bundu-ui`. The snapshot itself is machine-written by `scripts/fetch-canon.mjs` from `api.mzizi.dev/api/v1/brand` cross-checked with mzizi-registry's `palette.source.ts`. Never type a raw hex; the few local values with no canon equivalent live in the `LOCAL` table in the generator.
 - **Components** (`scripts/sync-registry.mjs`): every `@bundu/ui` `.astro` component, the modules they use, brand assets, `@bundu/server` helpers and `packages/bundu-ui/test/contract-runner.ts` are built from `mzizi-dev/mzizi-registry` at the commit in `scripts/registry-ref.json`. `scripts/registry-map.json` maps each registry item to its package path; `scripts/registry-imports.mjs` rewrites flat registry imports into the package layout. `registry:check` also fails on any `.astro` not in the map (a hand-written component is a fork). To change a component: change it upstream, bump the pin in a PR, run `pnpm registry:sync`, record it in `CHANGELOG.md`.
 - **Contracts** (`scripts/fetch-contracts.mjs`): `packages/bundu-ui/contracts/` is a committed copy of the registry's contracts so contract tests run offline. CI checks it against the registry pin.
 
-Hand-written: the `scripts/` tooling, `styles/globals.css`, `@nyuchi/ui` Svelte source, React primitives not in the map, configs and docs.
+Hand-written: the `scripts/` tooling, `styles/globals.css`, React primitives not in the map, configs and docs.
 
 ## Branches, releases and versioning
 
