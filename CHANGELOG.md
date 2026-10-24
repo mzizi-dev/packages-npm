@@ -21,6 +21,26 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Removed — `@nyuchi/ui` retired (2026-10-24)
+
+Owner decision, 2026-10-24: retire `@nyuchi/ui`, the Svelte package (following the 2026-10-20 decision that Svelte is out of the Mzizi ecosystem). This supersedes the 2026-10-20 README note further down that kept it as "Svelte 5 today".
+
+- **Removed:** `packages/ui`, `@nyuchi/ui` 0.4.0, a Svelte 5 / SvelteKit component library. It is no longer in the pnpm workspace, so no release publishes it again. The 0.4.0 already on npm is not unpublished or deprecated by this change: deprecating it needs an owner with the npm credentials.
+- **Changed (repository):** `scripts/generate-tokens.mjs` generates the token files for `@bundu/ui` only. The generated files in `packages/bundu-ui` are unchanged (`pnpm tokens:check` passes).
+- **Changed (@bundu/ui):** the README, BUILDING.md and Tailwind preset no longer list `.svelte` in the content globs, and the guard test in `src/app/app.test.ts` still refuses Svelte imports (and React, Preact, Vue and Solid imports, and `.svelte`/`.vue`/`.tsx`/`.jsx` import paths), as it did before. Nothing in `@bundu/ui` imported `@nyuchi/ui`.
+
+### Changed — the Kweli phase-2 fixes, synced from mzizi-registry 4.14.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `b29b1f8` (4.13.0) to mzizi-registry's 4.14.0 release on `main` (`674c94d`, mzizi-registry#561, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch 674c94d` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) **Breaking (a default changes):** `MziziTrustMeter.astro` writes no raw score unless `showScore` is set; the header names the level and the root carries `aria-valuetext` (mzizi-registry#555). Its contract `ui/mzizi-trust-meter` is now 2.0.0, with the Astro build's `since` corrected to `0.6.0`, which closes the mismatch recorded in the 4.13.0 sync.
+- (`@bundu/ui`) **Breaking (a default changes):** `app/BrandMark.astro` loads both images with `loading="lazy"`; the new `loading` prop takes `"eager"` for a mark that is the page's LCP image (contract `app/brand-mark` 1.3.0, mzizi-registry#558).
+- (`@bundu/ui`) `AddressShareCard.astro` takes `codeLabel` (passed to the address code chip) and draws its QR on a `surface-qr` plate in `on-surface-qr` ink (contract `ui/address-share-card` 1.1.0, mzizi-registry#558).
+- (`@bundu/ui`) `contracts/discover/category-chip.contract.json` 1.0.1 records the React-only `linkComponent` prop in `gaps`; `discover/CategoryChip.astro` itself is unchanged (mzizi-registry#556).
+- (`@bundu/ui`) Four new brand assets, mapped in `scripts/registry-map.json` and exported from `package.json`: `assets/brand/kweli-icon-192.png`, `kweli-icon-512.png`, `kweli-icon-maskable-512.png` and `kweli-apple-touch-icon.png` (mzizi-registry#560).
+- (`@bundu/ui`) Not synced, because the registry has no Astro build of them: `mzizi-event-card`, `mzizi-review-card`, `rating`, `filter-bar`, `mzizi-cover-header`, `mzizi-place-card` and `discover-category-chip`'s `linkComponent`. `mzizi-trust-tiers` is not mapped either: it is a `registry:lib` that imports Lucide React icons from `@/lib/icons`, which `@bundu/ui` does not ship, and no Astro build imports it.
+- (`@bundu/ui`) Known gap, to fix in the token pipeline: the new canonical roles `--status-error`, `--surface-qr` and `--on-surface-qr` live in the registry's `lib/tokens/roles.source.ts`, which `canon:fetch` does not read (a refresh changes nothing), so `@bundu/ui`'s generated tokens do not define them. Until they do, `AddressShareCard`'s `bg-surface-qr` / `text-on-surface-qr` plate and the trust meter's `text-status-*` classes need the consuming app to define those colours.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
 ### Added — `MziziTrustMeter.astro`, synced from mzizi-registry 4.13.0 (2026-10-24)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `6bfa9a4` (4.12.0) to mzizi-registry's 4.13.0 release on `main` (`b29b1f8`, mzizi-registry#553, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch` run at that commit.
@@ -51,10 +71,9 @@ Versions published before then are not renumbered.
 
 ### Changed — package dependencies are minimum versions (2026-10-21)
 
-- (`@nyuchi/ui`, `@bundu/ui`, `@bundu/server`) Every `dependencies` and `devDependencies` entry in `packages/*/package.json` is now `>=x.y.z` with no maximum (owner, 2026-10-21: "mark packages with minimum acceptable, latest shouldn't be a blocker on too old of a version"). Each floor is the version `pnpm-lock.yaml` already resolved, so nothing in the lockfile moves. `workspace:` ranges and `@nyuchi/ui`'s `svelte` peer range (`^5`) are unchanged. No package version changes, so nothing is published.
+- (`@bundu/ui`, `@bundu/server`) Every `dependencies` and `devDependencies` entry in `packages/*/package.json` is now `>=x.y.z` with no maximum (owner, 2026-10-21: "mark packages with minimum acceptable, latest shouldn't be a blocker on too old of a version"). Each floor is the version `pnpm-lock.yaml` already resolved, so nothing in the lockfile moves. `workspace:` ranges are unchanged. No package version changes, so nothing is published.
 - (`@bundu/ui`) Consumers now need `tailwind-merge` 3.6.0 or later (was `^3.0.2`), the version this repository builds and tests against (capped below 4 by the caps B entry above).
-- (`@nyuchi/ui`) `vite` and `@sveltejs/vite-plugin-svelte` are now `>=6.4.3` and `>=5.1.1`. A resolve without the lockfile can now cross into vite 8 and the plugin's next majors, which the owner's rule allows.
-- (repository) The `vite@>=8.0.0 <8.3.3` → `>=8.3.3` override is now `astro>vite` → `>=8.3.3`. pnpm applies a version-keyed override to any dependency spec whose range intersects the key, so once `@nyuchi/ui`'s `vite` became the open-ended `>=6.4.3`, the old key rewrote it to `>=8.3.3` and moved `@nyuchi/ui` onto vite 8. `astro` is the only package that resolves vite 8 here, so scoping the floor to it keeps the same fix (`astro`'s vite stays 8.3.5) and leaves `@nyuchi/ui` on vite 6.4.5. `pnpm audit` still reports nothing at high or above.
+- (repository) The `vite@>=8.0.0 <8.3.3` → `>=8.3.3` override is now `astro>vite` → `>=8.3.3` (capped `<9` by the caps B entry above). It was written while `@nyuchi/ui` was still in the workspace (it is retired above): pnpm applies a version-keyed override to any dependency spec whose range intersects the key, so once `@nyuchi/ui`'s `vite` became the open-ended `>=6.4.3`, the old key rewrote it to `>=8.3.3` and moved `@nyuchi/ui` onto vite 8. `astro` is the only package that resolves vite 8 here, so scoping the floor to it keeps the same fix (`astro`'s vite stays 8.3.5) and leaves `@nyuchi/ui` on vite 6.4.5. `pnpm audit` still reports nothing at high or above.
 
 ### Security — `http-cache-semantics`, `source-map-js`, `vite` and `vite-plus` raised to fixed versions (2026-10-21)
 
