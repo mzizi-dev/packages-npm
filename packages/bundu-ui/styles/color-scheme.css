@@ -275,5 +275,25 @@
     --text-primary: #e5e5e3;
     --text-secondary: #ccccca;
     --text-tertiary: #b3b3b1;
+    --tier-community: #e1b07e;
+    --tier-community-container: #3e2817;
+    --tier-community-on-container: #f5e6d3;
+    --tier-community-text: #ebcca3;
+    --tier-government: #ffd740;
+    --tier-government-container: #332200;
+    --tier-government-on-container: #ffecb3;
+    --tier-government-text: #ffd740;
+    --tier-licensed: #b388ff;
+    --tier-licensed-container: #1a0033;
+    --tier-licensed-on-container: #e3c2e8;
+    --tier-licensed-text: #dcc8ff;
+    --tier-otp: #00b0ff;
+    --tier-otp-container: #001f3f;
+    --tier-otp-on-container: #b3e5fc;
+    --tier-otp-text: #86dcff;
+    --tier-unverified: #a09c93;
+    --tier-unverified-container: #1e1d1a;
+    --tier-unverified-on-container: #e5e5e3;
+    --tier-unverified-text: #ccccca;
   }
 }

@@ -1427,6 +1427,146 @@
       "name": "text-tertiary"
     },
     {
+      "cssVar": "--tier-community",
+      "dark": "#E1B07E",
+      "kind": "ui",
+      "light": "#A0522D",
+      "name": "tier-community"
+    },
+    {
+      "cssVar": "--tier-community-container",
+      "dark": "#3E2817",
+      "kind": "surface",
+      "light": "#F5E6D3",
+      "name": "tier-community-container"
+    },
+    {
+      "cssVar": "--tier-community-on-container",
+      "dark": "#F5E6D3",
+      "kind": "text",
+      "light": "#5D2906",
+      "name": "tier-community-on-container"
+    },
+    {
+      "cssVar": "--tier-community-text",
+      "dark": "#EBCCA3",
+      "kind": "text",
+      "light": "#844425",
+      "name": "tier-community-text"
+    },
+    {
+      "cssVar": "--tier-government",
+      "dark": "#FFD740",
+      "kind": "ui",
+      "light": "#5D4037",
+      "name": "tier-government"
+    },
+    {
+      "cssVar": "--tier-government-container",
+      "dark": "#332200",
+      "kind": "surface",
+      "light": "#FFF8E1",
+      "name": "tier-government-container"
+    },
+    {
+      "cssVar": "--tier-government-on-container",
+      "dark": "#FFECB3",
+      "kind": "text",
+      "light": "#3E2723",
+      "name": "tier-government-on-container"
+    },
+    {
+      "cssVar": "--tier-government-text",
+      "dark": "#FFD740",
+      "kind": "text",
+      "light": "#5D4037",
+      "name": "tier-government-text"
+    },
+    {
+      "cssVar": "--tier-licensed",
+      "dark": "#B388FF",
+      "kind": "ui",
+      "light": "#4B0082",
+      "name": "tier-licensed"
+    },
+    {
+      "cssVar": "--tier-licensed-container",
+      "dark": "#1A0033",
+      "kind": "surface",
+      "light": "#F3E5F5",
+      "name": "tier-licensed-container"
+    },
+    {
+      "cssVar": "--tier-licensed-on-container",
+      "dark": "#E3C2E8",
+      "kind": "text",
+      "light": "#2E004D",
+      "name": "tier-licensed-on-container"
+    },
+    {
+      "cssVar": "--tier-licensed-text",
+      "dark": "#DCC8FF",
+      "kind": "text",
+      "light": "#4B0082",
+      "name": "tier-licensed-text"
+    },
+    {
+      "cssVar": "--tier-otp",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "tier-otp"
+    },
+    {
+      "cssVar": "--tier-otp-container",
+      "dark": "#001F3F",
+      "kind": "surface",
+      "light": "#E3F2FD",
+      "name": "tier-otp-container"
+    },
+    {
+      "cssVar": "--tier-otp-on-container",
+      "dark": "#B3E5FC",
+      "kind": "text",
+      "light": "#002966",
+      "name": "tier-otp-on-container"
+    },
+    {
+      "cssVar": "--tier-otp-text",
+      "dark": "#86DCFF",
+      "kind": "text",
+      "light": "#0047AB",
+      "name": "tier-otp-text"
+    },
+    {
+      "cssVar": "--tier-unverified",
+      "dark": "#A09C93",
+      "kind": "ui",
+      "light": "#55514B",
+      "name": "tier-unverified"
+    },
+    {
+      "cssVar": "--tier-unverified-container",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "tier-unverified-container"
+    },
+    {
+      "cssVar": "--tier-unverified-on-container",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "tier-unverified-on-container"
+    },
+    {
+      "cssVar": "--tier-unverified-text",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "tier-unverified-text"
+    },
+    {
       "cssVar": "--void",
       "dark": "#080807",
       "kind": "surface",

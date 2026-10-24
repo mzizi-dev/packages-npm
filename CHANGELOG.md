@@ -21,6 +21,14 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — the verification tier roles and the trust meter's `tier` prop, synced from mzizi-registry 4.15.0 (2026-10-24)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `674c94d` (4.14.0) to mzizi-registry's 4.15.0 release on `main` (`e336a5f`, mzizi-registry#565, tracking mzizi-registry#543), and `pnpm registry:sync` and `pnpm contracts:fetch e336a5f` run at that commit (105 files, 72 contracts).
+- (`@bundu/ui`) `MziziTrustMeter.astro` takes an optional `tier` (`"unverified" | "community" | "otp" | "government" | "licensed"`): the Verification signal is drawn in that tier's `--tier-*` role (`fill-tier-<id>`, `text-tier-<id>-text`), and without it stays `--status-warning`, as before (contract `ui/mzizi-trust-meter` 2.1.0, mzizi-registry#563).
+- (`@bundu/ui`) `pnpm canon:fetch && pnpm tokens:build` bring in the registry's new `--tier-*` roles (the role list in the snapshot goes from 115 to 135): `--tier-<id>`, `--tier-<id>-container`, `--tier-<id>-on-container` and `--tier-<id>-text` for each of the five tiers, light and dark, in `styles/tokens.css`, `styles/color-scheme.css` and `tokens.json`, registered as Tailwind colours in `styles/theme.css`. They are new in `@bundu/ui`, so nothing here changes value; they carry the registry's Breaking colour decision: community is terracotta (no longer malachite) and unverified is `--status-neutral` (no longer `#6B7280`). Existing variables keep their values. This closes the "Next" note in the colour-roles entry below.
+- (`@bundu/ui`) Not synced: the registry's `--color-<mineral>-light` tokens (mzizi-registry#563) are palette variables in its globals CSS, not colour roles, so `canon:fetch` does not read them; no `@bundu/ui` component uses them. The other 4.15.0 changes (`/v1/brand`'s pillar text, the `#D4A574` fallbacks, the tier components in React, the new Rust crates) touch nothing mapped here.
+- No version bump: releasing `@bundu/ui` is a separate call.
+
 ### Added — the registry's colour roles reach `@bundu/ui` tokens (2026-10-24)
 
 Closes the known gap recorded under the 4.14.0 sync below: `canon:fetch` read `/v1/brand` and `palette.source.ts` but not the registry's role manifest, so `--status-error`, `--surface-qr` and `--on-surface-qr` (and any later role) never reached `@bundu/ui`, and `tokens:check` still passed. `/v1/brand` does not expose roles.
