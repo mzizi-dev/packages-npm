@@ -848,7 +848,15 @@ function emitThemeCss(pkg, m) {
   const registered = new Set(lines.join("\n").match(/--color-[\w-]+(?=:)/g));
   const roleLines = m.roles
     .filter((r) => !registered.has(`--color-${r.cssVar.slice(2)}`))
-    .map((r) => `  --color-${r.cssVar.slice(2)}: var(${r.cssVar});`);
+    .map((r) => {
+      const line = `  --color-${r.cssVar.slice(2)}: var(${r.cssVar});`;
+      // Past the print width, write it the way `vp fmt` does (the longer
+      // --assurance-*-on-container and --attestation-*-on-container names),
+      // so the generated file passes the formatter and tokens:check at once.
+      return line.length <= WIDTH
+        ? line
+        : `  --color-${r.cssVar.slice(2)}: var(\n    ${r.cssVar}\n  );`;
+    });
   if (roleLines.length) {
     push("");
     push("  /* Registry roles (lib/tokens/roles.source.ts) */");
