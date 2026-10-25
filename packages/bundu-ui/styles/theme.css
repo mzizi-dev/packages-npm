@@ -209,6 +209,52 @@
   --color-brand-accent-foreground: var(--brand-accent-foreground);
 
   /* Registry roles (lib/tokens/roles.source.ts) */
+  --color-assurance-documented: var(--assurance-documented);
+  --color-assurance-documented-container: var(--assurance-documented-container);
+  --color-assurance-documented-on-container: var(
+    --assurance-documented-on-container
+  );
+  --color-assurance-documented-text: var(--assurance-documented-text);
+  --color-assurance-government: var(--assurance-government);
+  --color-assurance-government-container: var(--assurance-government-container);
+  --color-assurance-government-on-container: var(
+    --assurance-government-on-container
+  );
+  --color-assurance-government-text: var(--assurance-government-text);
+  --color-assurance-licensed: var(--assurance-licensed);
+  --color-assurance-licensed-container: var(--assurance-licensed-container);
+  --color-assurance-licensed-on-container: var(
+    --assurance-licensed-on-container
+  );
+  --color-assurance-licensed-text: var(--assurance-licensed-text);
+  --color-assurance-none: var(--assurance-none);
+  --color-assurance-none-container: var(--assurance-none-container);
+  --color-assurance-none-on-container: var(--assurance-none-on-container);
+  --color-assurance-none-text: var(--assurance-none-text);
+  --color-assurance-otp: var(--assurance-otp);
+  --color-assurance-otp-container: var(--assurance-otp-container);
+  --color-assurance-otp-on-container: var(--assurance-otp-on-container);
+  --color-assurance-otp-text: var(--assurance-otp-text);
+  --color-attestation-business: var(--attestation-business);
+  --color-attestation-business-container: var(--attestation-business-container);
+  --color-attestation-business-on-container: var(
+    --attestation-business-on-container
+  );
+  --color-attestation-business-text: var(--attestation-business-text);
+  --color-attestation-community: var(--attestation-community);
+  --color-attestation-community-container: var(
+    --attestation-community-container
+  );
+  --color-attestation-community-on-container: var(
+    --attestation-community-on-container
+  );
+  --color-attestation-community-text: var(--attestation-community-text);
+  --color-attestation-domain: var(--attestation-domain);
+  --color-attestation-domain-container: var(--attestation-domain-container);
+  --color-attestation-domain-on-container: var(
+    --attestation-domain-on-container
+  );
+  --color-attestation-domain-text: var(--attestation-domain-text);
   --color-border-control: var(--border-control);
   --color-category-1: var(--category-1);
   --color-category-2: var(--category-2);
