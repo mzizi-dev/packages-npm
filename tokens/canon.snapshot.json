@@ -671,6 +671,230 @@
       "name": "app-accent-foreground"
     },
     {
+      "cssVar": "--assurance-documented",
+      "dark": "#4B66FE",
+      "kind": "ui",
+      "light": "#283593",
+      "name": "assurance-documented"
+    },
+    {
+      "cssVar": "--assurance-documented-container",
+      "dark": "#0D1442",
+      "kind": "surface",
+      "light": "#E8EAF6",
+      "name": "assurance-documented-container"
+    },
+    {
+      "cssVar": "--assurance-documented-on-container",
+      "dark": "#C7CCEA",
+      "kind": "text",
+      "light": "#141A5C",
+      "name": "assurance-documented-on-container"
+    },
+    {
+      "cssVar": "--assurance-documented-text",
+      "dark": "#C6CFFF",
+      "kind": "text",
+      "light": "#283593",
+      "name": "assurance-documented-text"
+    },
+    {
+      "cssVar": "--assurance-government",
+      "dark": "#FFD740",
+      "kind": "ui",
+      "light": "#5D4037",
+      "name": "assurance-government"
+    },
+    {
+      "cssVar": "--assurance-government-container",
+      "dark": "#332200",
+      "kind": "surface",
+      "light": "#FFF8E1",
+      "name": "assurance-government-container"
+    },
+    {
+      "cssVar": "--assurance-government-on-container",
+      "dark": "#FFECB3",
+      "kind": "text",
+      "light": "#3E2723",
+      "name": "assurance-government-on-container"
+    },
+    {
+      "cssVar": "--assurance-government-text",
+      "dark": "#FFD740",
+      "kind": "text",
+      "light": "#5D4037",
+      "name": "assurance-government-text"
+    },
+    {
+      "cssVar": "--assurance-licensed",
+      "dark": "#B388FF",
+      "kind": "ui",
+      "light": "#4B0082",
+      "name": "assurance-licensed"
+    },
+    {
+      "cssVar": "--assurance-licensed-container",
+      "dark": "#1A0033",
+      "kind": "surface",
+      "light": "#F3E5F5",
+      "name": "assurance-licensed-container"
+    },
+    {
+      "cssVar": "--assurance-licensed-on-container",
+      "dark": "#E3C2E8",
+      "kind": "text",
+      "light": "#2E004D",
+      "name": "assurance-licensed-on-container"
+    },
+    {
+      "cssVar": "--assurance-licensed-text",
+      "dark": "#DCC8FF",
+      "kind": "text",
+      "light": "#4B0082",
+      "name": "assurance-licensed-text"
+    },
+    {
+      "cssVar": "--assurance-none",
+      "dark": "#A09C93",
+      "kind": "ui",
+      "light": "#55514B",
+      "name": "assurance-none"
+    },
+    {
+      "cssVar": "--assurance-none-container",
+      "dark": "#1E1D1A",
+      "kind": "surface",
+      "light": "#E5E4E1",
+      "name": "assurance-none-container"
+    },
+    {
+      "cssVar": "--assurance-none-on-container",
+      "dark": "#E5E5E3",
+      "kind": "text",
+      "light": "#373635",
+      "name": "assurance-none-on-container"
+    },
+    {
+      "cssVar": "--assurance-none-text",
+      "dark": "#CCCCCA",
+      "kind": "text",
+      "light": "#575655",
+      "name": "assurance-none-text"
+    },
+    {
+      "cssVar": "--assurance-otp",
+      "dark": "#00B0FF",
+      "kind": "ui",
+      "light": "#0047AB",
+      "name": "assurance-otp"
+    },
+    {
+      "cssVar": "--assurance-otp-container",
+      "dark": "#001F3F",
+      "kind": "surface",
+      "light": "#E3F2FD",
+      "name": "assurance-otp-container"
+    },
+    {
+      "cssVar": "--assurance-otp-on-container",
+      "dark": "#B3E5FC",
+      "kind": "text",
+      "light": "#002966",
+      "name": "assurance-otp-on-container"
+    },
+    {
+      "cssVar": "--assurance-otp-text",
+      "dark": "#86DCFF",
+      "kind": "text",
+      "light": "#0047AB",
+      "name": "assurance-otp-text"
+    },
+    {
+      "cssVar": "--attestation-business",
+      "dark": "#64FFDA",
+      "kind": "ui",
+      "light": "#004D40",
+      "name": "attestation-business"
+    },
+    {
+      "cssVar": "--attestation-business-container",
+      "dark": "#00251A",
+      "kind": "surface",
+      "light": "#E0F2F1",
+      "name": "attestation-business-container"
+    },
+    {
+      "cssVar": "--attestation-business-on-container",
+      "dark": "#A7FFEB",
+      "kind": "text",
+      "light": "#00332B",
+      "name": "attestation-business-on-container"
+    },
+    {
+      "cssVar": "--attestation-business-text",
+      "dark": "#64FFDA",
+      "kind": "text",
+      "light": "#004D40",
+      "name": "attestation-business-text"
+    },
+    {
+      "cssVar": "--attestation-community",
+      "dark": "#E1B07E",
+      "kind": "ui",
+      "light": "#A0522D",
+      "name": "attestation-community"
+    },
+    {
+      "cssVar": "--attestation-community-container",
+      "dark": "#3E2817",
+      "kind": "surface",
+      "light": "#F5E6D3",
+      "name": "attestation-community-container"
+    },
+    {
+      "cssVar": "--attestation-community-on-container",
+      "dark": "#F5E6D3",
+      "kind": "text",
+      "light": "#5D2906",
+      "name": "attestation-community-on-container"
+    },
+    {
+      "cssVar": "--attestation-community-text",
+      "dark": "#EBCCA3",
+      "kind": "text",
+      "light": "#844425",
+      "name": "attestation-community-text"
+    },
+    {
+      "cssVar": "--attestation-domain",
+      "dark": "#FF8A65",
+      "kind": "ui",
+      "light": "#BF5A36",
+      "name": "attestation-domain"
+    },
+    {
+      "cssVar": "--attestation-domain-container",
+      "dark": "#3A1A0E",
+      "kind": "surface",
+      "light": "#FBE4DA",
+      "name": "attestation-domain-container"
+    },
+    {
+      "cssVar": "--attestation-domain-on-container",
+      "dark": "#FFD3C2",
+      "kind": "text",
+      "light": "#5C2410",
+      "name": "attestation-domain-on-container"
+    },
+    {
+      "cssVar": "--attestation-domain-text",
+      "dark": "#FFC3B0",
+      "kind": "text",
+      "light": "#894027",
+      "name": "attestation-domain-text"
+    },
+    {
       "cssVar": "--background",
       "dark": "#0E0D0C",
       "kind": "surface",
