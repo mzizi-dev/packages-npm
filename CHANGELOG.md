@@ -21,6 +21,13 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Added — assurance levels and attestations, synced from mzizi-registry 4.17.0 (2026-10-25)
+
+- (`@bundu/ui`) `scripts/registry-ref.json` moves from `c68d3c3` (4.16.0) to mzizi-registry's 4.17.0 release on `main` (`780457a`, mzizi-registry#580, tracked in mzizi-registry#577), and `pnpm registry:sync` and `pnpm contracts:fetch 780457a` run at that commit (112 files, 77 contracts; 3 contracts updated). No new registry files need mapping.
+- (`@bundu/ui`) **New colour roles.** `pnpm canon:fetch` and `pnpm tokens:build` bring the registry's new N1 roles (mzizi-registry#578) into `styles/tokens.css`, `theme.css`, `color-scheme.css` and `tokens.json`, each with `-container`, `-on-container` and `-text` and a Tailwind `--color-*` registration: `--assurance-none`, `--assurance-otp` (cobalt), `--assurance-documented` (sodalite), `--assurance-government` (gold), `--assurance-licensed` (tanzanite), `--attestation-community` (terracotta), `--attestation-business` (malachite) and `--attestation-domain` (copper). Every `--tier-*` value is unchanged.
+- (`@bundu/ui`) The trust components on the new model (mzizi-registry#579): `mzizi-trust-tier-data` gains `ASSURANCE_DATA`, `ATTESTATION_DATA`, `legacyTierToAssurance` and `legacyTier`; `app/TierStatus.astro` (`app/tier-status` 1.1.0) takes `assurance` and `attestationTypes`; `MziziVerifiedBadge.astro` (`ui/mzizi-verified-badge` 1.1.0) takes `assurance` and `attestations`; `MziziTrustMeter.astro` (`ui/mzizi-trust-meter` 2.2.0) takes `assurance`. **Breaking (defaults change):** `TierStatus` with `tier="community"` now renders level Unverified plus a "Community Vouched" chip instead of a Community rung, and its ladder classes move from `--tier-*` to `--assurance-*`.
+- (repository) `scripts/generate-tokens.mjs` wraps a `theme.css` role registration that runs past the 80-column print width the way `vp fmt` does (the new `--color-assurance-*-on-container` and `--color-attestation-*-on-container` lines), so the generated file passes both `vp check` and `tokens:check`.
+
 ## [@bundu/ui 0.6.0] - 2026-10-24
 
 Releases `@bundu/ui` 0.6.0, the next minor above 0.5.0 (owner approval, 2026-10-24). It carries everything below since 0.5.0: the registry colour roles and `--tier-*` verification tiers, the trust meter's `tier` prop, the Kweli business-dashboard components and the provider-neutral `money` lib (synced from mzizi-registry 4.16.0), and the retirement of `@nyuchi/ui` from this workspace. `@bundu/server` stays at 0.1.0 (unchanged on npm).
