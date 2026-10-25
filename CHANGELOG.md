@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.7.0] - 2026-10-25
+
+Releases `@bundu/ui` 0.7.0, the next minor above 0.6.0 (owner approval, 2026-10-25). It carries everything below since 0.6.0: the assurance-level and attestation colour roles and the trust components on the new model, synced from mzizi-registry 4.17.0. `@bundu/server` stays at 0.1.0 (unchanged on npm).
+
 ### Added — assurance levels and attestations, synced from mzizi-registry 4.17.0 (2026-10-25)
 
 - (`@bundu/ui`) `scripts/registry-ref.json` moves from `c68d3c3` (4.16.0) to mzizi-registry's 4.17.0 release on `main` (`780457a`, mzizi-registry#580, tracked in mzizi-registry#577), and `pnpm registry:sync` and `pnpm contracts:fetch 780457a` run at that commit (112 files, 77 contracts; 3 contracts updated). No new registry files need mapping.
