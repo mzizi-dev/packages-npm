@@ -1,7 +1,7 @@
 {
   "name": "@bundu/ui",
   "version": "0.7.0",
-  "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, pure Astro app patterns for consoles with no framework and no client JavaScript (full-width app shell with a grouped, collapsible sidebar, workspace switcher, command palette, top bar, toolbar, stat tiles, empty states, data table, filters, pagination, detail panel, forms, states, toast, stat tile, bar chart, and the primitives under them) the Discover Standard's pure Astro components for public discover and browse pages (shell, meta, hero, search, category chips, sections, result grid, one card with article, event, circle and place variants, load more, open in Mukoko, and the detail pattern: detail hero, breadcrumb, meta list, actions and related rail), and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
+  "description": "The marketing UI kit for the Bundu Ecosystem \u2014 Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, pure Astro app patterns for consoles with no framework and no client JavaScript (full-width app shell with a grouped, collapsible sidebar, workspace switcher, command palette, top bar, toolbar, stat tiles, empty states, data table, filters, pagination, detail panel, forms, states, toast, stat tile, bar chart, and the primitives under them) the Discover Standard's pure Astro components for public discover and browse pages (shell, meta, hero, search, category chips, sections, result grid, one card with article, event, circle and place variants, load more, open in Mukoko, and the detail pattern: detail hero, breadcrumb, meta list, actions and related rail), and shadcn CVA + cn() React primitives. Generated from canon \u2014 nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
   "author": "Nyuchi Africa (Pvt) Ltd",
@@ -19,7 +19,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./ui/button": "./src/ui/button.tsx",
     "./ui/card": "./src/ui/card.tsx",
@@ -63,24 +64,29 @@
     "./MziziVerifiedBadge.astro": "./src/MziziVerifiedBadge.astro",
     "./mzizi-trust-tier-data": {
       "types": "./dist/mzizi-trust-tier-data.d.ts",
-      "import": "./dist/mzizi-trust-tier-data.js"
+      "import": "./dist/mzizi-trust-tier-data.js",
+      "default": "./dist/mzizi-trust-tier-data.js"
     },
     "./money": {
       "types": "./dist/money.d.ts",
-      "import": "./dist/money.js"
+      "import": "./dist/money.js",
+      "default": "./dist/money.js"
     },
     "./qr-matrix": {
       "types": "./dist/qr-matrix.d.ts",
-      "import": "./dist/qr-matrix.js"
+      "import": "./dist/qr-matrix.js",
+      "default": "./dist/qr-matrix.js"
     },
     "./safe-area": {
       "types": "./dist/safe-area.d.ts",
-      "import": "./dist/safe-area.js"
+      "import": "./dist/safe-area.js",
+      "default": "./dist/safe-area.js"
     },
     "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
     "./markdown-parse": {
       "types": "./dist/markdown-parse.d.ts",
-      "import": "./dist/markdown-parse.js"
+      "import": "./dist/markdown-parse.js",
+      "default": "./dist/markdown-parse.js"
     },
     "./app/AppShell.astro": "./src/app/AppShell.astro",
     "./app/SideNav.astro": "./src/app/SideNav.astro",
@@ -119,7 +125,8 @@
     "./app/PlanSummary.astro": "./src/app/PlanSummary.astro",
     "./app/nav": {
       "types": "./dist/app/nav.d.ts",
-      "import": "./dist/app/nav.js"
+      "import": "./dist/app/nav.js",
+      "default": "./dist/app/nav.js"
     },
     "./discover/DiscoverShell.astro": "./src/discover/DiscoverShell.astro",
     "./discover/DiscoverMeta.astro": "./src/discover/DiscoverMeta.astro",
@@ -139,19 +146,23 @@
     "./discover/RelatedRail.astro": "./src/discover/RelatedRail.astro",
     "./discover/open": {
       "types": "./dist/discover/open.d.ts",
-      "import": "./dist/discover/open.js"
+      "import": "./dist/discover/open.js",
+      "default": "./dist/discover/open.js"
     },
     "./lib/utils": {
       "types": "./dist/lib/utils.d.ts",
-      "import": "./dist/lib/utils.js"
+      "import": "./dist/lib/utils.js",
+      "default": "./dist/lib/utils.js"
     },
     "./lib/table": {
       "types": "./dist/lib/table.d.ts",
-      "import": "./dist/lib/table.js"
+      "import": "./dist/lib/table.js",
+      "default": "./dist/lib/table.js"
     },
     "./ui/variants": {
       "types": "./dist/ui/variants.d.ts",
-      "import": "./dist/ui/variants.js"
+      "import": "./dist/ui/variants.js",
+      "default": "./dist/ui/variants.js"
     },
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",

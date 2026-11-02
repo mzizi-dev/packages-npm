@@ -15,7 +15,7 @@ Tooling is Vite+ (`vp`, from `vite-plus`); its fmt/lint/test settings live in th
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm build            # pnpm -r build: @bundu/server (tsc)
+pnpm build            # pnpm -r build: @bundu/server (tsc), then @bundu/ui's compiled .ts exports to dist/
 pnpm lint             # vp lint (oxlint, type-aware but typeCheck: false on purpose)
 pnpm check            # vp check (format + lint)
 pnpm fmt              # vp fmt (write formatting)
@@ -30,7 +30,7 @@ pnpm --filter @bundu/ui test -- src/app/contracts.test.ts
 pnpm vp test scripts/release-tags.test.mjs     # root-level script tests
 ```
 
-Run `@bundu/ui` tests through the package, never with a bare root `vp test`: its `vitest.config.ts` uses Astro's `getViteConfig` to compile `.astro` files, and the root config excludes `packages/bundu-ui/**` and `packages/bundu-server/**`. `@bundu/ui` tests alias `@bundu/server/table` to source, so no build is needed first.
+Run `@bundu/ui` tests through the package, never with a bare root `vp test`: its `vitest.config.ts` uses Astro's `getViteConfig` to compile `.astro` files, and the root config excludes `packages/bundu-ui/**` and `packages/bundu-server/**`. The `@bundu/ui` `test` script builds first (`dist/` backs the plain-Node export tests).
 
 Generation and drift gates (all are CI jobs; run the `--check` forms before pushing):
 
