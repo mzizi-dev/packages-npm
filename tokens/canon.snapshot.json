@@ -112,9 +112,7 @@
       "voice": "Helpful, warm, intelligent"
     },
     {
-      "aliases": [
-        "nhimbe"
-      ],
+      "aliases": ["nhimbe"],
       "description": "Mukoko Events: community events and cultural gatherings across African cities, with RSVPs that never oversell a room, QR check-in at the door, and venues verified by Kweli. Formerly branded nhimbe, after the Shona communal work gathering.",
       "displayName": "Mukoko Events",
       "language": "English",
