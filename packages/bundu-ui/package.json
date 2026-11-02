@@ -14,12 +14,12 @@
   "bugs": {
     "url": "https://github.com/mzizi-dev/packages-npm/issues"
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./ui/button": "./src/ui/button.tsx",
     "./ui/card": "./src/ui/card.tsx",
@@ -61,12 +61,27 @@
     "./AddressPrivateRow.astro": "./src/AddressPrivateRow.astro",
     "./MziziTrustMeter.astro": "./src/MziziTrustMeter.astro",
     "./MziziVerifiedBadge.astro": "./src/MziziVerifiedBadge.astro",
-    "./mzizi-trust-tier-data": "./src/mzizi-trust-tier-data.ts",
-    "./money": "./src/money.ts",
-    "./qr-matrix": "./src/qr-matrix.ts",
-    "./safe-area": "./src/safe-area.ts",
+    "./mzizi-trust-tier-data": {
+      "types": "./dist/mzizi-trust-tier-data.d.ts",
+      "import": "./dist/mzizi-trust-tier-data.js"
+    },
+    "./money": {
+      "types": "./dist/money.d.ts",
+      "import": "./dist/money.js"
+    },
+    "./qr-matrix": {
+      "types": "./dist/qr-matrix.d.ts",
+      "import": "./dist/qr-matrix.js"
+    },
+    "./safe-area": {
+      "types": "./dist/safe-area.d.ts",
+      "import": "./dist/safe-area.js"
+    },
     "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
-    "./markdown-parse": "./src/markdown-parse.ts",
+    "./markdown-parse": {
+      "types": "./dist/markdown-parse.d.ts",
+      "import": "./dist/markdown-parse.js"
+    },
     "./app/AppShell.astro": "./src/app/AppShell.astro",
     "./app/SideNav.astro": "./src/app/SideNav.astro",
     "./app/AccountMenu.astro": "./src/app/AccountMenu.astro",
@@ -102,7 +117,10 @@
     "./app/TierStatus.astro": "./src/app/TierStatus.astro",
     "./app/Money.astro": "./src/app/Money.astro",
     "./app/PlanSummary.astro": "./src/app/PlanSummary.astro",
-    "./app/nav": "./src/app/nav.ts",
+    "./app/nav": {
+      "types": "./dist/app/nav.d.ts",
+      "import": "./dist/app/nav.js"
+    },
     "./discover/DiscoverShell.astro": "./src/discover/DiscoverShell.astro",
     "./discover/DiscoverMeta.astro": "./src/discover/DiscoverMeta.astro",
     "./discover/DiscoverHero.astro": "./src/discover/DiscoverHero.astro",
@@ -119,10 +137,22 @@
     "./discover/MetaList.astro": "./src/discover/MetaList.astro",
     "./discover/DetailActions.astro": "./src/discover/DetailActions.astro",
     "./discover/RelatedRail.astro": "./src/discover/RelatedRail.astro",
-    "./discover/open": "./src/discover/open.ts",
-    "./lib/utils": "./src/lib/utils.ts",
-    "./lib/table": "./src/lib/table.ts",
-    "./ui/variants": "./src/ui/variants.ts",
+    "./discover/open": {
+      "types": "./dist/discover/open.d.ts",
+      "import": "./dist/discover/open.js"
+    },
+    "./lib/utils": {
+      "types": "./dist/lib/utils.d.ts",
+      "import": "./dist/lib/utils.js"
+    },
+    "./lib/table": {
+      "types": "./dist/lib/table.d.ts",
+      "import": "./dist/lib/table.js"
+    },
+    "./ui/variants": {
+      "types": "./dist/ui/variants.d.ts",
+      "import": "./dist/ui/variants.js"
+    },
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",
     "./styles/color-scheme.css": "./styles/color-scheme.css",
@@ -164,7 +194,9 @@
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
-    "test": "vp test"
+    "build": "pnpm --filter @bundu/server run build && node scripts/build-js.mjs",
+    "test": "pnpm run build && vp test",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
     "@bundu/server": "workspace:^",
@@ -175,6 +207,7 @@
   },
   "files": [
     "src",
+    "dist",
     "!src/**/*.test.ts",
     "styles",
     "tailwind-preset.mjs",
@@ -205,6 +238,7 @@
     "css-select": ">=6.0.0",
     "domhandler": ">=5.0.3",
     "domutils": ">=3.2.2",
-    "htmlparser2": ">=10.1.0"
+    "htmlparser2": ">=10.1.0",
+    "typescript": ">=5.9.3"
   }
 }

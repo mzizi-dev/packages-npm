@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Fixed — plain Node can import the `.ts` exports (2026-11-02)
+
+- (`@bundu/ui`) The plain-TypeScript exports (`.`, `./app/nav`, `./discover/open`, `./lib/table`, `./lib/utils`, `./ui/variants`, `./money`, `./qr-matrix`, `./safe-area`, `./markdown-parse`, `./mzizi-trust-tier-data`) now ship as compiled ES modules plus `.d.ts` in `dist/`, with `exports` conditions `types` and `import` pointing there, and `main` and `types` too. They were `.ts` source, which plain Node refuses to load from `node_modules` (`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`). `dist/` is built from the synced `src/` by `packages/bundu-ui/scripts/build-js.mjs` (`tsc`, then `.js` appended to relative specifiers), on `pnpm build` and on `prepack`; the synced sources are unchanged. The `.astro` and `.tsx` exports stay source. `src/node-exports.test.ts` imports every `.ts` export with plain `node` from a scratch `node_modules`. `typescript` becomes a dev dependency. Fixes [#45](https://github.com/mzizi-dev/packages-npm/issues/45).
+
 ## [@bundu/ui 0.7.0] - 2026-10-25
 
 Releases `@bundu/ui` 0.7.0, the next minor above 0.6.0 (owner approval, 2026-10-25). It carries everything below since 0.6.0: the assurance-level and attestation colour roles and the trust components on the new model, synced from mzizi-registry 4.17.0. `@bundu/server` stays at 0.1.0 (unchanged on npm).
