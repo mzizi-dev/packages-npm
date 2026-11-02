@@ -21,6 +21,11 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — Apple-aligned sizes and desktop density (mzizi-registry 4.21.0, 2026-11-02)
+
+- **(@bundu/ui)** **Breaking (sizes):** moved the registry pin to the 4.21.0 release and ran `pnpm registry:sync` and `pnpm contracts:fetch`. Controls follow Apple HIG on touch (44pt targets) and step down on a desktop pointer; Button, Input, DiscoverSearch, TierStatus, MziziVerifiedBadge and `ui/variants` change size accordingly. The old 48/56 sizes return with `data-mzizi-sizes="legacy"` on the root element until an app has migrated (migration table: mzizi-registry `docs/sizes-and-density.md`). Radii are unchanged (4, 7, 12, 14, 17, pill).
+- **(@bundu/ui)** The contract runner judges `min_height` on a coarse pointer, so the hand-written touch-floor test now uses 48 as the failing value.
+
 - **(@bundu/ui)** Refreshed the canon snapshot (`pnpm canon:fetch && pnpm tokens:build`): the live canon gained `radii.xs` (4px, mzizi-registry#544), so `tokens/canon.snapshot.json` and `packages/bundu-ui/tokens.json` now carry it. The `snapshot matches live canon` check had been red on `staging` since 2026-11-02.
 
 ## [@bundu/ui 0.7.0] - 2026-10-25
