@@ -72,7 +72,7 @@
   ],
   "ecosystem": [
     {
-      "description": "The complete ecosystem built by Nyuchi Africa. Three pillars — mukoko (consumer super app), nyuchi (enterprise layer), and sister brands (specialist verticals) — all connected through one identity, one design system, and one open data commons.",
+      "description": "The complete ecosystem built by Nyuchi Africa. Three pillars — mukoko (consumer super app, tanzanite), nyuchi (infrastructure and enterprise, gold), and shamwari (sovereign AI, the intelligence pillar, sodalite) — with the sister brands as specialist verticals, all connected through one identity, one design system, and one open data commons.",
       "language": "Shona",
       "meaning": "Wilderness",
       "mineral": "copper",
@@ -112,7 +112,9 @@
       "voice": "Helpful, warm, intelligent"
     },
     {
-      "aliases": ["nhimbe"],
+      "aliases": [
+        "nhimbe"
+      ],
       "description": "Mukoko Events: community events and cultural gatherings across African cities, with RSVPs that never oversell a room, QR check-in at the door, and venues verified by Kweli. Formerly branded nhimbe, after the Shona communal work gathering.",
       "displayName": "Mukoko Events",
       "language": "English",
@@ -638,8 +640,9 @@
     "lg": "14px",
     "md": "12px",
     "sm": "7px",
-    "system": "Ecosystem numbers: 7, 12, 14, 17. Buttons are always pill (rounded-full).",
-    "xl": "17px"
+    "system": "Ecosystem numbers: 4, 7, 12, 14, 17, each from the 7px unit (xs is unit - 3). Buttons are always pill (rounded-full).",
+    "xl": "17px",
+    "xs": "4px"
   },
   "roles": [
     {
