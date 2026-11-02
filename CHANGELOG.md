@@ -21,6 +21,8 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+- **(@bundu/ui)** Refreshed the canon snapshot (`pnpm canon:fetch && pnpm tokens:build`): the live canon gained `radii.xs` (4px, mzizi-registry#544), so `tokens/canon.snapshot.json` and `packages/bundu-ui/tokens.json` now carry it. The `snapshot matches live canon` check had been red on `staging` since 2026-11-02.
+
 ## [@bundu/ui 0.7.0] - 2026-10-25
 
 Releases `@bundu/ui` 0.7.0, the next minor above 0.6.0 (owner approval, 2026-10-25). It carries everything below since 0.6.0: the assurance-level and attestation colour roles and the trust components on the new model, synced from mzizi-registry 4.17.0. `@bundu/server` stays at 0.1.0 (unchanged on npm).
