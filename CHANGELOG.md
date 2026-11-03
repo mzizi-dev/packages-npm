@@ -24,6 +24,7 @@ Versions published before then are not renumbered.
 ### Changed
 
 - (repository) CI: bump `pnpm/action-setup` from 6.0.10 to 6.1.0 in the release and tokens workflows (Dependabot #95). No package or published output changes.
+- (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
 
 ## [@bundu/ui 0.8.0] - 2026-11-03
 
