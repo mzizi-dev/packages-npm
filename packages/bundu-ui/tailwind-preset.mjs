@@ -70,9 +70,9 @@ export default {
         h5: ["1.25rem", { lineHeight: "1.4", fontWeight: "600" }],
         h6: ["1rem", { lineHeight: "1.4", fontWeight: "600" }],
         "body-lg": ["1.125rem", { lineHeight: "1.6" }],
-        body: ["1rem", { lineHeight: "1.6" }],
+        body: ["1.0625rem", { lineHeight: "1.6" }],
         "body-sm": ["0.875rem", { lineHeight: "1.5" }],
-        caption: ["0.75rem", { lineHeight: "1.5", letterSpacing: "0.02em" }],
+        caption: ["0.875rem", { lineHeight: "1.5", letterSpacing: "0.02em" }],
       },
       spacing: {
         xxs: "0.125rem",

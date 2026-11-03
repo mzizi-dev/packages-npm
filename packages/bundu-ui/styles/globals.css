@@ -3,6 +3,12 @@
    consumes them from one central source. This file adds the Tailwind base,
    component and utility layers on top. */
 @import "./tokens.css";
+/* The Bundu floor and density: body 17px, captions 14px, a 49px hit region,
+   and the size roles (`h-control`, `h-field`, ...). Generated from the registry;
+   see density.css. The `.btn-*` classes are also used on links, which the
+   `hit-area` overlay does not cover, so they are drawn at the 49px floor on
+   every device (`h-touch-min`). */
+@import "./density.css";
 
 @layer base {
   html {
@@ -69,7 +75,7 @@
 
   /* Pill buttons — design system mandate */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+    @apply inline-flex items-center justify-center gap-2 px-6 h-touch-min
            bg-primary text-primary-foreground font-medium rounded-full
            transition-all duration-200 ease-soft
            hover:opacity-90
@@ -78,7 +84,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+    @apply inline-flex items-center justify-center gap-2 px-6 h-touch-min
            bg-foreground text-background font-medium rounded-full
            transition-all duration-200 ease-soft
            hover:opacity-90
@@ -87,7 +93,7 @@
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 px-6 h-12
+    @apply inline-flex items-center justify-center gap-2 px-6 h-touch-min
            border border-foreground text-foreground font-medium rounded-full
            transition-all duration-200 ease-soft
            hover:bg-foreground hover:text-background
@@ -96,7 +102,7 @@
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-4 h-10
+    @apply inline-flex items-center justify-center gap-2 px-4 h-touch-min
            text-foreground font-medium rounded-full
            transition-colors duration-200 ease-soft
            hover:bg-muted
@@ -177,7 +183,7 @@
 
   /* Inputs */
   .input {
-    @apply w-full h-12 px-4 rounded-full
+    @apply w-full h-field px-4 rounded-full
            bg-input text-foreground border border-border
            placeholder:text-muted-foreground
            transition-colors duration-200

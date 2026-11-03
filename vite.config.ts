@@ -31,7 +31,11 @@ export default defineConfig({
     // gains exactPattern and initialsOf, all without semicolons. Drop these
     // three once the registry formats n2-primitives/money.ts,
     // n2-primitives/ui-utils.ts and n3-brand/mzizi-trust-tier-data.ts.
+    // styles/density.css is derived by `pnpm registry:sync` from the registry's
+    // stylesheet (scripts/registry-density.mjs) and held byte for byte by
+    // `registry:check`, so it is not reformatted here.
     ignorePatterns: [
+      "packages/bundu-ui/styles/density.css",
       "packages/bundu-ui/src/markdown-parse.ts",
       "packages/bundu-ui/src/qr-matrix.ts",
       "packages/bundu-ui/src/money.ts",

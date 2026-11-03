@@ -224,7 +224,7 @@
   --assurance-none: #55514b;
   --assurance-none-container: #e5e4e1;
   --assurance-none-on-container: #373635;
-  --assurance-none-text: #575655;
+  --assurance-none-text: #504f4e;
   --assurance-otp: #0047ab;
   --assurance-otp-container: #e3f2fd;
   --assurance-otp-on-container: #002966;
@@ -236,11 +236,11 @@
   --attestation-community: #a0522d;
   --attestation-community-container: #f5e6d3;
   --attestation-community-on-container: #5d2906;
-  --attestation-community-text: #844425;
+  --attestation-community-text: #7b3f23;
   --attestation-domain: #bf5a36;
   --attestation-domain-container: #fbe4da;
   --attestation-domain-on-container: #5c2410;
-  --attestation-domain-text: #894027;
+  --attestation-domain-text: #7e3b24;
   --border-control: #787774;
   --category-1: #0047ab;
   --category-2: #4b0082;
@@ -259,7 +259,7 @@
   --chart-negative: #b3261e;
   --chart-neutral: #55514b;
   --chart-positive: #004d40;
-  --destructive-text: #9f221b;
+  --destructive-text: #98201a;
   --hero-text: #ffffff;
   --on-surface-qr: #0e0d0c;
   --overlay-foreground: #373635;
@@ -274,11 +274,11 @@
   --status-danger: #a0522d;
   --status-danger-container: #f5e6d3;
   --status-danger-on-container: #5d2906;
-  --status-danger-text: #844425;
+  --status-danger-text: #7b3f23;
   --status-deprecated: #a0522d;
   --status-deprecated-container: #f5e6d3;
   --status-deprecated-on-container: #5d2906;
-  --status-deprecated-text: #844425;
+  --status-deprecated-text: #7b3f23;
   --status-error: #b3261e;
   --status-info: #0047ab;
   --status-info-container: #e3f2fd;
@@ -287,7 +287,7 @@
   --status-neutral: #55514b;
   --status-neutral-container: #e5e4e1;
   --status-neutral-on-container: #373635;
-  --status-neutral-text: #575655;
+  --status-neutral-text: #504f4e;
   --status-premium: #4b0082;
   --status-premium-container: #f3e5f5;
   --status-premium-on-container: #2e004d;
@@ -306,12 +306,12 @@
   --status-warning-text: #5d4037;
   --surface-qr: #ffffff;
   --text-primary: #373635;
-  --text-secondary: #575655;
+  --text-secondary: #504f4e;
   --text-tertiary: #6b6a69;
   --tier-community: #a0522d;
   --tier-community-container: #f5e6d3;
   --tier-community-on-container: #5d2906;
-  --tier-community-text: #844425;
+  --tier-community-text: #7b3f23;
   --tier-government: #5d4037;
   --tier-government-container: #fff8e1;
   --tier-government-on-container: #3e2723;
@@ -327,11 +327,11 @@
   --tier-unverified: #55514b;
   --tier-unverified-container: #e5e4e1;
   --tier-unverified-on-container: #373635;
-  --tier-unverified-text: #575655;
+  --tier-unverified-text: #504f4e;
 
   /* === Touch targets — accessibility mandate, 56px comfortable. */
-  --touch-target: 56px;
-  --touch-target-sm: 48px;
+  --touch-target: 49px;
+  --touch-target-sm: 40px;
 
   /* === Radius scale. Ecosystem numbers 7/12/14/17; buttons are always pill. */
   --radius-unit: 7px;

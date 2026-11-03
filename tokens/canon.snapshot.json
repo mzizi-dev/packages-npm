@@ -72,7 +72,7 @@
   ],
   "ecosystem": [
     {
-      "description": "The complete ecosystem built by Nyuchi Africa. Three pillars — mukoko (consumer super app), nyuchi (enterprise layer), and sister brands (specialist verticals) — all connected through one identity, one design system, and one open data commons.",
+      "description": "The complete ecosystem built by Nyuchi Africa. Three pillars — mukoko (consumer super app, tanzanite), nyuchi (infrastructure and enterprise, gold), and shamwari (sovereign AI, the intelligence pillar, sodalite) — with the sister brands as specialist verticals, all connected through one identity, one design system, and one open data commons.",
       "language": "Shona",
       "meaning": "Wilderness",
       "mineral": "copper",
@@ -638,8 +638,9 @@
     "lg": "14px",
     "md": "12px",
     "sm": "7px",
-    "system": "Ecosystem numbers: 7, 12, 14, 17. Buttons are always pill (rounded-full).",
-    "xl": "17px"
+    "system": "Ecosystem numbers: 4, 7, 12, 14, 17, each from the 7px unit (xs is unit - 3). Buttons are always pill (rounded-full).",
+    "xl": "17px",
+    "xs": "4px"
   },
   "roles": [
     {
@@ -779,7 +780,7 @@
       "cssVar": "--assurance-none-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "assurance-none-text"
     },
     {
@@ -863,7 +864,7 @@
       "cssVar": "--attestation-community-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "attestation-community-text"
     },
     {
@@ -891,7 +892,7 @@
       "cssVar": "--attestation-domain-text",
       "dark": "#FFC3B0",
       "kind": "text",
-      "light": "#894027",
+      "light": "#7E3B24",
       "name": "attestation-domain-text"
     },
     {
@@ -1101,7 +1102,7 @@
       "cssVar": "--destructive-text",
       "dark": "#F3C0BD",
       "kind": "text",
-      "light": "#9F221B",
+      "light": "#98201A",
       "name": "destructive-text"
     },
     {
@@ -1150,7 +1151,7 @@
       "cssVar": "--muted-foreground",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "muted-foreground"
     },
     {
@@ -1395,7 +1396,7 @@
       "cssVar": "--status-danger-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "status-danger-text"
     },
     {
@@ -1423,7 +1424,7 @@
       "cssVar": "--status-deprecated-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "status-deprecated-text"
     },
     {
@@ -1486,7 +1487,7 @@
       "cssVar": "--status-neutral-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "status-neutral-text"
     },
     {
@@ -1640,7 +1641,7 @@
       "cssVar": "--text-secondary",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "text-secondary"
     },
     {
@@ -1675,7 +1676,7 @@
       "cssVar": "--tier-community-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "tier-community-text"
     },
     {
@@ -1787,7 +1788,7 @@
       "cssVar": "--tier-unverified-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "tier-unverified-text"
     },
     {
