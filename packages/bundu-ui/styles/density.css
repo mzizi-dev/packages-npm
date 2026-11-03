@@ -1,0 +1,201 @@
+/* ════════════════════════════════════════════════════════════════════════════
+ * THE BUNDU FLOOR AND DENSITY — GENERATED. Do not edit.
+ *
+ * Derived by `pnpm registry:sync` (scripts/registry-density.mjs) from
+ * mzizi-registry's components/registry/n1-tokens/mzizi-tokens-globals.css at
+ * efb5f3a6955a; `pnpm registry:check` holds it to that. Change the registry,
+ * bump scripts/registry-ref.json, sync.
+ *
+ * What it is: body text 17px, captions 14px, a 49px hit region on every
+ * control (a control may be DRAWN 28 to 40px at desktop density), and the size
+ * roles the components use (h-control, h-control-sm, h-control-lg,
+ * size-control-icon, h-field, min-h-touch-min). Without it those utilities
+ * resolve to nothing. `styles/globals.css` imports it. An app that imports the
+ * pieces separately adds it AFTER theme.css and tokens.css:
+ *
+ *   @import "@bundu/ui/styles/theme.css";
+ *   @import "@bundu/ui/styles/density.css";
+ *
+ * `:root[data-mzizi-sizes="legacy"]` restores the pre-floor sizes (16px body,
+ * 12px captions, 48/56px controls) until an app has migrated.
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  --spacing-touch: max( var(--size-touch), var(--control-floor) );
+  --spacing-touch-min: var( --target-floor );
+  --spacing-control: max( var(--size-control), var(--control-floor) );
+  --spacing-control-sm: max( var(--size-control-sm), var(--control-floor) );
+  --spacing-control-lg: max( var(--size-control-lg), var(--control-floor) );
+  --spacing-control-icon: max( var(--size-control-icon), var(--control-floor) );
+  --spacing-control-dense: var(--size-control-dense);
+  --spacing-field: max( var(--size-field), var(--control-floor) );
+  --spacing-field-sm: max( var(--size-field-sm), var(--control-floor) );
+  --text-body-lg: var(--fs-body-lg);
+  --text-body: var(--fs-body);
+  --text-small: var(--fs-small);
+  --text-caption: var(--fs-caption);
+  --text-code: var(--fs-code);
+  --text-body-sm: var(--fs-small);
+  --text-xs: var( --fs-caption );
+  --text-xs--line-height: var(--lh-small);
+  --text-sm: var(--fs-small);
+  --text-sm--line-height: var(--lh-small);
+  --text-base: var( --fs-body );
+  --text-base--line-height: var(--lh-body);
+}
+
+:root {
+  --fs-display: 2.5rem;
+  --fs-display-sm: 2.125rem;
+  --fs-h1: 2.125rem;
+  --fs-h2: 1.75rem;
+  --fs-h3: 1.375rem;
+  --fs-h4: 1.25rem;
+  --fs-h5: 1.0625rem;
+  --fs-h6: 1.0625rem;
+  --fs-body-lg: 1.125rem;
+  --fs-body: 1.0625rem;
+  --fs-small: 0.875rem;
+  --fs-caption: 0.875rem;
+  --fs-code: 0.875rem;
+  --lh-display: 1.1;
+  --lh-h1: 1.15;
+  --lh-h2: 1.2;
+  --lh-h3: 1.25;
+  --lh-h4: 1.3;
+  --lh-h5: 1.4;
+  --lh-h6: 1.4;
+  --lh-body: 1.6;
+  --lh-small: 1.5;
+  --touch-target-lg: 49px;
+  --touch-target: 49px;
+  --touch-target-sm: 40px;
+  --h-button-default: 3.0625rem;
+  --h-button-sm: 3.0625rem;
+  --h-input: 3.0625rem;
+  --target-floor: 3.0625rem;
+  --control-floor: 3.0625rem;
+  --size-touch: 3.0625rem;
+  --size-touch-min: 3.0625rem;
+  --size-control: 3.0625rem;
+  --size-control-sm: 3.0625rem;
+  --size-control-lg: 3.5rem;
+  --size-control-icon: 3.0625rem;
+  --size-control-dense: 2rem;
+  --size-field: 3.0625rem;
+  --size-field-sm: 3.0625rem;
+}
+
+/* The 49px hit region (BUNDU_FLOOR.hitAreaPx): a transparent pseudo-element grows the click and
+   touch region of a button-like control to the floor, so a control drawn at 28px on a
+   desktop is still 49px to hit. It is in the base layer, so a utility on the element (absolute,
+   inset-*) wins, and it is a no-op where the control is already drawn at the floor or larger.
+   It steps aside, by design, for:
+   - an element that draws its own after: pseudo-element (checkbox, switch, radio, the tabs line): it keeps its
+     own, because a utility only overrides the properties it sets and the rest of this rule would mix in;
+   - composite widgets, where a 49px overlay on a row 28 to 36px tall would
+     overlap its neighbours and the later sibling would steal the click: menu and listbox rows take
+     min-height instead (below), and a calendar day ([data-day]) is a grid cell, left as drawn;
+   - an element that clips its overflow (overflow-hidden), which would clip the pseudo-element too: add
+     the wrapper-level hit-area, or size it at the floor.
+   Inline links in running text are exempt, as in WCAG 2.5.8; add `hit-area` to any other target. */
+@layer base {
+  :where(
+    button,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    summary,
+    .hit-area
+  ):not([class*="after:"], [data-day]) {
+    position: relative;
+  }
+  :where(
+      button,
+      [role="button"],
+      [role="tab"],
+      [role="switch"],
+      summary,
+      .hit-area
+    ):not([class*="after:"], [data-day])::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--target-floor));
+    height: max(100%, var(--target-floor));
+    transform: translate(-50%, -50%);
+  }
+  :where(
+    [role="menuitem"],
+    [role="menuitemcheckbox"],
+    [role="menuitemradio"],
+    [role="option"]
+  ) {
+    min-height: var(--target-floor);
+  }
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --fs-display: 3rem; /* 48px */
+    --fs-display-sm: 2.5rem; /* 40px */
+  }
+}
+
+@media (min-width: 64rem) and (pointer: fine) and (hover: hover) and (not (any-pointer: coarse)) {
+  :root {
+    --control-floor: 1.75rem; /* 28px: the smallest a control is DRAWN. --target-floor (the 49px hit region) is not lowered. */
+    --touch-target-lg: 36px;
+    --touch-target: 32px;
+    --h-button-default: 2.25rem; /* 36px */
+    --h-button-sm: 2rem; /* 32px */
+    --h-input: 3.0625rem; /* 49px */
+    --size-touch: 2.25rem; /* 36px */
+    --size-control: 2.25rem; /* 36px */
+    --size-control-sm: 2rem; /* 32px */
+    --size-control-lg: 2.5rem; /* 40px */
+    --size-control-icon: 2.25rem; /* 36px */
+    --size-control-dense: 1.75rem; /* 28px */
+    --size-field: 3.0625rem; /* 49px */
+    --size-field-sm: 3.0625rem; /* 49px */
+    --fs-display: 3rem; /* 48px */
+    --fs-display-sm: 2.5rem; /* 40px */
+    --fs-h1: 2rem; /* 32px */
+    --fs-h2: 1.5rem; /* 24px */
+    --fs-h3: 1.25rem; /* 20px */
+    --fs-h4: 1.125rem; /* 18px */
+  }
+}
+
+/* Opt out until you have migrated: the sizes consumers pinned before 2026-11-01. It restores the old sizes (and so
+   steps OUT of the Bundu floor: 16px body, 12px captions, 48px targets); remove it to take the floor. */
+:root[data-mzizi-sizes="legacy"] {
+  --target-floor: 3rem; /* 48px */
+  --control-floor: 3rem; /* 48px */
+  --touch-target-lg: 56px;
+  --touch-target: 48px;
+  --h-button-default: 3.5rem; /* 56px */
+  --h-button-sm: 3rem; /* 48px */
+  --h-input: 3.5rem; /* 56px */
+  --size-touch: 3.5rem; /* 56px */
+  --size-control: 3.5rem; /* 56px */
+  --size-control-sm: 3rem; /* 48px */
+  --size-control-lg: 3.5rem; /* 56px */
+  --size-control-icon: 3rem; /* 48px */
+  --size-control-dense: 2rem; /* 32px */
+  --size-field: 3.5rem; /* 56px */
+  --size-field-sm: 3rem; /* 48px */
+  --fs-display: 4.5rem; /* 72px */
+  --fs-display-sm: 3.75rem; /* 60px */
+  --fs-h1: 3rem; /* 48px */
+  --fs-h2: 2.25rem; /* 36px */
+  --fs-h3: 1.875rem; /* 30px */
+  --fs-h4: 1.5rem; /* 24px */
+  --fs-h5: 1.25rem; /* 20px */
+  --fs-h6: 1rem; /* 16px */
+  --fs-body-lg: 1.125rem; /* 18px */
+  --fs-body: 1rem; /* 16px */
+  --fs-small: 0.875rem; /* 14px */
+  --fs-caption: 0.75rem; /* 12px */
+}
