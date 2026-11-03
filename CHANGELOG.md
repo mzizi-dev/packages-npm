@@ -27,6 +27,14 @@ Versions published before then are not renumbered.
 - (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
 - (`@bundu/ui`) Dev dependency: bump `domhandler` from 5.0.3 to 6.0.1 (Dependabot #87). It is used only by the contract test runner (`test/contract-runner.ts`), which already imports `isTag` from `domhandler`; `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 
+## [@bundu/ui 0.9.0] - 2026-11-03
+
+Releases `@bundu/ui` 0.9.0, the next minor above 0.8.0: the `text-base` fix below, so the 17px floor holds for the standard class names. `@bundu/server` is unchanged.
+
+### Fixed
+
+- (`@bundu/ui`) **`text-base` is the 17px body size.** `theme.css` registers `--color-base` (the page-background surface), and Tailwind v4 resolved `text-base` to that colour instead of the registry's 17px size role, so `text-base` gave no size and painted text in the background colour (the `Input` and the markdown `h5` use it). `styles/globals.css` now declares `text-base` as a static utility (`font-size: var(--fs-body)`, `line-height: var(--lh-body)`) and resets its colour to `inherit` with a doubled-class selector. `bg-base`, `border-base` and the other `base` colour utilities are unchanged; a colour class written beside `text-base` needs more specificity to win. Test in `src/styles.test.ts`.
+
 ## [@bundu/ui 0.8.0] - 2026-11-03
 
 Releases `@bundu/ui` 0.8.0, the next minor above 0.7.0. It takes the Bundu floor from mzizi-registry 4.23.0 (mzizi-registry#615, owner rulings 2026-11-01 and 2026-11-02): body text 17px, captions 14px, a 49px hit region on every control, contrast floors of 7, 4.5 and 3. `@bundu/server` is unchanged (0.1.0 on npm). It also carries the Apple-aligned sizes of 4.21.0 and the compiled `.ts` exports, both merged to `staging` after 0.7.0.

@@ -197,6 +197,25 @@
   }
 }
 
+/* `text-base` is the 17px body size role. Tailwind v4 resolves `text-<name>`
+   against BOTH the font-size (`--text-*`) and colour (`--color-*`) namespaces,
+   and this package's `--color-base` (the surface ladder) is a colour of that
+   name, which took the utility. A static utility wins over the functional
+   resolution, so `text-base` is declared here by name; `bg-base`,
+   `border-base` and the rest of the `base` colour utilities are untouched. */
+@utility text-base {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+
+  /* The colour utility of the same name (`color: var(--base)`) is still
+     generated beside this one and would paint text in the page-background
+     colour. A doubled class is more specific than it, so text-base is a size
+     only; a colour class written with it must be more specific to win. */
+  &.text-base {
+    color: inherit;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
