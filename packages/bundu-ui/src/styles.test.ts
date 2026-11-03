@@ -23,6 +23,11 @@ const UTILITIES = [
   "min-h-touch-min",
   "text-xs",
   "text-sm",
+  "text-base",
+  "text-base-foreground",
+  "bg-base",
+  "border-base",
+  "text-body",
 ];
 
 let css = "";
@@ -101,6 +106,28 @@ function declared(selector: string, prop: string): string {
   return decl[1];
 }
 
+describe("text-base is the 17px body size, base stays a colour", () => {
+  it("text-base sets 17px and the body line height", () => {
+    const vars = rootDefaults();
+    expect(px(declared(".text-base", "font-size"), vars)).toBe(17);
+    expect(declared(".text-base", "line-height")).toBe("var(--lh-body)");
+    expect(declared(".text-base", "font-size")).not.toMatch(/--color-base/);
+    expect(px(declared(".text-body", "font-size"), vars)).toBe(17);
+  });
+
+  it("the base colour utilities still compile to the colour", () => {
+    expect(declared(".bg-base", "background-color")).toMatch(/--base/);
+    expect(declared(".border-base", "border-color")).toMatch(/--base/);
+  });
+
+  it("text-base compiles to no colour", () => {
+    // the single-class colour rule is outranked by the doubled-class reset
+    expect(flat(css)).toMatch(
+      /\.text-base \{[^}]*&\.text-base \{ color: inherit; \}/,
+    );
+  });
+});
+
 describe("the size utilities resolve", () => {
   it.each([
     [".h-control", "height"],
@@ -137,9 +164,6 @@ describe("the Bundu floor", () => {
     expect(px("var(--fs-small)", vars)).toBe(14);
     expect(px(declared(".text-xs", "font-size"), vars)).toBe(14);
     expect(px(declared(".text-sm", "font-size"), vars)).toBe(14);
-    // `text-base` is registered too (17px), but this package's `--color-base`
-    // (the surface ladder) is a Tailwind colour of the same name, which wins
-    // the utility; the `--text-base` role is still carried for plain CSS.
     expect(readFileSync(resolve(styles, "density.css"), "utf8")).toMatch(
       /--text-base: var\( ?--fs-body ?\)/,
     );
