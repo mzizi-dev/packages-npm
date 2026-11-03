@@ -60,9 +60,11 @@ const LOCAL = {
   // pass. See RESIDUAL-DRIFT in the PR body.
   secondaryDark: "#2a2927",
   white: "#ffffff",
-  // Touch targets — an accessibility mandate, not a colour.
-  touchTarget: "56px",
-  touchTargetSm: "48px",
+  // Touch targets — an accessibility mandate, not a colour. The Bundu floor
+  // (mzizi-registry 4.23.0): a 49px hit region, 40px for dense secondary
+  // actions. styles/density.css redeclares both from the registry.
+  touchTarget: "49px",
+  touchTargetSm: "40px",
 };
 
 /* ------------------------------------------------------------------ *

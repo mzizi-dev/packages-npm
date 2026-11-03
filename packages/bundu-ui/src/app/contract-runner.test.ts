@@ -57,9 +57,13 @@ describe("clauses", () => {
   });
 
   test("a touch floor below the contract fails", () => {
+    // min_height is judged on a coarse pointer (pointer-coarse:h-11 = 44), so 48 is above it.
+    expect(
+      evaluateClauses(withClauses('button "Close" min_height 48'), html),
+    ).toHaveLength(1);
     expect(
       evaluateClauses(withClauses('button "Close" min_height 44'), html),
-    ).toHaveLength(1);
+    ).toHaveLength(0);
   });
 
   test("an element no state renders fails", () => {
