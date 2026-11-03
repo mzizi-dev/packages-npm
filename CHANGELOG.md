@@ -23,6 +23,7 @@ Versions published before then are not renumbered.
 
 ### Changed
 
+- (repository) `AGENTS.md` gains a "Merge convention" section: squash through the merge queue, the `staging` queue's target config (`SQUASH`, no 5-minute wait) and what to do until the owner applies it (keep branches linear), enqueue as soon as the gate is met, the issue line every PR body needs, forward-porting `main`-only commits before a release, and that only a major needs the owner's go-ahead. No package or published output changes.
 - (`@bundu/ui`) Refreshed `tokens/canon.snapshot.json` from `api.mzizi.dev/v1/brand` (brand v4.0.31), which moved to the registry 4.23.0 canon: 15 `textLight` values changed slightly (for example `heritage.5` `#4A616B` to `#3E515A`). `pnpm tokens:build` regenerates no files from it, so no shipped token or CSS value changes; `canon:parity` is green again.
 - (repository) CI: bump `pnpm/action-setup` from 6.0.10 to 6.1.0 in the release and tokens workflows (Dependabot #95). No package or published output changes.
 - (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
