@@ -21,12 +21,18 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Fixed — plain Node can import the `.ts` exports (2026-11-02)
+
+- (`@bundu/ui`) The plain-TypeScript exports (`.`, `./app/nav`, `./discover/open`, `./lib/table`, `./lib/utils`, `./ui/variants`, `./money`, `./qr-matrix`, `./safe-area`, `./markdown-parse`, `./mzizi-trust-tier-data`) now ship as compiled ES modules plus `.d.ts` in `dist/`, with `exports` conditions `types` and `import` pointing there, and `main` and `types` too. They were `.ts` source, which plain Node refuses to load from `node_modules` (`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`). `dist/` is built from the synced `src/` by `packages/bundu-ui/scripts/build-js.mjs` (`tsc`, then `.js` appended to relative specifiers), on `pnpm build` and on `prepack`; the synced sources are unchanged. The `.astro` and `.tsx` exports stay source. `src/node-exports.test.ts` imports every `.ts` export with plain `node` from a scratch `node_modules`. `pnpm build` now also builds `@bundu/ui`'s `dist/`, and the `@bundu/ui` `test` script builds first, because `dist/` backs the plain-Node export tests. `typescript` becomes a dev dependency. Fixes [#45](https://github.com/mzizi-dev/packages-npm/issues/45).
+
 ### Changed — Apple-aligned sizes and desktop density (mzizi-registry 4.21.0, 2026-11-02)
 
 - **(@bundu/ui)** **Breaking (sizes):** moved the registry pin to the 4.21.0 release and ran `pnpm registry:sync` and `pnpm contracts:fetch`. Controls follow Apple HIG on touch (44pt targets) and step down on a desktop pointer; Button, Input, DiscoverSearch, TierStatus, MziziVerifiedBadge and `ui/variants` change size accordingly. The old 48/56 sizes return with `data-mzizi-sizes="legacy"` on the root element until an app has migrated (migration table: mzizi-registry `docs/sizes-and-density.md`). Radii are unchanged (4, 7, 12, 14, 17, pill).
 - **(@bundu/ui)** The contract runner judges `min_height` on a coarse pointer, so the hand-written touch-floor test now uses 48 as the failing value.
 
 - **(@bundu/ui)** Refreshed the canon snapshot (`pnpm canon:fetch && pnpm tokens:build`): the live canon gained `radii.xs` (4px, mzizi-registry#544), so `tokens/canon.snapshot.json` and `packages/bundu-ui/tokens.json` now carry it. The `snapshot matches live canon` check had been red on `staging` since 2026-11-02.
+
+- **(@bundu/ui)** Refreshed the canon snapshot again (brand 4.0.31, 2026-11-03): the text roles that sit on the 4.5:1 floor are a shade darker (`--text-secondary`, `--assurance-none-text`, `--attestation-community-text`, `--attestation-domain-text`, `--destructive-text`, `--status-*-text`, `--tier-*-text`); `styles/tokens.css` and `tokens.json` regenerated.
 
 ## [@bundu/ui 0.7.0] - 2026-10-25
 
