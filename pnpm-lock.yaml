@@ -64,6 +64,12 @@ importers:
       htmlparser2:
         specifier: '>=10.1.0'
         version: 10.1.0
+      tailwindcss:
+        specifier: 4.1.18
+        version: 4.1.18
+      typescript:
+        specifier: '>=5.9.3'
+        version: 5.9.3
 
 packages:
 
@@ -1936,6 +1942,9 @@ packages:
 
   tailwind-merge@3.7.0:
     resolution: {integrity: sha512-XPPUyAc+cvspz3lHTcR/QgPfW2A0lv/xQNIjX3HGhLR+Nq2lHaLq5MtTesHn8GUr3W3DguT2KT5x3NVgRtYwmA==}
+
+  tailwindcss@4.1.18:
+    resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
 
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
@@ -3925,6 +3934,8 @@ snapshots:
       sax: 1.6.1
 
   tailwind-merge@3.7.0: {}
+
+  tailwindcss@4.1.18: {}
 
   tiny-inflate@1.0.3: {}
 

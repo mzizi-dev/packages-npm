@@ -21,12 +21,44 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.8.0] - 2026-11-03
+
+Releases `@bundu/ui` 0.8.0, the next minor above 0.7.0. It takes the Bundu floor from mzizi-registry 4.23.0 (mzizi-registry#615, owner rulings 2026-11-01 and 2026-11-02): body text 17px, captions 14px, a 49px hit region on every control, contrast floors of 7, 4.5 and 3. `@bundu/server` is unchanged (0.1.0 on npm). It also carries the Apple-aligned sizes of 4.21.0 and the compiled `.ts` exports, both merged to `staging` after 0.7.0.
+
+### Added — the floor and density layer ships (mzizi-registry 4.23.0)
+
+- (`@bundu/ui`) **`styles/density.css`**, new and generated: `pnpm registry:sync` derives it from mzizi-registry's `components/registry/n1-tokens/mzizi-tokens-globals.css` with `scripts/registry-density.mjs`, and `registry:check` holds it to the pin. It carries the size roles the components already used as utilities (`h-control`, `h-control-sm`, `h-control-lg`, `size-control-icon`, `h-field`, `min-h-touch-min`, with the `--size-*`, `--control-floor` and `--target-floor` values behind them), the type floor (`--fs-*`, `--lh-*`, and `text-xs`, `text-sm`, `text-body`, `text-caption` and friends on the 14 and 17px floor), the `hit-area` rule, the tablet and desktop density layers and `:root[data-mzizi-sizes="legacy"]`. Before this release those utilities and layers were not in the package at all, so the synced components' size classes resolved to nothing unless the app loaded the registry's own stylesheet. `styles/globals.css` imports it, so an app that already imports `globals.css` gets it. An app that imports `theme.css` and `tokens.css` separately adds `@import "@bundu/ui/styles/density.css"` after them (README). It is exported as `@bundu/ui/styles/density.css`.
+- (`@bundu/ui`) `src/styles.test.ts` compiles `theme.css` and `globals.css` with Tailwind v4 and asserts the utilities above resolve at the 49px floor, body 17px, captions 14px, `--target-floor` 49px, the `hit-area` rule, the tablet and desktop layers and the legacy alias, and that the `globals.css` classes are not under the floor. `tailwindcss` becomes a dev dependency. `scripts/registry-density.test.mjs` pins the extraction.
+
+### Changed — **Breaking:** sizes follow the Bundu floor
+
+- (`@bundu/ui`) **Breaking (sizes):** body text is 17px (was 16px) and captions 14px (were 12px; badges were 10 to 11px), in the `text-body`, `text-caption` and `text-body-sm` utilities, the v3 preset and `theme.css`, and in `text-xs`, `text-sm` (14px) from `density.css`. Controls have a 49px hit region on every device, desktop included (was 44px touch, 24px fine pointer in 4.21.0, 48 and 56px before). A control may be drawn 28 to 40px on a desktop pointer (`min-width: 64rem`, fine pointer, hover) with a transparent `::after` keeping the 49px hit region; fields stay 49px drawn. Where an app draws its own `after:` pseudo-element, clips overflow, or uses a link, the rule steps aside: draw it at 49px or add `hit-area` (mzizi-registry `docs/sizes-and-density.md`). Badge, status badge, trust meter and verified badge text moved up with the floor (`h-6`, `text-sm`). `--touch-target` is 49px and `--touch-target-sm` 40px in `tokens.css` and `tokens.json` (were 56 and 48).
+- (`@bundu/ui`) **Breaking (contrast):** the contract floors are 7:1 for body text, 4.5:1 for other text and 3:1 for UI parts, and five text roles moved to 4.5:1: `--text-secondary`, `--assurance-none-text`, `--attestation-community-text`, `--attestation-domain-text` and `--destructive-text` (and `--status-danger-text`, `--status-deprecated-text`, `--status-neutral-text`, `--tier-community-text`, `--tier-unverified-text`, which follow them), a shade darker. Canon brand 4.0.31; `radii.xs` (4px) is in the snapshot.
+- (`@bundu/ui`) `styles/globals.css` (hand-written): `.btn-primary`, `.btn-secondary`, `.btn-outline` and `.btn-ghost` were 48px (`.btn-ghost` 40px) and `.input` 48px; they are `h-touch-min` (49px on every device, as they are used on links, which the `hit-area` overlay does not cover) and `h-field`.
+- (`@bundu/ui`) The contract runner (`test/contract-runner.ts`) counts a control's hit region as 49px where the `hit-area` rule applies and checks the 7, 4.5 and 3 contrast floors; synced contracts and components follow registry 4.23.0 (112 files, 77 contracts).
+
+- (repository) `scripts/registry-ref.json` moves from `780457a` (4.17.0) through 4.21.0 to mzizi-registry `efb5f3a`, the 4.23.0 release (`pnpm registry:sync`, `pnpm contracts:fetch`), with `scripts/registry-density.mjs` added to the sync.
+
+### Migration
+
+- Do nothing to take the floor. Apps that import `globals.css` get `density.css` with it; apps that import `theme.css` and `tokens.css` separately add `@import "@bundu/ui/styles/density.css"` after them.
+- To stay on the previous sizes until you have migrated, set `data-mzizi-sizes="legacy"` on the root element (`<html>`): 16px body, 12px captions, 48/56px controls, 48px hit region. It steps out of the floor; remove it to take the floor.
+- Known gap: `text-base` is the 17px body role in `density.css`, but `theme.css` also has a `base` surface colour (`--color-base`), and Tailwind gives `text-base` to the colour. Use `text-body` for the 17px size. Fixing the name collision is upstream (mzizi-registry).
+
+### Carried in from `staging` since 0.7.0
+
+### Fixed — plain Node can import the `.ts` exports (2026-11-02)
+
+- (`@bundu/ui`) The plain-TypeScript exports (`.`, `./app/nav`, `./discover/open`, `./lib/table`, `./lib/utils`, `./ui/variants`, `./money`, `./qr-matrix`, `./safe-area`, `./markdown-parse`, `./mzizi-trust-tier-data`) now ship as compiled ES modules plus `.d.ts` in `dist/`, with `exports` conditions `types` and `import` pointing there, and `main` and `types` too. They were `.ts` source, which plain Node refuses to load from `node_modules` (`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`). `dist/` is built from the synced `src/` by `packages/bundu-ui/scripts/build-js.mjs` (`tsc`, then `.js` appended to relative specifiers), on `pnpm build` and on `prepack`; the synced sources are unchanged. The `.astro` and `.tsx` exports stay source. `src/node-exports.test.ts` imports every `.ts` export with plain `node` from a scratch `node_modules`. `pnpm build` now also builds `@bundu/ui`'s `dist/`, and the `@bundu/ui` `test` script builds first, because `dist/` backs the plain-Node export tests. `typescript` becomes a dev dependency. Fixes [#45](https://github.com/mzizi-dev/packages-npm/issues/45).
+
 ### Changed — Apple-aligned sizes and desktop density (mzizi-registry 4.21.0, 2026-11-02)
 
 - **(@bundu/ui)** **Breaking (sizes):** moved the registry pin to the 4.21.0 release and ran `pnpm registry:sync` and `pnpm contracts:fetch`. Controls follow Apple HIG on touch (44pt targets) and step down on a desktop pointer; Button, Input, DiscoverSearch, TierStatus, MziziVerifiedBadge and `ui/variants` change size accordingly. The old 48/56 sizes return with `data-mzizi-sizes="legacy"` on the root element until an app has migrated (migration table: mzizi-registry `docs/sizes-and-density.md`). Radii are unchanged (4, 7, 12, 14, 17, pill).
 - **(@bundu/ui)** The contract runner judges `min_height` on a coarse pointer, so the hand-written touch-floor test now uses 48 as the failing value.
 
 - **(@bundu/ui)** Refreshed the canon snapshot (`pnpm canon:fetch && pnpm tokens:build`): the live canon gained `radii.xs` (4px, mzizi-registry#544), so `tokens/canon.snapshot.json` and `packages/bundu-ui/tokens.json` now carry it. The `snapshot matches live canon` check had been red on `staging` since 2026-11-02.
+
+- **(@bundu/ui)** Refreshed the canon snapshot again (brand 4.0.31, 2026-11-03): the text roles that sit on the 4.5:1 floor are a shade darker (`--text-secondary`, `--assurance-none-text`, `--attestation-community-text`, `--attestation-domain-text`, `--destructive-text`, `--status-*-text`, `--tier-*-text`); `styles/tokens.css` and `tokens.json` regenerated.
 
 ## [@bundu/ui 0.7.0] - 2026-10-25
 

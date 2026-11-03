@@ -1,6 +1,6 @@
 {
   "name": "@bundu/ui",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "The marketing UI kit for the Bundu Ecosystem — Nyuchi's implementation of the Mzizi design system. All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one --color-* namespace, the nine-step surface ladder, the connectivity status trio, a Tailwind v4 @theme entrypoint and the v3 preset, brand overlays for bundu/nyuchi/mukoko/shamwari/mzizi, machine-readable tokens.json for Expo and Satori, plus Astro marketing components, pure Astro app patterns for consoles with no framework and no client JavaScript (full-width app shell with a grouped, collapsible sidebar, workspace switcher, command palette, top bar, toolbar, stat tiles, empty states, data table, filters, pagination, detail panel, forms, states, toast, stat tile, bar chart, and the primitives under them) the Discover Standard's pure Astro components for public discover and browse pages (shell, meta, hero, search, category chips, sections, result grid, one card with article, event, circle and place variants, load more, open in Mukoko, and the detail pattern: detail hero, breadcrumb, meta list, actions and related rail), and shadcn CVA + cn() React primitives. Generated from canon — nothing in it is hand-copied.",
   "type": "module",
   "license": "MIT",
@@ -14,12 +14,13 @@
   "bugs": {
     "url": "https://github.com/mzizi-dev/packages-npm/issues"
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./ui/button": "./src/ui/button.tsx",
     "./ui/card": "./src/ui/card.tsx",
@@ -61,12 +62,32 @@
     "./AddressPrivateRow.astro": "./src/AddressPrivateRow.astro",
     "./MziziTrustMeter.astro": "./src/MziziTrustMeter.astro",
     "./MziziVerifiedBadge.astro": "./src/MziziVerifiedBadge.astro",
-    "./mzizi-trust-tier-data": "./src/mzizi-trust-tier-data.ts",
-    "./money": "./src/money.ts",
-    "./qr-matrix": "./src/qr-matrix.ts",
-    "./safe-area": "./src/safe-area.ts",
+    "./mzizi-trust-tier-data": {
+      "types": "./dist/mzizi-trust-tier-data.d.ts",
+      "import": "./dist/mzizi-trust-tier-data.js",
+      "default": "./dist/mzizi-trust-tier-data.js"
+    },
+    "./money": {
+      "types": "./dist/money.d.ts",
+      "import": "./dist/money.js",
+      "default": "./dist/money.js"
+    },
+    "./qr-matrix": {
+      "types": "./dist/qr-matrix.d.ts",
+      "import": "./dist/qr-matrix.js",
+      "default": "./dist/qr-matrix.js"
+    },
+    "./safe-area": {
+      "types": "./dist/safe-area.d.ts",
+      "import": "./dist/safe-area.js",
+      "default": "./dist/safe-area.js"
+    },
     "./MarkdownRenderer.astro": "./src/MarkdownRenderer.astro",
-    "./markdown-parse": "./src/markdown-parse.ts",
+    "./markdown-parse": {
+      "types": "./dist/markdown-parse.d.ts",
+      "import": "./dist/markdown-parse.js",
+      "default": "./dist/markdown-parse.js"
+    },
     "./app/AppShell.astro": "./src/app/AppShell.astro",
     "./app/SideNav.astro": "./src/app/SideNav.astro",
     "./app/AccountMenu.astro": "./src/app/AccountMenu.astro",
@@ -102,7 +123,11 @@
     "./app/TierStatus.astro": "./src/app/TierStatus.astro",
     "./app/Money.astro": "./src/app/Money.astro",
     "./app/PlanSummary.astro": "./src/app/PlanSummary.astro",
-    "./app/nav": "./src/app/nav.ts",
+    "./app/nav": {
+      "types": "./dist/app/nav.d.ts",
+      "import": "./dist/app/nav.js",
+      "default": "./dist/app/nav.js"
+    },
     "./discover/DiscoverShell.astro": "./src/discover/DiscoverShell.astro",
     "./discover/DiscoverMeta.astro": "./src/discover/DiscoverMeta.astro",
     "./discover/DiscoverHero.astro": "./src/discover/DiscoverHero.astro",
@@ -119,14 +144,31 @@
     "./discover/MetaList.astro": "./src/discover/MetaList.astro",
     "./discover/DetailActions.astro": "./src/discover/DetailActions.astro",
     "./discover/RelatedRail.astro": "./src/discover/RelatedRail.astro",
-    "./discover/open": "./src/discover/open.ts",
-    "./lib/utils": "./src/lib/utils.ts",
-    "./lib/table": "./src/lib/table.ts",
-    "./ui/variants": "./src/ui/variants.ts",
+    "./discover/open": {
+      "types": "./dist/discover/open.d.ts",
+      "import": "./dist/discover/open.js",
+      "default": "./dist/discover/open.js"
+    },
+    "./lib/utils": {
+      "types": "./dist/lib/utils.d.ts",
+      "import": "./dist/lib/utils.js",
+      "default": "./dist/lib/utils.js"
+    },
+    "./lib/table": {
+      "types": "./dist/lib/table.d.ts",
+      "import": "./dist/lib/table.js",
+      "default": "./dist/lib/table.js"
+    },
+    "./ui/variants": {
+      "types": "./dist/ui/variants.d.ts",
+      "import": "./dist/ui/variants.js",
+      "default": "./dist/ui/variants.js"
+    },
     "./styles/tokens.css": "./styles/tokens.css",
     "./styles/theme.css": "./styles/theme.css",
     "./styles/color-scheme.css": "./styles/color-scheme.css",
     "./styles/globals.css": "./styles/globals.css",
+    "./styles/density.css": "./styles/density.css",
     "./styles/brand-bundu.css": "./styles/brand-bundu.css",
     "./styles/brand-nyuchi.css": "./styles/brand-nyuchi.css",
     "./styles/brand-mukoko.css": "./styles/brand-mukoko.css",
@@ -164,7 +206,9 @@
     "./tailwind-palette": "./tailwind-palette.mjs"
   },
   "scripts": {
-    "test": "vp test"
+    "build": "pnpm --filter @bundu/server run build && node scripts/build-js.mjs",
+    "test": "pnpm run build && vp test",
+    "prepack": "pnpm run build"
   },
   "dependencies": {
     "@bundu/server": "workspace:^",
@@ -175,6 +219,7 @@
   },
   "files": [
     "src",
+    "dist",
     "!src/**/*.test.ts",
     "styles",
     "tailwind-preset.mjs",
@@ -205,6 +250,8 @@
     "css-select": ">=7.0.0",
     "domhandler": ">=5.0.3",
     "domutils": ">=3.2.2",
-    "htmlparser2": ">=10.1.0"
+    "htmlparser2": ">=10.1.0",
+    "tailwindcss": "4.1.18",
+    "typescript": ">=5.9.3"
   }
 }
