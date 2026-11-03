@@ -780,7 +780,7 @@
       "cssVar": "--assurance-none-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "assurance-none-text"
     },
     {
@@ -864,7 +864,7 @@
       "cssVar": "--attestation-community-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "attestation-community-text"
     },
     {
@@ -892,7 +892,7 @@
       "cssVar": "--attestation-domain-text",
       "dark": "#FFC3B0",
       "kind": "text",
-      "light": "#894027",
+      "light": "#7E3B24",
       "name": "attestation-domain-text"
     },
     {
@@ -1102,7 +1102,7 @@
       "cssVar": "--destructive-text",
       "dark": "#F3C0BD",
       "kind": "text",
-      "light": "#9F221B",
+      "light": "#98201A",
       "name": "destructive-text"
     },
     {
@@ -1151,7 +1151,7 @@
       "cssVar": "--muted-foreground",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "muted-foreground"
     },
     {
@@ -1396,7 +1396,7 @@
       "cssVar": "--status-danger-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "status-danger-text"
     },
     {
@@ -1424,7 +1424,7 @@
       "cssVar": "--status-deprecated-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "status-deprecated-text"
     },
     {
@@ -1487,7 +1487,7 @@
       "cssVar": "--status-neutral-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "status-neutral-text"
     },
     {
@@ -1641,7 +1641,7 @@
       "cssVar": "--text-secondary",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "text-secondary"
     },
     {
@@ -1676,7 +1676,7 @@
       "cssVar": "--tier-community-text",
       "dark": "#EBCCA3",
       "kind": "text",
-      "light": "#844425",
+      "light": "#7B3F23",
       "name": "tier-community-text"
     },
     {
@@ -1788,7 +1788,7 @@
       "cssVar": "--tier-unverified-text",
       "dark": "#CCCCCA",
       "kind": "text",
-      "light": "#575655",
+      "light": "#504F4E",
       "name": "tier-unverified-text"
     },
     {
