@@ -19,6 +19,9 @@
  *   node scripts/sync-registry.mjs --check    write nothing; fail on drift (pnpm registry:check)
  *   ... --from <dir>                          read a local registry checkout instead of GitHub
  *
+ * `styles/density.css` is not mapped: it is derived from the registry's
+ * n1-tokens/mzizi-tokens-globals.css by scripts/registry-density.mjs.
+ *
  * --check also fails if a package holds a component source that is not in
  * the map: a hand-authored `.astro` here is a fork of the registry.
  *
@@ -36,6 +39,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { safeRef } from "./contract-paths.mjs";
+import { densityCss } from "./registry-density.mjs";
 import { toPackage } from "./registry-imports.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -78,7 +82,7 @@ async function read(path, binary = false) {
 
 const SAFE =
   /^(?:n\d+-[a-z]+(?:-[a-z]+)*\/[A-Za-z0-9._-]+|assets\/[A-Za-z0-9._-]+|contracts\/[a-z.-]+)$/;
-const OUT = /^(?:src|test|assets)\/[A-Za-z0-9/._-]+$/;
+const OUT = /^(?:src|test|assets|styles)\/[A-Za-z0-9/._-]+$/;
 function dest(pkg, path) {
   if (!PACKAGES[pkg] || !OUT.test(path) || path.split("/").includes("..")) {
     throw new Error(`refusing destination ${pkg}:${path}`);
@@ -106,6 +110,16 @@ for (const [key, a] of Object.entries(map.assets)) {
 for (const x of EXTRA) {
   outputs.push({ file: dest(x.package, x.path), body: await read(x.registry) });
 }
+
+// The Bundu floor and density layers, derived from the registry's whole
+// globals.css (scripts/registry-density.mjs): styles/density.css.
+outputs.push({
+  file: dest("bundu-ui", "styles/density.css"),
+  body: densityCss(
+    await read("components/registry/n1-tokens/mzizi-tokens-globals.css"),
+    ref,
+  ),
+});
 
 let drift = 0;
 for (const { file, body } of outputs) {

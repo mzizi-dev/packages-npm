@@ -145,11 +145,11 @@
   --text-h6--font-weight: 600;
   --text-body-lg: 1.125rem;
   --text-body-lg--line-height: 1.6;
-  --text-body: 1rem;
+  --text-body: 1.0625rem;
   --text-body--line-height: 1.6;
   --text-body-sm: 0.875rem;
   --text-body-sm--line-height: 1.5;
-  --text-caption: 0.75rem;
+  --text-caption: 0.875rem;
   --text-caption--line-height: 1.5;
   --text-caption--letter-spacing: 0.02em;
   --container-prose: 65ch;
