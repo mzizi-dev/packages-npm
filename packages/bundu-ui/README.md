@@ -114,7 +114,7 @@ pnpm add react react-dom
 ```css
 @import "tailwindcss";
 @import "@bundu/ui/styles/theme.css"; /* @imports tokens.css, adds @theme */
-@import "@bundu/ui/styles/globals.css"; /* the @layer rules the Astro components use */
+@import "@bundu/ui/styles/globals.css"; /* the @layer rules the Astro components use, and density.css */
 @import "@bundu/ui/styles/color-scheme.css"; /* optional: follow the OS dark setting */
 @import "@bundu/ui/styles/brand-nyuchi.css";
 @source "../../node_modules/@bundu/ui/src"; /* v4 does not scan node_modules itself */
@@ -131,6 +131,23 @@ and the components' classes resolve with no preset. Tailwind imports `tokens.css
 even though both files reference it. The Astro components render the React primitives
 (for example `Hero`'s buttons), so an Astro site also needs `@astrojs/react`. With no
 `client:*` directive they render to static HTML and ship no JavaScript.
+
+**The Bundu floor and density.** `globals.css` imports `styles/density.css`, generated from
+the registry: body text 17px, captions 14px, a 49px hit region on every control (a control may
+be drawn 28 to 40px at desktop density, and a `hit-area` overlay keeps the 49px hit region),
+and the size roles the components use as utilities (`h-control`, `h-control-sm`,
+`h-control-lg`, `size-control-icon`, `h-field`, `min-h-touch-min`). Those utilities resolve
+to nothing without it. An app that imports the pieces separately (`theme.css` and
+`tokens.css`, no `globals.css`) must add it after them:
+
+```css
+@import "@bundu/ui/styles/theme.css";
+@import "@bundu/ui/styles/density.css";
+```
+
+`<html data-mzizi-sizes="legacy">` restores the sizes before the floor (16px body, 12px
+captions, 48/56px controls) until an app has migrated. Migration table: mzizi-registry
+`docs/sizes-and-density.md`.
 
 **1b. Tailwind v3, or v4 via `@config`** — unchanged from 0.1.x, still supported:
 

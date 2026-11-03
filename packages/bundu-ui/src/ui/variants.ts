@@ -33,9 +33,9 @@ export const buttonVariants = cva(
           "border border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground",
       },
       size: {
-        sm: "h-12 px-4 text-body-sm",
-        md: "h-12 px-6 text-body",
-        lg: "h-14 px-8 text-body-lg",
+        sm: "h-control-sm px-4 text-body-sm",
+        md: "h-control px-6 text-body",
+        lg: "h-control-lg px-8 text-body-lg",
       },
       fullWidth: {
         true: "w-full",
@@ -85,7 +85,7 @@ export const alertVariants = cva(
 );
 
 export const inputClasses =
-  "flex h-12 w-full rounded-lg border border-border bg-background px-4 text-body text-foreground transition-colors placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
+  "flex h-field w-full rounded-lg border border-border bg-background px-4 text-body text-foreground transition-colors placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
 
 export const labelClasses = "text-body-sm font-medium text-foreground";
 
@@ -154,7 +154,7 @@ export const BADGE_VARIANTS = [
 export type BadgeVariant = (typeof BADGE_VARIANTS)[number];
 
 const badgeBase =
-  "h-5 gap-1 rounded-md border border-transparent px-2 py-0.5 text-xs font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:size-3! inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive overflow-hidden group/badge";
+  "h-6 gap-1 rounded-md border border-transparent px-2 py-0.5 text-xs font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:size-3! inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive overflow-hidden group/badge";
 
 const badgeVariantClasses: Record<BadgeVariant, string> = {
   default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
