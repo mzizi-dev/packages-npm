@@ -26,6 +26,7 @@ Versions published before then are not renumbered.
 - (repository) CI: bump `pnpm/action-setup` from 6.0.10 to 6.1.0 in the release and tokens workflows (Dependabot #95). No package or published output changes.
 - (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
 - (`@bundu/ui`) Dev dependency: bump `domhandler` from 5.0.3 to 6.0.1 (Dependabot #87). It is used only by the contract test runner (`test/contract-runner.ts`), which already imports `isTag` from `domhandler`; `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
+- (`@bundu/ui`) Dev dependency: bump `htmlparser2` from 10.1.0 to 12.0.0 (Dependabot #84). It is used only by the contract test runner (`test/contract-runner.ts`); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 
 ## [@bundu/ui 0.9.0] - 2026-11-03
 
