@@ -35,6 +35,7 @@ Releases `@bundu/ui` 0.9.0, the next minor above 0.8.0: the `text-base` fix belo
 ### Fixed
 
 - (`@bundu/ui`) **`text-base` is the 17px body size.** `theme.css` registers `--color-base` (the page-background surface), and Tailwind v4 resolved `text-base` to that colour instead of the registry's 17px size role, so `text-base` gave no size and painted text in the background colour (the `Input` and the markdown `h5` use it). `styles/globals.css` now declares `text-base` as a static utility (`font-size: var(--fs-body)`, `line-height: var(--lh-body)`) and resets its colour to `inherit` with a doubled-class selector. `bg-base`, `border-base` and the other `base` colour utilities are unchanged; a colour class written beside `text-base` needs more specificity to win. Test in `src/styles.test.ts`.
+- (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 
 ## [@bundu/ui 0.8.0] - 2026-11-03
 
