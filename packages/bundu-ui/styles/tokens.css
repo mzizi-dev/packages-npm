@@ -330,8 +330,8 @@
   --tier-unverified-text: #504f4e;
 
   /* === Touch targets — accessibility mandate, 56px comfortable. */
-  --touch-target: 56px;
-  --touch-target-sm: 48px;
+  --touch-target: 49px;
+  --touch-target-sm: 40px;
 
   /* === Radius scale. Ecosystem numbers 7/12/14/17; buttons are always pill. */
   --radius-unit: 7px;

@@ -1,0 +1,214 @@
+// The package stylesheet, compiled with Tailwind v4 the way an app does:
+// `@import "tailwindcss"; theme.css; globals.css`. It holds the Bundu floor
+// (mzizi-registry 4.23.0) to what the components need: the size utilities
+// they use resolve, the body, caption and hit-area floors are in, the legacy
+// alias is there, and the hand-written globals.css classes sit at or above it.
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { compile } from "tailwindcss";
+import { beforeAll, describe, expect, it } from "vite-plus/test";
+
+const styles = resolve(dirname(fileURLToPath(import.meta.url)), "../styles");
+const require = createRequire(import.meta.url);
+
+const UTILITIES = [
+  "h-control",
+  "h-control-sm",
+  "h-control-lg",
+  "size-control-icon",
+  "h-field",
+  "min-h-touch-min",
+  "text-xs",
+  "text-sm",
+];
+
+let css = "";
+
+beforeAll(async () => {
+  const compiler = await compile(
+    `@import "tailwindcss"; @import "./theme.css"; @import "./globals.css";`,
+    {
+      base: styles,
+      async loadStylesheet(id, base) {
+        const path =
+          id === "tailwindcss"
+            ? require.resolve("tailwindcss/index.css")
+            : resolve(base, id);
+        return {
+          path,
+          base: dirname(path),
+          content: readFileSync(path, "utf8"),
+        };
+      },
+    },
+  );
+  css = compiler.build(UTILITIES);
+});
+
+const flat = (s: string) => s.replace(/\s+/g, " ");
+
+/** The first declaration of `--name` in the compiled CSS: the mobile default. */
+function rootDefaults(): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const m of flat(css).matchAll(/(--[a-z0-9-]+):\s*([^;{}]+);/g)) {
+    if (!map.has(m[1])) map.set(m[1], m[2].trim());
+  }
+  return map;
+}
+
+/** Evaluate a length: px, rem, `var(--x)` through `vars`, and `max(a, b)`. */
+function px(value: string, vars: Map<string, string>): number {
+  const v = value.replace(/\s+/g, " ").trim();
+  const max = /^max\((.*)\)$/.exec(v);
+  if (max) {
+    const parts: string[] = [];
+    let depth = 0;
+    let cur = "";
+    for (const ch of max[1]) {
+      if (ch === "(") depth += 1;
+      if (ch === ")") depth -= 1;
+      if (ch === "," && depth === 0) {
+        parts.push(cur);
+        cur = "";
+      } else cur += ch;
+    }
+    parts.push(cur);
+    return Math.max(...parts.map((p) => px(p, vars)));
+  }
+  const ref = /^var\(\s*(--[a-z0-9-]+)\s*\)$/.exec(v);
+  if (ref) {
+    const next = vars.get(ref[1]);
+    if (next === undefined) throw new Error(`${ref[1]} is not defined`);
+    return px(next, vars);
+  }
+  const rem = /^([\d.]+)rem$/.exec(v);
+  if (rem) return Number(rem[1]) * 16;
+  const pixels = /^([\d.]+)px$/.exec(v);
+  if (pixels) return Number(pixels[1]);
+  throw new Error(`cannot evaluate "${value}"`);
+}
+
+/** One declaration of a compiled rule: `.selector { prop: value }`. */
+function declared(selector: string, prop: string): string {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const rule = new RegExp(`${escaped}\\s*\\{([^}]*)\\}`).exec(flat(css));
+  if (!rule) throw new Error(`no rule for ${selector}`);
+  const decl = new RegExp(`(?:^|[; ])${prop}:\\s*([^;]+)`).exec(rule[1]);
+  if (!decl) throw new Error(`${selector} has no ${prop}`);
+  return decl[1];
+}
+
+describe("the size utilities resolve", () => {
+  it.each([
+    [".h-control", "height"],
+    [".h-control-sm", "height"],
+    [".h-control-lg", "height"],
+    [".size-control-icon", "height"],
+    [".size-control-icon", "width"],
+    [".h-field", "height"],
+    [".min-h-touch-min", "min-height"],
+  ])("%s sets %s", (selector, prop) => {
+    expect(declared(selector, prop)).toMatch(/var\(/);
+  });
+
+  it("is at the 49px floor on touch, and 49px for the hit region everywhere", () => {
+    const vars = rootDefaults();
+    for (const [selector, prop] of [
+      [".h-control", "height"],
+      [".h-control-sm", "height"],
+      [".h-field", "height"],
+      [".size-control-icon", "height"],
+      [".min-h-touch-min", "min-height"],
+    ] as const) {
+      expect(px(declared(selector, prop), vars), selector).toBe(49);
+    }
+    expect(px(declared(".h-control-lg", "height"), vars)).toBe(56);
+  });
+});
+
+describe("the Bundu floor", () => {
+  it("is body 17px and captions 14px, and text-xs follows the caption", () => {
+    const vars = rootDefaults();
+    expect(px("var(--fs-body)", vars)).toBe(17);
+    expect(px("var(--fs-caption)", vars)).toBe(14);
+    expect(px("var(--fs-small)", vars)).toBe(14);
+    expect(px(declared(".text-xs", "font-size"), vars)).toBe(14);
+    expect(px(declared(".text-sm", "font-size"), vars)).toBe(14);
+    // `text-base` is registered too (17px), but this package's `--color-base`
+    // (the surface ladder) is a Tailwind colour of the same name, which wins
+    // the utility; the `--text-base` role is still carried for plain CSS.
+    expect(readFileSync(resolve(styles, "density.css"), "utf8")).toMatch(
+      /--text-base: var\( ?--fs-body ?\)/,
+    );
+  });
+
+  it("holds the hit region at 49px and draws no control under 28px", () => {
+    const vars = rootDefaults();
+    expect(px("var(--target-floor)", vars)).toBe(49);
+    expect(px("var(--control-floor)", vars)).toBe(49);
+    expect(flat(css)).toMatch(/--control-floor: 1\.75rem/); // desktop density: 28px
+    for (const [name, value] of vars) {
+      if (/^--size-(?!control-dense)/.test(name)) {
+        expect(px(value, vars), name).toBeGreaterThanOrEqual(49);
+      }
+    }
+  });
+
+  it("has the hit-area rule, growing the hit region with a pseudo-element", () => {
+    const text = flat(css);
+    expect(text).toMatch(/\.hit-area[^{]*::after \{[^}]*content: ""/);
+    expect(text).toMatch(
+      /width: max\(100%, var\(--target-floor\)\); height: max\(100%, var\(--target-floor\)\)/,
+    );
+    expect(text).toMatch(/min-height: var\(--target-floor\)/); // menu rows
+  });
+
+  it("has the tablet and desktop density layers", () => {
+    const text = flat(css);
+    expect(text).toMatch(
+      /@media \(min-width: 64rem\) and \(pointer: fine\) and \(hover: hover\)/,
+    );
+    expect(text).toMatch(/@media \(min-width: 48rem\)/);
+  });
+
+  it('keeps the legacy alias: data-mzizi-sizes="legacy" restores the old sizes', () => {
+    const text = flat(css);
+    const legacy = /:root\[data-mzizi-sizes="legacy"\] \{([^}]*)\}/.exec(text);
+    expect(legacy).not.toBeNull();
+    expect(legacy![1]).toMatch(/--target-floor: 3rem/);
+    expect(legacy![1]).toMatch(/--fs-body: 1rem/);
+    expect(legacy![1]).toMatch(/--fs-caption: 0\.75rem/);
+  });
+});
+
+describe("styles/globals.css classes are not under the floor", () => {
+  it.each([".btn-primary", ".btn-secondary", ".btn-outline", ".btn-ghost"])(
+    "%s is drawn at 49px or more",
+    (selector) => {
+      expect(
+        px(declared(selector, "height"), rootDefaults()),
+      ).toBeGreaterThanOrEqual(49);
+    },
+  );
+
+  it(".input is drawn at 49px or more, desktop included", () => {
+    expect(
+      px(declared(".input", "height"), rootDefaults()),
+    ).toBeGreaterThanOrEqual(49);
+    // --size-field stays 49px in the desktop layer too.
+    expect(flat(css)).toMatch(/--size-field: 3\.0625rem/);
+  });
+
+  it("is imported by globals.css and exported by the package", () => {
+    expect(readFileSync(resolve(styles, "globals.css"), "utf8")).toMatch(
+      /@import "\.\/density\.css"/,
+    );
+    const pkg = JSON.parse(
+      readFileSync(resolve(styles, "../package.json"), "utf8"),
+    );
+    expect(pkg.exports["./styles/density.css"]).toBe("./styles/density.css");
+  });
+});
