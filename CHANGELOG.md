@@ -28,6 +28,8 @@ Versions published before then are not renumbered.
 - (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
 - (`@bundu/ui`) Dev dependency: bump `domhandler` from 5.0.3 to 6.0.1 (Dependabot #87). It is used only by the contract test runner (`test/contract-runner.ts`), which already imports `isTag` from `domhandler`; `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`) Dev dependency: bump `htmlparser2` from 10.1.0 to 12.0.0 (Dependabot #84). It is used only by the contract test runner (`test/contract-runner.ts`); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
+- (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
+- (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 
 ## [@bundu/ui 0.9.0] - 2026-11-03
 
@@ -36,8 +38,6 @@ Releases `@bundu/ui` 0.9.0, the next minor above 0.8.0: the `text-base` fix belo
 ### Fixed
 
 - (`@bundu/ui`) **`text-base` is the 17px body size.** `theme.css` registers `--color-base` (the page-background surface), and Tailwind v4 resolved `text-base` to that colour instead of the registry's 17px size role, so `text-base` gave no size and painted text in the background colour (the `Input` and the markdown `h5` use it). `styles/globals.css` now declares `text-base` as a static utility (`font-size: var(--fs-body)`, `line-height: var(--lh-body)`) and resets its colour to `inherit` with a doubled-class selector. `bg-base`, `border-base` and the other `base` colour utilities are unchanged; a colour class written beside `text-base` needs more specificity to win. Test in `src/styles.test.ts`.
-- (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
-- (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 
 ## [@bundu/ui 0.8.0] - 2026-11-03
 
