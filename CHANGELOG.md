@@ -21,10 +21,6 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
-### Fixed
-
-- (`@bundu/ui`) **The React `Badge` and `Tooltip` take 14px of side padding.** The 0.11.0 notes said `Badge` went from 8px to 14px. That was true of the Astro badge and the `badgeBase` string in `ui/variants`, which are synced from the registry, but not of the React `Badge` in `@bundu/ui/ui/badge`, which is hand-written here and stayed at `px-2` (8px, size `sm`) and `px-3` (12px, size `md`); mzizi-site renders that one. Both sizes now use `px-3.5` (14px), as does the `Tooltip` (was `px-2.5`, 10px). `src/ui/inset-floor.test.ts` scans every hand-written `src/ui/*.tsx` for side padding under 14px, so a new primitive cannot go under the floor unnoticed. Refs mzizi-dev/mzizi-registry#625.
-
 ### Changed
 
 - (repository) Every package release carries notes built from `CHANGELOG.md` (mzizi-dev/mzizi-registry#619): the version's section, the package name and version, the npm link and a "Full changelog" compare link. A version with no `## [<name> <version>]` section now fails: `scripts/release-publish.mjs` refuses it before `npm publish` (it was published, and released with the generic line "No CHANGELOG.md section names ..."), and `scripts/release-tags.mjs` throws instead of writing that line. Releases are created as drafts by `.github/scripts/publish-release.sh` and published once; a tag left by a run that died before its release now still gets the release. The new `release notes` workflow checks a `release/` PR's bumped versions have a section and prints the notes. `AGENTS.md` gains "Release notes (hard rule)". No package or published output changes.
@@ -36,6 +32,18 @@ Versions published before then are not renumbered.
 - (`@bundu/ui`) Dev dependency: bump `htmlparser2` from 10.1.0 to 12.0.0 (Dependabot #84). It is used only by the contract test runner (`test/contract-runner.ts`); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
+
+## [@bundu/ui 0.12.0] - 2026-11-04
+
+Releases `@bundu/ui` 0.12.0, the next minor above 0.11.0. It finishes the part of the spacing floor that 0.11.0 missed on the two components mzizi-site renders from React: the hand-written `Badge` and `Tooltip` in `src/ui`, which the registry sync never touches. The registry pin is unchanged (4.25.0, `c3e6e87`) and `@bundu/server` is unchanged.
+
+### Fixed
+
+- (`@bundu/ui`) **The React `Badge` and `Tooltip` take 14px of side padding.** The 0.11.0 notes said `Badge` went from 8px to 14px. That was true of the Astro badge and the `badgeBase` string in `ui/variants`, which are synced from the registry, but not of the React `Badge` in `@bundu/ui/ui/badge`, which is hand-written here and stayed at `px-2` (8px, size `sm`) and `px-3` (12px, size `md`); mzizi-site renders that one. Both sizes now use `px-3.5` (14px), as does the `Tooltip` (was `px-2.5`, 10px). `src/ui/inset-floor.test.ts` scans every hand-written `src/ui/*.tsx` for side padding under 14px, so a new primitive cannot go under the floor unnoticed. Refs mzizi-dev/mzizi-registry#625.
+
+### Still under the floor
+
+The ten text-bearing controls listed under 0.11.0 are still under 14px of inline padding. They are synced from the registry, so the fix is upstream and arrives with a later pin.
 
 ## [@bundu/ui 0.11.0] - 2026-11-04
 
