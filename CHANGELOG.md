@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Fixed
+
+- (`@bundu/ui`) **The React `Badge` and `Tooltip` take 14px of side padding.** The 0.11.0 notes said `Badge` went from 8px to 14px. That was true of the Astro badge and the `badgeBase` string in `ui/variants`, which are synced from the registry, but not of the React `Badge` in `@bundu/ui/ui/badge`, which is hand-written here and stayed at `px-2` (8px, size `sm`) and `px-3` (12px, size `md`); mzizi-site renders that one. Both sizes now use `px-3.5` (14px), as does the `Tooltip` (was `px-2.5`, 10px). `src/ui/inset-floor.test.ts` scans every hand-written `src/ui/*.tsx` for side padding under 14px, so a new primitive cannot go under the floor unnoticed. Refs mzizi-dev/mzizi-registry#625.
+
 ### Changed
 
 - (repository) Every package release carries notes built from `CHANGELOG.md` (mzizi-dev/mzizi-registry#619): the version's section, the package name and version, the npm link and a "Full changelog" compare link. A version with no `## [<name> <version>]` section now fails: `scripts/release-publish.mjs` refuses it before `npm publish` (it was published, and released with the generic line "No CHANGELOG.md section names ..."), and `scripts/release-tags.mjs` throws instead of writing that line. Releases are created as drafts by `.github/scripts/publish-release.sh` and published once; a tag left by a run that died before its release now still gets the release. The new `release notes` workflow checks a `release/` PR's bumped versions have a section and prints the notes. `AGENTS.md` gains "Release notes (hard rule)". No package or published output changes.
