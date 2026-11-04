@@ -15,6 +15,24 @@ Read off the repo rulesets on 2026-11-03 (`gh api repos/mzizi-dev/<repo>/ruleset
 - **Forward-port before you release.** The release-version-check gate fails a release PR while `main` has commits `staging` lacks (the registry-pin bot's commits, usually). Forward-port them to `staging` first, then cut the release. Do not push to the pin bot's branch (`bot/registry-pin`) unless you are taking the bump over.
 - **Sync back after a release.** The squash commit on `main` is never in `staging`'s history. If the trees differ, open a sync PR into `staging` from a branch off `staging` with `origin/main` merged in, squashed. Compare trees (`git diff origin/main origin/staging`), not commit counts.
 
+## Release notes (hard rule)
+
+Owner, 2026-11-04: "Every release should have release notes too with a changelog."
+
+- **Every package release carries notes built from `CHANGELOG.md`**: the
+  `## [<name> <version>] - <date>` section, the package name and version, its npm link and a
+  "Full changelog" compare link (`scripts/release-tags.mjs`). Bumping a `version` therefore
+  needs that dated section in the same PR.
+- **A version with no section fails the release.** `scripts/release-publish.mjs` refuses it
+  before `npm publish`, and `release-tags.mjs` throws rather than write generic notes.
+- **Notes are set when the release is created.** `.github/scripts/publish-release.sh` makes a
+  draft with the notes and publishes it once; never `gh release edit` a published release.
+- **A release PR's body carries the same notes.** Before merging a `release/` PR into `main`,
+  paste the section(s) being released (the `release notes / release PR` job prints them) into
+  the PR body.
+- `.github/scripts/publish-release.sh` and its test are identical in the other Mzizi
+  repositories (agent-tools, mzizi-api, mzizi-docs, mzizi-site, mzizi-registry).
+
 ## Dev skills, progress reports and the merge gate
 
 Load the Mzizi **dev skills** before starting work: `mzizi_get_skills category=dev` on the Mzizi MCP (`mcp.mzizi.dev`), or `@nyuchi/mzizi-skills` from npm. They are `digital-hygiene` and `progress-report`.
