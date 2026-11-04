@@ -34,6 +34,21 @@ Versions published before then are not renumbered.
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 
+## [@bundu/ui 0.10.0] - 2026-11-04
+
+Releases `@bundu/ui` 0.10.0, the next minor above 0.9.0. It takes the spacing floor from mzizi-registry 4.24.0 (owner ruling 2026-11-04, mzizi-registry#617): the least padding, gap and line height that nothing can go under, on the 7px unit. `@bundu/server` is unchanged (0.1.0 on npm).
+
+### Added — the spacing floor ships (mzizi-registry 4.24.0)
+
+- (`@bundu/ui`) **`styles/density.css`** (generated) now carries the spacing floor: `--inset-floor` 14px (the least padding between text and the edge of its container), `--gap-floor` 7px (the least gap between adjacent controls, a label and its field, and sibling items) and `--leading-floor` 1.5 (body line height, WCAG 1.4.12), the `p-inset-floor`, `px-inset-floor` and `gap-gap-floor` utilities, and the registry's base-layer rules that enforce them: body `line-height` of at least `--leading-floor`, `padding-inline` of at least `--inset-floor` on buttons, tabs, menu items, options, selects, textareas and text inputs, `padding` of at least `--inset-floor` on dialogs, popovers, alerts, tooltips and bare cards, and `gap` of at least `--gap-floor` on toolbars, tab lists, radio groups, groups, menus, listboxes and lists. The rules are defaults: they step aside for icon-only and fixed-square controls, calendar days, native checkbox, radio, range, colour and file inputs, and surfaces whose padding lives on their header, content and footer slots. No brand pack and no density layer lowers a floor.
+- (`@bundu/ui`) `:root[data-mzizi-sizes="legacy"]` also opts out of the spacing floor (`--inset-floor: 0px`, `--gap-floor: 0px`, `--leading-floor: 1`), as it does for the size floor, until an app has migrated.
+- (`@bundu/ui`) `src/styles.test.ts` compiles the package stylesheet and fails if a floor is missing or lowered: 14px, 7px and 1.5 at the root; the three utilities resolve to them; the four base-layer rules are present; the legacy opt-out exists and zeroes them; no brand pack, `tokens.css`, `theme.css` or density media layer redefines a floor; and the hand-written `globals.css` classes (badges, buttons, `.input`) sit at or above them. `scripts/registry-density.test.mjs` pins the extraction of the new rule and variables, and `scripts/registry-density.mjs` now throws if the registry drops the spacing floor.
+
+### Changed
+
+- (`@bundu/ui`) `styles/globals.css` (hand-written): `.badge` and the `.badge-*` variants had 12px side padding; they use `px-inset-floor` (14px).
+- (repository) `scripts/registry-ref.json` moves from `efb5f3a` (4.23.0) to mzizi-registry `1ac4f81` (main, the 4.24.0 release); `pnpm registry:sync`, `pnpm contracts:fetch` and `pnpm tokens:check` are clean (the synced components and contracts already met the floor, so only `density.css` changes). Refs mzizi-dev/mzizi-registry#617.
+
 ## [@bundu/ui 0.9.0] - 2026-11-03
 
 Releases `@bundu/ui` 0.9.0, the next minor above 0.8.0: the `text-base` fix below, so the 17px floor holds for the standard class names. `@bundu/server` is unchanged.

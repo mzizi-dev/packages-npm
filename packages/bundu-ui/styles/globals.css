@@ -147,31 +147,31 @@
 
   /* Badges — pill */
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium;
   }
 
   .badge-primary {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
   }
 
   .badge-success {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-malachite-container text-malachite-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-malachite-container text-malachite-on-container;
   }
 
   .badge-warning {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-gold-container text-gold-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-gold-container text-gold-on-container;
   }
 
   .badge-info {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-cobalt-container text-cobalt-on-container;
   }
 
   .badge-accent {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-terracotta-container text-terracotta-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-terracotta-container text-terracotta-on-container;
   }
 
   .badge-premium {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-caption font-medium bg-tanzanite-container text-tanzanite-on-container;
+    @apply inline-flex items-center px-inset-floor py-1 rounded-full text-caption font-medium bg-tanzanite-container text-tanzanite-on-container;
   }
 
   /* Ubuntu pull-quote */
