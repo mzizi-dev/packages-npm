@@ -31,11 +31,17 @@ export default defineConfig({
     // gains exactPattern and initialsOf, all without semicolons. Drop these
     // three once the registry formats n2-primitives/money.ts,
     // n2-primitives/ui-utils.ts and n3-brand/mzizi-trust-tier-data.ts.
+    // test/contract-runner.ts is the same case: synced byte for byte from the
+    // registry's contract runner, which gained about 190 lines at registry
+    // 4.25.0 (the spacing floor, mzizi-registry#622) in the registry's own
+    // style (no semicolons, long lines). Drop this entry once the registry
+    // formats contracts/runner.ts and a pin carries it.
     // styles/density.css is derived by `pnpm registry:sync` from the registry's
     // stylesheet (scripts/registry-density.mjs) and held byte for byte by
     // `registry:check`, so it is not reformatted here.
     ignorePatterns: [
       "packages/bundu-ui/styles/density.css",
+      "packages/bundu-ui/test/contract-runner.ts",
       "packages/bundu-ui/src/markdown-parse.ts",
       "packages/bundu-ui/src/qr-matrix.ts",
       "packages/bundu-ui/src/money.ts",
