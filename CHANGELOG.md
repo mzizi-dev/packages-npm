@@ -21,7 +21,6 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
-
 ### Changed
 
 - (repository) `scripts/release-tags.mjs` creates each GitHub release as a draft and publishes it once (`--draft`, then `gh release edit --draft=false`), so it is safe with GitHub's immutable releases (a published release's tag and assets are locked). It never edits or moves a tag afterwards.
