@@ -33,6 +33,18 @@ Versions published before then are not renumbered.
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 
+## [@bundu/ui 0.12.0] - 2026-11-04
+
+Releases `@bundu/ui` 0.12.0, the next minor above 0.11.0. It finishes the part of the spacing floor that 0.11.0 missed on the two components mzizi-site renders from React: the hand-written `Badge` and `Tooltip` in `src/ui`, which the registry sync never touches. The registry pin is unchanged (4.25.0, `c3e6e87`) and `@bundu/server` is unchanged.
+
+### Fixed
+
+- (`@bundu/ui`) **The React `Badge` and `Tooltip` take 14px of side padding.** The 0.11.0 notes said `Badge` went from 8px to 14px. That was true of the Astro badge and the `badgeBase` string in `ui/variants`, which are synced from the registry, but not of the React `Badge` in `@bundu/ui/ui/badge`, which is hand-written here and stayed at `px-2` (8px, size `sm`) and `px-3` (12px, size `md`); mzizi-site renders that one. Both sizes now use `px-3.5` (14px), as does the `Tooltip` (was `px-2.5`, 10px). `src/ui/inset-floor.test.ts` scans every hand-written `src/ui/*.tsx` for side padding under 14px, so a new primitive cannot go under the floor unnoticed. Refs mzizi-dev/mzizi-registry#625.
+
+### Still under the floor
+
+The ten text-bearing controls listed under 0.11.0 are still under 14px of inline padding. They are synced from the registry, so the fix is upstream and arrives with a later pin.
+
 ## [@bundu/ui 0.11.0] - 2026-11-04
 
 Releases `@bundu/ui` 0.11.0, the next minor above 0.10.0. It moves the mzizi-registry pin from 4.24.0 (`1ac4f81`) to 4.25.0 (`c3e6e87`), which brings the components toward the spacing floor (mzizi-registry#622, owner ruling 2026-11-04, mzizi-registry#617): at least 14px of inline inset, gaps of at least 7px, and 1.5 line height for body text. 0.10.0 carried the floor in the tokens; 0.11.0 carries it into the components. It is not complete: see "Still under the floor" below.

@@ -65,7 +65,7 @@ export function Tooltip({
         data-slot="tooltip-content"
         data-state={open ? "open" : "closed"}
         className={cn(
-          "pointer-events-none absolute z-50 w-max max-w-xs rounded-md bg-foreground px-2.5 py-1.5 text-caption font-medium text-background shadow-md",
+          "pointer-events-none absolute z-50 w-max max-w-xs rounded-md bg-foreground px-3.5 py-1.5 text-caption font-medium text-background shadow-md",
           sideClasses[side],
           astroClass,
           className,
