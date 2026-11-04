@@ -2,7 +2,12 @@
 // section; these are the headings it must and must not match.
 import { describe, expect, test } from "vite-plus/test";
 
-import { changelogSection, workspacePackages } from "./release-tags.mjs";
+import {
+  changelogSection,
+  previousTag,
+  releaseNotes,
+  workspacePackages,
+} from "./release-tags.mjs";
 
 const changelog = `# Changelog
 
@@ -61,5 +66,48 @@ describe("workspacePackages", () => {
   test("lists the two public packages with a name and version", () => {
     const names = workspacePackages().map((p) => p.name);
     expect(names.sort()).toEqual(["@bundu/server", "@bundu/ui"]);
+  });
+});
+
+describe("releaseNotes", () => {
+  const args = {
+    changelog,
+    name: "@nyuchi/ui",
+    version: "0.2.0",
+    repo: "o/r",
+    tag: "@nyuchi/ui@0.2.0",
+  };
+
+  test("carries the section, package, npm link, changelog link and compare link", () => {
+    const out = releaseNotes({ ...args, prevTag: "@nyuchi/ui@0.1.0" });
+    expect(out).toContain("## @nyuchi/ui 0.2.0");
+    expect(out).toContain("- Older.");
+    expect(out).toContain(
+      "npm: https://www.npmjs.com/package/@nyuchi/ui/v/0.2.0",
+    );
+    expect(out).toContain("blob/@nyuchi/ui@0.2.0/CHANGELOG.md");
+    expect(out).toContain(
+      "**Full changelog**: https://github.com/o/r/compare/@nyuchi/ui@0.1.0...@nyuchi/ui@0.2.0",
+    );
+  });
+
+  test("a version with no changelog section throws instead of making generic notes", () => {
+    expect(() => releaseNotes({ ...args, version: "9.9.9" })).toThrow(
+      /no "## \[@nyuchi\/ui 9\.9\.9\]" section/,
+    );
+  });
+});
+
+describe("previousTag", () => {
+  test("is the highest lower version of the same package, compared numerically", () => {
+    const tags = [
+      "@bundu/ui@0.9.0",
+      "@bundu/ui@0.10.0",
+      "@bundu/ui@0.11.0",
+      "@bundu/server@0.10.5",
+      "v1.0.0",
+    ];
+    expect(previousTag(tags, "@bundu/ui", "0.11.0")).toBe("@bundu/ui@0.10.0");
+    expect(previousTag(tags, "@bundu/ui", "0.9.0")).toBeNull();
   });
 });

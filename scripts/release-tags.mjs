@@ -7,7 +7,14 @@
 //   - the tag is `<name>@<version>` (for example `@bundu/ui@0.3.0`), annotated,
 //     on the commit the workflow built (GITHUB_SHA, else HEAD);
 //   - the GitHub release carries that version's CHANGELOG.md section, the one
-//     whose `## [...]` heading names `<name> <version>`.
+//     whose `## [...]` heading names `<name> <version>`, the package name and
+//     version, its npm link and a "Full changelog" compare link (owner,
+//     2026-11-04: "Every release should have release notes too with a
+//     changelog"). A version with NO such section fails the run (it never gets
+//     generic notes); release-publish.mjs checks the same before publishing.
+//   - the release is created as a draft with those notes and published once
+//     by .github/scripts/publish-release.sh (immutable releases: the notes are
+//     set at creation and a published release is never edited).
 //
 // Idempotent: a tag that already exists on origin is left alone, and so is a
 // release that already exists. A version that is not on npm (yet) is skipped,
@@ -96,6 +103,54 @@ export function onNpm(name, version, tries = 5) {
   return false;
 }
 
+/**
+ * The release notes for one package version: its CHANGELOG.md section, the
+ * package name and version, the npm and changelog links and, when `prevTag`
+ * is given, a "Full changelog" compare link. Throws when the changelog has no
+ * section for the version: a release with no changelog content must fail, not
+ * publish generic notes.
+ */
+export function releaseNotes({ changelog, name, version, repo, tag, prevTag }) {
+  const section = changelogSection(changelog, name, version);
+  if (section === null) {
+    throw new Error(
+      `CHANGELOG.md has no "## [${name} ${version}]" section; add one before releasing ${name} ${version}.`,
+    );
+  }
+  return (
+    `## ${name} ${version}\n\n${section}\n\n---\n\n` +
+    `Package: \`${name}\` ${version}\n` +
+    `npm: https://www.npmjs.com/package/${name}/v/${version}\n` +
+    `Changelog: https://github.com/${repo}/blob/${tag}/CHANGELOG.md\n` +
+    (prevTag
+      ? `**Full changelog**: https://github.com/${repo}/compare/${prevTag}...${tag}\n`
+      : "")
+  );
+}
+
+/**
+ * The highest tag `<name>@<x.y.z>` below `version`, or null. Compared
+ * numerically, so 0.10.0 is above 0.9.0.
+ */
+export function previousTag(tags, name, version) {
+  const parse = (v) => v.split(".").map(Number);
+  const cmp = (a, b) => {
+    for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i] - b[i];
+    return 0;
+  };
+  const cur = parse(version);
+  const prefix = `${name}@`;
+  const lower = tags
+    .filter(
+      (t) =>
+        t.startsWith(prefix) && /^\d+\.\d+\.\d+$/.test(t.slice(prefix.length)),
+    )
+    .map((t) => ({ tag: t, v: parse(t.slice(prefix.length)) }))
+    .filter(({ v }) => cmp(v, cur) < 0)
+    .sort((a, b) => cmp(a.v, b.v));
+  return lower.length ? lower[lower.length - 1].tag : null;
+}
+
 const tagOnOrigin = (tag) =>
   (tryRun("git", [
     "ls-remote",
@@ -113,19 +168,31 @@ function main() {
 
   for (const { name, version } of workspacePackages()) {
     const tag = `${name}@${version}`;
-    if (tagOnOrigin(tag)) {
-      console.log(`${tag}: tag exists, skipped`);
+    const tagged = tagOnOrigin(tag);
+    if (
+      tagged &&
+      tryRun("gh", ["release", "view", tag, "--repo", repo]) !== null
+    ) {
+      console.log(`${tag}: tag and release exist, skipped`);
       continue;
     }
     if (!onNpm(name, version)) {
       console.log(`${tag}: not on npm, not tagged`);
       continue;
     }
-    const notes =
-      (changelogSection(changelog, name, version) ??
-        `No CHANGELOG.md section names ${name} ${version}.`) +
-      `\n\n---\n\nnpm: https://www.npmjs.com/package/${name}/v/${version}` +
-      `\nChangelog: https://github.com/${repo}/blob/${tag}/CHANGELOG.md`;
+    // Built before anything is tagged: no changelog section throws here.
+    const notes = releaseNotes({
+      changelog,
+      name,
+      version,
+      repo,
+      tag,
+      prevTag: previousTag(
+        (tryRun("git", ["tag", "-l", `${name}@*`]) ?? "").split("\n"),
+        name,
+        version,
+      ),
+    });
 
     if (dryRun) {
       console.log(
@@ -134,24 +201,26 @@ function main() {
       continue;
     }
 
-    run("git", ["tag", "-a", tag, sha, "-m", `${name} ${version}`]);
-    run("git", ["push", "origin", `refs/tags/${tag}`]);
-    if (tryRun("gh", ["release", "view", tag, "--repo", repo]) === null) {
-      const file = join(mkdtempSync(join(tmpdir(), "notes-")), "notes.md");
-      writeFileSync(file, notes);
-      run("gh", [
-        "release",
-        "create",
-        tag,
-        "--repo",
-        repo,
-        "--verify-tag",
-        "--title",
-        `${name} ${version}`,
-        "--notes-file",
-        file,
-      ]);
+    // A tag left by a run that died before its release keeps the tag and
+    // still gets its release.
+    if (!tagged) {
+      run("git", ["tag", "-a", tag, sha, "-m", `${name} ${version}`]);
+      run("git", ["push", "origin", `refs/tags/${tag}`]);
     }
+    const file = join(mkdtempSync(join(tmpdir(), "notes-")), "notes.md");
+    writeFileSync(file, notes);
+    // Draft with the notes, then published once; never edited afterwards.
+    run(
+      "bash",
+      [
+        ".github/scripts/publish-release.sh",
+        tag,
+        `${name} ${version}`,
+        file,
+        "plain",
+      ],
+      { env: { ...process.env, GH_REPO: repo } },
+    );
     console.log(`${tag}: tagged ${sha.slice(0, 7)} and released`);
     made++;
   }

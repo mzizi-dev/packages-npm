@@ -110,11 +110,11 @@ export function declarations(body) {
 }
 
 const SIZE_ROLE =
-  /^--spacing-(?:touch|touch-min|control|control-sm|control-lg|control-icon|control-dense|field|field-sm)$/;
+  /^--spacing-(?:touch|touch-min|inset-floor|gap-floor|control|control-sm|control-lg|control-icon|control-dense|field|field-sm)$/;
 const TEXT_ROLE =
   /^--text-(?:body-lg|body|body-sm|small|caption|code|xs|sm|base)(?:--line-height)?$/;
 const ROOT_VAR =
-  /^--(?:size-[a-z-]+|control-floor|target-floor|touch-target(?:-lg|-sm)?|h-button-default|h-button-sm|h-input|fs-[a-z0-9-]+|lh-[a-z0-9-]+)$/;
+  /^--(?:size-[a-z-]+|control-floor|target-floor|inset-floor|gap-floor|leading-floor|touch-target(?:-lg|-sm)?|h-button-default|h-button-sm|h-input|fs-[a-z0-9-]+|lh-[a-z0-9-]+)$/;
 
 /** Names the derived file must define, or the registry has moved under it. */
 const REQUIRED = [
@@ -129,6 +129,11 @@ const REQUIRED = [
   "--size-control",
   "--target-floor",
   "--control-floor",
+  "--spacing-inset-floor",
+  "--spacing-gap-floor",
+  "--inset-floor",
+  "--gap-floor",
+  "--leading-floor",
   "--fs-body",
   "--fs-caption",
 ];
@@ -155,6 +160,9 @@ export function densityCss(source, ref) {
   const hit = blocks.filter(
     (b) => b.prelude === "@layer base" && b.body.includes("hit-area"),
   );
+  const spacing = blocks.filter(
+    (b) => b.prelude === "@layer base" && b.body.includes("--inset-floor"),
+  );
   const media = blocks.filter(
     (b) =>
       b.prelude.startsWith("@media") &&
@@ -172,6 +180,7 @@ export function densityCss(source, ref) {
     );
   }
   if (hit.length !== 1) throw new Error("expected one hit-area rule");
+  if (spacing.length !== 1) throw new Error("expected one spacing-floor rule");
   if (media.length < 2) {
     throw new Error("expected the tablet and desktop density layers");
   }
@@ -197,8 +206,13 @@ export function densityCss(source, ref) {
  *   @import "@bundu/ui/styles/theme.css";
  *   @import "@bundu/ui/styles/density.css";
  *
+ * The spacing floor (#617) rides with it: \`--inset-floor\` 14px (text inset),
+ * \`--gap-floor\` 7px (control, label and item gaps), \`--leading-floor\` 1.5
+ * (body line height), the \`p-inset-floor\` / \`gap-gap-floor\` utilities, and the
+ * base-layer rules that apply them. Nothing may lower them.
+ *
  * \`:root[data-mzizi-sizes="legacy"]\` restores the pre-floor sizes (16px body,
- * 12px captions, 48/56px controls) until an app has migrated.
+ * 12px captions, 48/56px controls, no spacing floor) until an app has migrated.
  * ════════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
@@ -210,6 +224,8 @@ ${rule(root)}
 }
 
 ${hit.map(verbatim).join("\n\n")}
+
+${spacing.map(verbatim).join("\n\n")}
 
 ${media.map(verbatim).join("\n\n")}
 

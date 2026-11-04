@@ -50,16 +50,18 @@ import { spawnSync } from "node:child_process";
 import {
   appendFileSync,
   mkdtempSync,
+  readFileSync,
   readdirSync,
   realpathSync,
   rmSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { onNpm, workspacePackages } from "./release-tags.mjs";
+import { changelogSection, onNpm, workspacePackages } from "./release-tags.mjs";
 
+const root = fileURLToPath(new URL("..", import.meta.url));
 const dryRun = process.argv.includes("--dry-run");
 
 /** Names of the workspace packages `pkg` depends on, by any dependency kind. */
@@ -100,13 +102,22 @@ export function publishOrder(pkgs) {
  * network, as is `checkVersion(pkg)`: null when the versioning policy allows
  * the version, else the reason it does not, and `isNew(name)`: true when npm
  * has never had the name (it then fails with firstPublishMessage, since OIDC
- * cannot publish it, and its dependants are blocked). Returns
+ * cannot publish it, and its dependants are blocked), and `hasNotes(pkg)`:
+ * false when CHANGELOG.md has no section for the version, which is refused
+ * before npm sees it (its GitHub release could not carry changelog notes).
+ * Returns
  * [{ name, version, result, detail }] where result is one of
  * "already on npm", "published", "failed", "blocked", "refused".
  */
 export function publishAll(
   pkgs,
-  { isOnNpm, publish, checkVersion = () => null, isNew = () => false },
+  {
+    isOnNpm,
+    publish,
+    checkVersion = () => null,
+    isNew = () => false,
+    hasNotes = () => true,
+  },
 ) {
   const names = new Set(pkgs.map((p) => p.name));
   const ok = new Set(); // names whose current version is on npm
@@ -141,6 +152,15 @@ export function publishAll(
     const refusal = checkVersion(pkg);
     if (refusal) {
       results.push({ name, version, result: "refused", detail: refusal });
+      continue;
+    }
+    if (!hasNotes(pkg)) {
+      results.push({
+        name,
+        version,
+        result: "refused",
+        detail: `CHANGELOG.md has no "## [${name} ${version}]" section; add one (the release notes are built from it)`,
+      });
       continue;
     }
     if (publish(pkg)) {
@@ -300,7 +320,9 @@ async function main() {
         npmVersions,
       )
     : () => null;
+  const changelog = readFileSync(join(root, "CHANGELOG.md"), "utf8");
   const results = publishAll(workspacePackages(), {
+    hasNotes: (p) => changelogSection(changelog, p.name, p.version) !== null,
     isOnNpm: (name, version) => onNpm(name, version, 1),
     publish: publishWithNpm,
     checkVersion,
