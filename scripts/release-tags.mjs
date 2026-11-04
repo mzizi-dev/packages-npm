@@ -150,7 +150,11 @@ function main() {
         `${name} ${version}`,
         "--notes-file",
         file,
+        // Immutable releases lock the tag and assets on publish: create a
+        // draft, then publish it once; nothing edits it afterwards.
+        "--draft",
       ]);
+      run("gh", ["release", "edit", tag, "--repo", repo, "--draft=false"]);
     }
     console.log(`${tag}: tagged ${sha.slice(0, 7)} and released`);
     made++;
