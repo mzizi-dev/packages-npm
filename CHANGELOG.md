@@ -28,23 +28,27 @@ Versions published before then are not renumbered.
 - (repository) `AGENTS.md` gains a "Merge convention" section: squash through the merge queue, the `staging` queue's target config (`SQUASH`, no 5-minute wait) and what to do until the owner applies it (keep branches linear), enqueue as soon as the gate is met, the issue line every PR body needs, forward-porting `main`-only commits before a release, and that only a major needs the owner's go-ahead. No package or published output changes.
 - (repository) CI: bump `pnpm/action-setup` from 6.0.10 to 6.1.0 in the release and tokens workflows (Dependabot #95). No package or published output changes.
 - (repository) Dev tooling: bump `vite-plus` to 1.4.0, `astro` to 7.4.2 and `tailwindcss` to 4.3.3 (Dependabot #101, the minor-and-patch group). `pnpm test`, `pnpm check` and `pnpm build` pass on the bumped tree. The published `@bundu/ui` and `@bundu/server` output is unchanged.
-
-## [@bundu/ui 0.11.0] - 2026-11-04
-
-Releases `@bundu/ui` 0.11.0, the next minor above 0.10.0. It moves the mzizi-registry pin from 4.24.0 (`1ac4f81`) to 4.25.0 (`c3e6e87`), which holds every component to the spacing floor (mzizi-registry#622, owner ruling 2026-11-04, mzizi-registry#617): at least 14px inset from a component's edge to its content, 7px gaps, and 1.5 line height for body text. 0.10.0 carried the floor in the tokens; 0.11.0 carries it in the components.
-
-### Changed
-
-- (`@bundu/ui`) **Label chips and pills are inset 14px on the inline axis.** `Badge`, the hero status pill, `MziziVerifiedBadge` and the related status and source badges went from 8px (`px-2`) to 14px (`px-3.5`) of side padding, with a 7px gap between an icon and its label. A one-line chip or pill is held by its inline inset only; its height is its line height or fixed height (mzizi-registry#625 and #627).
-- (`@bundu/ui`) Inputs and the small button take the same 14px inline padding (`px-3.5`), and 37 Astro components (the app shell, Discover, address, alert, bar chart, data table, filter bar, forms, pagination, side nav, toolbars and more) were regenerated from the registry at the new pin with their padding and gaps on the floor. `src/ui/variants.ts`, `styles/density.css`, `src/markdown-parse.ts` and the contract test runner moved with them. Nothing was edited by hand: `pnpm registry:sync` wrote them all.
-- (`@bundu/ui`) Contracts still match the registry (77 contracts) and `tokens:check` is clean at the new pin.
-- **Visible change for consumers:** components that were tight are roomier. A site that overrides these classes locally will see its override and the new default disagree; remove the override rather than add another.
-
-- (`@bundu/ui`) Refreshed `tokens/canon.snapshot.json` from `api.mzizi.dev/v1/brand` (brand v4.0.31), which moved to the registry 4.23.0 canon: 15 `textLight` values changed slightly (for example `heritage.5` `#4A616B` to `#3E515A`). `pnpm tokens:build` regenerates no files from it, so no shipped token or CSS value changes; `canon:parity` is green again.
 - (`@bundu/ui`) Dev dependency: bump `domhandler` from 5.0.3 to 6.0.1 (Dependabot #87). It is used only by the contract test runner (`test/contract-runner.ts`), which already imports `isTag` from `domhandler`; `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`) Dev dependency: bump `htmlparser2` from 10.1.0 to 12.0.0 (Dependabot #84). It is used only by the contract test runner (`test/contract-runner.ts`); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
+
+## [@bundu/ui 0.11.0] - 2026-11-04
+
+Releases `@bundu/ui` 0.11.0, the next minor above 0.10.0. It moves the mzizi-registry pin from 4.24.0 (`1ac4f81`) to 4.25.0 (`c3e6e87`), which brings the components toward the spacing floor (mzizi-registry#622, owner ruling 2026-11-04, mzizi-registry#617): at least 14px of inline inset, gaps of at least 7px, and 1.5 line height for body text. 0.10.0 carried the floor in the tokens; 0.11.0 carries it into the components. It is not complete: see "Still under the floor" below.
+
+### Changed
+
+- (`@bundu/ui`) **Label chips and pills are inset 14px on the inline axis.** `Badge` went from 8px (`px-2`) to 14px (`px-3.5`) of side padding and from a 4px to an 8px icon-to-label gap; the hero status pill went from 12px to 14px. The verified and source badges, inputs and the small button take the same 14px. A one-line chip or pill is held by its inline inset only; its height is its line height or fixed height (mzizi-registry#625 and #627).
+- (`@bundu/ui`) **Gaps are wider.** About 55 class lists moved from `gap-0.5` (2px) or `gap-1` (4px) to `gap-2` (8px), which clears the 7px floor: rows in the side nav, command palette, menus and the tier ladder are roomier, and a long list is taller. Markdown table cells went from 8px to 14px of vertical padding and from 12px to 14px of side padding, so tables are taller.
+- (`@bundu/ui`) 37 Astro components, `src/ui/variants.ts`, `styles/density.css`, `src/markdown-parse.ts` and the contract test runner were regenerated from the registry at the new pin. Nothing was edited by hand: `pnpm registry:sync` wrote them. Contracts still match the registry (77) and `tokens:check` is clean.
+- (`@bundu/ui`) **Breaking** for consumers that relied on it: a bare `role="alert"` or `role="status"` (inline error and live-region text) no longer receives the 14px surface padding, and the `size-*` exemption now matches a whole class, so `resize-none` no longer exempts a textarea (mzizi-registry 4.25.0, "Base layer corrected"). A `data-slot="alert"` or `role="alertdialog"` box still gets it. Add padding on the element if you want it.
+- (`@bundu/ui`) A site that overrides these classes locally will see its override and the new default disagree; remove the override rather than add another.
+- (`@bundu/ui`) Refreshed `tokens/canon.snapshot.json` from `api.mzizi.dev/v1/brand` (brand v4.0.31), which moved to the registry 4.23.0 canon: 15 `textLight` values changed slightly (for example `heritage.5` `#4A616B` to `#3E515A`). `pnpm tokens:build` regenerates no files from it, so no shipped token or CSS value changes; `canon:parity` is green again.
+
+### Still under the floor
+
+Some text-bearing controls are still under 14px of inline padding after this sync: the `ToolbarMenu` and `DataTable` row-action summaries and the `QuickSearch` button (`px-2.5`), and `TopBarAction`, `CommandPalette` items, the `AppShell` search and `SideNav` group labels (`px-2`). The registry's contract runner does not see text inside a child span, so it does not flag them. This is an upstream gap, not a choice made here; it is fixed in the registry and arrives with a later pin. `evaluateSpacing` in the synced contract runner has no caller in this package, so nothing here fails when a component drops under the floor.
 
 ## [@bundu/ui 0.10.0] - 2026-11-04
 
