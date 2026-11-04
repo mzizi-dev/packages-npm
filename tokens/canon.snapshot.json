@@ -309,7 +309,7 @@
       "onContainerDark": "#EBA68A",
       "onContainerLight": "#7A3115",
       "textDark": "#EEC9BA",
-      "textLight": "#843D20",
+      "textLight": "#803B1F",
       "uiDark": "#BB562D",
       "uiLight": "#CD5F33"
     },
@@ -325,7 +325,7 @@
       "onContainerDark": "#B6CE23",
       "onContainerLight": "#48510E",
       "textDark": "#CDD69C",
-      "textLight": "#4D5615",
+      "textLight": "#4B5415",
       "uiDark": "#768420",
       "uiLight": "#7E8C22"
     },
@@ -341,7 +341,7 @@
       "onContainerDark": "#28DB28",
       "onContainerLight": "#0F570F",
       "textDark": "#A4DFA4",
-      "textLight": "#175E17",
+      "textLight": "#175C17",
       "uiDark": "#228D22",
       "uiLight": "#259725"
     },
@@ -357,7 +357,7 @@
       "onContainerDark": "#24D6BC",
       "onContainerLight": "#0E554B",
       "textDark": "#A3DCD4",
-      "textLight": "#165B51",
+      "textLight": "#16594F",
       "uiDark": "#218A7A",
       "uiLight": "#249383"
     },
@@ -373,7 +373,7 @@
       "onContainerDark": "#99B2EE",
       "onContainerLight": "#1A409B",
       "textDark": "#C4D1F1",
-      "textLight": "#284CA6",
+      "textLight": "#274AA1",
       "uiDark": "#426CD1",
       "uiLight": "#577BD6"
     },
@@ -389,7 +389,7 @@
       "onContainerDark": "#CC9FEF",
       "onContainerLight": "#661B9E",
       "textDark": "#DFC8F2",
-      "textLight": "#742AAD",
+      "textLight": "#6F28A6",
       "uiDark": "#9749D3",
       "uiLight": "#A35DD8"
     },
@@ -405,7 +405,7 @@
       "onContainerDark": "#ED98C9",
       "onContainerLight": "#841656",
       "textDark": "#F1C4DD",
-      "textLight": "#932464",
+      "textLight": "#8F2361",
       "uiDark": "#CA3188",
       "uiLight": "#D34998"
     }
@@ -432,7 +432,7 @@
       "origin": "Sub-Saharan grasslands",
       "symbolism": "Sun-dried grass, open land, the dry season",
       "textDark": "#EBCF7D",
-      "textLight": "#725915",
+      "textLight": "#614C12",
       "usage": "Warm grassland surfaces, daylight atmosphere"
     },
     {
@@ -456,7 +456,7 @@
       "origin": "The African horizon at dusk",
       "symbolism": "Day's end, warmth, the gathering hour",
       "textDark": "#FFC3B0",
-      "textLight": "#A43310",
+      "textLight": "#8F2C0E",
       "usage": "Warm accent surfaces, golden-hour atmosphere"
     },
     {
@@ -468,7 +468,7 @@
       "origin": "The great African rivers — Zambezi, Nile, Congo",
       "symbolism": "Flow, life, the journey",
       "textDark": "#84DFEA",
-      "textLight": "#006064",
+      "textLight": "#00585C",
       "usage": "Cool surfaces, flowing atmosphere, water tones"
     },
     {
@@ -480,7 +480,7 @@
       "origin": "Sishen & Thabazimbi, South Africa",
       "symbolism": "Foundation, endurance, the substrate",
       "textDark": "#C9D2D7",
-      "textLight": "#4A616B",
+      "textLight": "#3E515A",
       "usage": "Neutral anchor, mini-app surfaces, atmosphere"
     },
     {
@@ -492,7 +492,7 @@
       "origin": "Kalahari & Namib, Southern Africa",
       "symbolism": "Openness, space, the light pole",
       "textDark": "#E8D9B5",
-      "textLight": "#675C46",
+      "textLight": "#564E3B",
       "usage": "Light anchor, warm backgrounds, mini-app surfaces"
     }
   ],
@@ -589,7 +589,7 @@
       "sortOrder": 4,
       "symbolism": "Earth, community, grounding",
       "textDark": "#EBCCA3",
-      "textLight": "#8E4928",
+      "textLight": "#7B3F23",
       "usage": "Community features, warmth"
     },
     {
@@ -627,7 +627,7 @@
       "sortOrder": 6,
       "symbolism": "Connection, foundation, stewardship",
       "textDark": "#FFC3B0",
-      "textLight": "#93452A",
+      "textLight": "#7E3B24",
       "usage": "Bundu ecosystem identity, the commons"
     }
   ],
