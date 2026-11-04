@@ -257,13 +257,20 @@ describe("the spacing floor (#617)", () => {
   });
 
   it("applies the floor in the base layer", () => {
+    // Anchored on the rules' own selectors, not on the declarations: the
+    // px-inset-floor, p-inset-floor and gap-gap-floor utilities compile to the
+    // same declarations, so a bare declaration match would pass without them.
     const text = flat(css);
     expect(text).toMatch(
-      /line-height: max\(var\(--lh-body\), var\(--leading-floor\)\)/,
+      /body \{ line-height: max\(var\(--lh-body\), var\(--leading-floor\)\)/,
     );
-    expect(text).toMatch(/padding-inline: var\(--inset-floor\)/); // controls with text
-    expect(text).toMatch(/padding: var\(--inset-floor\)/); // dialogs, alerts, cards
-    expect(text).toMatch(/gap: var\(--gap-floor\)/); // toolbars, groups, lists
+    expect(text).toMatch(
+      /\[role="tab"\][^{]*\{ padding-inline: var\(--inset-floor\)/,
+    ); // controls with text
+    expect(text).toMatch(
+      /dialog,[^{]*\[role="alert"\][^{]*\{ padding: var\(--inset-floor\)/,
+    ); // dialogs, alerts, cards
+    expect(text).toMatch(/\[role="toolbar"\][^{]*\{ gap: var\(--gap-floor\)/); // toolbars, groups, lists
   });
 
   it("keeps the legacy opt-out, which zeroes the floors", () => {
