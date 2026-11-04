@@ -1,0 +1,51 @@
+name: Release notes
+
+# Owner, 2026-11-04: "Every release should have release notes too with a
+# changelog." On a `release/*` pull request into `main`, every package whose
+# version it bumps must already have its `## [<name> <version>]` section in
+# CHANGELOG.md; the notes the release will carry are printed in the run summary
+# so they can be pasted into the pull request body. (The release itself checks
+# the same before npm publish: scripts/release-publish.mjs.)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - packages/*/package.json
+      - CHANGELOG.md
+
+permissions:
+  contents: read
+
+jobs:
+  release-pr:
+    name: release notes / release PR
+    if: startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Every bumped version has changelog notes
+        run: |
+          set -euo pipefail
+          cat > ./.release-notes-check.mjs <<'JS'
+          import { execFileSync } from "node:child_process";
+          import { readFileSync } from "node:fs";
+          import { releaseNotes, workspacePackages } from "./scripts/release-tags.mjs";
+          const changelog = readFileSync("CHANGELOG.md", "utf8");
+          for (const p of workspacePackages()) {
+            const old = JSON.parse(
+              execFileSync("git", ["show", `origin/main:packages/${p.dir.split("/").pop()}/package.json`], { encoding: "utf8" }),
+            ).version;
+            if (old === p.version) continue;
+            console.log(`${p.name} ${old} -> ${p.version}`);
+            const repo = process.env.GITHUB_REPOSITORY;
+            const tag = `${p.name}@${p.version}`;
+            const { name, version } = p;
+            console.log(releaseNotes({ changelog, name, version, repo, tag }));
+          }
+          JS
+          node ./.release-notes-check.mjs | tee -a "$GITHUB_STEP_SUMMARY"
