@@ -210,6 +210,22 @@ describe("first publish of a never-published package", () => {
     expect(published).toEqual(["@nyuchi/ui"]);
   });
 
+  test("a version with no changelog section is refused before npm sees it", () => {
+    const published = [];
+    const results = publishAll(pkgs, {
+      isOnNpm: () => false,
+      hasNotes: (p) => p.name !== "@nyuchi/ui",
+      publish: (p) => {
+        published.push(p.name);
+        return true;
+      },
+    });
+    const by = Object.fromEntries(results.map((r) => [r.name, r]));
+    expect(by["@nyuchi/ui"].result).toBe("refused");
+    expect(by["@nyuchi/ui"].detail).toContain("CHANGELOG.md has no");
+    expect(published).not.toContain("@nyuchi/ui");
+  });
+
   test("the first-publish message names the package and the manual steps", () => {
     const msg = firstPublishMessage("@bundu/server");
     expect(msg).toMatch(/^@bundu\/server has never been published/);
