@@ -48,7 +48,7 @@ Releases `@bundu/ui` 0.11.0, the next minor above 0.10.0. It moves the mzizi-reg
 
 ### Still under the floor
 
-Some text-bearing controls are still under 14px of inline padding after this sync: the `ToolbarMenu` and `DataTable` row-action summaries and the `QuickSearch` button (`px-2.5`), and `TopBarAction`, `CommandPalette` items, the `AppShell` search and `SideNav` group labels (`px-2`). The registry's contract runner does not see text inside a child span, so it does not flag them. This is an upstream gap, not a choice made here; it is fixed in the registry and arrives with a later pin. `evaluateSpacing` in the synced contract runner has no caller in this package, so nothing here fails when a component drops under the floor.
+Some text-bearing controls are still under 14px of inline padding after this sync: the `ToolbarMenu` and `DataTable` row-action summaries and the `QuickSearch` button (`px-2.5`), and `TopBarAction`, `CommandPalette` items, the `AppShell` search and `SideNav` group labels (`px-2`). The registry's contract runner does not see text inside a child span, so it does not flag them. This is an upstream gap, not a choice made here; it needs a fix in the registry and arrives with a later pin. `evaluateSpacing` in the synced contract runner has no caller in this package, so nothing here fails when a component drops under the floor.
 
 ## [@bundu/ui 0.10.0] - 2026-11-04
 
