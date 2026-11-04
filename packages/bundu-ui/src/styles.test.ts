@@ -1,9 +1,9 @@
 // The package stylesheet, compiled with Tailwind v4 the way an app does:
 // `@import "tailwindcss"; theme.css; globals.css`. It holds the Bundu floor
-// (mzizi-registry 4.23.0) to what the components need: the size utilities
+// (mzizi-registry 4.23.0) and the spacing floor (4.24.0, #617) to what the components need: the size utilities
 // they use resolve, the body, caption and hit-area floors are in, the legacy
 // alias is there, and the hand-written globals.css classes sit at or above it.
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,6 +21,9 @@ const UTILITIES = [
   "size-control-icon",
   "h-field",
   "min-h-touch-min",
+  "px-inset-floor",
+  "p-inset-floor",
+  "gap-gap-floor",
   "text-xs",
   "text-sm",
   "text-base",
@@ -89,6 +92,9 @@ function px(value: string, vars: Map<string, string>): number {
     if (next === undefined) throw new Error(`${ref[1]} is not defined`);
     return px(next, vars);
   }
+  const calc = /^calc\(\s*var\(--spacing\)\s*\*\s*([\d.]+)\s*\)$/.exec(v);
+  if (calc)
+    return px(vars.get("--spacing") ?? "0.25rem", vars) * Number(calc[1]);
   const rem = /^([\d.]+)rem$/.exec(v);
   if (rem) return Number(rem[1]) * 16;
   const pixels = /^([\d.]+)px$/.exec(v);
@@ -175,7 +181,7 @@ describe("the Bundu floor", () => {
     expect(px("var(--control-floor)", vars)).toBe(49);
     expect(flat(css)).toMatch(/--control-floor: 1\.75rem/); // desktop density: 28px
     for (const [name, value] of vars) {
-      if (/^--size-(?!control-dense)/.test(name)) {
+      if (/^--size-(?!control-dense|inset-floor|gap-floor)/.test(name)) {
         expect(px(value, vars), name).toBeGreaterThanOrEqual(49);
       }
     }
@@ -234,5 +240,115 @@ describe("styles/globals.css classes are not under the floor", () => {
       readFileSync(resolve(styles, "../package.json"), "utf8"),
     );
     expect(pkg.exports["./styles/density.css"]).toBe("./styles/density.css");
+  });
+});
+
+describe("the spacing floor (#617)", () => {
+  const density = readFileSync(resolve(styles, "density.css"), "utf8");
+
+  it("sets the floors: inset 14px, gap 7px, body leading 1.5", () => {
+    const vars = rootDefaults();
+    expect(px("var(--inset-floor)", vars)).toBe(14);
+    expect(px("var(--gap-floor)", vars)).toBe(7);
+    expect(vars.get("--leading-floor")).toBe("1.5");
+    expect(px(declared(".px-inset-floor", "padding-inline"), vars)).toBe(14);
+    expect(px(declared(".p-inset-floor", "padding"), vars)).toBe(14);
+    expect(px(declared(".gap-gap-floor", "gap"), vars)).toBe(7);
+  });
+
+  it("applies the floor in the base layer", () => {
+    // Anchored on the rules' own selectors, not on the declarations: the
+    // px-inset-floor, p-inset-floor and gap-gap-floor utilities compile to the
+    // same declarations, so a bare declaration match would pass without them.
+    const text = flat(css);
+    expect(text).toMatch(
+      /body \{ line-height: max\(var\(--lh-body\), var\(--leading-floor\)\)/,
+    );
+    expect(text).toMatch(
+      /\[role="tab"\][^{]*\{ padding-inline: var\(--inset-floor\)/,
+    ); // controls with text
+    expect(text).toMatch(
+      /dialog,[^{]*\[role="alert"\][^{]*\{ padding: var\(--inset-floor\)/,
+    ); // dialogs, alerts, cards
+    expect(text).toMatch(/\[role="toolbar"\][^{]*\{ gap: var\(--gap-floor\)/); // toolbars, groups, lists
+  });
+
+  it("keeps the legacy opt-out, which zeroes the floors", () => {
+    const legacy = /:root\[data-mzizi-sizes="legacy"\] \{([^}]*)\}/.exec(
+      flat(css),
+    );
+    expect(legacy).not.toBeNull();
+    expect(legacy![1]).toMatch(/--inset-floor: 0px/);
+    expect(legacy![1]).toMatch(/--gap-floor: 0px/);
+    expect(legacy![1]).toMatch(/--leading-floor: 1;/);
+  });
+
+  it("is not lowered by any other stylesheet, brand pack or density layer", () => {
+    const FLOOR = /--(?:inset-floor|gap-floor|leading-floor)\s*:/;
+    for (const name of readdirSync(styles).filter((f) => f.endsWith(".css"))) {
+      if (name === "density.css") continue;
+      expect(
+        readFileSync(resolve(styles, name), "utf8"),
+        `${name} must not redefine a spacing floor`,
+      ).not.toMatch(FLOOR);
+    }
+    // in density.css only the root default and the legacy opt-out set them,
+    // never a media (density) layer
+    const media = [...density.matchAll(/@media[^{]*\{([\s\S]*?\n\})/g)].map(
+      (m) => m[1],
+    );
+    expect(media.length).toBeGreaterThan(0);
+    for (const block of media) expect(block).not.toMatch(FLOOR);
+    const decls = [
+      ...density.matchAll(/(--(?:inset-floor|gap-floor|leading-floor)):/g),
+    ].map((m) => m[1]);
+    expect(decls.sort()).toEqual(
+      [
+        "--gap-floor",
+        "--gap-floor",
+        "--inset-floor",
+        "--inset-floor",
+        "--leading-floor",
+        "--leading-floor",
+      ].sort(),
+    );
+  });
+
+  it("holds the hand-written globals.css classes to it", () => {
+    const vars = rootDefaults();
+    for (const sel of [
+      ".badge",
+      ".badge-primary",
+      ".badge-success",
+      ".badge-warning",
+      ".badge-info",
+      ".badge-accent",
+      ".badge-premium",
+    ]) {
+      expect(
+        px(declared(sel, "padding-inline"), vars),
+        sel,
+      ).toBeGreaterThanOrEqual(14);
+    }
+    for (const sel of [".btn-primary", ".btn-secondary", ".btn-outline"]) {
+      expect(
+        px(declared(sel, "padding-inline"), vars),
+        sel,
+      ).toBeGreaterThanOrEqual(14);
+    }
+    expect(
+      px(declared(".btn-ghost", "padding-inline"), vars),
+    ).toBeGreaterThanOrEqual(14);
+    expect(
+      px(declared(".input", "padding-inline"), vars),
+    ).toBeGreaterThanOrEqual(14);
+    for (const sel of [
+      ".btn-primary",
+      ".btn-secondary",
+      ".btn-outline",
+      ".btn-ghost",
+    ]) {
+      expect(px(declared(sel, "gap"), vars), sel).toBeGreaterThanOrEqual(7);
+    }
   });
 });
