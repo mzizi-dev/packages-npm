@@ -3,7 +3,7 @@
  *
  * Derived by `pnpm registry:sync` (scripts/registry-density.mjs) from
  * mzizi-registry's components/registry/n1-tokens/mzizi-tokens-globals.css at
- * efb5f3a6955a; `pnpm registry:check` holds it to that. Change the registry,
+ * 1ac4f81a0571; `pnpm registry:check` holds it to that. Change the registry,
  * bump scripts/registry-ref.json, sync.
  *
  * What it is: body text 17px, captions 14px, a 49px hit region on every
@@ -16,13 +16,20 @@
  *   @import "@bundu/ui/styles/theme.css";
  *   @import "@bundu/ui/styles/density.css";
  *
+ * The spacing floor (#617) rides with it: `--inset-floor` 14px (text inset),
+ * `--gap-floor` 7px (control, label and item gaps), `--leading-floor` 1.5
+ * (body line height), the `p-inset-floor` / `gap-gap-floor` utilities, and the
+ * base-layer rules that apply them. Nothing may lower them.
+ *
  * `:root[data-mzizi-sizes="legacy"]` restores the pre-floor sizes (16px body,
- * 12px captions, 48/56px controls) until an app has migrated.
+ * 12px captions, 48/56px controls, no spacing floor) until an app has migrated.
  * ════════════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   --spacing-touch: max( var(--size-touch), var(--control-floor) );
   --spacing-touch-min: var( --target-floor );
+  --spacing-inset-floor: var( --inset-floor );
+  --spacing-gap-floor: var( --gap-floor );
   --spacing-control: max( var(--size-control), var(--control-floor) );
   --spacing-control-sm: max( var(--size-control-sm), var(--control-floor) );
   --spacing-control-lg: max( var(--size-control-lg), var(--control-floor) );
@@ -74,9 +81,14 @@
   --h-button-sm: 3.0625rem;
   --h-input: 3.0625rem;
   --target-floor: 3.0625rem;
+  --inset-floor: 0.875rem;
+  --gap-floor: 0.4375rem;
+  --leading-floor: 1.5;
   --control-floor: 3.0625rem;
   --size-touch: 3.0625rem;
   --size-touch-min: 3.0625rem;
+  --size-inset-floor: 0.875rem;
+  --size-gap-floor: 0.4375rem;
   --size-control: 3.0625rem;
   --size-control-sm: 3.0625rem;
   --size-control-lg: 3.5rem;
@@ -136,6 +148,91 @@
   }
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+ * THE SPACING FLOOR (owner, 2026-11-04, #617; `BUNDU_FLOOR.spacing`): minimums that nothing can go under, even a
+ * component that sets no padding at all. Inset 14px, gaps 7px, body leading 1.5.
+ * These are DEFAULTS in the base layer, like the hit-area rule above: a bare element gets the floor, and a utility
+ * on it (`p-6`, `gap-2`) is the author's own value, which `__tests__/spacing-floor.test.ts` holds to the floor
+ * for every registry component. They step aside, by design, for:
+ *   - controls with no text to inset: an icon-only button (`> svg:only-child`), an empty one, an `svg` (a spinner with `role="status"`), a fixed square
+ *     (`size-*`), a calendar day (`[data-day]`), and the native checkbox, radio, range, colour and file inputs;
+ *   - a surface whose padding lives on its structured children (a card with `card-header` / `card-content`
+ *     slots): padding the root as well would pad twice. The children carry the inset, and the test holds them to it.
+ * A control's BLOCK axis is not inset here: its height floors (the 28px drawn minimum, the 49px hit
+ * region) already decide it, and 14px of block padding does not fit a 28px control.
+ * The legacy opt-out (data-mzizi-sizes="legacy", last in this file) sets the three variables to 0, 0 and 1: every rule below becomes a no-op.
+ * ════════════════════════════════════════════════════════════════════════════ */
+@layer base {
+  body {
+    line-height: max(var(--lh-body), var(--leading-floor));
+  }
+  :is(
+    button,
+    [role="button"],
+    [role="tab"],
+    [role="menuitem"],
+    [role="menuitemcheckbox"],
+    [role="menuitemradio"],
+    [role="option"],
+    select,
+    textarea,
+    input:not(
+      [type="checkbox"],
+      [type="radio"],
+      [type="range"],
+      [type="hidden"],
+      [type="file"],
+      [type="color"],
+      [type="image"]
+    )
+  ):not(
+    :has(> svg:only-child, > img:only-child),
+    :empty,
+    [class*="size-"],
+    [data-day]
+  ) {
+    padding-inline: var(--inset-floor);
+  }
+  :where(
+    dialog,
+    [popover],
+    [role="alert"],
+    [role="status"],
+    [role="alertdialog"],
+    [role="tooltip"],
+    [data-slot="card"],
+    [data-slot="alert"]
+  ):not(
+    :has(
+      > [data-slot*="header"],
+      > [data-slot*="content"],
+      > [data-slot*="footer"],
+      > [data-slot*="title"],
+      > [data-slot*="description"]
+    ),
+    svg,
+    :empty,
+    [class*="size-"]
+  ) {
+    padding: var(--inset-floor);
+  }
+  :where(
+    [role="toolbar"],
+    [role="tablist"],
+    [role="radiogroup"],
+    [role="group"],
+    [role="menu"],
+    [role="listbox"],
+    [role="list"],
+    ul,
+    ol,
+    menu,
+    fieldset
+  ) {
+    gap: var(--gap-floor);
+  }
+}
+
 @media (min-width: 48rem) {
   :root {
     --fs-display: 3rem; /* 48px */
@@ -172,6 +269,9 @@
    steps OUT of the Bundu floor: 16px body, 12px captions, 48px targets); remove it to take the floor. */
 :root[data-mzizi-sizes="legacy"] {
   --target-floor: 3rem; /* 48px */
+  --inset-floor: 0px; /* no spacing floor (steps out of #617) */
+  --gap-floor: 0px;
+  --leading-floor: 1;
   --control-floor: 3rem; /* 48px */
   --touch-target-lg: 56px;
   --touch-target: 48px;
