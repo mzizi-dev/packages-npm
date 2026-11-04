@@ -66,8 +66,16 @@ if (
   process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
-  const tsc = createRequire(join(PKG, "package.json")).resolve(
-    "typescript/bin/tsc",
+  // TypeScript 7 no longer exports `typescript/bin/tsc`, so locate the
+  // package through its (always exported) package.json instead.
+  const tsc = join(
+    dirname(
+      createRequire(join(PKG, "package.json")).resolve(
+        "typescript/package.json",
+      ),
+    ),
+    "bin",
+    "tsc",
   );
   rmSync(DIST, { recursive: true, force: true });
   execFileSync(process.execPath, [tsc, "-p", "tsconfig.build.json"], {
