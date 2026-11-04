@@ -268,8 +268,14 @@ describe("the spacing floor (#617)", () => {
       /\[role="tab"\][^{]*\{ padding-inline: var\(--inset-floor\)/,
     ); // controls with text
     expect(text).toMatch(
-      /dialog,[^{]*\[role="alert"\][^{]*\{ padding: var\(--inset-floor\)/,
-    ); // dialogs, alerts, cards
+      /dialog,[^{]*\[role="alertdialog"\][^{]*\{ padding: var\(--inset-floor\)/,
+    ); // dialogs, alert surfaces, cards
+    // A bare role="alert" or role="status" is inline error or live-region text,
+    // not a surface, so it takes no surface padding (mzizi-registry 4.25.0,
+    // "Base layer corrected"). A data-slot="alert" box still does.
+    expect(text).not.toMatch(
+      /\[role="(alert|status)"\][^{]*\{ padding: var\(--inset-floor\)/,
+    );
     expect(text).toMatch(/\[role="toolbar"\][^{]*\{ gap: var\(--gap-floor\)/); // toolbars, groups, lists
   });
 
