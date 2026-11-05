@@ -33,6 +33,23 @@ Versions published before then are not renumbered.
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 
+## [@bundu/ui 0.13.0] - 2026-11-05
+
+Releases `@bundu/ui` 0.13.0, the next minor above 0.12.0. It takes the upstream fix for the controls that 0.11.0 and 0.12.0 listed as still under the floor: the registry moved to v4.27.0 (mzizi-registry#631, #634), and `pnpm registry:sync` rebuilt the components from it.
+
+### Fixed
+
+- (`@bundu/ui`) **Six synced controls take 14px of side padding.** The Bundu floor holds a one-line label chip or pill to a 14px inline inset (mzizi-registry#625, #627). These had 8px or 10px, and now have 14px (`px-3.5`): the `ToolbarMenu` summary and the `DataTable` row-action summary (were 10px), `QuickSearch` (was 10px), the `SideNav` group label (was 10px), `TopBarAction` and the `CommandPalette` items and group heading (were 8px). Heights are unchanged, so every control keeps its hit region.
+
+### Changed
+
+- (`@bundu/ui`) The synced sources, the density stylesheet and the contract runner say "Rust" where they said "Dioxus" in comments and one schema description (mzizi-registry#636). No behaviour changes.
+- (repository) `scripts/registry-ref.json` moves from `c3e6e87` (registry v4.25.0) to `a55fbdb` (registry v4.27.0).
+
+### Still under the floor
+
+Three places keep their padding on purpose, as the registry states: the `AppShell` sidebar-search wrapper (`px-2`, a shared gutter; the search control itself is `QuickSearch`, which is fixed), the `SideNav` navigation rows (`px-2.5`) and the top bar (`px-2`). The group labels now sit 4px inward of the rows.
+
 ## [@bundu/ui 0.12.0] - 2026-11-04
 
 Releases `@bundu/ui` 0.12.0, the next minor above 0.11.0. It finishes the part of the spacing floor that 0.11.0 missed on the two components mzizi-site renders from React: the hand-written `Badge` and `Tooltip` in `src/ui`, which the registry sync never touches. The registry pin is unchanged (4.25.0, `c3e6e87`) and `@bundu/server` is unchanged.
