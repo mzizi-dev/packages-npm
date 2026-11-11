@@ -109,7 +109,7 @@ export function TabsList({
       data-slot="tabs-list"
       onKeyDown={onKeyDown}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full bg-muted p-1",
+        "inline-flex items-center gap-2 rounded-full bg-muted p-1",
         astroClass,
         className,
       )}

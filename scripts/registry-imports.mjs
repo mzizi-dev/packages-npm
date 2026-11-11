@@ -20,7 +20,15 @@
 import { posix } from "node:path";
 
 /** `from "…"` and `import "…"` / `import("…")` specifiers. */
-const SPECIFIER = /(\bfrom\s*|\bimport\s*\(?\s*)(["'])(\.\/[^"']+)\2/g;
+const SPECIFIER =
+  /(\bfrom\s*|\bimport\s*\(?\s*)(["'])((?:\.\/|@\/lib\/)[^"']+)\2/g;
+
+/**
+ * `@/lib/<name>`: how a registry `.tsx` imports a framework-free registry
+ * module (`@/lib/ui-utils`), the form it installs under with shadcn. Only the
+ * `.tsx` builds use it; `.astro` and `.ts` files import flat.
+ */
+const LIB_ALIAS = /^@\/lib\/([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 
 /** `./name`, `./name.astro`, `./name.js`, or `./assets/<file>`. */
 function parseFlat(spec) {
@@ -51,7 +59,8 @@ function relativeImport(fromPath, toPath) {
 export function toPackage(source, registryPath, pkg, packagePath, map) {
   const missing = [];
   const out = source.replace(SPECIFIER, (whole, lead, q, spec) => {
-    const flat = parseFlat(spec);
+    const alias = LIB_ALIAS.exec(spec);
+    const flat = alias ? { name: alias[1], ext: "" } : parseFlat(spec);
     if (!flat) {
       missing.push(spec);
       return whole;
@@ -120,6 +129,9 @@ export function toRegistry(source, registryPath, pkg, packagePath, map) {
         return whole;
       }
       const suffix = abs.endsWith(".astro") ? ".astro" : js ? ".js" : "";
+      // A registry .tsx reaches a module through its install path.
+      if (packagePath.endsWith(".tsx") && !abs.endsWith(".astro"))
+        return `${lead}${q}@/lib/${name}${q}`;
       return `${lead}${q}./${name}${suffix}${q}`;
     },
   );

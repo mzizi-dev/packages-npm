@@ -31,6 +31,20 @@ describe("registry-imports", () => {
     );
   });
 
+  test("maps a registry .tsx's @/lib/<module> import to the package layout", () => {
+    expect(
+      toPackage(
+        `import { cn } from "@/lib/ui-utils";\nimport { buttonVariants } from "@/lib/ui-variants";\n`,
+        "n2-primitives/react-button.tsx",
+        "bundu-ui",
+        "src/ui/button.tsx",
+        map,
+      ),
+    ).toBe(
+      `import { cn } from "../lib/utils";\nimport { buttonVariants } from "./variants";\n`,
+    );
+  });
+
   test("keeps a .js suffix for the server package's NodeNext imports", () => {
     expect(
       toPackage(
