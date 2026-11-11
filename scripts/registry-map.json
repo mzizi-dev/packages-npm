@@ -350,6 +350,81 @@
       "path": "src/qr-matrix.ts",
       "registry": "n2-primitives/qr-matrix.ts"
     },
+    "react-alert": {
+      "package": "bundu-ui",
+      "path": "src/ui/alert.tsx",
+      "registry": "n2-primitives/react-alert.tsx"
+    },
+    "react-avatar": {
+      "package": "bundu-ui",
+      "path": "src/ui/avatar.tsx",
+      "registry": "n2-primitives/react-avatar.tsx"
+    },
+    "react-badge": {
+      "package": "bundu-ui",
+      "path": "src/ui/badge.tsx",
+      "registry": "n2-primitives/react-badge.tsx"
+    },
+    "react-button": {
+      "package": "bundu-ui",
+      "path": "src/ui/button.tsx",
+      "registry": "n2-primitives/react-button.tsx"
+    },
+    "react-card": {
+      "package": "bundu-ui",
+      "path": "src/ui/card.tsx",
+      "registry": "n2-primitives/react-card.tsx"
+    },
+    "react-checkbox": {
+      "package": "bundu-ui",
+      "path": "src/ui/checkbox.tsx",
+      "registry": "n2-primitives/react-checkbox.tsx"
+    },
+    "react-input": {
+      "package": "bundu-ui",
+      "path": "src/ui/input.tsx",
+      "registry": "n2-primitives/react-input.tsx"
+    },
+    "react-label": {
+      "package": "bundu-ui",
+      "path": "src/ui/label.tsx",
+      "registry": "n2-primitives/react-label.tsx"
+    },
+    "react-select": {
+      "package": "bundu-ui",
+      "path": "src/ui/select.tsx",
+      "registry": "n2-primitives/react-select.tsx"
+    },
+    "react-separator": {
+      "package": "bundu-ui",
+      "path": "src/ui/separator.tsx",
+      "registry": "n2-primitives/react-separator.tsx"
+    },
+    "react-skeleton": {
+      "package": "bundu-ui",
+      "path": "src/ui/skeleton.tsx",
+      "registry": "n2-primitives/react-skeleton.tsx"
+    },
+    "react-switch": {
+      "package": "bundu-ui",
+      "path": "src/ui/switch.tsx",
+      "registry": "n2-primitives/react-switch.tsx"
+    },
+    "react-tabs": {
+      "package": "bundu-ui",
+      "path": "src/ui/tabs.tsx",
+      "registry": "n2-primitives/react-tabs.tsx"
+    },
+    "react-textarea": {
+      "package": "bundu-ui",
+      "path": "src/ui/textarea.tsx",
+      "registry": "n2-primitives/react-textarea.tsx"
+    },
+    "react-tooltip": {
+      "package": "bundu-ui",
+      "path": "src/ui/tooltip.tsx",
+      "registry": "n2-primitives/react-tooltip.tsx"
+    },
     "safe-area": {
       "package": "bundu-ui",
       "path": "src/safe-area.ts",

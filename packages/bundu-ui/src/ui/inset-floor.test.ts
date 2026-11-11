@@ -4,12 +4,12 @@ import { describe, expect, it } from "vitest";
 // The spacing floor (mzizi-registry#617, #627): text keeps at least 14px of
 // inset from the edge of the box that draws it. For a one-line label chip or
 // pill (a Badge) only the inline axis is held; its block axis is its line
-// height. This scans the hand-written React primitives in src/ui for side
+// height. This scans the React primitives in src/ui for side
 // padding under the floor, so a new primitive cannot go under it unnoticed.
 //
-// These .tsx files are hand-written (not in scripts/registry-map.json) and
-// `react` is only a peer dependency here, so they cannot be imported in a
-// test; their class strings are read from source.
+// These .tsx files are built from the registry's react-* items (they are in
+// scripts/registry-map.json) and `react` is only a peer dependency here, so
+// they cannot be imported in a test; their class strings are read from source.
 const INSET_FLOOR_PX = 14;
 const PX_PER_SPACING_UNIT = 4;
 
@@ -26,7 +26,7 @@ function sidePaddings(source: string): { token: string; px: number }[] {
   }));
 }
 
-describe("hand-written React primitives keep the inline inset floor", () => {
+describe("React primitives keep the inline inset floor", () => {
   it("finds the primitives", () => {
     expect(files).toContain("badge.tsx");
     expect(files).toContain("tooltip.tsx");
