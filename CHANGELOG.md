@@ -39,6 +39,7 @@ Releases `@bundu/ui` 0.14.0, the next minor above 0.13.0. The package's exports 
 - (`@bundu/ui`) Dev dependency: bump `domutils` from 3.2.2 to 4.0.2 (Dependabot #85). It is used only by the contract test runner (`test/contract-runner.ts`), which imports `isTag` from `domhandler` as domutils 4 requires (mzizi-registry#494); `pnpm test`, `pnpm check` and `pnpm build` pass. Nothing published changes.
 - (`@bundu/ui`, `@bundu/server`) Dev dependency: bump `typescript` from 5.9.3 to 7.0.2 (Dependabot #97). TypeScript 7 no longer exports `typescript/bin/tsc`, which broke `@bundu/ui`'s `scripts/build-js.mjs` (the `dist/` build of the plain `.ts` exports); the script now locates `tsc` through `typescript/package.json`. Both builds pass on 7.0.2, and the emitted `dist/` matches the 5.9.3 build except for the order of string-literal union members in one `.d.ts` (`ui/variants.d.ts`), which is the same type. Nothing else published changes.
 - (repository) `scripts/registry-ref.json` points at registry `main` (`f673a91ff03d`, v4.28.0) instead of a registry staging commit that `main` no longer contains; the synced sources and contracts are unchanged, and only the density stylesheet's recorded commit moves.
+- (repository) `tokens/canon.snapshot.json` is refreshed from `api.mzizi.dev/v1/brand` after the API's registry pin moved to v4.28.0 (the `bundu` ecosystem description now names four pillars governed by the Bundu Foundation, mzizi-registry#632). Only that description changes; the generated token files are identical.
 
 ## [@bundu/ui 0.13.0] - 2026-11-05
 
