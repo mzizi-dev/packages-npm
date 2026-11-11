@@ -13,7 +13,7 @@ import { cn } from "../lib/utils";
  * as-is.
  */
 export const selectClasses =
-  "flex h-12 w-full appearance-none rounded-lg border border-border bg-background px-4 text-body text-foreground transition-colors outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
+  "flex h-field w-full appearance-none rounded-lg border border-border bg-background px-4 text-body text-foreground transition-colors outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed";
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   /** Astro-style class attribute (merged with `className`). */

@@ -11,8 +11,8 @@ import { cn } from "../lib/utils";
  * `role="switch"` and `aria-checked`, supporting both controlled
  * (`checked` + `onCheckedChange`) and uncontrolled (`defaultChecked`)
  * use. It expands its hit area to the Ubuntu 48px touch-target floor
- * with `p-3 -m-3` (padding out, negative margin back) so the visual
- * track stays compact while the tap target stays large. Colours come
+ * with padding out and a negative margin back, so the visual track
+ * stays compact while the tap target stays large. Colours come
  * from the semantic `primary` / `muted` tokens — no hex.
  */
 export interface SwitchProps {
@@ -65,6 +65,7 @@ export function Switch({
       data-state={isOn ? "checked" : "unchecked"}
       onClick={toggle}
       className={cn(
+        // spacing-floor: exception the switch holds no text; the negative margin cancels the padding that grows its hit area, so layout is unchanged.
         "group relative box-content inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full p-3 -m-3 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
         astroClass,
         className,
