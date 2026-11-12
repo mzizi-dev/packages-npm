@@ -23,6 +23,7 @@ Versions published before then are not renumbered.
 
 ### Changed
 
+- (repository) `AGENTS.md` state the owner's release rule: the owner approves major releases only; minor and patch releases (the `staging` → `main` release PR, its tag and the sync-back into `staging`) and merges of green PRs that have passed review are done by agents following the repo's playbook, without asking the owner (owner, 2026-11-02). The "Releases" bullet and the progress-report line (report ticks never publish, release, merge or deploy without the owner's approval) now state it. Merge method, the merge gate, auto-merge and the changelog rules are unchanged. Nothing served or published changes. Refs [mzizi-dev/mzizi-registry#661](https://github.com/mzizi-dev/mzizi-registry/issues/661).
 - (repository) `scripts/registry-ref.json` moves from `f673a91` (registry v4.28.0) to `a64e57f` (registry v4.29.0, the commit `api.mzizi.dev` is pinned to). The synced sources and contracts are unchanged (`registry:check` and `contracts:check` pass); only the commit recorded in `packages/bundu-ui/styles/density.css` moves. No package version change, so nothing is published for it.
 
 ## [@bundu/ui 0.14.0] - 2026-11-11
