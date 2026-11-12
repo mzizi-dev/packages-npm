@@ -92,13 +92,17 @@ export function changelogSection(changelog, name, version) {
 
 /**
  * Whether npm serves this exact version. `tries` above 1 waits between tries:
- * a version published seconds ago can lag on the registry.
+ * a version published seconds ago can lag on the registry. The default waits
+ * about five minutes in total: @bundu/ui 0.14.0's tag step was skipped because
+ * the index outlasted the old fifty seconds.
  */
-export function onNpm(name, version, tries = 5) {
+export function onNpm(name, version, tries = 14) {
   for (let attempt = 0; attempt < tries; attempt++) {
     if (tryRun("npm", ["view", `${name}@${version}`, "version"]) === version)
       return true;
-    if (attempt < tries - 1) execFileSync("sleep", [String(5 * (attempt + 1))]);
+    // 5s growing to a 30s cap
+    if (attempt < tries - 1)
+      execFileSync("sleep", [String(Math.min(30, 5 * (attempt + 1)))]);
   }
   return false;
 }
