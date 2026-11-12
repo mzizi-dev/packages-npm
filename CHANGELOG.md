@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed
+
+- (repository) `scripts/registry-ref.json` moves from `f673a91` (registry v4.28.0) to `a64e57f` (registry v4.29.0, the commit `api.mzizi.dev` is pinned to). The synced sources and contracts are unchanged (`registry:check` and `contracts:check` pass); only the commit recorded in `packages/bundu-ui/styles/density.css` moves. No package version change, so nothing is published for it.
+
 ## [@bundu/ui 0.14.0] - 2026-11-11
 
 Releases `@bundu/ui` 0.14.0, the next minor above 0.13.0. The package's exports are unchanged. Its fifteen React primitives (`@bundu/ui/ui/*`) are now built from the registry rather than written by hand, so a change to one is made upstream and synced; three of them pick up the registry's spacing-floor fixes (`TabsList` gap 8px, `Select` height `h-field`, a floor-exception comment on `Switch`).
