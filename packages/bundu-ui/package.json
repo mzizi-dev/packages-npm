@@ -246,7 +246,7 @@
     "discover"
   ],
   "devDependencies": {
-    "astro": ">=7.4.5",
+    "astro": ">=7.4.12",
     "css-select": ">=7.0.0",
     "domhandler": ">=6.0.1",
     "domutils": ">=4.0.2",
