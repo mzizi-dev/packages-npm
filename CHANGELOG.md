@@ -21,6 +21,19 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed
+
+- (repository) `AGENTS.md` state the owner's release rule: the owner approves major releases only; minor and patch releases (the `staging` → `main` release PR, its tag and the sync-back into `staging`) and merges of green PRs that have passed review are done by agents following the repo's playbook, without asking the owner (owner, 2026-11-02). The "Releases" bullet and the progress-report line (report ticks never publish, release, merge or deploy without the owner's approval) now state it. Merge method, the merge gate, auto-merge and the changelog rules are unchanged. Nothing served or published changes. Refs [mzizi-dev/mzizi-registry#661](https://github.com/mzizi-dev/mzizi-registry/issues/661).
+- (repository) `scripts/registry-ref.json` moves from `f673a91` (registry v4.28.0) to `a64e57f` (registry v4.29.0, the commit `api.mzizi.dev` is pinned to). The synced sources and contracts are unchanged (`registry:check` and `contracts:check` pass); only the commit recorded in `packages/bundu-ui/styles/density.css` moves. No package version change, so nothing is published for it.
+
+### Fixed
+
+- (repository) The release job waits about five minutes for npm to list a version before it gives up on the tag step, up from about fifty seconds (14 tries, the sleep growing from 5s to a 30s cap). After `@bundu/ui` 0.14.0 the GitHub release step ran before npm listed the version and was skipped; a rerun fixed it. `release-publish.mjs` still checks once and is unchanged.
+
+### Security
+
+- (@bundu/ui, dev) The `astro` devDependency floor moves from `>=7.4.5` to `>=7.4.12` (locked 7.4.5 to 7.4.12), clearing a moderate advisory: the `@astrojs/node` image endpoint could read files from a case-variant sibling of the output directory on case-sensitive filesystems (GHSA-r3h5-4585-7x3w, affects 5.14.3 to 7.4.6). astro is used only to build and test the `.astro` components; it is not a runtime dependency of the published package, so no version is bumped and nothing is published for it. `pnpm audit --audit-level=moderate` reports no known vulnerabilities.
+
 ## [@bundu/ui 0.14.0] - 2026-11-11
 
 Releases `@bundu/ui` 0.14.0, the next minor above 0.13.0. The package's exports are unchanged. Its fifteen React primitives (`@bundu/ui/ui/*`) are now built from the registry rather than written by hand, so a change to one is made upstream and synced; three of them pick up the registry's spacing-floor fixes (`TabsList` gap 8px, `Select` height `h-field`, a floor-exception comment on `Switch`).
