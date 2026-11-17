@@ -21,9 +21,13 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.15.0] - 2026-11-17
+
+Releases `@bundu/ui` 0.15.0, the next minor above 0.14.0. It adds `@bundu/ui/starlight`, the one Mzizi shell and theme for the Starlight docs sites, so docs.nyuchi.com and docs.bundu.org can share a header, sidebar, footer and theme. Nothing existing changes.
+
 ### Added
 
-- `@bundu/ui` New subpath `@bundu/ui/starlight`: the standard Mzizi shell and theme for Astro Starlight docs sites, so `docs.nyuchi.com` and `docs.bundu.org` share one header, sidebar, footer and theme (owner, 2026-11-17: "It all should be bundled into the Bundu/ui package"). `starlightMziziShell({ navLinks, footerColumns, tagline, legal, accent, theme })` registers `Header`, `Sidebar`, `PageFrame` (Starlight's frame plus a full-width footer) and a blank `MobileMenuToggle`, and adds `styles/tokens.css`, `starlight/theme.css` and `starlight/shell.css` before the site's own CSS. `accent` names a mineral (`cobalt` to `copper`) and points the accent at that mineral's `--color-*` tokens; without it the accent follows `--primary`, so a `brand-*.css` overlay works too. The theme maps Starlight's accent, neutrals, fonts and radii onto the tokens with no literal colour; accent text measured 7:1 or more in both themes (copper: links 8.32 light, 14.19 dark; active sidebar item 8.15 light, 7.15 dark). The header styles both Starlight's Pagefind button and the `nyuchi-docs-search` trigger. Moved from nyuchi-docs' private `@nyuchi/nyuchi-docs-shell` (nyuchi/nyuchi-docs#137, #133); changes from it: the `accent` option takes a mineral name instead of a `var(--…)` reference, a `theme` option and stylesheet are new, and the header's active-link test is `isCurrentHref` from `@bundu/ui/app/nav`. Needs `@astrojs/starlight` 0.42 in the site; it is not declared as a peer, so the lockfile and other consumers are unchanged. Tests: `src/starlight/starlight.test.ts` (28). Not released: no version bump.
+- `@bundu/ui` New subpath `@bundu/ui/starlight`: the standard Mzizi shell and theme for Astro Starlight docs sites, so `docs.nyuchi.com` and `docs.bundu.org` share one header, sidebar, footer and theme (owner, 2026-11-17: "It all should be bundled into the Bundu/ui package"). `starlightMziziShell({ navLinks, footerColumns, tagline, legal, accent, theme })` registers `Header`, `Sidebar`, `PageFrame` (Starlight's frame plus a full-width footer) and a blank `MobileMenuToggle`, and adds `styles/tokens.css`, `starlight/theme.css` and `starlight/shell.css` before the site's own CSS. `accent` names a mineral (`cobalt` to `copper`) and points the accent at that mineral's `--color-*` tokens; without it the accent follows `--primary`, so a `brand-*.css` overlay works too. The theme maps Starlight's accent, neutrals, fonts and radii onto the tokens with no literal colour; accent text measured 7:1 or more in both themes (copper: links 8.32 light, 14.19 dark; active sidebar item 8.15 light, 7.15 dark). The header styles both Starlight's Pagefind button and the `nyuchi-docs-search` trigger. Moved from nyuchi-docs' private `@nyuchi/nyuchi-docs-shell` (nyuchi/nyuchi-docs#137, #133); changes from it: the `accent` option takes a mineral name instead of a `var(--…)` reference, a `theme` option and stylesheet are new, and the header's active-link test is `isCurrentHref` from `@bundu/ui/app/nav`. Needs `@astrojs/starlight` 0.42 in the site; it is not declared as a peer, so the lockfile and other consumers are unchanged. Tests: `src/starlight/starlight.test.ts` (28).
 - (repository) `scripts/sync-registry.mjs` exempts `packages/bundu-ui/src/starlight/` from the "unmapped `.astro`" check, by name and with the reason: the Starlight shell composes Starlight's virtual modules and the registry has no Starlight target to build it from.
 
 ### Changed
@@ -33,6 +37,7 @@ Versions published before then are not renumbered.
 
 ### Fixed
 
+- (@bundu/ui, test) The starlight colour test strips comments until none are left, so a removal cannot reveal a new match; CodeQL flagged the single pass as incomplete multi-character sanitization (#143). Test only.
 - (repository) The release job waits about five minutes for npm to list a version before it gives up on the tag step, up from about fifty seconds (14 tries, the sleep growing from 5s to a 30s cap). After `@bundu/ui` 0.14.0 the GitHub release step ran before npm listed the version and was skipped; a rerun fixed it. `release-publish.mjs` still checks once and is unchanged.
 
 ### Security
