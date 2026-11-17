@@ -255,16 +255,26 @@ describe("initScrollState", () => {
   });
 });
 
+/** Removes every match, repeating until none is left, so a match that a removal reveals goes too. */
+function stripAll(text: string, pattern: RegExp): string {
+  let previous: string;
+  do {
+    previous = text;
+    text = text.replace(pattern, "");
+  } while (text !== previous);
+  return text;
+}
+
 describe("the shell sources", () => {
   const files = readdirSync(DIR).filter((f) => /\.(astro|css)$/.test(f));
 
   test("carry no literal colour, only tokens", () => {
     for (const file of files) {
-      const text = readFileSync(join(DIR, file), "utf8")
-        // Comments and the font URL are not colours.
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/<!--[\s\S]*?-->/g, "")
-        .replace(/url\([^)]*\)/g, "");
+      // Comments and the font URL are not colours.
+      let text = readFileSync(join(DIR, file), "utf8");
+      text = stripAll(text, /\/\*[\s\S]*?\*\//g);
+      text = stripAll(text, /<!--[\s\S]*?-->/g);
+      text = stripAll(text, /url\([^)]*\)/g);
       expect(text, file).not.toMatch(/#[0-9a-f]{3,8}\b/i);
       expect(text, file).not.toMatch(
         /\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/i,
