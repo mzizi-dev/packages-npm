@@ -1,0 +1,119 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Mzizi theme for Starlight: @bundu/ui/starlight/theme.css.
+
+   Maps Starlight's colours, fonts and radii onto the @bundu/ui tokens
+   (@bundu/ui/styles/tokens.css, which the plugin loads first), so every
+   Starlight docs site in the ecosystem draws from the same palette and only
+   its accent mineral differs. Tokens only: there is no literal colour in this
+   file. The tokens are theme-adaptive (:root and [data-theme="dark"]), so one
+   block serves both of Starlight's themes.
+
+   Starlight's own styles live in cascade layers; this sheet is unlayered, so
+   it wins without !important, and a site's own customCss (loaded after it)
+   can still refine it.
+
+   Bundu floor: 7:1 text contrast. The accent is the mineral mixed half and
+   half with the foreground, which holds accent text at 7:1 or more on the
+   page and on the sidebar in both themes; the container tokens carry the low
+   and high accents.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Mzizi typography: Noto Sans body, Noto Serif display, JetBrains Mono code.
+   From Google Fonts, so the package ships no font binaries. */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* The accent mineral. The plugin's `accent` option points these at one
+     mineral's tokens (an inline rule in the header); without it the accent
+     follows --primary, which a brand-*.css overlay sets. */
+  --mzizi-accent: var(--primary);
+  --mzizi-accent-container: color-mix(
+    in srgb,
+    var(--mzizi-accent) 15%,
+    var(--background)
+  );
+  --mzizi-accent-on-container: color-mix(
+    in srgb,
+    var(--mzizi-accent) 45%,
+    var(--foreground)
+  );
+
+  --sl-color-accent-low: var(--mzizi-accent-container);
+  --sl-color-accent: color-mix(
+    in srgb,
+    var(--mzizi-accent) 50%,
+    var(--foreground)
+  );
+  --sl-color-accent-high: var(--mzizi-accent-on-container);
+
+  /* Neutrals: the foreground-to-background ramp of the semantic tokens. */
+  --sl-color-white: var(--foreground);
+  --sl-color-gray-1: color-mix(
+    in srgb,
+    var(--foreground) 92%,
+    var(--background)
+  );
+  --sl-color-gray-2: color-mix(
+    in srgb,
+    var(--foreground) 84%,
+    var(--background)
+  );
+  --sl-color-gray-3: color-mix(
+    in srgb,
+    var(--foreground) 76%,
+    var(--background)
+  );
+  --sl-color-gray-4: color-mix(
+    in srgb,
+    var(--foreground) 50%,
+    var(--background)
+  );
+  --sl-color-gray-5: color-mix(
+    in srgb,
+    var(--foreground) 30%,
+    var(--background)
+  );
+  --sl-color-gray-6: color-mix(
+    in srgb,
+    var(--foreground) 14%,
+    var(--background)
+  );
+  --sl-color-gray-7: color-mix(
+    in srgb,
+    var(--foreground) 6%,
+    var(--background)
+  );
+  --sl-color-black: var(--background);
+
+  --sl-font:
+    "Noto Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --sl-font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --mzizi-font-serif:
+    "Noto Serif", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+}
+
+/* Display headings and the site title use the Noto Serif brand face. */
+:is(h1, h2, h3),
+.site-title,
+.sl-markdown-content :is(h1, h2, h3) {
+  font-family: var(--mzizi-font-serif);
+}
+
+/* Wordmarks are always lowercase: an ecosystem brand decision. */
+.site-title {
+  font-variant-caps: normal;
+  text-transform: lowercase;
+}
+
+/* Design-system radii on the surfaces Starlight rounds. */
+.sl-markdown-content :not(a) > code {
+  border-radius: var(--radius-sm);
+}
+.sl-markdown-content pre,
+.starlight-aside,
+.card {
+  border-radius: var(--radius-md);
+}

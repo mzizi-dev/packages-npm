@@ -140,6 +140,13 @@ for (const { file, body } of outputs) {
 }
 
 // No hand-authored component source: every .astro in a package is mapped.
+//
+// One exception, by owner decision (2026-11-17, "It all should be bundled
+// into the Bundu/ui package"): `src/starlight/` is the Starlight docs shell
+// (@bundu/ui/starlight). It is not a registry component: it composes
+// Starlight's own components through Starlight's virtual modules, and the
+// registry has no Starlight target to build it from. It is authored here.
+const NOT_FROM_REGISTRY = [join("packages", "bundu-ui", "src", "starlight")];
 const mapped = new Set(outputs.map((o) => o.file));
 function walk(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
@@ -150,7 +157,10 @@ for (const pkg of Object.values(PACKAGES)) {
   const src = join(pkg, "src");
   if (!existsSync(src)) continue;
   for (const file of walk(src)) {
-    if (file.endsWith(".astro") && !mapped.has(file)) {
+    const exempt = NOT_FROM_REGISTRY.some((dir) =>
+      relative(ROOT, file).startsWith(`${dir}/`),
+    );
+    if (file.endsWith(".astro") && !mapped.has(file) && !exempt) {
       console.error(
         `unmapped: ${relative(ROOT, file)} is not built from the registry. Move it to mzizi-registry and add it to scripts/registry-map.json.`,
       );
