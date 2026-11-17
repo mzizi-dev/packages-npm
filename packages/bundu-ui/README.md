@@ -471,6 +471,65 @@ state switches (`ResultGrid state`, `LoadMore state`, `DiscoverCard badgeTone`,
 `CategoryChip current`) are attributes styled by classes, so the template needs
 no logic.
 
+## Starlight docs shell (`@bundu/ui/starlight`)
+
+The standard Mzizi shell and theme for [Astro Starlight](https://starlight.astro.build)
+docs sites, so `docs.nyuchi.com` and `docs.bundu.org` share one header, sidebar, footer,
+mobile menu and theme and differ only in their links and their mineral. A Starlight
+plugin, five Astro components and two stylesheets; no UI framework and no runtime
+dependency. It needs `@astrojs/starlight` 0.42 in the site.
+
+```js
+// astro.config.mjs
+import starlight from "@astrojs/starlight";
+import { starlightMziziShell } from "@bundu/ui/starlight";
+
+starlight({
+  title: "Bundu Docs",
+  plugins: [
+    starlightMziziShell({
+      navLinks: [{ label: "Foundations", href: "/mzizi/foundations/" }],
+      footerColumns: [
+        {
+          title: "Ecosystem",
+          links: [{ label: "Website", href: "https://bundu.org", external: true }],
+        },
+      ],
+      tagline: "I am because we are.",
+      legal: "© 2026 Bundu Foundation",
+      accent: "copper",
+    }),
+  ],
+});
+```
+
+| Option          | Default                | Notes                                                                                                        |
+| --------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `navLinks`      | none                   | At most 6 `{ label, href, external? }`, shown in the header from 72rem.                                      |
+| `footerColumns` | none                   | At most 4 `{ title, links[] }`, at most 8 links each.                                                        |
+| `tagline`       | `I am because we are.` | Under the footer logo.                                                                                       |
+| `legal`         | none                   | The legal line.                                                                                              |
+| `accent`        | `--primary`            | A mineral: `cobalt`, `tanzanite`, `malachite`, `gold`, `terracotta`, `sodalite` or `copper`. Never a colour. |
+| `theme`         | `true`                 | Map Starlight onto the tokens (`styles/tokens.css` + `starlight/theme.css`). `false` keeps the site's own.   |
+
+What it registers: `Header` (sticky, 56px; the accent pill of round 44px buttons below
+50rem; the search field, GitHub icon and theme select from 50rem), `Sidebar` (the
+seven-mineral strip, 48px items, a tinted accent active item), `PageFrame` (Starlight's
+frame plus the full-width footer, a real `contentinfo` landmark) and a blank
+`MobileMenuToggle` (the header carries the menu button, first in the tab order). The
+header's search slot is whatever search the site uses: Starlight's Pagefind button or the
+`nyuchi-docs-search` modal are styled the same. A site that overrides `PageFrame` keeps
+its own and composes `@bundu/ui/starlight/PageFrame.astro` inside it.
+
+Options are validated when the config loads: an unknown option, an unsafe `href`, a
+duplicate, a size limit or an accent that is not a mineral fails the build naming it.
+The theme mixes the accent mineral half and half with the foreground for text, which
+measured 7:1 or more for links and the active sidebar item in both themes.
+
+`src/starlight/` is authored in this package, not synced from the registry: it composes
+Starlight's own components through Starlight's virtual modules, and the registry has no
+Starlight target. `pnpm registry:check` exempts that directory by name.
+
 ## Component contracts
 
 Every app and Discover component carries a contract, as everything built in Mzizi does. The

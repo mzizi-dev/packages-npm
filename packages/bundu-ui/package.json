@@ -149,6 +149,18 @@
       "import": "./dist/discover/open.js",
       "default": "./dist/discover/open.js"
     },
+    "./starlight": {
+      "types": "./dist/starlight/index.d.ts",
+      "import": "./dist/starlight/index.js",
+      "default": "./dist/starlight/index.js"
+    },
+    "./starlight/Header.astro": "./src/starlight/Header.astro",
+    "./starlight/Sidebar.astro": "./src/starlight/Sidebar.astro",
+    "./starlight/Footer.astro": "./src/starlight/Footer.astro",
+    "./starlight/PageFrame.astro": "./src/starlight/PageFrame.astro",
+    "./starlight/MobileMenuToggle.astro": "./src/starlight/MobileMenuToggle.astro",
+    "./starlight/shell.css": "./src/starlight/shell.css",
+    "./starlight/theme.css": "./src/starlight/theme.css",
     "./lib/utils": {
       "types": "./dist/lib/utils.d.ts",
       "import": "./dist/lib/utils.js",
@@ -243,7 +255,8 @@
     "console",
     "app-shell",
     "data-table",
-    "discover"
+    "discover",
+    "starlight"
   ],
   "devDependencies": {
     "astro": ">=7.4.12",
