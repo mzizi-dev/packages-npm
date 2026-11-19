@@ -1,6 +1,6 @@
-# Nyuchi Design System
+# Mzizi npm packages
 
-> Shared, publishable UI packages — Nyuchi's implementation of the Mzizi architecture, consumed by the marketing and documentation sites.
+> Shared, publishable UI packages: the Mzizi architecture as `@bundu/ui` and `@bundu/server`, consumed by the marketing and documentation sites.
 
 [![Lint](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/lint.yml)
 [![Release](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml/badge.svg)](https://github.com/mzizi-dev/packages-npm/actions/workflows/release.yml)
@@ -12,11 +12,13 @@
 
 ## What this is
 
-A [pnpm workspace](https://pnpm.io/workspaces) holding the UI packages Nyuchi
+A [pnpm workspace](https://pnpm.io/workspaces) holding the UI packages Mzizi
 publishes to npm. The packages implement the [Mzizi](https://mzizi.dev)
-architecture — an open-architecture project of the Bundu Foundation, operated
-and developed by Nyuchi — but the packages themselves are **Nyuchi-owned
-implementations**, not Mzizi itself. Mzizi's own registry lives at
+architecture. Mzizi is a Bundu Foundation project, built by Nyuchi; Nyuchi
+runs its cyber section. Mzizi is a programming language (in research), a design
+system, a component registry, a CLI toolchain and skills for web and server
+architecture; these packages carry the design system and server helpers to npm.
+Mzizi's own registry lives at
 [`mzizi-dev/mzizi-registry`](https://github.com/mzizi-dev/mzizi-registry).
 
 | Package                                                                                      | Framework      | What it is                                                                                                         |
