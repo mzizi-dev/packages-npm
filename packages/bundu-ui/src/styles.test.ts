@@ -394,3 +394,20 @@ describe("the address selector add link meets the floor", () => {
     expect(px("var(--target-floor)", vars)).toBe(45);
   });
 });
+
+describe("the discover breadcrumb meets the floor", () => {
+  it("draws its links at least 45px on touch and 28px on a desktop", () => {
+    // DiscoverBreadcrumb draws min-h-6 (24px) on a fine pointer and min-h-11 (44px) on touch.
+    // The local rule in globals.css lifts both to the floor.
+    const vars = rootDefaults();
+    const value = declared('[data-slot="discover-breadcrumb"] a', "min-height");
+    expect(value).toBe("max(var(--target-floor), 1.75rem)");
+    expect(
+      declared(
+        '[data-slot="discover-breadcrumb"] [aria-current="page"]',
+        "min-height",
+      ),
+    ).toBe("max(var(--target-floor), 1.75rem)");
+    expect(px("var(--target-floor)", vars)).toBe(45);
+  });
+});
