@@ -21,6 +21,26 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.16.0] - 2026-11-20
+
+Releases `@bundu/ui` 0.16.0, the next minor above 0.15.0. The Bundu floor and the spacing layers now come from mzizi-registry 4.45.0 (owner rulings 2026-11-19): the floor tokens move, the components do not. The components, contracts and exports stay at registry 4.29.0 until the coordinated major, so a consumer's buttons and inputs look the same. Nothing is removed.
+
+### Changed
+
+- `@bundu/ui` The hit region is 45px on touch and 24px on a desktop (fine pointer with hover, 64rem and up), with a desktop drawn minimum of 28px (was 49px and 28px). `--target-floor`, `--touch-target-lg` and the size roles follow in `styles/density.css`. `--touch-target` is 45px and `--touch-target-sm` is 41px in `styles/tokens.css` and `tokens.json` (was 49px and 40px).
+- `@bundu/ui` Control heights on a desktop are 33px for `sm`, dense and field-sm, and 41px for `lg` and `touch-target-sm` (was 32px and 40px). Touch heights (49px default and field, 56px `lg`) are unchanged: they are component heights, not the floor.
+- `@bundu/ui` The spacing layers from registry 4.45.0 are in `styles/density.css` as `--spacing-*` and `--space-*` tokens, each with its dense step (page edge 17, container 28/21, card 21/14, card gap 14/7, control inset 17/12, control gap 9/7, between controls 9/9, chip 12/9, pill 9/5, pill gap 5/3, label gap 7/5, section 49/28). The base-layer floors apply the dense step of each layer. The fallback floors for a component with no known layer stay 14px inset and 7px gap, never weaker.
+- (repository) `scripts/registry-ref.json` gains `tokensRef` (mzizi-registry v4.45.0, `4b488a2`). `ref` (the components and contracts, `a64e57f`) is unchanged. `scripts/sync-registry.mjs` derives `styles/density.css` from `tokensRef` (default `ref`), with a `--tokens-from` option for a local checkout. `scripts/registry-density.mjs` reads the v4.45.0 layout, including the spacing layers and the 45px and 24px hit region.
+- (repository) `scripts/generate-tokens.mjs` sets the touch values to 45px and 41px.
+
+### Tests
+
+- (`@bundu/ui`, test) `src/styles.test.ts` asserts the 45px touch and 24px desktop hit region, the 45px floor for `btn-*` and `min-h-touch-min`, and the base-layer rules by their layer's dense floor. A new block pins the dense steps and the 33px and 41px heights. Assertions are moved to the floor values only; none is loosened or skipped.
+
+### Known, left for the coordinated major
+
+- The components still set some literal heights that sit under the new floor, because they are built from registry 4.29.0: `pointer-coarse:h-11` and `min-h-11` (44px on touch) in `src/ui/variants.ts` and `src/AddressSelector.astro`. They are fixed upstream in mzizi-registry and arrive with the components' pin move. Until then they keep the 44px touch height.
+
 ## [@bundu/ui 0.15.0] - 2026-11-17
 
 Releases `@bundu/ui` 0.15.0, the next minor above 0.14.0. It adds `@bundu/ui/starlight`, the one Mzizi shell and theme for the Starlight docs sites, so docs.nyuchi.com and docs.bundu.org can share a header, sidebar, footer and theme. Nothing existing changes.

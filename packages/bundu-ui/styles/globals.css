@@ -3,11 +3,11 @@
    consumes them from one central source. This file adds the Tailwind base,
    component and utility layers on top. */
 @import "./tokens.css";
-/* The Bundu floor and density: body 17px, captions 14px, a 49px hit region,
-   and the size roles (`h-control`, `h-field`, ...). Generated from the registry;
-   see density.css. The `.btn-*` classes are also used on links, which the
-   `hit-area` overlay does not cover, so they are drawn at the 49px floor on
-   every device (`h-touch-min`). */
+/* The Bundu floor and density: body 17px, captions 14px, a 45px hit region on
+   touch (24px on a desktop), and the size roles (`h-control`, `h-field`, ...).
+   Generated from the registry; see density.css. The `.btn-*` classes are also
+   used on links, which the `hit-area` overlay does not cover, so they are drawn
+   at the 45px floor on every device (`h-touch-min`). */
 @import "./density.css";
 
 @layer base {
@@ -273,4 +273,12 @@
       var(--color-malachite-container) 100%
     );
   }
+}
+
+/* Hand-written, not from the registry. The add link in AddressSelector is an <a>
+   with min-h-11 (44px). Links are not in the `hit-area` selector list and it is
+   a standalone control, so its hit region would sit under the Bundu floor. Lift it
+   to the floor here. Remove when the registry's Kweli address link is 45px. */
+a[data-slot="address-selector-add"] {
+  min-height: var(--target-floor);
 }
