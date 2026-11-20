@@ -7,8 +7,11 @@
    --sl-color-* and the @bundu/ui --color-* minerals); there is no literal
    colour in this file.
 
-   Bundu floor: 7px gaps, 14px insets, 1.5 body leading, 44px minimum touch
-   targets (48px for sidebar items and footer links), 7:1 text contrast.
+   Bundu floor (owner, 2026-11-19): every control's hit area is at least 45px
+   on touch and is never drawn under 28px on a desktop; this shell draws its
+   icon buttons at 45px on every pointer (49px for sidebar items and footer
+   links), 9px between controls, 14px insets, 1.5 body leading, 7:1 text
+   contrast. Full table: https://docs.mzizi.dev/foundations/bundu-floor
 
    Starlight's own styles live in cascade layers; this sheet is unlayered, so
    it wins without !important.
@@ -19,11 +22,11 @@
   --mzizi-brand-accent: var(--sl-color-accent);
   /* Icon colour on the accent pill. */
   --mzizi-on-accent: var(--sl-color-black);
-  --mzizi-pad-x: 1.25rem; /* 20px */
-  --mzizi-gap: 0.4375rem; /* 7px */
+  --mzizi-pad-x: 1.3125rem; /* 21px: the page edge, 7 x 3 */
+  --mzizi-gap: 0.5625rem; /* 9px: the gap between controls */
   --mzizi-inset: 0.875rem; /* 14px */
-  --mzizi-target: 2.75rem; /* 44px */
-  --mzizi-target-lg: 3rem; /* 48px */
+  --mzizi-target: 2.8125rem; /* 45px: the touch hit floor */
+  --mzizi-target-lg: 3.0625rem; /* 49px */
   --mzizi-focus: var(--focusRing-width, 2px) solid var(--sl-color-accent);
   --mzizi-focus-offset: var(--focusRing-offset, 2px);
 
@@ -79,7 +82,7 @@
   }
 }
 
-/* The menu button: first control in the header, a quiet 44px icon button.
+/* The menu button: first control in the header, a quiet 45px icon button.
    (Starlight's own toggle is blanked by the plugin.) */
 .mzizi-menu-button {
   display: inline-flex;
@@ -231,7 +234,7 @@
   outline-offset: var(--mzizi-focus-offset);
 }
 
-/* Below 50rem: the brand-accent pill, a capsule of round 44px icon buttons. */
+/* Below 50rem: the brand-accent pill, a capsule of round 45px icon buttons. */
 @media (max-width: 49.99rem) {
   .mzizi-actions {
     padding: 2px;
@@ -414,7 +417,7 @@
   margin-block-start: 2px;
 }
 
-/* Items and group labels: at least 48px high, 14px inset. */
+/* Items and group labels: at least 49px high, 14px inset. */
 .mzizi-sidebar a,
 .mzizi-sidebar summary {
   display: flex;

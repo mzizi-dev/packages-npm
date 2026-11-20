@@ -282,3 +282,15 @@
 a[data-slot="address-selector-add"] {
   min-height: var(--target-floor);
 }
+
+/* Hand-written, not from the registry. DiscoverBreadcrumb's links and current-page
+   item draw min-h-6 (24px) on a fine pointer and min-h-11 (44px) on touch. They
+   are standalone controls, not links in running text, so the Bundu floor applies:
+   at least 45px on touch and never drawn under 28px on a desktop. Remove when the
+   registry's breadcrumb meets the floor. */
+[data-slot="discover-breadcrumb"] a {
+  min-height: max(var(--target-floor), 1.75rem);
+}
+[data-slot="discover-breadcrumb"] [aria-current="page"] {
+  min-height: max(var(--target-floor), 1.75rem);
+}

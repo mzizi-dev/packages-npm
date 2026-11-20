@@ -21,6 +21,15 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+## [@bundu/ui 0.17.0] - 2026-11-20
+
+No issue: owner ruling 2026-11-20 (the Bundu floor is the rule; minors only).
+
+### Fixed
+
+- `@bundu/ui` The Starlight shell (`@bundu/ui/starlight/shell.css`, used by docs.nyuchi.com and docs.bundu.org) meets the Bundu floor: header icon buttons and the search field are 45px (`--mzizi-target`, was 44px), sidebar items and footer links are 49px (`--mzizi-target-lg`, was 48px), the gap between controls is 9px (`--mzizi-gap`, was 7px), and the page edge is 21px (`--mzizi-pad-x`, was 20px). The shell draws these on every pointer, so a control is never drawn under 28px on a desktop.
+- `@bundu/ui` DiscoverBreadcrumb's links and current-page item draw at least 45px on touch and 28px on a desktop (were 44px and 24px), through a local rule in `styles/globals.css`, until the registry's breadcrumb meets the floor.
+
 ## [@bundu/ui 0.16.0] - 2026-11-20
 
 Releases `@bundu/ui` 0.16.0, the next minor above 0.15.0. The Bundu floor and the spacing layers now come from mzizi-registry 4.45.0 (owner rulings 2026-11-19): the floor tokens move, the components do not. The components, contracts and exports stay at registry 4.29.0 until the coordinated major, so a consumer's buttons and inputs look the same. Nothing is removed.
