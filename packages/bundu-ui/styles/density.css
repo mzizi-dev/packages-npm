@@ -3,14 +3,15 @@
  *
  * Derived by `pnpm registry:sync` (scripts/registry-density.mjs) from
  * mzizi-registry's components/registry/n1-tokens/mzizi-tokens-globals.css at
- * a64e57f23b59; `pnpm registry:check` holds it to that. Change the registry,
+ * 4b488a2832fa; `pnpm registry:check` holds it to that. Change the registry,
  * bump scripts/registry-ref.json, sync.
  *
- * What it is: body text 17px, captions 14px, a 49px hit region on every
- * control (a control may be DRAWN 28 to 40px at desktop density), and the size
- * roles the components use (h-control, h-control-sm, h-control-lg,
- * size-control-icon, h-field, min-h-touch-min). Without it those utilities
- * resolve to nothing. `styles/globals.css` imports it. An app that imports the
+ * What it is: body text 17px (15px at desktop density), captions 14px, a 45px
+ * hit region on touch and 24px on a desktop for every control (a control may
+ * be DRAWN 28 to 41px at desktop density), the size roles the components use
+ * (h-control, h-control-sm, h-control-lg, size-control-icon, h-field,
+ * min-h-touch-min), and the spacing layers (p-control-x, gap-card-gap, ...).
+ * Without it those utilities resolve to nothing. `styles/globals.css` imports it. An app that imports the
  * pieces separately adds it AFTER theme.css and tokens.css:
  *
  *   @import "@bundu/ui/styles/theme.css";
@@ -18,8 +19,8 @@
  *
  * The spacing floor (#617) rides with it: `--inset-floor` 14px (text inset),
  * `--gap-floor` 7px (control, label and item gaps), `--leading-floor` 1.5
- * (body line height), the `p-inset-floor` / `gap-gap-floor` utilities, and the
- * base-layer rules that apply them. Nothing may lower them.
+ * (body line height), and the base-layer rules that apply the per-layer floors.
+ * Nothing may lower them.
  *
  * `:root[data-mzizi-sizes="legacy"]` restores the pre-floor sizes (16px body,
  * 12px captions, 48/56px controls, no spacing floor) until an app has migrated.
@@ -30,6 +31,37 @@
   --spacing-touch-min: var( --target-floor );
   --spacing-inset-floor: var( --inset-floor );
   --spacing-gap-floor: var( --gap-floor );
+  --spacing-page-x: 1.0625rem;
+  --spacing-page-x-wide: 1.75rem;
+  --spacing-page-x-wide-dense: 1.3125rem;
+  --spacing-section: 3.0625rem;
+  --spacing-section-dense: 1.75rem;
+  --spacing-container: 1.75rem;
+  --spacing-container-dense: 1.3125rem;
+  --spacing-container-gap: 1.3125rem;
+  --spacing-container-gap-dense: 0.875rem;
+  --spacing-card: 1.3125rem;
+  --spacing-card-dense: 0.875rem;
+  --spacing-card-gap: 0.875rem;
+  --spacing-card-gap-dense: 0.4375rem;
+  --spacing-card-stack: 0.4375rem;
+  --spacing-card-stack-dense: 0.4375rem;
+  --spacing-control-x: 1.0625rem;
+  --spacing-control-x-dense: 0.75rem;
+  --spacing-field-x: 1.0625rem;
+  --spacing-field-x-dense: 0.75rem;
+  --spacing-control-gap: 0.5625rem;
+  --spacing-control-gap-dense: 0.4375rem;
+  --spacing-control-between: 0.5625rem;
+  --spacing-control-between-dense: 0.5625rem;
+  --spacing-chip-x: 0.75rem;
+  --spacing-chip-x-dense: 0.5625rem;
+  --spacing-pill-x: 0.5625rem;
+  --spacing-pill-x-dense: 0.3125rem;
+  --spacing-pill-gap: 0.3125rem;
+  --spacing-pill-gap-dense: 0.1875rem;
+  --spacing-label-gap: 0.4375rem;
+  --spacing-label-gap-dense: 0.3125rem;
   --spacing-control: max( var(--size-control), var(--control-floor) );
   --spacing-control-sm: max( var(--size-control-sm), var(--control-floor) );
   --spacing-control-lg: max( var(--size-control-lg), var(--control-floor) );
@@ -74,38 +106,70 @@
   --lh-h6: 1.4;
   --lh-body: 1.6;
   --lh-small: 1.5;
-  --touch-target-lg: 49px;
-  --touch-target: 49px;
-  --touch-target-sm: 40px;
+  --touch-target-lg: 45px;
+  --touch-target: 45px;
+  --touch-target-sm: 41px;
   --h-button-default: 3.0625rem;
   --h-button-sm: 3.0625rem;
   --h-input: 3.0625rem;
-  --target-floor: 3.0625rem;
+  --target-floor: 2.8125rem;
   --inset-floor: 0.875rem;
   --gap-floor: 0.4375rem;
   --leading-floor: 1.5;
-  --control-floor: 3.0625rem;
-  --size-touch: 3.0625rem;
-  --size-touch-min: 3.0625rem;
+  --control-floor: 2.8125rem;
+  --size-touch: 2.8125rem;
+  --size-touch-min: 2.8125rem;
   --size-inset-floor: 0.875rem;
   --size-gap-floor: 0.4375rem;
+  --space-page-x: 1.0625rem;
+  --space-page-x-wide: 1.75rem;
+  --space-page-x-wide-dense: 1.3125rem;
+  --space-section: 3.0625rem;
+  --space-section-dense: 1.75rem;
+  --space-container: 1.75rem;
+  --space-container-dense: 1.3125rem;
+  --space-container-gap: 1.3125rem;
+  --space-container-gap-dense: 0.875rem;
+  --space-card: 1.3125rem;
+  --space-card-dense: 0.875rem;
+  --space-card-gap: 0.875rem;
+  --space-card-gap-dense: 0.4375rem;
+  --space-card-stack: 0.4375rem;
+  --space-card-stack-dense: 0.4375rem;
+  --space-control-x: 1.0625rem;
+  --space-control-x-dense: 0.75rem;
+  --space-field-x: 1.0625rem;
+  --space-field-x-dense: 0.75rem;
+  --space-control-gap: 0.5625rem;
+  --space-control-gap-dense: 0.4375rem;
+  --space-control-between: 0.5625rem;
+  --space-control-between-dense: 0.5625rem;
+  --space-chip-x: 0.75rem;
+  --space-chip-x-dense: 0.5625rem;
+  --space-pill-x: 0.5625rem;
+  --space-pill-x-dense: 0.3125rem;
+  --space-pill-gap: 0.3125rem;
+  --space-pill-gap-dense: 0.1875rem;
+  --space-label-gap: 0.4375rem;
+  --space-label-gap-dense: 0.3125rem;
   --size-control: 3.0625rem;
   --size-control-sm: 3.0625rem;
   --size-control-lg: 3.5rem;
   --size-control-icon: 3.0625rem;
-  --size-control-dense: 2rem;
+  --size-control-dense: 2.0625rem;
   --size-field: 3.0625rem;
   --size-field-sm: 3.0625rem;
 }
 
-/* The 49px hit region (BUNDU_FLOOR.hitAreaPx): a transparent pseudo-element grows the click and
-   touch region of a button-like control to the floor, so a control drawn at 28px on a
-   desktop is still 49px to hit. It is in the base layer, so a utility on the element (absolute,
-   inset-*) wins, and it is a no-op where the control is already drawn at the floor or larger.
+/* The hit region (BUNDU_FLOOR.hitAreaPx, 45px on touch; 24px on a desktop, BUNDU_FLOOR.pointerFine): a
+   transparent pseudo-element grows the click and touch region of a button-like control to the floor
+   (--target-floor, which the desktop media block below lowers). It is in the base layer, so a utility on the
+   element (absolute, inset-*) wins, and it is a no-op where the control is already drawn at the floor or larger
+   (every desktop control is drawn at least 28px, so on a desktop it never grows one).
    It steps aside, by design, for:
    - an element that draws its own after: pseudo-element (checkbox, switch, radio, the tabs line): it keeps its
      own, because a utility only overrides the properties it sets and the rest of this rule would mix in;
-   - composite widgets, where a 49px overlay on a row 28 to 36px tall would
+   - composite widgets, where a touch-sized overlay on a row 28 to 36px tall would
      overlap its neighbours and the later sibling would steal the click: menu and listbox rows take
      min-height instead (below), and a calendar day ([data-day]) is a grid cell, left as drawn;
    - an element that clips its overflow (overflow-hidden), which would clip the pseudo-element too: add
@@ -149,8 +213,11 @@
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
- * THE SPACING FLOOR (owner, 2026-11-04, #617; `BUNDU_FLOOR.spacing`): minimums that nothing can go under, even a
- * component that sets no padding at all. Inset 14px, gaps 7px, body leading 1.5.
+ * THE SPACING FLOOR (owner, 2026-11-04, #617; one floor per layer with a dense step, owner 2026-11-19; `BUNDU_FLOOR.spacing`):
+ * minimums that nothing can go under, even a component that sets no padding at all. A bare control is inset at its dense
+ * floor, 12px (`--space-control-x-dense`), a bare card 14px (`--space-card-dense`), a bare
+ * dialog, sheet or popover 21px (`--space-container-dense`); the fallback gap for a component with no known layer is 7px
+ * (`--gap-floor`), and body leading is 1.5.
  * These are DEFAULTS in the base layer, like the hit-area rule above: a bare element gets the floor, and a utility
  * on it (`p-6`, `gap-2`) is the author's own value, which `__tests__/spacing-floor.test.ts` holds to the floor
  * for every registry component. They step aside, by design, for:
@@ -158,7 +225,7 @@
  *     (`size-*`), a calendar day (`[data-day]`), and the native checkbox, radio, range, colour and file inputs;
  *   - a surface whose padding lives on its structured children (a card with `card-header` / `card-content`
  *     slots): padding the root as well would pad twice. The children carry the inset, and the test holds them to it.
- * A control's BLOCK axis is not inset here: its height floors (the 28px drawn minimum, the 49px hit
+ * A control's BLOCK axis is not inset here: its height floors (the 28px drawn minimum, the 45px hit
  * region) already decide it, and 14px of block padding does not fit a 28px control.
  * The legacy opt-out (data-mzizi-sizes="legacy", last in this file) sets the three variables to 0, 0 and 1: every rule below becomes a no-op.
  * ════════════════════════════════════════════════════════════════════════════ */
@@ -192,16 +259,9 @@
     [class*=" size-"],
     [data-day]
   ) {
-    padding-inline: var(--inset-floor);
+    padding-inline: var(--space-control-x-dense);
   }
-  :where(
-    dialog,
-    [popover],
-    [role="alertdialog"],
-    [role="tooltip"],
-    [data-slot="card"],
-    [data-slot="alert"]
-  ):not(
+  :where(dialog, [popover], [role="alertdialog"]):not(
     :has(
       > [data-slot*="header"],
       > [data-slot*="content"],
@@ -214,7 +274,22 @@
     [class^="size-"],
     [class*=" size-"]
   ) {
-    padding: var(--inset-floor);
+    padding: var(--space-container-dense);
+  }
+  :where([role="tooltip"], [data-slot="card"], [data-slot="alert"]):not(
+    :has(
+      > [data-slot*="header"],
+      > [data-slot*="content"],
+      > [data-slot*="footer"],
+      > [data-slot*="title"],
+      > [data-slot*="description"]
+    ),
+    svg,
+    :empty,
+    [class^="size-"],
+    [class*=" size-"]
+  ) {
+    padding: var(--space-card-dense);
   }
   :where(
     [role="toolbar"],
@@ -242,26 +317,29 @@
 
 @media (min-width: 64rem) and (pointer: fine) and (hover: hover) and (not (any-pointer: coarse)) {
   :root {
-    --control-floor: 1.75rem; /* 28px: the smallest a control is DRAWN. --target-floor (the 49px hit region) is not lowered. */
+    --target-floor: 1.5rem; /* 24px: the desktop hit region (BUNDU_FLOOR.pointerFine). Touch keeps 45px. */
+    --control-floor: 1.75rem; /* 28px: the smallest a control is DRAWN. */
     --touch-target-lg: 36px;
-    --touch-target: 32px;
+    --touch-target: 33px;
     --h-button-default: 2.25rem; /* 36px */
-    --h-button-sm: 2rem; /* 32px */
-    --h-input: 3.0625rem; /* 49px */
+    --h-button-sm: 2.0625rem; /* 33px */
+    --h-input: 2.25rem; /* 36px */
     --size-touch: 2.25rem; /* 36px */
     --size-control: 2.25rem; /* 36px */
-    --size-control-sm: 2rem; /* 32px */
-    --size-control-lg: 2.5rem; /* 40px */
+    --size-control-sm: 2.0625rem; /* 33px */
+    --size-control-lg: 2.5625rem; /* 41px */
     --size-control-icon: 2.25rem; /* 36px */
     --size-control-dense: 1.75rem; /* 28px */
-    --size-field: 3.0625rem; /* 49px */
-    --size-field-sm: 3.0625rem; /* 49px */
+    --size-field: 2.25rem; /* 36px */
+    --size-field-sm: 2.0625rem; /* 33px */
     --fs-display: 3rem; /* 48px */
     --fs-display-sm: 2.5rem; /* 40px */
     --fs-h1: 2rem; /* 32px */
     --fs-h2: 1.5rem; /* 24px */
     --fs-h3: 1.25rem; /* 20px */
     --fs-h4: 1.125rem; /* 18px */
+    --fs-body-lg: 1.0625rem; /* 17px */
+    --fs-body: 0.9375rem; /* 15px */
   }
 }
 
@@ -271,6 +349,9 @@
   --target-floor: 3rem; /* 48px */
   --inset-floor: 0px; /* no spacing floor (steps out of #617) */
   --gap-floor: 0px;
+  --space-control-x-dense: 0px; /* the dense floors the base layer reads (owner 2026-11-19) */
+  --space-card-dense: 0px;
+  --space-container-dense: 0px;
   --leading-floor: 1;
   --control-floor: 3rem; /* 48px */
   --touch-target-lg: 56px;
