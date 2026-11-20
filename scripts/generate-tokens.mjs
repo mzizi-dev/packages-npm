@@ -61,10 +61,11 @@ const LOCAL = {
   secondaryDark: "#2a2927",
   white: "#ffffff",
   // Touch targets — an accessibility mandate, not a colour. The Bundu floor
-  // (mzizi-registry 4.23.0): a 49px hit region, 40px for dense secondary
-  // actions. styles/density.css redeclares both from the registry.
-  touchTarget: "49px",
-  touchTargetSm: "40px",
+  // (mzizi-registry 4.45.0, owner rulings 2026-11-19): a 45px hit region on
+  // touch, 41px for dense secondary actions (prime). styles/density.css
+  // redeclares both from the registry at tokensRef.
+  touchTarget: "45px",
+  touchTargetSm: "41px",
 };
 
 /* ------------------------------------------------------------------ *

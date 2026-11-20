@@ -60,6 +60,9 @@ const args = process.argv.slice(2);
 const check = args.includes("--check");
 const fromIdx = args.indexOf("--from");
 const from = fromIdx === -1 ? null : resolve(args[fromIdx + 1] ?? "");
+const tokensFromIdx = args.indexOf("--tokens-from");
+const tokensFrom =
+  tokensFromIdx === -1 ? null : resolve(args[tokensFromIdx + 1] ?? "");
 const map = JSON.parse(
   readFileSync(join(ROOT, "scripts/registry-map.json"), "utf8"),
 );
@@ -67,14 +70,20 @@ const pin = JSON.parse(
   readFileSync(join(ROOT, "scripts/registry-ref.json"), "utf8"),
 );
 const ref = safeRef(pin.ref);
+/**
+ * The commit the density and the Bundu floor tokens (styles/density.css) come from. It is
+ * separate from `ref` so the floor can move ahead of the components (a coordinated major moves the
+ * components). Defaults to `ref`.
+ */
+const tokensRef = safeRef(pin.tokensRef ?? pin.ref);
 
-/** A file from the registry, at the pinned ref (or the local checkout). */
-async function read(path, binary = false) {
-  if (from) {
-    const buf = readFileSync(join(from, path));
+/** A file from the registry, at a pinned ref (or the local checkout). */
+async function read(path, binary = false, at = ref, localDir = from) {
+  if (localDir) {
+    const buf = readFileSync(join(localDir, path));
     return binary ? buf : buf.toString("utf8");
   }
-  const url = `https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/${ref}/${path}`;
+  const url = `https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/${at}/${path}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return binary ? Buffer.from(await res.arrayBuffer()) : res.text();
@@ -112,12 +121,17 @@ for (const x of EXTRA) {
 }
 
 // The Bundu floor and density layers, derived from the registry's whole
-// globals.css (scripts/registry-density.mjs): styles/density.css.
+// globals.css at tokensRef (scripts/registry-density.mjs): styles/density.css.
 outputs.push({
   file: dest("bundu-ui", "styles/density.css"),
   body: densityCss(
-    await read("components/registry/n1-tokens/mzizi-tokens-globals.css"),
-    ref,
+    await read(
+      "components/registry/n1-tokens/mzizi-tokens-globals.css",
+      false,
+      tokensRef,
+      tokensFrom ?? from,
+    ),
+    tokensRef,
   ),
 });
 
