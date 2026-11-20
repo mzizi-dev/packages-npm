@@ -382,3 +382,15 @@ describe("the spacing layers and control heights (mzizi-registry 4.45.0)", () =>
     expect(text).toMatch(/--size-control-lg: 2\.5625rem;/); // desktop: 41
   });
 });
+
+describe("the address selector add link meets the floor", () => {
+  it("lifts the <a> add link to --target-floor, the hit region on touch", () => {
+    // The link is an <a> with min-h-11 (44px). Links are not in the hit-area selector list, so the
+    // local rule in globals.css lifts it to the 45px floor. Remove the rule with the registry fix.
+    const vars = rootDefaults();
+    expect(
+      px(declared('a[data-slot="address-selector-add"]', "min-height"), vars),
+    ).toBe(45);
+    expect(px("var(--target-floor)", vars)).toBe(45);
+  });
+});
