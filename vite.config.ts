@@ -36,12 +36,22 @@ export default defineConfig({
     // 4.25.0 (the spacing floor, mzizi-registry#622) in the registry's own
     // style (no semicolons, long lines). Drop this entry once the registry
     // formats contracts/runner.ts and a pin carries it.
+    // mzizi-registry 4.49.0 adds three more synced byte for byte in the
+    // registry's own style: src/device-code-format.ts and src/qr-code.ts
+    // (DeviceCode's modules, n2-primitives), and test/contract-runner-held.ts,
+    // the registry's contracts/runner.ts at the hold commit
+    // (scripts/registry-ref.json), which is formatted at the source or not at
+    // all. Drop the first two once the registry formats them; the third goes
+    // when the hold is lifted.
     // styles/density.css is derived by `pnpm registry:sync` from the registry's
     // stylesheet (scripts/registry-density.mjs) and held byte for byte by
     // `registry:check`, so it is not reformatted here.
     ignorePatterns: [
       "packages/bundu-ui/styles/density.css",
       "packages/bundu-ui/test/contract-runner.ts",
+      "packages/bundu-ui/test/contract-runner-held.ts",
+      "packages/bundu-ui/src/device-code-format.ts",
+      "packages/bundu-ui/src/qr-code.ts",
       "packages/bundu-ui/src/markdown-parse.ts",
       "packages/bundu-ui/src/qr-matrix.ts",
       "packages/bundu-ui/src/money.ts",

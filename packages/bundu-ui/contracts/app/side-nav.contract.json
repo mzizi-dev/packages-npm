@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "node": 7,
   "kind": "shell",
-  "summary": "An app's navigation, dense like a product console: quiet group labels, one 32px row per item (44px on touch) with an icon and the label, a badge, nested items under a disclosure, and the current item filled with a brand-coloured indicator. Descriptions are tooltips and accessible descriptions, never printed.",
+  "summary": "An app's navigation, dense like a product console: quiet group labels, one 32px row per item (45px on touch) with an icon and the label, a badge, nested items under a disclosure, and the current item filled with a brand-coloured indicator. Descriptions are tooltips and accessible descriptions, never printed.",
   "implementations": {
     "astro": {
       "registry": "app-side-nav",
@@ -151,14 +151,14 @@
     {
       "part": "nav row",
       "select": "a[data-nav-row]",
-      "fine": 32,
-      "coarse": 44
+      "fine": 33,
+      "coarse": 45
     },
     {
       "part": "disclosure row",
       "select": "summary[data-nav-row]",
-      "fine": 32,
-      "coarse": 44
+      "fine": 33,
+      "coarse": 45
     }
   ],
   "theming": {
@@ -183,7 +183,7 @@
     "Fills the sidebar's width; labels truncate rather than wrap.",
     "Tooltips are drawn from 64rem only; on phones the description is still the accessible description."
   ],
-  "contract": "contract\n  slot is \"side-nav\"\n  label is \"Sections\"\n  a \"Home\" min_height 32\n  when default shows a \"News\"\n  when default shows summary \"Content\"\n  when flat shows a \"B\"\nend",
+  "contract": "contract\n  slot is \"side-nav\"\n  label is \"Sections\"\n  a \"Home\" min_height 33\n  when default shows a \"News\"\n  when default shows summary \"Content\"\n  when flat shows a \"B\"\nend",
   "checks": [
     {
       "say": "Exactly one link is the current page.",

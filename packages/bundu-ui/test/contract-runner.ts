@@ -191,30 +191,34 @@ export function heightOf(classes: string, prefix = ""): number | null {
  */
 export const ROLE_HEIGHTS: Readonly<Record<string, readonly [number, number]>> =
   {
-    touch: [49, 36],
-    "touch-min": [49, 49],
+    touch: [45, 36],
+    "touch-min": [45, 24],
     control: [49, 36],
-    "control-sm": [49, 32],
-    "control-lg": [56, 40],
+    "control-sm": [49, 33],
+    "control-lg": [56, 41],
     "control-icon": [49, 36],
-    "control-dense": [32, 28],
-    field: [49, 49],
-    "field-sm": [49, 49],
+    "control-dense": [33, 28],
+    field: [49, 36],
+    "field-sm": [49, 33],
   };
 
 /**
  * THE BUNDU FLOOR, as the runner holds it (owner ruling 2026-11-02): a copy of `BUNDU_FLOOR` in
  * `lib/tokens/roles.source.ts`, kept here so this file stays free of imports; `__tests__/density.test.ts`
  * fails when the two disagree, and mzizi-rs/contract-eval holds the same numbers.
- * `HIT_AREA_PX` is the hit region every interactive control keeps on every device, desktop included;
- * `VISIBLE_FINE_MIN_PX` is the smallest a control is DRAWN at desktop density.
+ * The floor has two pointer tiers (owner ruling 2026-11-12, #660): `HIT_AREA_PX` is the hit region every
+ * interactive control keeps on touch (a coarse pointer); `HIT_AREA_FINE_PX` is the one it keeps on a desktop (a
+ * fine pointer with hover), where the drawn box is the hit region; `VISIBLE_FINE_MIN_PX` (28px) is the smallest any
+ * interactive element is DRAWN at desktop density. It is larger than `HIT_AREA_FINE_PX`, so a box drawn under it fails
+ * even where its hit region would pass.
  */
-export const HIT_AREA_PX = 49;
+export const HIT_AREA_PX = 45;
+export const HIT_AREA_FINE_PX = 24;
 export const VISIBLE_FINE_MIN_PX = 28;
 
 /**
  * Roles the token layer's `hit-area` rule grows to HIT_AREA_PX with a pseudo-element (see `densityLayer()` in
- * render-globals-css.ts). Composite rows (`menuitem*`, `option`) are NOT here: a 49px overlay on a 28 to 36px
+ * render-globals-css.ts). Composite rows (`menuitem*`, `option`) are NOT here: a 45px overlay on a 24 to 36px
  * row would overlap its neighbours, so the token layer gives them `min-height` instead.
  */
 const HIT_AREA_ROLES = new Set(["button", "tab", "switch"]);
@@ -262,16 +266,20 @@ export function isInteractive(el: Element): boolean {
 }
 
 /**
- * The hit region, in px, an interactive control has at one pointer. It is the drawn height, raised to
- * HIT_AREA_PX only where the token layer's rule provably does it: a button-like control with no `after:` utility
+ * The hit region, in px, an interactive control has at one pointer. It is the drawn height, raised to `floor`
+ * (HIT_AREA_PX on touch, HIT_AREA_FINE_PX on a desktop) only where the token layer's rule provably does it: a button-like control with no `after:` utility
  * of its own and no overflow clipping (the pseudo-element), or a composite row with no `min-h-*` of its own
  * (`min-height`). The runner cannot see static positioning or a page without the stylesheet, so it assumes the
  * stylesheet is there; everything else is the drawn box.
  */
-export function hitRegion(el: Element, drawn: number): number {
+export function hitRegion(
+  el: Element,
+  drawn: number,
+  floor: number = HIT_AREA_PX,
+): number {
   if (isCompositeRow(el))
-    return ownMinHeight(el) ? drawn : Math.max(drawn, HIT_AREA_PX);
-  if (carriesHitArea(el) && !clips(el)) return Math.max(drawn, HIT_AREA_PX);
+    return ownMinHeight(el) ? drawn : Math.max(drawn, floor);
+  if (carriesHitArea(el) && !clips(el)) return Math.max(drawn, floor);
   return drawn;
 }
 
@@ -288,15 +296,15 @@ export function hitViolations(
   if (fine === null || !isInteractive(el)) return [];
   const at = coarse ?? fine;
   const under: string[] = [];
-  if (hitRegion(el, fine) < HIT_AREA_PX)
+  if (hitRegion(el, fine, HIT_AREA_FINE_PX) < HIT_AREA_FINE_PX)
     under.push(
-      `hit region is ${hitRegion(el, fine)}px on a fine pointer, below the ${HIT_AREA_PX}px Bundu floor`,
+      `hit region is ${hitRegion(el, fine, HIT_AREA_FINE_PX)}px on a fine pointer, below the ${HIT_AREA_FINE_PX}px Bundu floor`,
     );
   if (hitRegion(el, at) < HIT_AREA_PX)
     under.push(
       `hit region is ${hitRegion(el, at)}px on a coarse pointer, below the ${HIT_AREA_PX}px Bundu floor`,
     );
-  if (carriesHitArea(el) && !clips(el) && fine < VISIBLE_FINE_MIN_PX)
+  if (fine < VISIBLE_FINE_MIN_PX)
     under.push(
       `drawn at ${fine}px on a fine pointer, below the ${VISIBLE_FINE_MIN_PX}px smallest a control is drawn`,
     );
@@ -304,51 +312,11 @@ export function hitViolations(
 }
 
 /**
- * Density rows whose control is a known, pinned gap against the Bundu floor: `<contract name>:<row part>`.
- * Each is a link, or a control drawn on a literal Tailwind height (`h-12`, 48px) or smaller than the desktop
- * minimum, that predates the floor. The set is pinned by `__tests__/density.test.ts`, which also holds it equal to the Rust copy;
- * the follow-up moves each onto a size role.
+ * Density rows excused from the Bundu floor: `<contract name>:<row part>`. EMPTY since the 2026-11-20 floor sweep
+ * (every density row meets the floor: 45px hit region on touch, 24px on a desktop, a desktop drawn 28px). A new entry
+ * is a regression and needs an owner ruling; `__tests__/density.test.ts` pins this list equal to the Rust copy.
  */
-export const HIT_AREA_GAPS: readonly string[] = [
-  "app/button:sm",
-  "app/command-palette:result row",
-  "app/command-palette:search box",
-  "app/confirm-action:typed confirm box",
-  "app/data-table:menu item",
-  "app/filter-bar:field",
-  "app/form-field:input",
-  "app/form-field:select",
-  "app/info-tip:button",
-  "app/input:input",
-  "app/page-header:docs pill",
-  "app/pagination:page link",
-  "app/plan-summary:action link",
-  "app/side-nav:nav row",
-  "app/tier-status:evidence link",
-  "app/toolbar-menu:choice",
-  "app/toolbar:search box",
-  "app/top-bar-action:action",
-  "app/workspace-switcher:menu item",
-  "discover/breadcrumb:crumb link",
-  "discover/category-chip:chip",
-  "discover/category-chips:chip",
-  "discover/detail-actions:secondary action",
-  "discover/detail-actions:share link",
-  "discover/discover-card:app link",
-  "discover/discover-section:see all",
-  "discover/discover-shell:home link",
-  "discover/discover-shell:nav link",
-  "discover/load-more:link",
-  "discover/meta-list:linked value",
-  "discover/open-in-app:link",
-  "discover/related-rail:see all",
-  "site/hero:call to action",
-  "site/hero:call to action (centred)",
-  "site/social-icon:link",
-  "ui/address-code:link",
-  "ui/address-private-row:link",
-  "ui/address-share-card:link",
-];
+export const HIT_AREA_GAPS: readonly string[] = [];
 
 type Outcome = { ok: true } | { ok: false; say: string };
 const pass: Outcome = { ok: true };
@@ -535,7 +503,7 @@ function evaluateClause(clause: string, rendered: Rendered): Outcome {
       for (const el of elements(doc(h))) {
         if (el.name !== tag || !carries(el, want ?? "")) continue;
         seen += 1;
-        // The Bundu hit area (49px) is judged on a coarse pointer here; a fine pointer's hit region is
+        // The Bundu hit area (45px) is judged on a coarse pointer here; a fine pointer's hit region is
         // held by the density rows (`evaluateDensity`) and __tests__/density.test.ts.
         const cls = el.attribs.class ?? "";
         const px = heightOf(cls, "pointer-coarse:") ?? heightOf(cls);
@@ -685,10 +653,11 @@ export function evaluateDensity(
         failures.push(
           `density ${row.part}: coarse pointer is ${coarse}px, the contract says ${row.coarse}`,
         );
-      // The Bundu floor (owner ruling 2026-11-02): every interactive control keeps a HIT_AREA_PX hit
-      // region on every device, desktop included. A button-like control keeps it through the
-      // `hit-area` pseudo-element and may be drawn down to VISIBLE_FINE_MIN_PX; a native field or a
-      // link has only its box, so it is drawn at the floor.
+      // The Bundu floor (owner rulings 2026-11-02 and 2026-11-12, #660): every interactive control keeps a
+      // HIT_AREA_PX hit region on touch and a HIT_AREA_FINE_PX one on a desktop. A button-like control keeps
+      // it through the `hit-area` pseudo-element; a native field or a link has only its box, so its box is its
+      // hit region. Every interactive element is also drawn at least VISIBLE_FINE_MIN_PX on a desktop (checked in
+      // hitViolations, not here).
       const gap = HIT_AREA_GAPS.includes(`${contract.name}:${row.part}`);
       if (!gap)
         for (const u of hitViolations(el, fine, coarse))
@@ -699,12 +668,68 @@ export function evaluateDensity(
 }
 
 /**
- * THE SPACING FLOOR, as the runner holds it (owner, 2026-11-04, #617): a copy of `BUNDU_FLOOR.spacing` in
+ * THE SPACING FLOOR, as the runner holds it (owner, 2026-11-04, #617; the least layer, owner 2026-11-19): a copy of `BUNDU_FLOOR.spacing` in
  * `lib/tokens/roles.source.ts`, kept here so this file stays free of imports; `__tests__/spacing-floor.test.ts`
  * fails when the two disagree, and mzizi-rs/contract-eval holds the same numbers.
  */
 export const INSET_FLOOR_PX = 14;
 export const GAP_FLOOR_PX = 7;
+
+/** The layers the layer-aware checker knows (owner ruling 2026-11-19). A copy of `SpacingLayer` in roles.source.ts. */
+export type SpacingLayer =
+  "pills" | "chips" | "controls" | "cards" | "containers" | "layout";
+
+/**
+ * Each layer's dense floors, px: the absolute minimum a component of that layer may use. A copy of
+ * `SPACING_LAYER_FLOORS` in lib/tokens/roles.source.ts; `__tests__/spacing-floor.test.ts` holds it equal.
+ */
+export const SPACING_LAYER_FLOORS: Readonly<
+  Record<SpacingLayer, Readonly<Record<string, number>>>
+> = {
+  pills: { padding: 5, gap: 3 },
+  chips: { padding: 9, gap: 7 },
+  controls: { padding: 12, gap: 7, between: 9, label: 5 },
+  cards: { padding: 14, gap: 7 },
+  containers: { padding: 21, gap: 14 },
+  layout: { padding: 17, wide: 21, gap: 28 },
+};
+
+/**
+ * The layer of each contract that has one (a copy of `COMPONENT_LAYERS` in lib/tokens/roles.source.ts). A contract
+ * not listed here is checked at the fallback floor: INSET_FLOOR_PX (14) and GAP_FLOOR_PX (7), today's values.
+ */
+export const COMPONENT_LAYERS: Readonly<Record<string, SpacingLayer>> = {
+  "app/badge": "pills",
+  "ui/status-badge": "pills",
+  "ui/mzizi-verified-badge": "pills",
+  "discover/category-chip": "chips",
+  "discover/category-chips": "chips",
+  "app/button": "controls",
+  "ui/button": "controls",
+  "app/input": "controls",
+  "ui/input": "controls",
+  "ui/native-select": "controls",
+  "ui/segmented-control": "controls",
+  "app/toolbar-menu": "controls",
+  "app/top-bar-action": "controls",
+  "app/quick-search": "controls",
+  "app/card": "cards",
+  "ui/card": "cards",
+  "app/stat-tile": "cards",
+  "discover/discover-card": "cards",
+  "app/alert": "cards",
+  "ui/alert": "cards",
+  "app/confirm-action": "containers",
+  "app/detail-panel": "containers",
+  "app/command-palette": "containers",
+  "app/account-menu": "containers",
+  "ui/toaster": "containers",
+  "app/app-shell": "layout",
+  "app/page-header": "layout",
+  "site/container": "layout",
+  "site/section": "layout",
+  "discover/discover-shell": "layout",
+};
 export const LEADING_FLOOR = 1.5;
 
 /** The named spacing steps (`--space-*`, px) a class can name: `p-md`, `gap-sm`. A copy of `SPACING`. */
@@ -758,11 +783,21 @@ const GAP_KINDS = new Set(["gap", "gap-x", "gap-y", "space-x", "space-y"]);
 const INLINE_PADDING = new Set(["p", "px", "pl", "pr", "ps", "pe"]);
 const BLOCK_PADDING = new Set(["p", "py", "pt", "pb"]);
 /** Body copy: the elements WCAG 1.4.12 line height applies to here. Headings and display type are not. */
-const BODY_COPY = new Set(["p", "li", "dd", "blockquote", "figcaption", "td", "th"]);
+const BODY_COPY = new Set([
+  "p",
+  "li",
+  "dd",
+  "blockquote",
+  "figcaption",
+  "td",
+  "th",
+]);
 
 /** Whether an element has text of its own, directly in it: a text container, in the sense of the inset floor. */
 function ownText(el: Element): boolean {
-  return el.children.some((c) => c.type === "text" && /\S/.test(textContent(c)));
+  return el.children.some(
+    (c) => c.type === "text" && /\S/.test(textContent(c)),
+  );
 }
 
 /** Whether an element draws an edge of its own: a fill, a border, a ring, a shadow or an outline. Padding is the inset from that edge. */
@@ -780,13 +815,28 @@ function fixesHeight(tokens: string[]): boolean {
 }
 
 /** Inline tags: their box is a run of text, so its line height, not block padding, decides the block axis. */
-const INLINE_TAGS = new Set(["span", "code", "kbd", "mark", "small", "a", "abbr", "b", "i", "em", "strong", "label"]);
+const INLINE_TAGS = new Set([
+  "span",
+  "code",
+  "kbd",
+  "mark",
+  "small",
+  "a",
+  "abbr",
+  "b",
+  "i",
+  "em",
+  "strong",
+  "label",
+]);
 /** Whether an element is inline-level or a pill: a chip, a tag, a badge, an eyebrow. */
 function inlineLevel(el: Element, tokens: string[]): boolean {
   return (
     INLINE_TAGS.has(el.name) ||
     tokens.some((t) =>
-      /^(?:inline|inline-flex|inline-block|inline-grid|w-fit|rounded-full)$/.test(utilityOf(t)),
+      /^(?:inline|inline-flex|inline-block|inline-grid|w-fit|rounded-full)$/.test(
+        utilityOf(t),
+      ),
     )
   );
 }
@@ -801,6 +851,11 @@ function hasSiblings(el: Element): boolean {
   return kids.length >= 2;
 }
 
+/** Whether an element has a direct child that is an interactive control (a button, a link with a hit area, an input). */
+function childrenAreControls(el: Element): boolean {
+  return el.children.some((c) => isTag(c) && isInteractive(c));
+}
+
 /**
  * What an element's own classes violate of the spacing floor, as sentences (each names the class). Three rules,
  * each on the element that carries the class, never on a guess about its ancestors:
@@ -808,35 +863,66 @@ function hasSiblings(el: Element): boolean {
  * - inset: padding under INSET_FLOOR_PX on an element with text of its own that draws an edge (a fill, border, ring,
  *   shadow or outline), on the inline axis, and on the block axis too unless the element is an interactive control
  *   or fixes its own height or is inline-level, a chip or a pill (then its height or its line height decides the
- *   block axis, as the 28px and 49px floors do for a control); and a
+ *   block axis, as the 28px drawn and 45px hit floors do for a control); and a
  *   negative margin on a text container, which pulls its text past its edge;
  * - leading: a tight `leading-*` on body copy (`p`, `li`, `dd`, `blockquote`, `figcaption`, `td`, `th`).
  * `evaluateSpacing` and mzizi-rs/contract-eval's `spacing_violations` return the same list for the same markup;
  * `contracts/spacing-cases.json` is the shared table both are tested against.
  */
-export function spacingViolations(el: Element): string[] {
+export function spacingViolations(el: Element, layer?: SpacingLayer): string[] {
+  if (layer !== undefined && !(layer in SPACING_LAYER_FLOORS))
+    throw new Error(`unknown spacing layer "${layer}"`);
   const out: string[] = [];
   const tokens = classOf(el).split(/\s+/).filter(Boolean);
   const text = ownText(el);
   const edge = drawsEdge(tokens);
-  const control = isInteractive(el) || fixesHeight(tokens) || inlineLevel(el, tokens);
+  const control =
+    isInteractive(el) || fixesHeight(tokens) || inlineLevel(el, tokens);
   const siblings = hasSiblings(el);
+  // Each element is checked against its OWN layer's dense floor (owner 2026-11-19). An interactive element is a control
+  // whatever its component is; any other element takes its component's layer. No known layer: today's 14 and 7.
+  // A component with no known layer keeps 14 and 7 on every element, so its enforcement is never weaker than today.
+  const elementLayer: SpacingLayer | undefined = layer
+    ? isInteractive(el)
+      ? "controls"
+      : layer
+    : undefined;
+  const insetFloor = elementLayer
+    ? SPACING_LAYER_FLOORS[elementLayer].padding!
+    : INSET_FLOOR_PX;
+  // Between adjacent controls is 9px when the children are controls, for a component with a layer. A component with
+  // no layer keeps 7 between its children: a 9px rule there would flag a form's label-to-field gap (a 7px gap), so the
+  // control rule stops at the layers. A pill's gap is 3px; everything else keeps the 7px fallback.
+  const gapFloor =
+    layer && childrenAreControls(el)
+      ? SPACING_LAYER_FLOORS.controls.between!
+      : layer === "pills"
+        ? SPACING_LAYER_FLOORS.pills.gap!
+        : GAP_FLOOR_PX;
   for (const t of tokens) {
     const u = utilityOf(t);
     const m = SPACING_UTILITY.exec(u);
     if (m) {
       const [, neg, kind, v] = m as unknown as [string, string, string, string];
       const px = spaceOf(v);
-      if (GAP_KINDS.has(kind) && !neg && px !== null && px < GAP_FLOOR_PX && siblings)
-        out.push(`\`${t}\` is a ${px}px gap, below the ${GAP_FLOOR_PX}px Bundu spacing floor`);
+      if (
+        GAP_KINDS.has(kind) &&
+        !neg &&
+        px !== null &&
+        px < gapFloor &&
+        siblings
+      )
+        out.push(
+          `\`${t}\` is a ${px}px gap, below the ${gapFloor}px Bundu spacing floor${layer ? ` for the ${layer} layer` : ""}`,
+        );
       else if (text && neg && /^m/.test(kind) && px !== null && px > 0)
         out.push(`\`${t}\` is a negative margin on a text container`);
       else if (text && edge && !neg && px !== null) {
         const inline = INLINE_PADDING.has(kind);
         const block = BLOCK_PADDING.has(kind) && !control;
-        if ((inline || block) && px < INSET_FLOOR_PX)
+        if ((inline || block) && px < insetFloor)
           out.push(
-            `\`${t}\` is ${px}px of ${inline ? "inline" : "block"} padding on a text container, below the ${INSET_FLOOR_PX}px Bundu inset floor`,
+            `\`${t}\` is ${px}px of ${inline ? "inline" : "block"} padding on a text container, below the ${insetFloor}px Bundu inset floor${layer ? ` for the ${layer} layer` : ""}`,
           );
       }
       continue;
@@ -845,9 +931,17 @@ export function spacingViolations(el: Element): string[] {
       const l = /^leading-(none|tight|snug|\[(\d*\.?\d+)\])$/.exec(u);
       if (l) {
         const n =
-          l[1] === "none" ? 1 : l[1] === "tight" ? 1.25 : l[1] === "snug" ? 1.375 : Number(l[2]);
+          l[1] === "none"
+            ? 1
+            : l[1] === "tight"
+              ? 1.25
+              : l[1] === "snug"
+                ? 1.375
+                : Number(l[2]);
         if (n < LEADING_FLOOR)
-          out.push(`\`${t}\` is a ${n} line height on body copy, below the ${LEADING_FLOOR} Bundu floor`);
+          out.push(
+            `\`${t}\` is a ${n} line height on body copy, below the ${LEADING_FLOOR} Bundu floor`,
+          );
       }
     }
   }
@@ -876,10 +970,11 @@ export function evaluateSpacing(
   rendered: Rendered,
 ): string[] {
   const failures: string[] = [];
+  const layer = COMPONENT_LAYERS[contract.name];
   for (const [state, html] of Object.entries(rendered)) {
     for (const el of elements(doc(html))) {
       if (SKIP.has(el.name)) continue;
-      for (const v of spacingViolations(el)) {
+      for (const v of spacingViolations(el, layer)) {
         const token = /^`([^`]+)`/.exec(v)?.[1] ?? v;
         const key = `${contract.name}:${token}`;
         if (!(key in SPACING_GAPS))

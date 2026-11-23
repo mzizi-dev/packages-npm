@@ -275,19 +275,15 @@
   }
 }
 
-/* Hand-written, not from the registry. The add link in AddressSelector is an <a>
-   with min-h-11 (44px). Links are not in the `hit-area` selector list and it is
-   a standalone control, so its hit region would sit under the Bundu floor. Lift it
-   to the floor here. Remove when the registry's Kweli address link is 45px. */
-a[data-slot="address-selector-add"] {
-  min-height: var(--target-floor);
-}
-
 /* Hand-written, not from the registry. DiscoverBreadcrumb's links and current-page
-   item draw min-h-6 (24px) on a fine pointer and min-h-11 (44px) on touch. They
-   are standalone controls, not links in running text, so the Bundu floor applies:
-   at least 45px on touch and never drawn under 28px on a desktop. Remove when the
-   registry's breadcrumb meets the floor. */
+   item are standalone controls, not links in running text, so the Bundu floor
+   applies: at least 45px wherever --target-floor is 45px, and never drawn under
+   28px on a desktop. Since mzizi-registry 4.48.0 the markup draws min-h-7 (28px)
+   and pointer-coarse:min-h-touch-min (45px on a coarse pointer), which covers
+   touch. It does not cover a fine pointer under 64rem, where --target-floor is
+   still 45px but pointer-coarse does not match, so this rule stays. Remove when
+   the registry's breadcrumb also lifts that case (as address-code does with
+   max-lg:min-h-touch-min). */
 [data-slot="discover-breadcrumb"] a {
   min-height: max(var(--target-floor), 1.75rem);
 }

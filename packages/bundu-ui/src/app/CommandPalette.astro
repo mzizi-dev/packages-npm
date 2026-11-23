@@ -37,20 +37,20 @@ const inputId = `${id}-q`;
 <div id={id} popover role="dialog" aria-label={label} data-slot="command-palette">
   {
     action ? (
-      <form method="get" action={action} role="search" data-cmdk-form class="flex items-center gap-2 border-b border-border px-3">
+      <form method="get" action={action} role="search" data-cmdk-form class="flex items-center gap-control-between border-b border-border px-3">
         <label for={inputId} class="sr-only">
           {label}
         </label>
         <Icon name="search" class="h-4 w-4 shrink-0 text-muted-foreground" />
-        <input id={inputId} name="q" type="search" autocomplete="off" autofocus placeholder={placeholder} class="h-11 min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
+        <input id={inputId} name="q" type="search" autocomplete="off" autofocus placeholder={placeholder} class="h-control-sm pointer-coarse:h-touch-min min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
       </form>
     ) : (
-      <div class="flex items-center gap-2 border-b border-border px-3" data-cmdk-form>
+      <div class="flex items-center gap-control-between border-b border-border px-3" data-cmdk-form>
         <label for={inputId} class="sr-only">
           {label}
         </label>
         <Icon name="search" class="h-4 w-4 shrink-0 text-muted-foreground" />
-        <input id={inputId} name="q" type="search" autocomplete="off" autofocus placeholder={placeholder} class="h-11 min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
+        <input id={inputId} name="q" type="search" autocomplete="off" autofocus placeholder={placeholder} class="h-control-sm pointer-coarse:h-touch-min min-w-0 flex-1 bg-transparent text-body outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden" />
       </div>
     )
   }
@@ -61,10 +61,10 @@ const inputId = `${id}-q`;
           <p aria-hidden="true" class="px-3.5 pt-2 pb-1 text-caption font-medium text-muted-foreground">
             {s.label}
           </p>
-          <ul role="list" class="grid gap-2">
+          <ul role="list" class="grid gap-control-between">
             {s.items.map((i) => (
               <li data-cmdk-item data-search={[i.label, i.description ?? i.summary ?? "", i.group ?? "", ...i.trail].join(" ")}>
-                <a href={i.href} class="flex h-9 min-w-0 items-center gap-2.5 rounded-sm px-3.5 text-body-sm outline-none hover:bg-muted focus-visible:bg-muted focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:h-11">
+                <a href={i.href} class="flex h-9 min-w-0 items-center gap-2.5 rounded-sm px-3.5 text-body-sm outline-none hover:bg-muted focus-visible:bg-muted focus-visible:ring-2 focus-visible:ring-ring pointer-coarse:h-touch-min">
                   {i.icon ? <Icon name={i.icon} class="h-4 w-4 shrink-0 text-muted-foreground" /> : <span class="w-4 shrink-0" />}
                   <span class="shrink-0">
                     {i.trail.length > 0 && <span class="text-muted-foreground">{i.trail.join(" › ")} › </span>}
@@ -155,7 +155,8 @@ const inputId = `${id}-q`;
         }
       });
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !(input.form ?? null)) {
+        // isComposing: an IME confirming a conversion candidate must not open
+        if (e.key === "Enter" && !e.isComposing && !(input.form ?? null)) {
           const first = links()[0];
           if (first) window.location.assign(first.href);
         }

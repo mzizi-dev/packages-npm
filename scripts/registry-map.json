@@ -215,6 +215,16 @@
       "path": "src/Card.astro",
       "registry": "n2-primitives/card.astro"
     },
+    "device-code": {
+      "package": "bundu-ui",
+      "path": "src/DeviceCode.astro",
+      "registry": "n2-primitives/device-code.astro"
+    },
+    "device-code-format": {
+      "package": "bundu-ui",
+      "path": "src/device-code-format.ts",
+      "registry": "n2-primitives/device-code-format.ts"
+    },
     "discover-breadcrumb": {
       "package": "bundu-ui",
       "path": "src/discover/DiscoverBreadcrumb.astro",
@@ -344,6 +354,11 @@
       "package": "bundu-ui",
       "path": "src/NativeSelect.astro",
       "registry": "n2-primitives/native-select.astro"
+    },
+    "qr-code": {
+      "package": "bundu-ui",
+      "path": "src/qr-code.ts",
+      "registry": "n2-primitives/qr-code.ts"
     },
     "qr-matrix": {
       "package": "bundu-ui",

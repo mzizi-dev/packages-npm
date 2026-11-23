@@ -18,12 +18,18 @@
  *   node scripts/sync-registry.mjs            write every mapped file  (pnpm registry:sync)
  *   node scripts/sync-registry.mjs --check    write nothing; fail on drift (pnpm registry:check)
  *   ... --from <dir>                          read a local registry checkout instead of GitHub
+ *   ... --hold-from <dir>                     read held components from a local checkout at hold.ref
  *
  * `styles/density.css` is not mapped: it is derived from the registry's
  * n1-tokens/mzizi-tokens-globals.css by scripts/registry-density.mjs.
  *
  * --check also fails if a package holds a component source that is not in
  * the map: a hand-authored `.astro` here is a fork of the registry.
+ *
+ * A component named in the pin's `hold` (scripts/registry-hold.mjs) is built
+ * from `hold.ref` instead of `ref`, and checked against it. Without
+ * --hold-from it is read from GitHub at that commit, even with --from: a local
+ * checkout is at `ref`, not at the hold.
  *
  * Never edit a mapped file in this repo. Change the registry, bump the pin,
  * run this.
@@ -40,6 +46,7 @@ import { fileURLToPath } from "node:url";
 
 import { safeRef } from "./contract-paths.mjs";
 import { densityCss } from "./registry-density.mjs";
+import { componentRef, readHold } from "./registry-hold.mjs";
 import { toPackage } from "./registry-imports.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -63,6 +70,9 @@ const from = fromIdx === -1 ? null : resolve(args[fromIdx + 1] ?? "");
 const tokensFromIdx = args.indexOf("--tokens-from");
 const tokensFrom =
   tokensFromIdx === -1 ? null : resolve(args[tokensFromIdx + 1] ?? "");
+const holdFromIdx = args.indexOf("--hold-from");
+const holdFrom =
+  holdFromIdx === -1 ? null : resolve(args[holdFromIdx + 1] ?? "");
 const map = JSON.parse(
   readFileSync(join(ROOT, "scripts/registry-map.json"), "utf8"),
 );
@@ -76,6 +86,8 @@ const ref = safeRef(pin.ref);
  * components). Defaults to `ref`.
  */
 const tokensRef = safeRef(pin.tokensRef ?? pin.ref);
+/** Components kept at an older registry commit than `ref` (registry-hold.mjs). */
+const hold = readHold(pin, map.components);
 
 /** A file from the registry, at a pinned ref (or the local checkout). */
 async function read(path, binary = false, at = ref, localDir = from) {
@@ -103,10 +115,17 @@ const outputs = [];
 for (const [name, e] of Object.entries(map.components)) {
   if (!SAFE.test(e.registry))
     throw new Error(`${name}: refusing registry path ${e.registry}`);
-  const source = await read(`components/registry/${e.registry}`);
+  const at = componentRef(hold, name, ref);
+  const source = await read(
+    `components/registry/${e.registry}`,
+    false,
+    at,
+    at === ref ? from : holdFrom,
+  );
   outputs.push({
     file: dest(e.package, e.path),
     body: toPackage(source, e.registry, e.package, e.path, map),
+    at,
   });
 }
 for (const [key, a] of Object.entries(map.assets)) {
@@ -118,6 +137,17 @@ for (const [key, a] of Object.entries(map.assets)) {
 }
 for (const x of EXTRA) {
   outputs.push({ file: dest(x.package, x.path), body: await read(x.registry) });
+}
+// A held contract is checked by the runner it was written for: the runner at
+// hold.ref, beside the current one (src/app/contracts.test.ts picks it for the
+// held contracts only). Without a held contract the file must not exist.
+const HELD_RUNNER = dest("bundu-ui", "test/contract-runner-held.ts");
+if (hold?.contracts.size) {
+  outputs.push({
+    file: HELD_RUNNER,
+    body: await read("contracts/runner.ts", false, hold.ref, holdFrom),
+    at: hold.ref,
+  });
 }
 
 // The Bundu floor and density layers, derived from the registry's whole
@@ -136,14 +166,14 @@ outputs.push({
 });
 
 let drift = 0;
-for (const { file, body } of outputs) {
+for (const { file, body, at = ref } of outputs) {
   const current = existsSync(file) ? readFileSync(file) : null;
   const want = Buffer.isBuffer(body) ? body : Buffer.from(body, "utf8");
   if (current && current.equals(want)) continue;
   const rel = relative(ROOT, file);
   if (check) {
     console.error(
-      `drift: ${rel} differs from mzizi-registry at ${ref.slice(0, 12)}`,
+      `drift: ${rel} differs from mzizi-registry at ${at.slice(0, 12)}${at === ref ? "" : " (held)"}`,
     );
     drift += 1;
   } else {
@@ -151,6 +181,13 @@ for (const { file, body } of outputs) {
     writeFileSync(file, want);
     console.log(`wrote ${rel}`);
   }
+}
+
+if (!hold?.contracts.size && existsSync(HELD_RUNNER)) {
+  console.error(
+    `stale: ${relative(ROOT, HELD_RUNNER)} is only for held contracts, and none is held; delete it`,
+  );
+  drift += 1;
 }
 
 // No hand-authored component source: every .astro in a package is mapped.
@@ -190,8 +227,11 @@ if (drift > 0) {
   );
   process.exit(1);
 }
+const held = hold
+  ? ` (${hold.components.size} held at ${hold.ref.slice(0, 12)}: ${[...hold.components].join(", ")})`
+  : "";
 console.log(
   check
-    ? `ok: ${outputs.length} files match mzizi-registry@${ref.slice(0, 12)}`
-    : `synced ${outputs.length} files from mzizi-registry@${ref.slice(0, 12)}`,
+    ? `ok: ${outputs.length} files match mzizi-registry@${ref.slice(0, 12)}${held}`
+    : `synced ${outputs.length} files from mzizi-registry@${ref.slice(0, 12)}${held}`,
 );

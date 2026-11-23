@@ -52,6 +52,14 @@ pnpm registry:check  # CI gate: fail on any drift, or on an .astro the registry 
 Never edit those files here. Change the component in the registry (its contract, `.astro` and
 `.tsx` together), then bump the pin and run `pnpm registry:sync`.
 
+A component the registry has changed in a way that is not yet safe to ship here can be
+**held**: the pin's `hold` (`scripts/registry-hold.mjs`) names it, the older registry commit it
+is built from and why. A held component and its contract are still synced from the registry
+byte for byte and still checked; they just follow `hold.ref` instead of `ref`, and a held
+contract is evaluated by the contract runner of that commit (`test/contract-runner-held.ts`).
+Today `button` (`Button.astro`) is held at registry 4.29.0: the registry's Astro button is
+unstyled since 4.42.0 and its look is a stylesheet this package does not ship.
+
 ## Tokens
 
 All 21 Mzizi colour families (7 minerals, 7 heritage, 7 experimental) under one

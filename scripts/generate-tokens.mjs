@@ -40,24 +40,11 @@ const byName = (list) => Object.fromEntries(list.map((e) => [e.name, e]));
  * else in this file contains a literal hex.
  * ------------------------------------------------------------------ */
 const LOCAL = {
-  // Canon has no ink token; the brand document treats foreground as a
-  // per-surface pairing rather than a palette entry. These are the values
-  // @bundu/ui has shipped since 0.1.0 and all four consumers render against.
-  foreground: { light: "#1a1a17", dark: "#f0efe9" },
-  // Canon has no "card": a card is `surface` in the registry's own shell.
-  // Marketing sites float a WHITE card on the light base for editorial
-  // contrast, which is why light stays #ffffff while dark adopts canon
-  // `surface` (this is drift fix 3 — dark was #1a1917).
-  cardLight: "#ffffff",
   // Ink used on a saturated fill (primary / destructive) in dark mode.
   onBrightDark: "#1a1917",
-  // Secondary/muted foreground. Canon `neutral` (#55514B/#A09C93) is close
-  // but not identical; changing it was not in scope for this pass. See
-  // RESIDUAL-DRIFT in the PR body.
-  mutedForeground: { light: "#5d5c57", dark: "#a8a6a0" },
   // Canon `container` dark is #1E1D1A; @bundu/ui has shipped #2a2927 (equal to
-  // `border` dark) since 0.1.0. Only the LIGHT value was in scope for this
-  // pass. See RESIDUAL-DRIFT in the PR body.
+  // `border` dark) since 0.1.0, for --secondary. Only the LIGHT value was in
+  // scope for that pass; --secondary dark is still open for the owner.
   secondaryDark: "#2a2927",
   white: "#ffffff",
   // Touch targets — an accessibility mandate, not a colour. The Bundu floor
@@ -122,8 +109,9 @@ function buildModel(canon) {
 
   // The nine-step surface ladder, in depth order. `muted` is the tenth
   // background in canon; it is emitted as --surface-muted because the
-  // semantic --muted (a shadcn token, mapped to canon `container`) already
-  // owns that name in every consumer's Tailwind config.
+  // semantic --muted (a shadcn token) owns that name in every consumer's
+  // Tailwind config. Since @bundu/ui 0.18.0 the semantic --muted IS canon
+  // `muted`, through --surface-muted, as in the registry.
   const LADDER = [
     "pitch",
     "void",
@@ -325,24 +313,43 @@ function declarations(m) {
     "Canon `base`. Was #faf9f4 / #100f0e before 0.2.0 — drift fixes 1 and 2.",
   );
   push("semantic", "--canvas", v("--background"), v("--background"));
+  // Text colours are the registry's roles (lib/tokens/roles.source.ts, in the
+  // snapshot): --foreground is --text-primary and --muted-foreground is
+  // --text-secondary, as in the registry's globals.css. Until 0.18.0 they were
+  // package-local (#1a1a17 / #f0efe9 and #5d5c57 / #a8a6a0); #5d5c57 is under
+  // the 7:1 body-text minimum on --base (6.0:1) and on --card (5.8:1).
+  const role = (name) => {
+    const r = m.roles.find((x) => x.name === name);
+    if (!r) throw new Error(`canon has no role "${name}"`);
+    return r;
+  };
   push(
     "semantic",
     "--foreground",
-    lit(LOCAL.foreground.light),
-    lit(LOCAL.foreground.dark),
+    lit(role("foreground").light),
+    lit(role("foreground").dark),
+    "The registry role (--text-primary). Was #1a1a17 / #f0efe9 until 0.18.0.",
   );
   push("semantic", "--ink", v("--foreground"), v("--foreground"));
 
+  // Surfaces follow canon (/v1/brand `backgrounds`) and the registry's
+  // styles/pattern/tokens.css: card is `surface`, popover is `overlay`, muted
+  // is canon `muted` (owner, 2026-11-23).
   push(
     "semantic",
     "--card",
-    lit(LOCAL.cardLight),
     v("--surface"),
-    "Dark was #1a1917 before 0.2.0 — drift fix 3. Light stays white: a " +
-      "marketing card floats above the base by design.",
+    v("--surface"),
+    "Canon `surface`, as in the registry. Light was #ffffff until 0.18.0.",
   );
   push("semantic", "--card-foreground", v("--foreground"), v("--foreground"));
-  push("semantic", "--popover", v("--card"), v("--card"));
+  push(
+    "semantic",
+    "--popover",
+    v("--overlay"),
+    v("--overlay"),
+    "Canon `overlay`, as in the registry. Was --card until 0.18.0.",
+  );
   push(
     "semantic",
     "--popover-foreground",
@@ -383,15 +390,17 @@ function declarations(m) {
   push(
     "semantic",
     "--muted",
-    v("--container"),
-    lit(LOCAL.secondaryDark),
-    "Light was #f4f2ec before 0.2.0 — drift fix 4.",
+    v("--surface-muted"),
+    v("--surface-muted"),
+    "Canon `muted` (the deepest fill), as in the registry. Was --container " +
+      "(light) and #2a2927 (dark) until 0.18.0.",
   );
   push(
     "semantic",
     "--muted-foreground",
-    lit(LOCAL.mutedForeground.light),
-    lit(LOCAL.mutedForeground.dark),
+    lit(role("muted-foreground").light),
+    lit(role("muted-foreground").dark),
+    "The registry role (--text-secondary). Was #5d5c57 / #a8a6a0 until 0.18.0.",
   );
 
   push(

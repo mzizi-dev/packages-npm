@@ -9,6 +9,10 @@
  * Only the brand changes between services: the `brand` slot (mark and
  * wordmark) and the brand overlay stylesheet. Layout never varies.
  *
+ * Keyboard help is part of the shell and cannot be left out (the Bundu floor,
+ * `BUNDU_FLOOR.keyboardHelp`): the footer names Tab, Shift+Tab and Enter and links to the
+ * accessibility statement. The shell defines no shortcut and no `accesskey`.
+ *
  * Mzizi Discover Standard (contracts/discover/discover-shell).
  */
 import MineralStrip from "../MineralStrip.astro";
@@ -31,8 +35,10 @@ interface Props {
   /** The seven-mineral strip on the left edge (default true). */
   strip?: boolean;
   skipLabel?: string;
+  /** The accessibility statement the keyboard help links to (default "/accessibility/"). */
+  accessibilityHref?: string;
 }
-const { homeLabel, homeHref = "/", nav = [], footerLinks = [], footerNote, strip = true, skipLabel = "Skip to content" } = Astro.props;
+const { homeLabel, homeHref = "/", nav = [], footerLinks = [], footerNote, strip = true, skipLabel = "Skip to content", accessibilityHref = "/accessibility/" } = Astro.props;
 const cur = (c: Link["current"]) => (c === true ? "page" : c === false || c === undefined ? undefined : c);
 const link = "text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground";
 ---
@@ -42,7 +48,7 @@ const link = "text-foreground underline decoration-border underline-offset-4 tra
   {strip && <MineralStrip />}
   <header class="border-b border-border bg-background">
     <div class="container-custom flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-4">
-      <a href={homeHref} aria-label={homeLabel} class="inline-flex min-h-11 items-center gap-2 text-foreground no-underline" data-slot="discover-home">
+      <a href={homeHref} aria-label={homeLabel} class="inline-flex min-h-control-sm pointer-coarse:min-h-touch-min items-center gap-2 text-foreground no-underline" data-slot="discover-home">
         <slot name="brand" />
       </a>
       {
@@ -51,7 +57,7 @@ const link = "text-foreground underline decoration-border underline-offset-4 tra
             <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-body-sm">
               {nav.map((l) => (
                 <li>
-                  <a href={l.href} aria-current={cur(l.current)} class={`inline-flex min-h-11 items-center ${link} aria-[current=page]:font-semibold aria-[current=page]:decoration-foreground`}>
+                  <a href={l.href} aria-current={cur(l.current)} class={`inline-flex min-h-control-sm pointer-coarse:min-h-touch-min items-center ${link} aria-[current=page]:font-semibold aria-[current=page]:decoration-foreground`}>
                     {l.label}
                   </a>
                 </li>
@@ -81,7 +87,7 @@ const link = "text-foreground underline decoration-border underline-offset-4 tra
             <ul class="space-y-2">
               {footerLinks.map((l) => (
                 <li>
-                  <a href={l.href} aria-current={cur(l.current)} class={`inline-flex min-h-11 items-center ${link}`}>
+                  <a href={l.href} aria-current={cur(l.current)} class={`inline-flex min-h-control-sm pointer-coarse:min-h-touch-min items-center ${link}`}>
                     {l.label}
                   </a>
                 </li>
@@ -90,6 +96,9 @@ const link = "text-foreground underline decoration-border underline-offset-4 tra
           </nav>
         )
       }
+      <p data-slot="keyboard-help" class="text-body-sm text-muted-foreground md:col-span-3">
+        Every page works with a keyboard alone: <kbd class="rounded-sm border border-border px-page-x font-sans text-caption">Tab</kbd> moves forward, <kbd class="rounded-sm border border-border px-page-x font-sans text-caption">Shift</kbd>+<kbd class="rounded-sm border border-border px-page-x font-sans text-caption">Tab</kbd> moves back, <kbd class="rounded-sm border border-border px-page-x font-sans text-caption">Enter</kbd> follows a link. Read the <a href={accessibilityHref} class={link}>accessibility statement</a> or report a barrier there.
+      </p>
       {footerNote !== undefined && <p class="text-body-sm text-muted-foreground md:col-span-3 empty:hidden">{footerNote}</p>}
     </div>
   </footer>

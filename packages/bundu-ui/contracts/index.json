@@ -239,7 +239,7 @@
     {
       "name": "app/bar-chart",
       "title": "BarChart",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "file": "app/bar-chart.contract.json",
       "astro": "app-bar-chart",
       "tsx": "app-bar-chart",
@@ -320,7 +320,7 @@
     {
       "name": "discover/discover-shell",
       "title": "DiscoverShell",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "file": "discover/discover-shell.contract.json",
       "astro": "discover-shell",
       "tsx": "discover-shell",
@@ -694,6 +694,15 @@
       "astro": "mzizi-verified-badge",
       "tsx": "mzizi-verified-badge",
       "rs": null
+    },
+    {
+      "name": "ui/device-code",
+      "title": "DeviceCode",
+      "version": "1.0.0",
+      "file": "ui/device-code.contract.json",
+      "astro": "device-code",
+      "tsx": "device-code",
+      "rs": "device-code"
     }
   ]
 }

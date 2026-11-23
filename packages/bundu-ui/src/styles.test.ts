@@ -14,6 +14,32 @@ import { beforeAll, describe, expect, it } from "vite-plus/test";
 const styles = resolve(dirname(fileURLToPath(import.meta.url)), "../styles");
 const require = createRequire(import.meta.url);
 
+const src = resolve(dirname(fileURLToPath(import.meta.url)));
+/** Component sources: every .astro, .ts and .tsx under src/, tests excluded. */
+function sources(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((d) => {
+    const path = resolve(dir, d.name);
+    if (d.isDirectory()) return sources(path);
+    return /\.(?:astro|tsx?)$/.test(d.name) && !d.name.endsWith(".test.ts")
+      ? [path]
+      : [];
+  });
+}
+/**
+ * The Bundu floor's size roles (`h-control-sm`, `size-touch-min`, ...) and
+ * spacing layers (`gap-control-between`, `p-container-dense`, ...), with any
+ * variant prefix (`pointer-coarse:`, `max-lg:`), as the components write them.
+ */
+const ROLE =
+  /(?<![\w:-])((?:[a-z-]+:)*-?(?:min-|max-)?(?:h|w|size|gap|gap-x|gap-y|p|px|py|ps|pe|pt|pb|m|mx|my|mt|mb|ms|me|space-x|space-y)-(?:control(?:-[a-z]+)*|touch(?:-[a-z]+)*|field(?:-[a-z]+)*|page-x(?:-[a-z]+)*|section(?:-dense)?|container(?:-[a-z]+)*|card(?:-[a-z]+)*|chip-x(?:-dense)?|pill-(?:x|gap)(?:-dense)?|label-gap(?:-dense)?|inset-floor|gap-floor))(?![\w-])/g;
+const COMPONENT_UTILITIES = [
+  ...new Set(
+    sources(src).flatMap((file) =>
+      [...readFileSync(file, "utf8").matchAll(ROLE)].map((m) => m[1]),
+    ),
+  ),
+].sort((a, b) => a.localeCompare(b));
+
 const UTILITIES = [
   "h-control",
   "h-control-sm",
@@ -34,6 +60,8 @@ const UTILITIES = [
 ];
 
 let css = "";
+/** Every size-role and spacing-layer utility the synced components use, compiled. */
+let componentCss = "";
 
 beforeAll(async () => {
   const compiler = await compile(
@@ -54,6 +82,7 @@ beforeAll(async () => {
     },
   );
   css = compiler.build(UTILITIES);
+  componentCss = compiler.build(COMPONENT_UTILITIES);
 });
 
 const flat = (s: string) => s.replace(/\s+/g, " ");
@@ -102,10 +131,12 @@ function px(value: string, vars: Map<string, string>): number {
   throw new Error(`cannot evaluate "${value}"`);
 }
 
+const text = flat;
+
 /** One declaration of a compiled rule: `.selector { prop: value }`. */
-function declared(selector: string, prop: string): string {
+function declared(selector: string, prop: string, from = css): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const rule = new RegExp(`${escaped}\\s*\\{([^}]*)\\}`).exec(flat(css));
+  const rule = new RegExp(`${escaped}\\s*\\{([^}]*)\\}`).exec(flat(from));
   if (!rule) throw new Error(`no rule for ${selector}`);
   const decl = new RegExp(`(?:^|[; ])${prop}:\\s*([^;]+)`).exec(rule[1]);
   if (!decl) throw new Error(`${selector} has no ${prop}`);
@@ -383,15 +414,61 @@ describe("the spacing layers and control heights (mzizi-registry 4.45.0)", () =>
   });
 });
 
+describe("every size role and spacing layer the components use resolves", () => {
+  // The components synced from mzizi-registry 4.49.0 draw with the Bundu floor's size roles and
+  // spacing layers. Each must compile to a rule from the package's own stylesheets, or the
+  // component would be drawn with no size at all.
+  it("finds them in the component sources", () => {
+    for (const cls of [
+      "h-control-sm",
+      "pointer-coarse:h-touch-min",
+      "pointer-coarse:size-touch-min",
+      "size-control-sm",
+      "gap-control-between",
+      "min-h-control-dense",
+      "max-lg:min-h-touch-min",
+      "p-container-dense",
+    ]) {
+      expect(COMPONENT_UTILITIES, cls).toContain(cls);
+    }
+  });
+
+  it.each(COMPONENT_UTILITIES)("%s compiles", (cls) => {
+    const selector = `.${cls.replace(/:/g, "\\:")}`;
+    expect(flat(componentCss)).toContain(`${selector} `);
+  });
+});
+
 describe("the address selector add link meets the floor", () => {
-  it("lifts the <a> add link to --target-floor, the hit region on touch", () => {
-    // The link is an <a> with min-h-11 (44px). Links are not in the hit-area selector list, so the
-    // local rule in globals.css lifts it to the 45px floor. Remove the rule with the registry fix.
+  it("draws the <a> add link at the control size, and 45px on touch", () => {
+    // mzizi-registry 4.47.0 (#733) moved the link from min-h-11 (44px) to the size role, so the
+    // local rule globals.css carried until 0.17.0 is gone: the markup meets the floor itself.
     const vars = rootDefaults();
+    const source = readFileSync(resolve(src, "AddressSelector.astro"), "utf8");
+    const link = /data-slot="address-selector-add"\s+class="([^"]+)"/.exec(
+      source,
+    );
+    expect(link?.[1].split(/\s+/)).toEqual(
+      expect.arrayContaining([
+        "min-h-control-sm",
+        "pointer-coarse:min-h-touch-min",
+      ]),
+    );
     expect(
-      px(declared('a[data-slot="address-selector-add"]', "min-height"), vars),
+      px(declared(".min-h-control-sm", "min-height", componentCss), vars),
+    ).toBe(49);
+    expect(text(componentCss)).toMatch(/--size-control-sm: 2\.0625rem;/); // 33px on a desktop
+    expect(
+      px(
+        declared(
+          ".pointer-coarse\\:min-h-touch-min",
+          "min-height",
+          componentCss,
+        ),
+        vars,
+      ),
     ).toBe(45);
-    expect(px("var(--target-floor)", vars)).toBe(45);
+    expect(text(css)).not.toContain('a[data-slot="address-selector-add"]');
   });
 });
 

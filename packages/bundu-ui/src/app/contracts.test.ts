@@ -9,21 +9,40 @@
 // `contract … end` clauses, the selector checks, the density table and the
 // brand-overlay rule. A clause the runner cannot evaluate fails: an
 // unevaluable contract must never read as a passing one (RFC-0006 FM-12).
+//
+// A contract held at an older registry commit (the `hold` in
+// scripts/registry-ref.json, scripts/registry-hold.mjs) is evaluated by the
+// runner of that commit, test/contract-runner-held.ts, which `pnpm
+// registry:sync` writes beside the current one: a held contract is checked
+// exactly as it was before the pin moved. Every other contract uses the
+// current runner.
 import { readFileSync, readdirSync } from "node:fs";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, test } from "vite-plus/test";
 
-import {
-  type Contract,
-  type Rendered,
-  declaredProps,
-  declaredSlots,
-  evaluateChecks,
-  evaluateClauses,
-  evaluateDensity,
-  evaluateTheming,
-  hydrate,
-} from "../../test/contract-runner";
+import * as current from "../../test/contract-runner";
+import type { Contract, Rendered } from "../../test/contract-runner";
+
+type Runner = typeof current;
+const heldRunner = Object.values(
+  import.meta.glob<Runner>("/test/contract-runner-held.ts", { eager: true }),
+)[0];
+const pin = JSON.parse(
+  readFileSync(
+    new URL("../../../../scripts/registry-ref.json", import.meta.url),
+    "utf8",
+  ),
+) as { hold?: { contracts?: string[] } };
+const held = new Set(pin.hold?.contracts ?? []);
+/** The runner a contract is evaluated by: the held one for a held contract. */
+function runnerFor(c: { name: string }): Runner {
+  if (!held.has(c.name)) return current;
+  if (!heldRunner)
+    throw new Error(
+      `${c.name} is held, but test/contract-runner-held.ts is missing: run pnpm registry:sync`,
+    );
+  return heldRunner;
+}
 
 const contractsDir = new URL("../../contracts/", import.meta.url);
 const srcDir = new URL("../", import.meta.url);
@@ -66,6 +85,7 @@ async function renderStates(c: Contract): Promise<Rendered> {
   const mod = components[file];
   if (!mod) throw new Error(`${c.name}: no ${file}`);
   const out: Rendered = {};
+  const { hydrate } = runnerFor(c);
   for (const [name, state] of Object.entries(c.states)) {
     const html = await container.renderToString(mod.default as Component, {
       props: hydrate(state.props),
@@ -107,6 +127,16 @@ describe("coverage", () => {
     }
   });
 
+  test("a held contract is one the registry lists, and has its runner", () => {
+    for (const name of held) {
+      expect(
+        index.contracts.map((e) => e.name),
+        name,
+      ).toContain(name);
+    }
+    expect(heldRunner !== undefined).toBe(held.size > 0);
+  });
+
   test("every contract's Astro export is a package export of this file", () => {
     for (const c of contracts) {
       const exp = c.implementations.astro?.export ?? "";
@@ -120,6 +150,14 @@ describe.each(contracts.map((c) => [c.title, c] as const))(
   "%s keeps its contract",
   (_title, c) => {
     const source = readFileSync(sourceOf(c), "utf8");
+    const {
+      declaredProps,
+      declaredSlots,
+      evaluateChecks,
+      evaluateClauses,
+      evaluateDensity,
+      evaluateTheming,
+    } = runnerFor(c);
     let rendered: Rendered;
     beforeAll(async () => {
       rendered = await renderStates(c);

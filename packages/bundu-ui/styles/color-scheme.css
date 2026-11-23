@@ -161,13 +161,14 @@
     /* Canon `base`. Was #faf9f4 / #100f0e before 0.2.0 — drift fixes 1 and 2. */
     --background: var(--base);
     --canvas: var(--background);
-    --foreground: #f0efe9;
+    /* The registry role (--text-primary). Was #1a1a17 / #f0efe9 until 0.18.0. */
+    --foreground: #e5e5e3;
     --ink: var(--foreground);
-    /* Dark was #1a1917 before 0.2.0 — drift fix 3. Light stays white: a marketing
-       card floats above the base by design. */
+    /* Canon `surface`, as in the registry. Light was #ffffff until 0.18.0. */
     --card: var(--surface);
     --card-foreground: var(--foreground);
-    --popover: var(--card);
+    /* Canon `overlay`, as in the registry. Was --card until 0.18.0. */
+    --popover: var(--overlay);
     --popover-foreground: var(--card-foreground);
     /* Drift fix 6. Canon: "Cobalt is the exceptional mineral for links/info only
        — do not use it as --primary." Every brand-*.css overlay repoints this;
@@ -176,8 +177,11 @@
     --primary-foreground: #1a1917;
     --secondary: #2a2927; /* Light was #f4f2ec before 0.2.0 — drift fix 5. */
     --secondary-foreground: var(--foreground);
-    --muted: #2a2927; /* Light was #f4f2ec before 0.2.0 — drift fix 4. */
-    --muted-foreground: #a8a6a0;
+    /* Canon `muted` (the deepest fill), as in the registry. Was --container
+       (light) and #2a2927 (dark) until 0.18.0. */
+    --muted: var(--surface-muted);
+    /* The registry role (--text-secondary). Was #5d5c57 / #a8a6a0 until 0.18.0. */
+    --muted-foreground: #ccccca;
     --accent: var(--color-cobalt-container);
     --accent-foreground: var(--color-cobalt-on-container);
     --destructive: #f2b8b5;

@@ -15,7 +15,12 @@
  * `ref` is a registry branch, tag or commit (default `main`). `--check`
  * writes nothing and fails if the copy differs from the registry at `ref`.
  * It needs the network, so it is not part of `pnpm test`.
+ *
+ * A contract named in the `hold` of scripts/registry-ref.json
+ * (scripts/registry-hold.mjs) is fetched from `hold.ref` instead, and checked
+ * against it; index.json and every other contract come from `ref`.
  */
+import { readFileSync } from "node:fs";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -27,17 +32,27 @@ import {
   safeJoin,
   safeRef,
 } from "./contract-paths.mjs";
+import { contractRef, readHold } from "./registry-hold.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DEST = resolve(ROOT, "packages/bundu-ui/contracts");
 const args = process.argv.slice(2);
 const check = args.includes("--check");
 const ref = safeRef(args.find((a) => !a.startsWith("--")) ?? "main");
-const base = `https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/${ref}/contracts/`;
+const pin = JSON.parse(
+  readFileSync(resolve(ROOT, "scripts/registry-ref.json"), "utf8"),
+);
+const map = JSON.parse(
+  readFileSync(resolve(ROOT, "scripts/registry-map.json"), "utf8"),
+);
+const hold = readHold(pin, map.components);
+const base = (at) =>
+  `https://raw.githubusercontent.com/mzizi-dev/mzizi-registry/${at}/contracts/`;
 
-async function get(path) {
-  const res = await fetch(base + path);
-  if (!res.ok) throw new Error(`${base + path}: HTTP ${res.status}`);
+async function get(path, at = ref) {
+  const url = base(at) + path;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return res.text();
 }
 
@@ -54,8 +69,18 @@ const files = new Map([
   ["index.json", indexText],
   [index.schema, await get(index.schema)],
 ]);
+for (const name of hold?.contracts ?? []) {
+  if (!index.contracts.some((e) => e.name === name)) {
+    throw new Error(
+      `registry-ref.json: hold.contracts names ${name}, which the registry at ${ref} does not list`,
+    );
+  }
+}
 for (const entry of index.contracts)
-  files.set(entry.file, await get(entry.file));
+  files.set(
+    entry.file,
+    await get(entry.file, contractRef(hold, entry.file, ref)),
+  );
 
 let drift = 0;
 for (const [path, text] of files) {
@@ -71,7 +96,7 @@ for (const [path, text] of files) {
   if (local === text) continue;
   if (check) {
     console.error(
-      `drift: contracts/${path} differs from the registry at ${ref}`,
+      `drift: contracts/${path} differs from the registry at ${contractRef(hold, path, ref)}`,
     );
     drift += 1;
   } else {
@@ -95,5 +120,9 @@ for (const family of FAMILIES) {
 }
 if (drift > 0) process.exit(1);
 console.log(
-  `contracts match mzizi-registry@${ref} (${index.contracts.length} contracts)`,
+  `contracts match mzizi-registry@${ref} (${index.contracts.length} contracts` +
+    (hold?.contracts.size
+      ? `; ${[...hold.contracts].join(", ")} held at ${hold.ref}`
+      : "") +
+    ")",
 );

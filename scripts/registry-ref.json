@@ -1,6 +1,12 @@
 {
   "repository": "https://github.com/mzizi-dev/mzizi-registry",
-  "ref": "a64e57f23b598dfb7484230bcf156218bf578d1d",
+  "ref": "82aafedef083eb979d6521a8e68cb8b29f4c249b",
   "tokensRef": "4b488a2832facb92a114f9a96a748d65cc83cb08",
-  "note": "ref: the mzizi-registry commit the components and contracts are built from (pnpm registry:sync, pnpm contracts:check); move it in a coordinated major. tokensRef: the commit styles/density.css (the Bundu floor and spacing layers) is derived from (mzizi-registry v4.45.0). Omit tokensRef to use ref. Move either in a pull request: the diff is the review."
+  "hold": {
+    "ref": "a64e57f23b598dfb7484230bcf156218bf578d1d",
+    "components": ["button"],
+    "contracts": ["ui/button"],
+    "reason": "The registry's Astro button sets no class since mzizi-registry 4.42.0 (#716, #708): its look moved to styles/pattern/mzizi-theme.css, which @bundu/ui does not ship. Taking it would leave every @bundu/ui/Button.astro unstyled. Removing classes is held for the major the owner coordinates across products (mzizi-registry docs/unstyled/decisions.md), so Button.astro and contracts/ui/button stay at registry 4.29.0 until then. Lift the hold in that major."
+  },
+  "note": "ref: the mzizi-registry commit the components and contracts are built from (pnpm registry:sync, pnpm contracts:check). hold: the items still built from an older commit, and why (scripts/registry-hold.mjs). tokensRef: the commit styles/density.css (the Bundu floor and spacing layers) is derived from (mzizi-registry v4.45.0). Omit tokensRef to use ref. Move any of them in a pull request: the diff is the review."
 }
