@@ -21,6 +21,10 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — canon snapshot refreshed to brand v4.0.31 (@bundu/ui, 2026-11-28)
+
+`tokens/canon.snapshot.json` follows the live canon again, so `snapshot matches live canon` passes. The ecosystem copy now writes Mukoko, Nyuchi and Shamwari with a capital and calls Shamwari open-weight AI. The generated `brand-shamwari.css` header comment follows. No token value changes.
+
 ## [@bundu/ui 0.17.0] - 2026-11-20
 
 No issue: owner ruling 2026-11-20 (the Bundu floor is the rule; minors only).
