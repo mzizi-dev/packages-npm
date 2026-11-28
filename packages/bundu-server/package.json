@@ -61,7 +61,7 @@
     "prepack": "tsc -p tsconfig.build.json"
   },
   "devDependencies": {
-    "typescript": ">=7.0.2"
+    "typescript": "^6.0.3"
   },
   "files": [
     "dist"
