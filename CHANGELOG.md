@@ -21,6 +21,48 @@ Versions published before then are not renumbered.
 
 ## [Unreleased]
 
+### Changed — canon snapshot refreshed to brand v4.0.31 (@bundu/ui, 2026-11-28)
+
+`tokens/canon.snapshot.json` follows the live canon again, so `snapshot matches live canon` passes. The ecosystem copy now writes Mukoko, Nyuchi and Shamwari with a capital and calls Shamwari open-weight AI. The generated `brand-shamwari.css` header comment follows. No token value changes.
+
+## [@bundu/ui 0.17.0] - 2026-11-20
+
+No issue: owner ruling 2026-11-20 (the Bundu floor is the rule; minors only).
+
+### Fixed
+
+- `@bundu/ui` The Starlight shell (`@bundu/ui/starlight/shell.css`, used by docs.nyuchi.com and docs.bundu.org) meets the Bundu floor: header icon buttons and the search field are 45px (`--mzizi-target`, was 44px), sidebar items and footer links are 49px (`--mzizi-target-lg`, was 48px), the gap between controls is 9px (`--mzizi-gap`, was 7px), and the page edge is 21px (`--mzizi-pad-x`, was 20px). The shell draws these on every pointer, so a control is never drawn under 28px on a desktop.
+- `@bundu/ui` DiscoverBreadcrumb's links and current-page item draw at least 45px on touch and 28px on a desktop (were 44px and 24px), through a local rule in `styles/globals.css`, until the registry's breadcrumb meets the floor.
+
+## [@bundu/ui 0.16.0] - 2026-11-20
+
+Releases `@bundu/ui` 0.16.0, the next minor above 0.15.0. The Bundu floor and the spacing layers now come from mzizi-registry 4.45.0 (owner rulings 2026-11-19): the floor tokens move, the components do not. The components, contracts and exports stay at registry 4.29.0 until the coordinated major, so a consumer's buttons and inputs look the same. Nothing is removed.
+
+### Changed
+
+- `@bundu/ui` The hit region is 45px on touch and 24px on a desktop (fine pointer with hover, 64rem and up), with a desktop drawn minimum of 28px (was 49px and 28px). `--target-floor`, `--touch-target-lg` and the size roles follow in `styles/density.css`. `--touch-target` is 45px and `--touch-target-sm` is 41px in `styles/tokens.css` and `tokens.json` (was 49px and 40px).
+- `@bundu/ui` Control heights on a desktop are 33px for `sm`, dense and field-sm, and 41px for `lg` and `touch-target-sm` (was 32px and 40px). Touch heights (49px default and field, 56px `lg`) are unchanged: they are component heights, not the floor.
+- `@bundu/ui` The spacing layers from registry 4.45.0 are in `styles/density.css` as `--spacing-*` and `--space-*` tokens, each with its dense step (page edge 17, container 28/21, card 21/14, card gap 14/7, control inset 17/12, control gap 9/7, between controls 9/9, chip 12/9, pill 9/5, pill gap 5/3, label gap 7/5, section 49/28). The base-layer floors apply the dense step of each layer. The fallback floors for a component with no known layer stay 14px inset and 7px gap, never weaker.
+- (repository) `scripts/registry-ref.json` gains `tokensRef` (mzizi-registry v4.45.0, `4b488a2`). `ref` (the components and contracts, `a64e57f`) is unchanged. `scripts/sync-registry.mjs` derives `styles/density.css` from `tokensRef` (default `ref`), with a `--tokens-from` option for a local checkout. `scripts/registry-density.mjs` reads the v4.45.0 layout, including the spacing layers and the 45px and 24px hit region.
+- (repository) `scripts/generate-tokens.mjs` sets the touch values to 45px and 41px.
+
+### Tests
+
+- (`@bundu/ui`, test) `src/styles.test.ts` asserts the 45px touch and 24px desktop hit region, the 45px floor for `btn-*` and `min-h-touch-min`, and the base-layer rules by their layer's dense floor. A new block pins the dense steps and the 33px and 41px heights. Assertions are moved to the floor values only; none is loosened or skipped.
+
+### Known, left for the coordinated major
+
+- The components still set some literal heights that sit under the new floor, because they are built from registry 4.29.0: `pointer-coarse:h-11` and `min-h-11` (44px on touch) in `src/ui/variants.ts` and `src/AddressSelector.astro`. They are fixed upstream in mzizi-registry and arrive with the components' pin move. Until then they keep the 44px touch height.
+
+## [@bundu/ui 0.15.0] - 2026-11-17
+
+Releases `@bundu/ui` 0.15.0, the next minor above 0.14.0. It adds `@bundu/ui/starlight`, the one Mzizi shell and theme for the Starlight docs sites, so docs.nyuchi.com and docs.bundu.org can share a header, sidebar, footer and theme. Nothing existing changes.
+
+### Added
+
+- `@bundu/ui` New subpath `@bundu/ui/starlight`: the standard Mzizi shell and theme for Astro Starlight docs sites, so `docs.nyuchi.com` and `docs.bundu.org` share one header, sidebar, footer and theme (owner, 2026-11-17: "It all should be bundled into the Bundu/ui package"). `starlightMziziShell({ navLinks, footerColumns, tagline, legal, accent, theme })` registers `Header`, `Sidebar`, `PageFrame` (Starlight's frame plus a full-width footer) and a blank `MobileMenuToggle`, and adds `styles/tokens.css`, `starlight/theme.css` and `starlight/shell.css` before the site's own CSS. `accent` names a mineral (`cobalt` to `copper`) and points the accent at that mineral's `--color-*` tokens; without it the accent follows `--primary`, so a `brand-*.css` overlay works too. The theme maps Starlight's accent, neutrals, fonts and radii onto the tokens with no literal colour; accent text measured 7:1 or more in both themes (copper: links 8.32 light, 14.19 dark; active sidebar item 8.15 light, 7.15 dark). The header styles both Starlight's Pagefind button and the `nyuchi-docs-search` trigger. Moved from nyuchi-docs' private `@nyuchi/nyuchi-docs-shell` (nyuchi/nyuchi-docs#137, #133); changes from it: the `accent` option takes a mineral name instead of a `var(--…)` reference, a `theme` option and stylesheet are new, and the header's active-link test is `isCurrentHref` from `@bundu/ui/app/nav`. Needs `@astrojs/starlight` 0.42 in the site; it is not declared as a peer, so the lockfile and other consumers are unchanged. Tests: `src/starlight/starlight.test.ts` (28).
+- (repository) `scripts/sync-registry.mjs` exempts `packages/bundu-ui/src/starlight/` from the "unmapped `.astro`" check, by name and with the reason: the Starlight shell composes Starlight's virtual modules and the registry has no Starlight target to build it from.
+
 ### Changed
 
 - (repository) `AGENTS.md` state the owner's release rule: the owner approves major releases only; minor and patch releases (the `staging` → `main` release PR, its tag and the sync-back into `staging`) and merges of green PRs that have passed review are done by agents following the repo's playbook, without asking the owner (owner, 2026-11-02). The "Releases" bullet and the progress-report line (report ticks never publish, release, merge or deploy without the owner's approval) now state it. Merge method, the merge gate, auto-merge and the changelog rules are unchanged. Nothing served or published changes. Refs [mzizi-dev/mzizi-registry#661](https://github.com/mzizi-dev/mzizi-registry/issues/661).
@@ -28,6 +70,7 @@ Versions published before then are not renumbered.
 
 ### Fixed
 
+- (@bundu/ui, test) The starlight colour test strips comments until none are left, so a removal cannot reveal a new match; CodeQL flagged the single pass as incomplete multi-character sanitization (#143). Test only.
 - (repository) The release job waits about five minutes for npm to list a version before it gives up on the tag step, up from about fifty seconds (14 tries, the sleep growing from 5s to a 30s cap). After `@bundu/ui` 0.14.0 the GitHub release step ran before npm listed the version and was skipped; a rerun fixed it. `release-publish.mjs` still checks once and is unchanged.
 
 ### Security

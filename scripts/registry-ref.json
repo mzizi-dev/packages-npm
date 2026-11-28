@@ -1,5 +1,6 @@
 {
   "repository": "https://github.com/mzizi-dev/mzizi-registry",
   "ref": "a64e57f23b598dfb7484230bcf156218bf578d1d",
-  "note": "The mzizi-registry commit @bundu/ui and @bundu/server are built from (pnpm registry:sync) and checked against (pnpm registry:check). Move it in a pull request."
+  "tokensRef": "4b488a2832facb92a114f9a96a748d65cc83cb08",
+  "note": "ref: the mzizi-registry commit the components and contracts are built from (pnpm registry:sync, pnpm contracts:check); move it in a coordinated major. tokensRef: the commit styles/density.css (the Bundu floor and spacing layers) is derived from (mzizi-registry v4.45.0). Omit tokensRef to use ref. Move either in a pull request: the diff is the review."
 }

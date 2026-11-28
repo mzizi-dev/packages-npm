@@ -18,7 +18,7 @@
  *   - the body and caption floor (`--fs-*`, `--lh-*` and the `--text-*`
  *     registrations, with Tailwind's `text-xs`, `text-sm` and `text-base`
  *     remapped to 14, 14 and 17px);
- *   - the `hit-area` rule that grows every control to a 49px hit region, the
+ *   - the `hit-area` rule that grows every control to a 45px hit region on touch (24px on a desktop), the
  *     tablet and desktop density layers, and the
  *     `:root[data-mzizi-sizes="legacy"]` opt-out.
  *
@@ -109,12 +109,20 @@ export function declarations(body) {
   return out;
 }
 
-const SIZE_ROLE =
-  /^--spacing-(?:touch|touch-min|inset-floor|gap-floor|control|control-sm|control-lg|control-icon|control-dense|field|field-sm)$/;
+/**
+ * The spacing layers (owner rulings 2026-11-19): each is a default and a `-dense` step, declared in the registry's
+ * `@theme inline` as `--spacing-<layer>` and in `:root` as `--space-<layer>` (the value the base-layer floors read).
+ */
+const LAYER =
+  "(?:page-x|page-x-wide|section|container|container-gap|card|card-gap|card-stack|control-x|field-x|control-gap|control-between|chip-x|pill-x|pill-gap|label-gap)";
+const SIZE_ROLE = new RegExp(
+  `^--spacing-(?:touch|touch-min|inset-floor|gap-floor|control|control-sm|control-lg|control-icon|control-dense|field|field-sm|${LAYER}(?:-dense)?)$`,
+);
 const TEXT_ROLE =
   /^--text-(?:body-lg|body|body-sm|small|caption|code|xs|sm|base)(?:--line-height)?$/;
-const ROOT_VAR =
-  /^--(?:size-[a-z-]+|control-floor|target-floor|inset-floor|gap-floor|leading-floor|touch-target(?:-lg|-sm)?|h-button-default|h-button-sm|h-input|fs-[a-z0-9-]+|lh-[a-z0-9-]+)$/;
+const ROOT_VAR = new RegExp(
+  `^--(?:size-[a-z-]+|space-${LAYER}(?:-dense)?|control-floor|target-floor|inset-floor|gap-floor|leading-floor|touch-target(?:-lg|-sm)?|h-button-default|h-button-sm|h-input|fs-[a-z0-9-]+|lh-[a-z0-9-]+)$`,
+);
 
 /** Names the derived file must define, or the registry has moved under it. */
 const REQUIRED = [
@@ -161,7 +169,9 @@ export function densityCss(source, ref) {
     (b) => b.prelude === "@layer base" && b.body.includes("hit-area"),
   );
   const spacing = blocks.filter(
-    (b) => b.prelude === "@layer base" && b.body.includes("--inset-floor"),
+    (b) =>
+      b.prelude === "@layer base" &&
+      (b.body.includes("--gap-floor") || b.body.includes("--inset-floor")),
   );
   const media = blocks.filter(
     (b) =>
@@ -196,11 +206,12 @@ export function densityCss(source, ref) {
  * ${ref.slice(0, 12)}; \`pnpm registry:check\` holds it to that. Change the registry,
  * bump scripts/registry-ref.json, sync.
  *
- * What it is: body text 17px, captions 14px, a 49px hit region on every
- * control (a control may be DRAWN 28 to 40px at desktop density), and the size
- * roles the components use (h-control, h-control-sm, h-control-lg,
- * size-control-icon, h-field, min-h-touch-min). Without it those utilities
- * resolve to nothing. \`styles/globals.css\` imports it. An app that imports the
+ * What it is: body text 17px (15px at desktop density), captions 14px, a 45px
+ * hit region on touch and 24px on a desktop for every control (a control may
+ * be DRAWN 28 to 41px at desktop density), the size roles the components use
+ * (h-control, h-control-sm, h-control-lg, size-control-icon, h-field,
+ * min-h-touch-min), and the spacing layers (p-control-x, gap-card-gap, ...).
+ * Without it those utilities resolve to nothing. \`styles/globals.css\` imports it. An app that imports the
  * pieces separately adds it AFTER theme.css and tokens.css:
  *
  *   @import "@bundu/ui/styles/theme.css";
@@ -208,8 +219,8 @@ export function densityCss(source, ref) {
  *
  * The spacing floor (#617) rides with it: \`--inset-floor\` 14px (text inset),
  * \`--gap-floor\` 7px (control, label and item gaps), \`--leading-floor\` 1.5
- * (body line height), the \`p-inset-floor\` / \`gap-gap-floor\` utilities, and the
- * base-layer rules that apply them. Nothing may lower them.
+ * (body line height), and the base-layer rules that apply the per-layer floors.
+ * Nothing may lower them.
  *
  * \`:root[data-mzizi-sizes="legacy"]\` restores the pre-floor sizes (16px body,
  * 12px captions, 48/56px controls, no spacing floor) until an app has migrated.

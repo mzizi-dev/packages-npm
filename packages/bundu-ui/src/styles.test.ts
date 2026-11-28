@@ -147,18 +147,19 @@ describe("the size utilities resolve", () => {
     expect(declared(selector, prop)).toMatch(/var\(/);
   });
 
-  it("is at the 49px floor on touch, and 49px for the hit region everywhere", () => {
+  it("is drawn at the 49px touch height, and the hit-area floor is 45px", () => {
+    // 49 and 56 are component heights (buttons, inputs), not the floor. The floor is --target-floor.
     const vars = rootDefaults();
     for (const [selector, prop] of [
       [".h-control", "height"],
       [".h-control-sm", "height"],
       [".h-field", "height"],
       [".size-control-icon", "height"],
-      [".min-h-touch-min", "min-height"],
     ] as const) {
       expect(px(declared(selector, prop), vars), selector).toBe(49);
     }
     expect(px(declared(".h-control-lg", "height"), vars)).toBe(56);
+    expect(px(declared(".min-h-touch-min", "min-height"), vars)).toBe(45);
   });
 });
 
@@ -175,14 +176,15 @@ describe("the Bundu floor", () => {
     );
   });
 
-  it("holds the hit region at 49px and draws no control under 28px", () => {
+  it("holds the hit region at 45px on touch, 24px on a desktop, and draws no control under 28px", () => {
     const vars = rootDefaults();
-    expect(px("var(--target-floor)", vars)).toBe(49);
-    expect(px("var(--control-floor)", vars)).toBe(49);
+    expect(px("var(--target-floor)", vars)).toBe(45);
+    expect(px("var(--control-floor)", vars)).toBe(45);
+    expect(flat(css)).toMatch(/--target-floor: 1\.5rem/); // desktop hit region: 24px
     expect(flat(css)).toMatch(/--control-floor: 1\.75rem/); // desktop density: 28px
     for (const [name, value] of vars) {
       if (/^--size-(?!control-dense|inset-floor|gap-floor)/.test(name)) {
-        expect(px(value, vars), name).toBeGreaterThanOrEqual(49);
+        expect(px(value, vars), name).toBeGreaterThanOrEqual(45);
       }
     }
   });
@@ -216,11 +218,11 @@ describe("the Bundu floor", () => {
 
 describe("styles/globals.css classes are not under the floor", () => {
   it.each([".btn-primary", ".btn-secondary", ".btn-outline", ".btn-ghost"])(
-    "%s is drawn at 49px or more",
+    "%s is drawn at the 45px touch floor or more",
     (selector) => {
       expect(
         px(declared(selector, "height"), rootDefaults()),
-      ).toBeGreaterThanOrEqual(49);
+      ).toBeGreaterThanOrEqual(45);
     },
   );
 
@@ -265,16 +267,19 @@ describe("the spacing floor (#617)", () => {
       /body \{ line-height: max\(var\(--lh-body\), var\(--leading-floor\)\)/,
     );
     expect(text).toMatch(
-      /\[role="tab"\][^{]*\{ padding-inline: var\(--inset-floor\)/,
-    ); // controls with text
+      /\[role="tab"\][^{]*\{ padding-inline: var\(--space-control-x-dense\)/,
+    ); // controls with text: the controls layer's dense floor (12px)
     expect(text).toMatch(
-      /dialog,[^{]*\[role="alertdialog"\][^{]*\{ padding: var\(--inset-floor\)/,
-    ); // dialogs, alert surfaces, cards
+      /dialog,[^{]*\[role="alertdialog"\][^{]*\{ padding: var\(--space-container-dense\)/,
+    ); // dialogs: the containers layer's dense floor (21px)
+    expect(text).toMatch(
+      /\[role="tooltip"\][^{]*\[data-slot="card"\][^{]*\{ padding: var\(--space-card-dense\)/,
+    ); // cards: the cards layer's dense floor (14px)
     // A bare role="alert" or role="status" is inline error or live-region text,
     // not a surface, so it takes no surface padding (mzizi-registry 4.25.0,
     // "Base layer corrected"). A data-slot="alert" box still does.
     expect(text).not.toMatch(
-      /\[role="(alert|status)"\][^{]*\{ padding: var\(--inset-floor\)/,
+      /\[role="(alert|status)"\][^{]*\{ padding: var\(--space-card-dense\)/,
     );
     expect(text).toMatch(/\[role="toolbar"\][^{]*\{ gap: var\(--gap-floor\)/); // toolbars, groups, lists
   });
@@ -356,5 +361,53 @@ describe("the spacing floor (#617)", () => {
     ]) {
       expect(px(declared(sel, "gap"), vars), sel).toBeGreaterThanOrEqual(7);
     }
+  });
+});
+
+describe("the spacing layers and control heights (mzizi-registry 4.45.0)", () => {
+  it("sets the dense step of each layer and the 33px and 41px desktop heights", () => {
+    const vars = rootDefaults();
+    // dense is the absolute floor of each layer (owner, 2026-11-19)
+    expect(px(vars.get("--space-control-x-dense") ?? "", vars)).toBe(12);
+    expect(px(vars.get("--space-card-dense") ?? "", vars)).toBe(14);
+    expect(px(vars.get("--space-container-dense") ?? "", vars)).toBe(21);
+    expect(px(vars.get("--space-pill-x-dense") ?? "", vars)).toBe(5);
+    expect(px(vars.get("--space-label-gap-dense") ?? "", vars)).toBe(5);
+    expect(px(vars.get("--space-control-between") ?? "", vars)).toBe(9);
+    // the touch-target-sm is drawn at 41px (prime), the dense control at 33px (3 x 11)
+    expect(vars.get("--touch-target-sm")).toBe("41px");
+    expect(vars.get("--size-control-dense")).toBe("2.0625rem");
+    const text = flat(css);
+    expect(text).toMatch(/--size-control-sm: 2\.0625rem;/); // desktop: 33
+    expect(text).toMatch(/--size-control-lg: 2\.5625rem;/); // desktop: 41
+  });
+});
+
+describe("the address selector add link meets the floor", () => {
+  it("lifts the <a> add link to --target-floor, the hit region on touch", () => {
+    // The link is an <a> with min-h-11 (44px). Links are not in the hit-area selector list, so the
+    // local rule in globals.css lifts it to the 45px floor. Remove the rule with the registry fix.
+    const vars = rootDefaults();
+    expect(
+      px(declared('a[data-slot="address-selector-add"]', "min-height"), vars),
+    ).toBe(45);
+    expect(px("var(--target-floor)", vars)).toBe(45);
+  });
+});
+
+describe("the discover breadcrumb meets the floor", () => {
+  it("draws its links at least 45px on touch and 28px on a desktop", () => {
+    // DiscoverBreadcrumb draws min-h-6 (24px) on a fine pointer and min-h-11 (44px) on touch.
+    // The local rule in globals.css lifts both to the floor.
+    const vars = rootDefaults();
+    const value = declared('[data-slot="discover-breadcrumb"] a', "min-height");
+    expect(value).toBe("max(var(--target-floor), 1.75rem)");
+    expect(
+      declared(
+        '[data-slot="discover-breadcrumb"] [aria-current="page"]',
+        "min-height",
+      ),
+    ).toBe("max(var(--target-floor), 1.75rem)");
+    expect(px("var(--target-floor)", vars)).toBe(45);
   });
 });
