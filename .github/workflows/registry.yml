@@ -16,7 +16,7 @@ name: Registry
 on:
   pull_request:
   push:
-    branches: [main, staging]
+    branches: [main]
   merge_group:
   workflow_dispatch:
 
